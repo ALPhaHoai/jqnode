@@ -121,6 +121,7 @@ JQ.prototype.hasClass = require('./methods/attributes-methods/hasClass');
 JQ.prototype.text = require('./methods/content-methods/text');
 JQ.prototype.html = require('./methods/content-methods/html');
 JQ.prototype.table2json = require('./methods/content-methods/table2json');
+JQ.prototype.findTableWithHeader = require('./methods/content-methods/findTableWithHeader');
 JQ.prototype.title = require('./methods/content-methods/title');
 JQ.prototype.each = require('./methods/iteration-methods/each');
 JQ.prototype.map = require('./methods/iteration-methods/map');
