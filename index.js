@@ -357,6 +357,7 @@ JQFactory.inArray = staticUtils.inArray;
 JQFactory.hasData = staticUtils.hasData;
 JQFactory.extend = staticUtils.extend;
 JQFactory.escapeSelector = staticUtils.escapeSelector;
+JQFactory.title = staticUtils.title;
 
 // Export the factory function as the main module interface
 module.exports = JQFactory;

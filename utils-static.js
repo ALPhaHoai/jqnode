@@ -516,6 +516,20 @@ function escapeSelector(selector) {
     });
 }
 
+/**
+ * Get the document title.
+ * Uses jqnode selector to find and return the text content of the <title> element.
+ * @returns {string} The current document title, or empty string if not found
+ */
+function title() {
+    // Lazy load JQFactory to avoid circular dependency
+    const JQFactory = require('./index');
+
+    // Use jqnode selector to find title element
+    // This works in both Node.js (with parsed HTML) and browser environments
+    return JQFactory("head > title").text().trim();
+}
+
 module.exports = {
     now,
     noop,
@@ -536,5 +550,6 @@ module.exports = {
     inArray,
     hasData,
     extend,
-    escapeSelector
+    escapeSelector,
+    title
 };
