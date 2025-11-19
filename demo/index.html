@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jqnode Library - Feature Demo</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="assets/lib/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 jqnode Library</h1>
+            <p>jQuery-like DOM manipulation and traversal for Node.js and browsers</p>
+        </header>
+
+        <!-- Introduction -->
+        <section class="demo-section">
+            <h2>Welcome to jqnode</h2>
+            <div class="demo-content">
+                <div>
+                    <p><strong>jqnode</strong> is a lightweight jQuery-compatible library for DOM manipulation and
+                        traversal. It works seamlessly in both Node.js environments and web browsers, making it ideal
+                        for server-side HTML processing, web scraping, and client-side DOM manipulation.</p>
+
+                    <h3>Available Methods:</h3>
+                    <div class="method-groups">
+                        <!-- DOM Traversal -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">🌳 DOM Traversal</h4>
+                            <p class="method-group-description">Navigate DOM trees with methods like
+                                <code>find()</code>, <code>parent()</code>, <code>children()</code></p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="dom-traversal">find()</div>
+                                <div class="method-item" data-section="dom-traversal">parent()</div>
+                                <div class="method-item" data-section="dom-traversal">children()</div>
+                                <div class="method-item" data-section="dom-traversal">siblings()</div>
+                                <div class="method-item" data-section="dom-traversal">closest()</div>
+                                <div class="method-item" data-section="dom-traversal">next()</div>
+                                <div class="method-item" data-section="dom-traversal">prev()</div>
+                                <div class="method-item" data-section="dom-traversal">nextAll()</div>
+                                <div class="method-item" data-section="dom-traversal">prevAll()</div>
+                                <div class="method-item" data-section="dom-traversal">nextUntil()</div>
+                                <div class="method-item" data-section="dom-traversal">prevUntil()</div>
+                                <div class="method-item" data-section="dom-traversal">parents()</div>
+                                <div class="method-item" data-section="dom-traversal">parentsUntil()</div>
+                                <div class="method-item" data-section="dom-traversal">contents()</div>
+                                <div class="method-item" data-section="dom-traversal">end()</div>
+                            </div>
+                        </div>
+
+                        <!-- Content Manipulation -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">📝 Content Manipulation</h4>
+                            <p class="method-group-description">Get and set HTML/text content with <code>html()</code>,
+                                <code>text()</code>, <code>val()</code></p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="content-manipulation">html()</div>
+                                <div class="method-item" data-section="content-manipulation">text()</div>
+                                <div class="method-item" data-section="content-manipulation">val()</div>
+                            </div>
+                        </div>
+
+                        <!-- Attributes & Properties -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">🏷️ Attributes & Properties</h4>
+                            <p class="method-group-description">Work with element attributes and properties using
+                                <code>attr()</code>, <code>prop()</code>, and related methods</p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="attributes-classes">attr()</div>
+                                <div class="method-item" data-section="attributes-classes">prop()</div>
+                                <div class="method-item" data-section="attributes-classes">removeAttr()</div>
+                                <div class="method-item" data-section="attributes-classes">removeProp()</div>
+                            </div>
+                        </div>
+
+                        <!-- CSS Classes -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">🎨 CSS Classes</h4>
+                            <p class="method-group-description">Manage CSS classes with methods like
+                                <code>addClass()</code>, <code>removeClass()</code>, <code>toggleClass()</code></p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="attributes-classes">hasClass()</div>
+                                <div class="method-item" data-section="attributes-classes">addClass()</div>
+                                <div class="method-item" data-section="attributes-classes">removeClass()</div>
+                                <div class="method-item" data-section="attributes-classes">toggleClass()</div>
+                            </div>
+                        </div>
+
+                        <!-- Element Insertion -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">➕ Element Insertion</h4>
+                            <p class="method-group-description">Add content to the DOM at various positions with
+                                <code>append()</code>, <code>prepend()</code>, <code>before()</code>,
+                                <code>after()</code></p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="element-insertion">append()</div>
+                                <div class="method-item" data-section="element-insertion">prepend()</div>
+                                <div class="method-item" data-section="element-insertion">before()</div>
+                                <div class="method-item" data-section="element-insertion">after()</div>
+                                <div class="method-item" data-section="element-insertion">wrap()</div>
+                                <div class="method-item" data-section="element-insertion">wrapAll()</div>
+                                <div class="method-item" data-section="element-insertion">wrapInner()</div>
+                                <div class="method-item" data-section="element-insertion">appendTo()</div>
+                                <div class="method-item" data-section="element-insertion">prependTo()</div>
+                                <div class="method-item" data-section="element-insertion">insertAfter()</div>
+                                <div class="method-item" data-section="element-insertion">insertBefore()</div>
+                            </div>
+                        </div>
+
+                        <!-- Filtering & Selection -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">🔍 Filtering & Selection</h4>
+                            <p class="method-group-description">Filter and select elements from collections using
+                                <code>filter()</code>, <code>not()</code>, <code>is()</code>, and position methods</p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="filtering-iteration">filter()</div>
+                                <div class="method-item" data-section="filtering-iteration">not()</div>
+                                <div class="method-item" data-section="filtering-iteration">has()</div>
+                                <div class="method-item" data-section="filtering-iteration">is()</div>
+                                <div class="method-item" data-section="filtering-iteration">eq()</div>
+                                <div class="method-item" data-section="filtering-iteration">first()</div>
+                                <div class="method-item" data-section="filtering-iteration">last()</div>
+                                <div class="method-item" data-section="filtering-iteration">slice()</div>
+                            </div>
+                        </div>
+
+                        <!-- Iteration & Utilities -->
+                        <div class="method-group">
+                            <h4 class="method-group-title">🔄 Iteration & Utilities</h4>
+                            <p class="method-group-description">Iterate over collections and transform data with
+                                <code>each()</code> and <code>map()</code> methods</p>
+                            <div class="method-list">
+                                <div class="method-item" data-section="filtering-iteration">each()</div>
+                                <div class="method-item" data-section="filtering-iteration">map()</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HTML Parsing Demo -->
+        <section id="html-parsing" class="demo-section">
+            <h2>HTML Parsing & Factory Function</h2>
+            <div class="demo-content">
+                <div>
+                    <p>The core of jqnode is the <code>$()</code> factory function. It can parse HTML strings,
+                        select elements with CSS selectors, or work with existing node arrays.</p>
+
+                    <h3>Sample HTML:</h3>
+                    <div class="html-demo" id="sample-html">
+                        &lt;div class="container"&gt;
+                        &lt;h1 class="title"&gt;Welcome to jqnode&lt;/h1&gt;
+                        &lt;p class="intro"&gt;This is a demo of the library's features.&lt;/p&gt;
+                        &lt;ul class="features"&gt;
+                        &lt;li&gt;DOM Traversal&lt;/li&gt;
+                        &lt;li&gt;CSS Selectors&lt;/li&gt;
+                        &lt;li&gt;HTML Manipulation&lt;/li&gt;
+                        &lt;li&gt;Method Chaining&lt;/li&gt;
+                        &lt;/ul&gt;
+                        &lt;input type="text" id="demo-input" value="Hello World"&gt;
+                        &lt;/div&gt;
+                    </div>
+
+                    <button class="run-btn" onclick="demoSimpleHTMLParsing()">Parse Simple HTML</button>
+                    <div class="result-block" id="parsing-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Code Example:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Traversal Methods Demo -->
+        <section id="dom-traversal" class="demo-section">
+            <h2>DOM Traversal Methods</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Navigate through the DOM tree using powerful traversal methods. These methods allow you to move
+                        up, down, and across the DOM hierarchy.</p>
+
+                    <button class="run-btn" onclick="demoTraversal()">Run Traversal Demo</button>
+                    <div class="result-block" id="traversal-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Traversal Methods:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Manipulation Demo -->
+        <section id="content-manipulation" class="demo-section">
+            <h2>Content Manipulation</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Get and set text content, HTML content, and form values. These methods are essential for dynamic
+                        content updates.</p>
+
+                    <button class="run-btn" onclick="demoContent()">Run Content Demo</button>
+                    <div class="result-block" id="content-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Content Methods:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attributes & Classes Demo -->
+        <section id="attributes-classes" class="demo-section">
+            <h2>Attributes & Classes</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Work with element attributes and CSS classes. Manage properties, attributes, and class
+                        manipulation.</p>
+
+                    <button class="run-btn" onclick="demoAttributes()">Run Attributes Demo</button>
+                    <div class="result-block" id="attributes-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Attribute & Class Methods:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Element Insertion Demo -->
+        <section id="element-insertion" class="demo-section">
+            <h2>Element Insertion</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Add new content to the DOM at various positions relative to existing elements.</p>
+
+                    <button class="run-btn" onclick="demoInsertion()">Run Insertion Demo</button>
+                    <div class="result-block" id="insertion-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Insertion Methods:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filtering & Iteration Demo -->
+        <section id="filtering-iteration" class="demo-section">
+            <h2>Filtering & Iteration</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Filter element collections and iterate over them. Test elements against selectors and perform
+                        batch operations.</p>
+
+                    <button class="run-btn" onclick="demoFiltering()">Run Filtering Demo</button>
+                    <div class="result-block" id="filtering-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Filtering & Iteration Methods:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Method Chaining Demo -->
+        <section id="method-chaining" class="demo-section">
+            <h2>Method Chaining</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Chain multiple operations together for clean, readable code. Most methods return the same
+                        jQuery-like object for chaining.</p>
+
+                    <button class="run-btn" onclick="demoChaining()">Run Chaining Demo</button>
+                    <div class="result-block" id="chaining-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Chaining Example:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Features Demo -->
+        <section id="advanced-features" class="demo-section">
+            <h2>Advanced Features</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Explore advanced features like CSS selectors, complex traversals, and utility methods.</p>
+
+                    <button class="run-btn" onclick="demoAdvanced()">Run Advanced Demo</button>
+                    <div class="result-block" id="advanced-result">Results will appear here...</div>
+                </div>
+                <div>
+                    <h3>Advanced Selectors & Features:</h3>
+                    <pre><code class="language-javascript">// Code example will be generated dynamically...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual Testing Section -->
+        <section id="manual-testing" class="demo-section">
+            <h2>🧪 Manual Testing</h2>
+            <div class="demo-content">
+                <div>
+                    <p>Test individual demo functions to verify they work correctly. Each test runs the corresponding
+                        demo function and displays the results.</p>
+
+                    <button class="run-btn" onclick="runIndividualTests()">Run Individual Tests</button>
+                    <div class="result-block" id="test-results">Click "Run Individual Tests" to execute all demo
+                        functions...</div>
+                </div>
+                <div>
+                    <h3>Test Functions Available:</h3>
+                    <pre><code class="language-javascript">// Available test functions:
+demoSimpleHTMLParsing() // Simple HTML parsing
+demoHTMLParsing()     // HTML parsing & factory function
+demoTraversal()       // DOM traversal methods
+demoContent()         // Content manipulation
+demoAttributes()      // Attributes & classes
+demoInsertion()       // Element insertion methods
+demoFiltering()       // Filtering & iteration
+demoChaining()        // Method chaining
+demoAdvanced()        // Advanced features & utilities
+
+// Each function returns a result object and updates
+// the corresponding demo result display area.</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>jqnode Library - A lightweight jQuery-compatible DOM manipulation library</p>
+            <p>Works in both Node.js and browser environments</p>
+            <p><a href="https://github.com/ALPhaHoai/jqnode" target="_blank">View on GitHub</a> | <a
+                    href="https://www.npmjs.com/package/jqnode" target="_blank">NPM Package</a></p>
+        </footer>
+    </div>
+
+    <!-- Load external libraries -->
+    <script src="assets/lib/prism.min.js"></script>
+    <script src="assets/lib/prism-javascript.min.js"></script>
+    <script src="assets/lib/jqnode.umd.js"></script>
+
+    <!-- Load demo scripts -->
+    <script src="assets/js/demo.js"></script>
+    <script src="assets/js/init.js"></script>
+</body>
+
+</html>
