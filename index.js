@@ -335,5 +335,28 @@ JQFactory.map = function (collection, callback) {
     return results;
 };
 
+// Attach static utility methods
+const staticUtils = require('./utils-static');
+JQFactory.now = staticUtils.now;
+JQFactory.noop = staticUtils.noop;
+JQFactory.param = staticUtils.param;
+JQFactory.parseHTML = staticUtils.parseHTML;
+JQFactory.parseJSON = staticUtils.parseJSON;
+JQFactory.parseXML = staticUtils.parseXML;
+JQFactory.trim = staticUtils.trim;
+JQFactory.type = staticUtils.type;
+JQFactory.unique = staticUtils.unique;
+JQFactory.uniqueSort = staticUtils.uniqueSort;
+JQFactory.makeArray = staticUtils.makeArray;
+JQFactory.isPlainObject = staticUtils.isPlainObject;
+JQFactory.isNumeric = staticUtils.isNumeric;
+JQFactory.isFunction = staticUtils.isFunction;
+JQFactory.isEmptyObject = staticUtils.isEmptyObject;
+JQFactory.isArray = staticUtils.isArray;
+JQFactory.inArray = staticUtils.inArray;
+JQFactory.hasData = staticUtils.hasData;
+JQFactory.extend = staticUtils.extend;
+JQFactory.escapeSelector = staticUtils.escapeSelector;
+
 // Export the factory function as the main module interface
 module.exports = JQFactory;
