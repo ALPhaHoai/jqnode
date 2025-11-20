@@ -23,7 +23,7 @@ A lightweight jQuery-like library for DOM manipulation and traversal in both Nod
 ## Installation
 
 ```bash
-npm install jqnode
+npm install @alphahoai/jqnode
 ```
 
 ## Building
@@ -47,7 +47,7 @@ npm run build:browser   # Browser only
 ### Node.js
 
 ```javascript
-const $ = require('jqnode');
+const $ = require('@alphahoai/jqnode');
 
 const html = `
 <div class="container">
@@ -85,7 +85,7 @@ Include the UMD build in your HTML:
 Or with a module bundler:
 
 ```javascript
-import $ from 'jqnode';
+import $ from '@alphahoai/jqnode';
 
 // Use the same API as in Node.js
 const root = $('html content...');
