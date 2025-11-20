@@ -1,8 +1,6 @@
 const {selectNodes} = require('../../../selector');
 
 function parent(selector) {
-    this.debugLog(`JQ.parent: Finding parents for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
-
     const parents = [];
     const seen = new Set(); // Avoid duplicates
 
@@ -41,8 +39,6 @@ function parent(selector) {
         // Filter our parents to only include those that match the selector
         resultNodes = parents.filter(parent => matchingParents.includes(parent));
     }
-
-    this.debugLog(`JQ.parent: Found ${resultNodes.length} parent elements`);
     // Use a more reliable way to create new instance
     const JQ = this.constructor;
     const result = new JQ(resultNodes);

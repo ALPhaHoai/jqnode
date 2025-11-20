@@ -1,8 +1,6 @@
 const {selectNodes} = require('../../../selector');
 
 function insertAfter(target) {
-    this.debugLog(`JQ.insertAfter: Inserting ${this.nodes.length} elements after target`);
-
     let targetJQ;
     let isDynamicTarget = false;
     if (target instanceof this.constructor) {
@@ -23,14 +21,11 @@ function insertAfter(target) {
         targetJQ = new this.constructor(this._normalizeContent(target));
         isDynamicTarget = true;
     }
-    this.debugLog(`JQ.insertAfter: Target has ${targetJQ.nodes.length} elements`);
-
     // If this is a dynamically created target, add it to the root first
     if (isDynamicTarget) {
         for (const targetElement of targetJQ.nodes) {
             if (!require('../../../jq').allRootNodes.includes(targetElement)) {
                 require('../../../jq').allRootNodes.push(targetElement);
-                this.debugLog(`JQ.insertAfter: Added dynamic target <${targetElement.tagName}> to root nodes`);
             }
         }
     }
@@ -69,8 +64,6 @@ function insertAfter(target) {
                 for (const clonedNode of clonedNodes) {
                     clonedNode.parent = targetElement.parent;
                 }
-
-                this.debugLog(`JQ.insertAfter: Cloned ${clonedNodes.length} elements after target <${targetElement.tagName}>`);
             }
         } else {
             // Target is a root node, insert into root nodes array
@@ -100,8 +93,6 @@ function insertAfter(target) {
 
                 // Insert clones after target in root nodes
                 rootNodes.splice(targetIndex + 1, 0, ...clonedNodes);
-
-                this.debugLog(`JQ.insertAfter: Cloned ${clonedNodes.length} root elements after target <${targetElement.tagName}>`);
             }
         }
     }

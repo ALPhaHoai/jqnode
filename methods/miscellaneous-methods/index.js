@@ -36,11 +36,6 @@ module.exports = function index(arg) {
         if (!first) return -1;
 
         try {
-            // Try to require selector engine if possible, or use global document
-            // Note: In this project structure, we might need to be careful with circular deps
-            // But since this is a method required by jq.js, and jq.js is required by index.js...
-            // We can try lazy requiring selector.js
-
             let allMatches = [];
 
             // Check if we are in browser environment with document
@@ -49,7 +44,6 @@ module.exports = function index(arg) {
                 allMatches = Array.from(matches);
             } else {
                 // Node environment - try to use internal selector engine
-                // We need root nodes. JQ class has allRootNodes registry.
                 const roots = this.constructor.allRootNodes || [];
 
                 if (roots.length > 0) {
@@ -61,9 +55,11 @@ module.exports = function index(arg) {
                 }
             }
 
-            return allMatches.indexOf(first);
+            const target = first._originalElement || first;
+            return allMatches.findIndex(match => {
+                return match === target || match === first || (match._originalElement && match._originalElement === target);
+            });
         } catch (e) {
-            this.debugLog(`JQ.index: Error finding selector "${arg}": ${e.message}`);
             return -1;
         }
     }
@@ -73,5 +69,12 @@ module.exports = function index(arg) {
     if (target instanceof this.constructor) {
         target = target.nodes[0];
     }
-    return this.nodes.indexOf(target);
+
+    // If target is a JQ node, it might have _originalElement
+    // If target is a DOM element, it is the _originalElement
+    const targetElem = target._originalElement || target;
+
+    return this.nodes.findIndex(node => {
+        return node === target || node === targetElem || (node._originalElement && node._originalElement === targetElem);
+    });
 };

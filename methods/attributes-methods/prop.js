@@ -23,13 +23,10 @@ module.exports = function prop(name, value) {
         if (name === 'value' && result !== undefined) {
             return String(result);
         }
-
-        this.debugLog(`JQ.prop: Getting property "${name}" from first element, value: ${result}`);
         return result;
     }
 
     // Set property value on all elements
-    this.debugLog(`JQ.prop: Setting property "${name}" = "${value}" on ${this.nodes.length} elements`);
     this.nodes.forEach(element => {
         if (element) {
             // Initialize properties object if it doesn't exist

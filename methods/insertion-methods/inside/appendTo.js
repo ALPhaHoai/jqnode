@@ -1,6 +1,4 @@
 function appendTo(target) {
-    this.debugLog(`JQ.appendTo: Appending ${this.nodes.length} elements to target`);
-
     let targetJQ;
     let isDynamicTarget = false;
     if (target instanceof this.constructor) {
@@ -20,8 +18,6 @@ function appendTo(target) {
         targetJQ = new this.constructor(this._normalizeContent(target));
         isDynamicTarget = true;
     }
-    this.debugLog(`JQ.appendTo: Target has ${targetJQ.nodes.length} elements`);
-
     for (const targetElement of targetJQ.nodes) {
         if (targetElement.type === 'element' && targetElement.children) {
             // Clone our nodes to avoid sharing references
@@ -32,8 +28,6 @@ function appendTo(target) {
             for (const clonedNode of clonedNodes) {
                 clonedNode.parent = targetElement;
             }
-
-            this.debugLog(`JQ.appendTo: Appended ${clonedNodes.length} elements to target <${targetElement.tagName}>`);
         }
     }
 
@@ -42,7 +36,6 @@ function appendTo(target) {
         for (const targetElement of targetJQ.nodes) {
             if (!this.constructor.allRootNodes.includes(targetElement)) {
                 this.constructor.allRootNodes.push(targetElement);
-                this.debugLog(`JQ.appendTo: Added dynamic target <${targetElement.tagName}> to root nodes`);
             }
         }
     }

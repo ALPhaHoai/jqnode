@@ -1,8 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function siblings(selector) {
-    this.debugLog(`JQ.siblings: Finding siblings for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
-
     const allSiblings = [];
     const seen = new Set(); // Use a Set for deduplication
 
@@ -34,8 +32,6 @@ function siblings(selector) {
             });
         }
     }
-
-    this.debugLog(`JQ.siblings: Found ${allSiblings.length} siblings`);
     return new this.constructor(allSiblings);
 }
 

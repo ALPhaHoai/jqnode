@@ -5,8 +5,6 @@
  * @returns {JQ} New JQ instance with the element at the specified index, or empty if out of bounds
  */
 module.exports = function eq(index) {
-    this.debugLog(`JQ.eq: Selecting element at index ${index} from ${this.nodes.length} elements`);
-
     const originalIndex = index;
 
     // jQuery behavior:
@@ -20,12 +18,10 @@ module.exports = function eq(index) {
 
     // Special case: undefined becomes NaN, return empty
     if (index === undefined) {
-        this.debugLog(`JQ.eq: Index ${originalIndex} is undefined, returning empty result`);
         return new this.constructor([]);
     }
 
     if (isNaN(numericIndex)) {
-        this.debugLog(`JQ.eq: Index ${originalIndex} converts to NaN, returning empty result`);
         return new this.constructor([]);
     }
 
@@ -48,11 +44,8 @@ module.exports = function eq(index) {
 
         const result = new this.constructor([selectedNode]);
         result._prevObject = this;
-        this.debugLog(`JQ.eq: Found element at index ${numericIndex}`);
         return result;
     }
-
-    this.debugLog(`JQ.eq: Index ${originalIndex} is out of bounds, returning empty result`);
     const result = new this.constructor([]);
     result._prevObject = this;
     return result;

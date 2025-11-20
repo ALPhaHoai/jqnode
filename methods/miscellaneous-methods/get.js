@@ -6,10 +6,13 @@
  */
 module.exports = function get(index) {
     if (index === undefined) {
-        return this.nodes.slice();
+        return this.nodes.map(node => node._originalElement || node);
     }
+    let node;
     if (index < 0) {
-        return this.nodes[this.nodes.length + index];
+        node = this.nodes[this.nodes.length + index];
+    } else {
+        node = this.nodes[index];
     }
-    return this.nodes[index];
+    return node ? (node._originalElement || node) : undefined;
 };

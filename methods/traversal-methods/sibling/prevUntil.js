@@ -1,8 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function prevUntil(selector, filter) {
-    this.debugLog(`JQ.prevUntil: Finding preceding siblings until selector: ${selector || 'none'}, filter: ${filter || 'none'}`);
-
     const precedingSiblings = [];
     const {nodeMatchesSelector, parseSelector} = require('../../../selector');
     let parsedStopSelector = null;
@@ -155,7 +153,6 @@ function prevUntil(selector, filter) {
         }
     }
 
-    this.debugLog(`JQ.prevUntil: Found ${uniqueSiblings.length} unique preceding sibling elements in reverse document order (farthest first)`);
     return new this.constructor(uniqueSiblings);
 }
 

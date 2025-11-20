@@ -1,8 +1,6 @@
 const {parseSelector, nodeMatchesSelector} = require('../../../selector');
 
 function parents(selector) {
-    this.debugLog(`JQ.parents: Finding ancestors for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
-
     const ancestors = [];
     const seen = new Set(); // Avoid duplicates
 
@@ -11,7 +9,6 @@ function parents(selector) {
     if (selector) {
         parsedSelector = parseSelector(selector);
         if (!parsedSelector) {
-            this.debugLog(`JQ.parents: Invalid selector "${selector}", returning empty result`);
             return new this.constructor([]);
         }
     }
@@ -71,8 +68,6 @@ function parents(selector) {
             }
         }
     }
-
-    this.debugLog(`JQ.parents: Found ${ancestors.length} ancestor elements`);
     return new this.constructor(ancestors);
 }
 

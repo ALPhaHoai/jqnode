@@ -5,8 +5,6 @@
  * @returns {JQ} The JQ instance for chaining
  */
 module.exports = function addClass(className) {
-    this.debugLog(`JQ.addClass: Adding classes "${className}" to ${this.nodes.length} elements`);
-
     if (typeof className === 'function') {
         // For function parameters, we need to process each element individually
         this.nodes.forEach((element, index) => {

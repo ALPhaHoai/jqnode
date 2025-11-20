@@ -1,9 +1,5 @@
 function wrapInner(wrappingElement) {
-    this.debugLog(`JQ.wrapInner: Wrapping inner content of ${this.nodes.length} elements`);
-
     const wrapperNodes = this._normalizeContent(wrappingElement);
-    this.debugLog(`JQ.wrapInner: Normalized ${wrapperNodes.length} wrapper nodes`);
-
     for (const element of this.nodes) {
         if (element.type === 'element' && wrapperNodes.length > 0) {
             // Clone the wrapper
@@ -47,8 +43,6 @@ function wrapInner(wrappingElement) {
             // Replace the element's children with the wrapper
             element.children = [wrapper];
             wrapper.parent = element;
-
-            this.debugLog(`JQ.wrapInner: Wrapped inner content of <${element.tagName}> with <${wrapper.tagName}>`);
         }
     }
 

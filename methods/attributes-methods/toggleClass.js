@@ -6,8 +6,6 @@
  * @returns {JQ} The JQ instance for chaining
  */
 module.exports = function toggleClass(className, state) {
-    this.debugLog(`JQ.toggleClass: Toggling classes "${className}" with state ${state} on ${this.nodes.length} elements`);
-
     this.nodes.forEach(element => {
         if (!element || !element.attributes) return;
 

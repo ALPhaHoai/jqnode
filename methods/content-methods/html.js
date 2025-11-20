@@ -20,18 +20,15 @@ module.exports = function html(htmlString) {
             const result = firstNode.children.map(child => {
                 return nodeToHTML(child);
             }).join('');
-            this.debugLog(`JQ.html: Getting inner HTML of first element, result length: ${result.length}`);
             return result;
         } else {
             // For text nodes or other types, return their HTML representation
             const result = nodeToHTML(firstNode);
-            this.debugLog(`JQ.html: Converting non-element node to HTML, result length: ${result.length}`);
             return result;
         }
     }
 
     // Set inner HTML on all element nodes
-    this.debugLog(`JQ.html: Setting inner HTML on ${this.nodes.length} elements`);
     this.nodes.forEach(node => {
         if (node.type === 'element') {
             // Parse the HTML string and set as children

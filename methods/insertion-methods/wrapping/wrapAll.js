@@ -1,13 +1,9 @@
 function wrapAll(wrappingElement) {
-    this.debugLog(`JQ.wrapAll: Wrapping all ${this.nodes.length} elements together`);
-
     if (this.nodes.length === 0) {
         return this;
     }
 
     const wrapperNodes = this._normalizeContent(wrappingElement);
-    this.debugLog(`JQ.wrapAll: Normalized ${wrapperNodes.length} wrapper nodes`);
-
     if (wrapperNodes.length === 0) {
         return this;
     }
@@ -62,8 +58,6 @@ function wrapAll(wrappingElement) {
     // Insert the wrapper at the position of the first element
     siblings.splice(firstIndex, 0, wrapper);
     wrapper.parent = parent;
-
-    this.debugLog(`JQ.wrapAll: Wrapped ${clonedElements.length} elements with <${wrapper.tagName}>`);
     return this;
 }
 

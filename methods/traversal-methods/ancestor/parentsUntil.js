@@ -1,8 +1,6 @@
 const {selectNodes} = require('../../../selector');
 
 function parentsUntil(selector, filter) {
-    this.debugLog(`JQ.parentsUntil: Finding ancestors until selector: ${selector || 'none'}, filter: ${filter || 'none'}`);
-
     const ancestors = [];
     const seen = new Set(); // Avoid duplicates
     const stopElements = new Set();
@@ -100,8 +98,6 @@ function parentsUntil(selector, filter) {
         // Filter our ancestors to only include those that match the filter
         resultNodes = ancestors.filter(ancestor => matchingAncestors.includes(ancestor));
     }
-
-    this.debugLog(`JQ.parentsUntil: Found ${resultNodes.length} ancestor elements`);
     return new this.constructor(resultNodes);
 }
 

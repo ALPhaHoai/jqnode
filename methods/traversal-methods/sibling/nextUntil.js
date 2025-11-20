@@ -1,8 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function nextUntil(selector, filter) {
-    this.debugLog(`JQ.nextUntil: Finding following siblings until selector: ${selector || 'none'}, filter: ${filter || 'none'}`);
-
     const followingSiblings = [];
     const {nodeMatchesSelector, parseSelector} = require('../../../selector');
     const parsedStopSelector = selector && typeof selector === 'string' ? parseSelector(selector) : null;
@@ -95,8 +93,6 @@ function nextUntil(selector, filter) {
             }
         }
     }
-
-    this.debugLog(`JQ.nextUntil: Found ${followingSiblings.length} following sibling elements`);
     return new this.constructor(followingSiblings);
 }
 

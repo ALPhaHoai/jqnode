@@ -30,12 +30,10 @@ module.exports = function text(value) {
         }).join('');
 
         const unescapedResult = unescapeHtml(result);
-        this.debugLog(`JQ.text: Getting text content from ${elementNodes.length} element nodes, total length: ${unescapedResult.length}`);
         return unescapedResult;
     }
 
     // Set text content on all elements
-    this.debugLog(`JQ.text: Setting text content "${value}" on ${this.nodes.length} elements`);
     this.nodes.forEach(node => {
         // Handle DOM elements
         if (node.nodeType === 1) {
