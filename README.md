@@ -61,6 +61,33 @@ const title = root.find('.title');
 console.log(title.text()); // "Hello World"
 ```
 
+### Using .load() Method
+
+The `.load()` static method provides a convenient way to parse HTML, especially useful when working with API responses:
+
+```javascript
+const jq = require('@alphahoai/jqnode');
+
+// Load HTML from API response
+const result = { data: '<table><tr><td>Data</td></tr></table>' };
+const $ = jq.load(result?.data || "");
+const tables = $.find("table");
+
+console.log('Tables found:', tables.length);
+```
+
+**Note:** Both `jq(html)` and `jq.load(html)` are functionally equivalent. Use `.load()` when it makes your code more readable, especially when dealing with optional data from API responses.
+
+```javascript
+// These are equivalent:
+const $1 = jq(html);
+const $2 = jq.load(html);
+
+// Both return a JQ instance that you can query with .find()
+$1.find('table');
+$2.find('table');
+```
+
 ### Browser
 
 Include the UMD build in your HTML:

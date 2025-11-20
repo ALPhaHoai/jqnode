@@ -335,6 +335,24 @@ JQFactory.map = function (collection, callback) {
     return results;
 };
 
+/**
+ * Loads and parses HTML string, creating a new JQ instance.
+ * This is a convenience method that wraps the JQFactory constructor.
+ * @param {string} html - HTML string to parse
+ * @returns {JQ} New JQ instance containing the parsed HTML
+ * @example
+ * const jq = require('@alphahoai/jqnode');
+ * const $ = jq.load('<div>Hello</div>');
+ * const divs = $('div');
+ */
+JQFactory.load = function (html) {
+    if (typeof html !== 'string') {
+        console.warn('[jqnode] .load() expects a string argument, received:', typeof html);
+        return new JQ([]);
+    }
+    return JQFactory(html);
+};
+
 // Attach static utility methods
 const staticUtils = require('./utils-static');
 JQFactory.now = staticUtils.now;
