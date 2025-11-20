@@ -119,28 +119,15 @@ JQFactory.clearRootNodesRegistry = JQ.clearRootNodesRegistry;
  * @returns {JQ} New JQ instance
  */
 function JQFactory(htmlOrSelectorOrNodes, context) {
-    if (typeof jest === 'undefined') {
-        console.log(`[DEBUG] JQFactory: Called with input type: ${typeof htmlOrSelectorOrNodes}, context provided: ${!!context}`);
-    }
-
     if (typeof htmlOrSelectorOrNodes === 'string') {
         const trimmed = htmlOrSelectorOrNodes.trim();
         if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
             // HTML string - parse it
-            if (typeof jest === 'undefined') {
-                console.log(`[DEBUG] JQFactory: Detected HTML string, parsing...`);
-            }
             let nodes = parseHTML(htmlOrSelectorOrNodes);
-            if (typeof jest === 'undefined') {
-                console.log(`[DEBUG] JQFactory: HTML parsing returned ${nodes.length} root nodes`);
-            }
             // Filter out pure whitespace text nodes at the top level
             nodes = nodes.filter(node => {
                 return !(node.type === 'text' && node.value.trim() === '');
             });
-            if (typeof jest === 'undefined') {
-                console.log(`[DEBUG] JQFactory: After filtering whitespace, ${nodes.length} root nodes`);
-            }
             return new JQ(nodes);
         } else if (htmlOrSelectorOrNodes.startsWith('.') || htmlOrSelectorOrNodes.startsWith('#') ||
             htmlOrSelectorOrNodes.includes(' ') || htmlOrSelectorOrNodes.includes('>') ||
@@ -155,25 +142,12 @@ function JQFactory(htmlOrSelectorOrNodes, context) {
                 searchContext = JQ.allRootNodes;
             } else if (context === null) {
                 // Explicitly null context provided, return empty
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Null context provided for selector "${htmlOrSelectorOrNodes}", returning empty result`);
-                }
                 return new JQ([]);
             } else if (!Array.isArray(searchContext)) {
                 // Invalid context provided, return empty
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Invalid context provided for selector "${htmlOrSelectorOrNodes}", returning empty result`);
-                }
                 return new JQ([]);
             }
-            if (typeof jest === 'undefined') {
-                console.log(`[DEBUG] JQFactory: Detected CSS selector: "${htmlOrSelectorOrNodes}"`);
-                console.log(`[DEBUG] JQFactory: Searching within ${searchContext.length} context nodes`);
-            }
             const nodes = selectNodes(searchContext, htmlOrSelectorOrNodes);
-            if (typeof jest === 'undefined') {
-                console.log(`[DEBUG] JQFactory: Selector search returned ${nodes.length} nodes`);
-            }
             return new JQ(nodes);
         } else {
             // Plain word - could be tag name or text content
@@ -184,64 +158,33 @@ function JQFactory(htmlOrSelectorOrNodes, context) {
                 searchContext = JQ.allRootNodes;
             } else if (context === null) {
                 // Explicitly null context provided, return empty
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Null context provided for selector (tag): "${htmlOrSelectorOrNodes}", returning empty result`);
-                }
                 return new JQ([]);
             } else if (!Array.isArray(searchContext)) {
                 // Invalid context provided, return empty
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Invalid context provided for selector (tag): "${htmlOrSelectorOrNodes}", returning empty result`);
-                }
                 return new JQ([]);
             }
             // Check if there are root nodes to search
             if (searchContext.length > 0) {
                 // There are root nodes, treat as CSS selector (tag name)
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Detected CSS selector (tag): "${htmlOrSelectorOrNodes}"`);
-                    console.log(`[DEBUG] JQFactory: Searching within ${searchContext.length} context nodes`);
-                }
                 const nodes = selectNodes(searchContext, htmlOrSelectorOrNodes);
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: Selector search returned ${nodes.length} nodes`);
-                }
                 return new JQ(nodes);
             } else {
                 // No root nodes, treat as HTML/text content
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: No root nodes, treating as HTML content: "${htmlOrSelectorOrNodes}"`);
-                }
                 const nodes = parseHTML(htmlOrSelectorOrNodes);
-                if (typeof jest === 'undefined') {
-                    console.log(`[DEBUG] JQFactory: HTML parsing returned ${nodes.length} root nodes`);
-                }
                 return new JQ(nodes);
             }
         }
     } else if (Array.isArray(htmlOrSelectorOrNodes)) {
-        if (typeof jest === 'undefined') {
-            console.log(`[DEBUG] JQFactory: Received array of ${htmlOrSelectorOrNodes.length} nodes`);
-        }
         return new JQ(htmlOrSelectorOrNodes);
     } else if (htmlOrSelectorOrNodes && typeof htmlOrSelectorOrNodes === 'object' && htmlOrSelectorOrNodes.type) {
         // Single node object
-        if (typeof jest === 'undefined') {
-            console.log(`[DEBUG] JQFactory: Received single node object`);
-        }
         return new JQ([htmlOrSelectorOrNodes]);
     } else if (htmlOrSelectorOrNodes && typeof htmlOrSelectorOrNodes === 'object' && htmlOrSelectorOrNodes.nodeType) {
         // DOM element - convert to internal node format
-        if (typeof jest === 'undefined') {
-            console.log(`[DEBUG] JQFactory: Received DOM element, converting to internal format`);
-        }
         const node = domElementToNode(htmlOrSelectorOrNodes);
         return new JQ([node]);
     }
 
-    if (typeof jest === 'undefined') {
-        console.log(`[DEBUG] JQFactory: Invalid input, creating empty JQ instance`);
-    }
     return new JQ([]);
 }
 
@@ -335,6 +278,267 @@ JQFactory.map = function (collection, callback) {
     return results;
 };
 
+/**
+ * Creates a callable wrapper around a JQ instance.
+ * This allows the returned object to be called as a function for finding elements.
+ * @param {JQ} jqInstance - The JQ instance to wrap
+ * @returns {Function} A callable function with all JQ methods attached
+ * @private
+ */
+function makeCallable(jqInstance) {
+    // Create a function that calls .find() on the JQ instance
+    const callable = function (selector) {
+        return jqInstance.find(selector);
+    };
+
+    // Copy all properties and methods from the JQ instance to the callable function
+    // This includes all prototype methods and instance properties
+    Object.setPrototypeOf(callable, Object.getPrototypeOf(jqInstance));
+
+    // Copy instance properties
+    for (let key in jqInstance) {
+        if (jqInstance.hasOwnProperty(key)) {
+            callable[key] = jqInstance[key];
+        }
+    }
+
+    // Ensure the callable function has access to all JQ prototype methods
+    for (let key of Object.getOwnPropertyNames(JQ.prototype)) {
+        if (key !== 'constructor' && typeof jqInstance[key] === 'function') {
+            callable[key] = jqInstance[key].bind(jqInstance);
+        } else if (key !== 'constructor') {
+            Object.defineProperty(callable, key, {
+                get: function () { return jqInstance[key]; },
+                set: function (value) { jqInstance[key] = value; },
+                enumerable: true,
+                configurable: true
+            });
+        }
+    }
+
+    // Copy special properties
+    callable.nodes = jqInstance.nodes;
+    callable.length = jqInstance.length;
+
+    // Make it iterable
+    callable[Symbol.iterator] = function () {
+        return jqInstance.nodes[Symbol.iterator]();
+    };
+
+    // Array-like numeric access
+    return new Proxy(callable, {
+        get(target, prop) {
+            // Handle numeric indices
+            if (typeof prop === 'string' && /^\d+$/.test(prop)) {
+                const index = parseInt(prop, 10);
+                return jqInstance.nodes[index];
+            }
+            // Handle length property
+            if (prop === 'length') {
+                return jqInstance.nodes.length;
+            }
+            // Handle nodes property
+            if (prop === 'nodes') {
+                return jqInstance.nodes;
+            }
+            // Handle other properties
+            return target[prop];
+        },
+        apply(target, thisArg, args) {
+            // When called as a function, behave like JQFactory
+            // If it's a string selector, use find() within the current context
+            // If it's a node, array, or other input, use JQFactory to wrap it
+            const input = args[0];
+
+            if (typeof input === 'string') {
+                // String: could be HTML or selector
+                // If it looks like HTML, create new nodes (not within context)
+                const trimmed = input.trim();
+                if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
+                    // HTML string - use JQFactory to parse it
+                    return JQFactory(input);
+                } else {
+                    // CSS selector - search within current context using find()
+                    return jqInstance.find(input);
+                }
+            } else if (input && (typeof input === 'object' || Array.isArray(input))) {
+                // Node object or array - wrap it using JQFactory
+                return JQFactory(input);
+            }
+
+            // Default: return empty
+            return JQFactory([]);
+        }
+    });
+}
+
+/**
+ * Loads and parses an HTML string, creating a callable JQ instance for easy manipulation.
+ * 
+ * This is a static utility method that provides a convenient, jQuery-like API for parsing HTML strings
+ * and creating jqnode instances. It's particularly useful when working with data from API responses,
+ * file content, or when you need to make your code more explicit about HTML parsing.
+ * 
+ * The returned instance is "callable", meaning you can use it as both a function and an object:
+ * - As a function: `$('selector')` - searches within the loaded HTML
+ * - As an object: `$.find('selector')` or `$.text()` - uses traditional method syntax
+ * 
+ * @param {string} html - The HTML string to parse and load. Can be:
+ *                        - Complete HTML documents (e.g., full page markup)
+ *                        - HTML fragments (e.g., '<div>content</div>')
+ *                        - Empty strings (returns empty instance, no warning)
+ *                        - Single elements or multiple root elements
+ *                        - Complex nested structures
+ * @param {Object} [options] - Configuration options
+ * @param {boolean} [options.normalize=false] - Whether to normalize whitespace in the HTML string before parsing.
+ *                                              If true, removes tabs, newlines, carriage returns, and collapses multiple spaces.
+ * 
+ * @returns {Function & JQ} A callable JQ instance (Proxy-wrapped) that:
+ *                          - Can be called as a function to find elements: `$('p')`
+ *                          - Has all standard JQ methods: `.find()`, `.text()`, `.attr()`, etc.
+ *                          - Provides array-like access: `$[0]`, `$.length`
+ *                          - Is iterable with for...of loops
+ *                          - Maintains its own HTML context (isolated from global state)
+ * 
+ * @throws {Never} This method never throws errors. Invalid inputs trigger warnings and return empty instances.
+ * 
+ * @example <caption>Basic Usage - Parse and Query HTML</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * const $ = jq.load('<div><p class="text">Hello</p><p class="text">World</p></div>');
+ * 
+ * // jQuery-like callable syntax
+ * const paragraphs = $('p');
+ * console.log(paragraphs.length); // 2
+ * 
+ * // Traditional method syntax
+ * const textElements = $.find('.text');
+ * console.log(textElements.eq(0).text()); // 'Hello'
+ * 
+ * @example <caption>API Response Handling with Optional Chaining</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * const axios = require('axios');
+ * 
+ * async function fetchUserProfile() {
+ *   const result = await axios.get('https://example.com/user/profile');
+ *   
+ *   // Safe parsing with fallback to empty string
+ *   const $ = jq.load(result?.data || "");
+ *   
+ *   const username = $('.username').text();
+ *   const email = $('.email').attr('href');
+ *   
+ *   return { username, email };
+ * }
+ * 
+ * @example <caption>Using Normalization Option</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * const rawHtml = '<div>\n\t<p>  Text  with   spaces  </p>\n</div>';
+ * 
+ * // Without normalization (preserves whitespace)
+ * const $raw = jq.load(rawHtml);
+ * 
+ * // With normalization (collapses whitespace)
+ * const $clean = jq.load(rawHtml, { normalize: true });
+ * console.log($clean('div').html()); // '<p> Text with spaces </p>'
+ * 
+ * @example <caption>Multiple Independent HTML Contexts</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * 
+ * // Each load() creates an isolated context
+ * const $page1 = jq.load('<div id="page1"><h1>Page 1</h1></div>');
+ * const $page2 = jq.load('<div id="page2"><h1>Page 2</h1></div>');
+ * const $page3 = jq.load('<div id="page3"><h1>Page 3</h1></div>');
+ * 
+ * // Queries are isolated to their respective contexts
+ * console.log($page1('h1').text()); // 'Page 1'
+ * console.log($page2('h1').text()); // 'Page 2'
+ * console.log($page3('h1').text()); // 'Page 3'
+ * 
+ * @example <caption>Working with Table Data</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * 
+ * const tableHtml = `
+ *   <table>
+ *     <tr><th>Name</th><th>Age</th></tr>
+ *     <tr><td>John</td><td>30</td></tr>
+ *     <tr><td>Jane</td><td>25</td></tr>
+ *   </table>
+ * `;
+ * 
+ * const $ = jq.load(tableHtml);
+ * 
+ * // Extract table data
+ * const headers = $('th').map(function() { return $(this).text(); }).get();
+ * const rows = $('tr').slice(1).map(function() {
+ *   const cells = $(this).find('td');
+ *   return {
+ *     name: cells.eq(0).text(),
+ *     age: cells.eq(1).text()
+ *   };
+ * }).get();
+ * 
+ * console.log(headers); // ['Name', 'Age']
+ * console.log(rows);    // [{name: 'John', age: '30'}, {name: 'Jane', age: '25'}]
+ * 
+ * @example <caption>Handling Various Input Types</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * 
+ * // Valid string input
+ * const $valid = jq.load('<p>Valid HTML</p>');
+ * console.log($valid('p').length); // 1
+ * 
+ * // Empty string (no warning)
+ * const $empty = jq.load('');
+ * console.log($empty('p').length); // 0
+ * 
+ * // Non-string input (triggers warning, returns empty instance)
+ * const $invalid = jq.load(123);        // Warning: expects string, received: number
+ * const $null = jq.load(null);          // Warning: expects string, received: object
+ * const $undefined = jq.load(undefined); // Warning: expects string, received: undefined
+ * 
+ * @example <caption>Combining with Other JQ Methods</caption>
+ * const jq = require('@alphahoai/jqnode');
+ * 
+ * const html = '<ul><li>A</li><li>B</li><li>C</li></ul>';
+ * const $ = jq.load(html);
+ * 
+ * // Chain multiple operations
+ * const items = $('li')
+ *   .filter(function(i) { return i > 0; })
+ *   .map(function() { return $(this).text(); })
+ *   .get();
+ * 
+ * console.log(items); // ['B', 'C']
+ * 
+ * @see {@link JQ} For available methods on the returned instance
+ * @see {@link JQFactory} For alternative ways to create JQ instances
+ * 
+ * @since 1.0.0
+ * 
+ * @remarks
+ * - **Type Safety**: Only accepts strings. Non-string values trigger a console warning and return an empty instance.
+ * - **No Global State Pollution**: Each `jq.load()` call creates an isolated HTML context.
+ * - **Callable Pattern**: Uses JavaScript Proxy to make the instance both callable and object-like.
+ * - **Memory Efficiency**: Parse HTML once, query multiple times without re-parsing.
+ * - **jQuery Compatibility**: Designed to feel familiar to jQuery users transitioning to Node.js.
+ * 
+ * @public
+ */
+JQFactory.load = function (html, options) {
+    if (typeof html !== 'string') {
+        console.warn('[jqnode] .load() expects a string argument, received:', typeof html);
+        return makeCallable(new JQ([]));
+    }
+
+    // Normalize HTML if requested
+    if (options && options.normalize) {
+        html = JQFactory.normalizeHTML(html);
+    }
+
+    const jqInstance = JQFactory(html);
+    return makeCallable(jqInstance);
+};
+
 // Attach static utility methods
 const staticUtils = require('./utils-static');
 JQFactory.now = staticUtils.now;
@@ -358,6 +562,7 @@ JQFactory.hasData = staticUtils.hasData;
 JQFactory.extend = staticUtils.extend;
 JQFactory.escapeSelector = staticUtils.escapeSelector;
 JQFactory.title = staticUtils.title;
+JQFactory.normalizeHTML = staticUtils.normalizeHTML;
 
 // Export the factory function as the main module interface
 module.exports = JQFactory;

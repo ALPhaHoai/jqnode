@@ -14,7 +14,6 @@ module.exports = function attr(name, value) {
         const element = this.nodes[0];
 
         if (!element) {
-            this.debugLog(`JQ.attr: No elements found for getting attribute "${name}"`);
             return undefined;
         }
 
@@ -22,8 +21,6 @@ module.exports = function attr(name, value) {
         // This matches jQuery's behavior of always reading the current DOM state
         if (element._originalElement) {
             const attrValue = element._originalElement.getAttribute(name);
-            this.debugLog(`JQ.attr: Getting attribute "${name}" from _originalElement, value: ${attrValue}`);
-
             if (attrValue === null) return undefined;
 
             // For boolean attributes, jQuery always returns the attribute name if present
@@ -37,8 +34,6 @@ module.exports = function attr(name, value) {
         // Handle DOM elements (direct DOM element without our wrapper)
         if (element.nodeType === 1) {
             const attrValue = element.getAttribute(name);
-            this.debugLog(`JQ.attr: Getting attribute "${name}" from DOM element, value: ${attrValue}`);
-
             if (attrValue === null) return undefined;
 
             // For boolean attributes, jQuery always returns the attribute name if present
@@ -54,17 +49,14 @@ module.exports = function attr(name, value) {
 
         // For boolean attributes, return the actual stored value (jQuery behavior)
         if (booleanAttributes.includes(name)) {
-            this.debugLog(`JQ.attr: Getting boolean attribute "${name}" from internal node, value: ${attrValue}`);
             return attrValue;
         }
 
         const result = attrValue;
-        this.debugLog(`JQ.attr: Getting attribute "${name}" from internal node, value: ${result}`);
         return result;
     }
 
     // Set attribute value on all elements
-    this.debugLog(`JQ.attr: Setting attribute "${name}" = "${value}" on ${this.nodes.length} elements`);
     this.nodes.forEach(element => {
         if (!element) return;
 

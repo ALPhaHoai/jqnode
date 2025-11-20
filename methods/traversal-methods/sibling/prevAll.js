@@ -1,7 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function prevAll(selector) {
-    this.debugLog(`JQ.prevAll: Finding all preceding siblings for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
     const allPrecedingSiblings = [];
 
     // Parse selector if provided
@@ -91,8 +90,6 @@ function prevAll(selector) {
             uniqueSiblings.push(sibling);
         }
     }
-
-    this.debugLog(`JQ.prevAll: Found ${uniqueSiblings.length} preceding siblings`);
     return new this.constructor(uniqueSiblings);
 }
 

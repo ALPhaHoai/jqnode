@@ -5,7 +5,7 @@
 ### ✅ Fully Documented Methods (Docs + Examples)
 **Total: 9 methods**
 
-1. **table2json** - Convert HTML tables to JSON arrays
+1. **toJSON** - Convert HTML tables to JSON arrays
 2. **findTableWithHeader** - Find tables by header content
 3. **title** - Get document title
 4. **attr** - Get/set HTML attributes
@@ -45,7 +45,7 @@
 
 #### Example Files (16 total)
 Organized by functionality:
-- **table2json-usage.js** - 9 examples (basic to complex tables)
+- **toJSON-usage.js** - 9 examples (basic to complex tables)
 - **findTableWithHeader-usage.js** - Advanced table finding scenarios
 - **title-usage.js** - Document title extraction
 - **attr-usage.js** - 11 examples (attributes, ARIA, forms)
@@ -77,7 +77,7 @@ Organized by functionality:
 ## 🎯 What's Covered
 
 ### Content Manipulation
-✅ html(), text(), findTableWithHeader(), table2json(), title()
+✅ html(), text(), findTableWithHeader(), toJSON(), title()
 
 ### CSS Classes
 ✅ addClass(), removeClass(), toggleClass(), hasClass()
@@ -126,7 +126,7 @@ cat docs/README.md
 node examples/methodName-usage.js
 
 # Examples:
-node examples/table2json-usage.js
+node examples/toJSON-usage.js
 node examples/attr-usage.js
 node examples/each-usage.js
 node examples/comprehensive-methods-demo.js
@@ -143,13 +143,13 @@ node scripts/check-docs.js
 1. **data.md** (12,622 bytes) - Complete data storage guide
 2. **attr.md** (11,213 bytes) - Attribute manipulation master guide
 3. **each.md** (10,188 bytes) - Iteration patterns encyclopedia
-4. **table2json.md** (9,202 bytes) - Table conversion complete guide
+4. **toJSON.md** (9,202 bytes) - Table conversion complete guide
 
 ### Most Comprehensive Examples
 1. **data-usage.js** (10,564 bytes) - 12 examples
 2. **attr-usage.js** (9,453 bytes) - 11 examples
 3. **each-usage.js** (9,420 bytes) - 12 examples
-4. **table2json-usage.js** (8,340 bytes) - 9 examples
+4. **toJSON-usage.js** (8,340 bytes) - 9 examples
 
 ### Key Features Documented
 - ✅ jQuery compatibility
@@ -225,7 +225,7 @@ console.log($('#user').data()); // All data
 const tables = $('body').findTableWithHeader(['Name', 'Email']);
 
 // Convert to JSON
-const data = $('table').table2json();
+const data = $('table').toJSON();
 console.log(data); // Array of objects
 ```
 

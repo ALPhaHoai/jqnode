@@ -530,6 +530,31 @@ function title() {
     return JQFactory("head > title").text().trim();
 }
 
+/**
+ * Normalize HTML by removing tabs, newlines, carriage returns, and collapsing multiple whitespace.
+ * This is useful for cleaning up HTML content from API responses or files before parsing.
+ * @param {string} html - HTML string to normalize
+ * @returns {string} Normalized HTML string with whitespace collapsed
+ * @example
+ * const jq = require('@alphahoai/jqnode');
+ * const html = `
+ *   <div>
+ *     <p>Hello    World</p>
+ *   </div>
+ * `;
+ * const normalized = jq.normalizeHTML(html);
+ * console.log(normalized); // '<div> <p>Hello World</p> </div>'
+ */
+function normalizeHTML(html) {
+    if (typeof html !== 'string') {
+        return '';
+    }
+    return html
+        .replaceAll(/[\t\n\r]/gi, ' ')  // Replace tabs, newlines, carriage returns with space
+        .replaceAll(/\s+/g, ' ')        // Collapse multiple spaces into single space
+        .trim();                         // Remove leading and trailing whitespace
+}
+
 module.exports = {
     now,
     noop,
@@ -551,5 +576,6 @@ module.exports = {
     hasData,
     extend,
     escapeSelector,
-    title
+    title,
+    normalizeHTML
 };

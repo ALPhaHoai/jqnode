@@ -20,7 +20,7 @@ const categoryFolders = {
 
 // List of all methods that need documentation
 const methods = {
-    'content': ['html', 'text', 'table2json', 'findTableWithHeader', 'title'],
+    'content': ['html', 'text', 'toJSON', 'findTableWithHeader', 'title'],
     'attributes': ['addClass', 'removeClass', 'toggleClass', 'hasClass', 'attr', 'prop', 'removeAttr', 'removeProp', 'val'],
     'data': ['data', 'removeData'],
     'iteration': ['each', 'map'],

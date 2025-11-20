@@ -1,9 +1,5 @@
 function wrap(wrappingElement) {
-    this.debugLog(`JQ.wrap: Wrapping ${this.nodes.length} elements`);
-
     const wrapperNodes = this._normalizeContent(wrappingElement);
-    this.debugLog(`JQ.wrap: Normalized ${wrapperNodes.length} wrapper nodes`);
-
     for (const element of this.nodes) {
         if (element.parent && element.parent.children) {
             const siblings = element.parent.children;
@@ -36,8 +32,6 @@ function wrap(wrappingElement) {
                 // Replace the original element with the wrapper
                 siblings[elementIndex] = wrapper;
                 wrapper.parent = element.parent;
-
-                this.debugLog(`JQ.wrap: Wrapped element <${element.tagName}> with <${wrapper.tagName}>`);
             }
         }
     }

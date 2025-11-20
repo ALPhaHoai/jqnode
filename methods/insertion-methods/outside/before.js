@@ -1,6 +1,4 @@
 function before(...content) {
-    this.debugLog(`JQ.before: Inserting content before ${this.nodes.length} elements`);
-
     // Flatten all content arguments into a single array of nodes
     const allContent = [];
     const contentToClone = [];
@@ -15,9 +13,6 @@ function before(...content) {
             allContent.push(...this._normalizeContent(item));
         }
     }
-
-    this.debugLog(`JQ.before: Normalized ${allContent.length} nodes to insert, ${contentToClone.length} JQ objects to clone`);
-
     for (const element of this.nodes) {
         if (element.parent && element.parent.children) {
             const siblings = element.parent.children;
@@ -33,8 +28,6 @@ function before(...content) {
                     for (const clonedNode of clonedContent) {
                         clonedNode.parent = element.parent;
                     }
-
-                    this.debugLog(`JQ.before: Inserted ${clonedContent.length} cloned nodes before element <${element.tagName}>`);
                 }
 
                 // Handle JQ objects - clone them and remove originals
@@ -63,7 +56,6 @@ function before(...content) {
                         siblings.splice(elementIndex, 0, clonedNode);
                         clonedNode.parent = element.parent;
                     }
-                    this.debugLog(`JQ.before: Cloned and moved ${jqObject.nodes.length} nodes before element <${element.tagName}>`);
                 }
             }
         }

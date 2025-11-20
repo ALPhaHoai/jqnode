@@ -1,6 +1,4 @@
 function append(...content) {
-    this.debugLog(`JQ.append: Appending content to ${this.nodes.length} elements`);
-
     // Flatten all content arguments into a single array of nodes
     const allContent = [];
     const contentToClone = [];
@@ -15,16 +13,12 @@ function append(...content) {
             allContent.push(...this._normalizeContent(item));
         }
     }
-
-    this.debugLog(`JQ.append: Normalized ${allContent.length} nodes to append, ${contentToClone.length} JQ objects to clone`);
-
     for (const element of this.nodes) {
         if (element.type === 'element' && element.children) {
             // Handle cloned content (HTML strings, etc.)
             if (allContent.length > 0) {
                 const clonedContent = allContent.map(node => this._cloneNode(node));
                 element.children.push(...clonedContent);
-                this.debugLog(`JQ.append: Appended ${clonedContent.length} cloned nodes to element <${element.tagName}>`);
             }
 
             // Handle JQ objects - move them (jQuery behavior)
@@ -48,7 +42,6 @@ function append(...content) {
                     element.children.push(nodeToMove);
                     nodeToMove.parent = element;
                 }
-                this.debugLog(`JQ.append: Moved ${jqObject.nodes.length} nodes to element <${element.tagName}>`);
             }
         }
     }

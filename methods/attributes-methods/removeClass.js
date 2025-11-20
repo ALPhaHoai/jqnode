@@ -5,8 +5,6 @@
  * @returns {JQ} The JQ instance for chaining
  */
 module.exports = function removeClass(className) {
-    this.debugLog(`JQ.removeClass: Removing classes "${className}" from ${this.nodes.length} elements`);
-
     if (typeof className === 'function') {
         // For function parameters, jQuery calls the function for each element with the class value
         // from element.getAttribute('class'), not from a cached value.

@@ -1,14 +1,3 @@
-/**
- * Debug logging utility that checks for environment variable
- * Set JQNODE_DEBUG=1 or DEBUG=jqnode to enable debug logs
- */
-const debugLog = (...args) => {
-    if (process.env.JQNODE_DEBUG === '1' ||
-        process.env.DEBUG === 'jqnode' ||
-        (process.env.DEBUG && process.env.DEBUG.includes('jqnode'))) {
-        console.log('[DEBUG]', ...args);
-    }
-};
 
 /**
  * jQuery-style wrapper class for working with HTML node trees.
@@ -55,9 +44,7 @@ class JQ {
                 });
             }
         }
-        if (typeof jest === 'undefined') {
-            debugLog(`JQ constructor: Created JQ instance with ${this.nodes.length} nodes`);
-        }
+
 
         // Return a proxy to support array-like access
         return new Proxy(this, {
@@ -107,7 +94,7 @@ class JQ {
 JQ.className = 'JQ';
 
 // Attach all methods to the prototype
-JQ.prototype.debugLog = debugLog;
+
 JQ.prototype.find = require('./methods/selector-methods/find');
 JQ.prototype.attr = require('./methods/attributes-methods/attr');
 JQ.prototype.prop = require('./methods/attributes-methods/prop');
@@ -119,8 +106,9 @@ JQ.prototype.removeClass = require('./methods/attributes-methods/removeClass');
 JQ.prototype.toggleClass = require('./methods/attributes-methods/toggleClass');
 JQ.prototype.hasClass = require('./methods/attributes-methods/hasClass');
 JQ.prototype.text = require('./methods/content-methods/text');
+JQ.prototype.normalizedText = require('./methods/content-methods/normalizedText');
 JQ.prototype.html = require('./methods/content-methods/html');
-JQ.prototype.table2json = require('./methods/content-methods/table2json');
+JQ.prototype.toJSON = require('./methods/content-methods/toJSON');
 JQ.prototype.findTableWithHeader = require('./methods/content-methods/findTableWithHeader');
 JQ.prototype.title = require('./methods/content-methods/title');
 JQ.prototype.each = require('./methods/iteration-methods/each');
@@ -160,11 +148,12 @@ JQ.prototype.wrapAll = require('./methods/insertion-methods/wrapping/wrapAll');
 JQ.prototype.wrapInner = require('./methods/insertion-methods/wrapping/wrapInner');
 JQ.prototype.toArray = require('./methods/miscellaneous-methods/toArray');
 JQ.prototype.get = require('./methods/miscellaneous-methods/get');
-JQ.prototype.size = require('./methods/miscellaneous-methods/size');
+
 JQ.prototype.index = require('./methods/miscellaneous-methods/index');
 JQ.prototype.data = require('./methods/data-methods/data');
 JQ.prototype.removeData = require('./methods/data-methods/removeData');
 JQ.prototype.remove = require('./methods/miscellaneous-methods/remove');
+JQ.prototype.clone = require('./methods/miscellaneous-methods/clone');
 JQ.prototype.position = require('./methods/miscellaneous-methods/position');
 
 
@@ -176,4 +165,4 @@ JQ.prototype._hasDescendant = require('./helpers/hasDescendant');
 JQ.prototype._findCommonRoots = require('./helpers/findCommonRoots');
 
 module.exports = JQ;
-module.exports.debugLog = debugLog;
+

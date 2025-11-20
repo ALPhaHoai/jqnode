@@ -1,8 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function nextAll(selector) {
-    this.debugLog(`JQ.nextAll: Finding all following siblings for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
-
     const followingSiblings = [];
     const seen = new Set(); // Avoid duplicates
 
@@ -39,8 +37,6 @@ function nextAll(selector) {
             return selectorList.some(sel => nodeMatchesSelector(sibling, sel));
         });
     }
-
-    this.debugLog(`JQ.nextAll: Found ${resultNodes.length} following sibling elements`);
     return new this.constructor(resultNodes);
 }
 

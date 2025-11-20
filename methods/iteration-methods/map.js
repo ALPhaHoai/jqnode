@@ -5,7 +5,6 @@
  * @returns {JQ} New JQ instance containing the results of the callback function
  */
 module.exports = function map(callback) {
-    this.debugLog(`JQ.map: Mapping over ${this.nodes.length} elements`);
     const results = [];
 
     for (let i = 0; i < this.nodes.length; i++) {
@@ -21,11 +20,8 @@ module.exports = function map(callback) {
                 }
             }
         } catch (error) {
-            this.debugLog(`JQ.map: Skipping element at index ${i} due to error: ${error.message}`);
             // Continue to next element without adding this result
         }
     }
-
-    this.debugLog(`JQ.map: Mapped to ${results.length} results`);
     return new this.constructor(results);
 };

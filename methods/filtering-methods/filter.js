@@ -1,13 +1,10 @@
 const {nodeMatchesSelector, parseSelector} = require('../../selector');
 
 function filter(selectorOrFunction, context) {
-    this.debugLog(`JQ.filter: Filtering ${this.nodes.length} elements with ${typeof selectorOrFunction}`);
-
     if (typeof selectorOrFunction === 'string') {
         // CSS selector filter
         const parsedSelector = parseSelector(selectorOrFunction);
         if (!parsedSelector) {
-            this.debugLog(`JQ.filter: Invalid selector "${selectorOrFunction}", returning empty result`);
             return new this.constructor([]);
         }
 
@@ -41,7 +38,6 @@ function filter(selectorOrFunction, context) {
                 }
             }
         });
-        this.debugLog(`JQ.filter: Filtered to ${filtered.length} elements using selector "${selectorOrFunction}"`);
         const result = new this.constructor(filtered);
         result._prevObject = this;
         return result;
@@ -58,17 +54,13 @@ function filter(selectorOrFunction, context) {
                 }
             } catch (error) {
                 // Skip elements that cause errors in the filter function
-                this.debugLog(`JQ.filter: Skipping element at index ${i} due to error: ${error.message}`);
                 // Continue to next element without adding this one
             }
         }
-        this.debugLog(`JQ.filter: Filtered to ${filtered.length} elements using function`);
         const result = new this.constructor(filtered);
         result._prevObject = this;
         return result;
     }
-
-    this.debugLog(`JQ.filter: Invalid selector/function, returning empty result`);
     const result = new this.constructor([]);
     result._prevObject = this;
     return result;

@@ -395,7 +395,7 @@ describe('.findTableWithHeader()', () => {
             `;
             const data = jq(html)
                 .findTableWithHeader('Name')
-                .table2json();
+                .toJSON();
             expect(data).toEqual([{
                 Name: 'John',
                 Email: 'john@example.com'

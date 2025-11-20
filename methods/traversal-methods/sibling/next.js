@@ -1,8 +1,6 @@
 const {nodeMatchesSelector, parseSelector} = require('../../../selector');
 
 function next(selector) {
-    this.debugLog(`JQ.next: Finding next sibling for ${this.nodes.length} elements, selector: ${selector || 'none'}`);
-
     const nextSiblings = [];
 
     for (const node of this.nodes) {
@@ -70,8 +68,6 @@ function next(selector) {
             }
         }
     }
-
-    this.debugLog(`JQ.next: Found ${nextSiblings.length} next sibling elements`);
     return new this.constructor(nextSiblings);
 }
 

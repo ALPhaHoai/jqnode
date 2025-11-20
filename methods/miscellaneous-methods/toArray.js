@@ -4,5 +4,5 @@
  * @returns {Array} The set of matched elements as a standard JavaScript array
  */
 module.exports = function toArray() {
-    return this.nodes.slice();
+    return this.nodes.map(node => node._originalElement || node);
 };

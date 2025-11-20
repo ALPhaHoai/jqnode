@@ -1,6 +1,4 @@
 function after(...content) {
-    this.debugLog(`JQ.after: Inserting content after ${this.nodes.length} elements`);
-
     // Flatten all content arguments into a single array of nodes
     const allContent = [];
     const contentToClone = [];
@@ -15,9 +13,6 @@ function after(...content) {
             allContent.push(...this._normalizeContent(item));
         }
     }
-
-    this.debugLog(`JQ.after: Normalized ${allContent.length} nodes to insert, ${contentToClone.length} JQ objects to clone`);
-
     for (const element of this.nodes) {
         if (element.parent && element.parent.children) {
             const siblings = element.parent.children;
@@ -33,8 +28,6 @@ function after(...content) {
                     for (const clonedNode of clonedContent) {
                         clonedNode.parent = element.parent;
                     }
-
-                    this.debugLog(`JQ.after: Inserted ${clonedContent.length} cloned nodes after element <${element.tagName}>`);
                 }
 
                 // Handle JQ objects - clone them and remove originals
@@ -67,8 +60,6 @@ function after(...content) {
                         clonedNode.parent = element.parent;
                     }
                     insertionIndex += clonedNodes.length;
-
-                    this.debugLog(`JQ.after: Cloned and moved ${jqObject.nodes.length} nodes after element <${element.tagName}>`);
                 }
             }
         }

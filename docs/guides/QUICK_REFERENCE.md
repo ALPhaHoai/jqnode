@@ -387,11 +387,11 @@ $('div').position(); // {top: 0, left: 0}
 
 ## jqnode-Specific
 
-### table2json([options])
+### toJSON([options])
 Convert table to JSON.
 ```javascript
-$('table').table2json();
-$('table').table2json({ ignoreColumns: [0] });
+$('table').toJSON();
+$('table').toJSON({ ignoreColumns: [0] });
 ```
 
 ### findTableWithHeader(headers)

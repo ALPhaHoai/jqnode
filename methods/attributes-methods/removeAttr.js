@@ -5,7 +5,6 @@
  * @returns {JQ} The JQ instance for chaining
  */
 module.exports = function removeAttr(name) {
-    this.debugLog(`JQ.removeAttr: Removing attribute "${name}" from ${this.nodes.length} elements`);
     this.nodes.forEach(element => {
         if (element && element.attributes) {
             delete element.attributes[name];

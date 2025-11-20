@@ -24,20 +24,6 @@ docs/
 - **[Documentation Summary](./guides/DOCUMENTATION_SUMMARY.md)** - Complete overview
 - **[Overview](./guides/README.md)** - Documentation index
 
-## 📖 Methods by Category
-
-### Content Manipulation (`/content`)
-Manipulate HTML and text content:
-- **[html()](./content/html.md)** - Get/set HTML content
-- **[text()](./content/text.md)** - Get/set text content
-- **[table2json()](./content/table2json.md)** - Convert tables to JSON
-- **[findTableWithHeader()](./content/findTableWithHeader.md)** - Find tables by headers
-- **[title()](./content/title-method.md)** - Get document title
-
-### Attributes & Classes (`/attributes`)
-Manage element attributes and CSS classes:
-- **[attr()](./attributes/attr.md)** - Get/set attributes
-- **[prop()](./attributes/prop.md)** - Get/set properties
 - **[val()](./attributes/val.md)** - Get/set form values
 - **[addClass()](./attributes/addClass.md)** - Add CSS classes
 - **[removeClass()](./attributes/removeClass.md)** - Remove CSS classes
@@ -115,7 +101,7 @@ node examples/method-name-usage.js
 node examples/attr-usage.js        # Attributes
 node examples/each-usage.js        # Iteration
 node examples/traversal-usage.js   # DOM traversal
-node examples/table2json-usage.js  # Table conversion
+node examples/toJSON-usage.js  # Table conversion
 ```
 
 ## 📊 Coverage Status

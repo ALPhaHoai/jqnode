@@ -1,17 +1,13 @@
 const {parseSelector, nodeMatchesSelector} = require('../../../selector');
 
 function closest(selector) {
-    this.debugLog(`JQ.closest: Finding closest ancestors matching "${selector}" for ${this.nodes.length} elements`);
-
     if (!selector) {
-        this.debugLog(`JQ.closest: No selector provided, returning empty result`);
         return new this.constructor([]);
     }
 
     // Parse the selector
     const parsedSelector = parseSelector(selector);
     if (!parsedSelector) {
-        this.debugLog(`JQ.closest: Invalid selector "${selector}", returning empty result`);
         return new this.constructor([]);
     }
 
@@ -40,8 +36,6 @@ function closest(selector) {
             current = current.parent || current.parentNode;
         }
     }
-
-    this.debugLog(`JQ.closest: Found ${results.length} closest elements`);
     // Use a more reliable way to create new instance
     const JQ = this.constructor;
     return new JQ(results);

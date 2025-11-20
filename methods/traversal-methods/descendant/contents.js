@@ -1,6 +1,4 @@
 function contents() {
-    this.debugLog(`JQ.contents: Finding all child nodes for ${this.nodes.length} elements`);
-
     const contents = [];
     const seen = new Set(); // Avoid duplicates
 
@@ -76,8 +74,6 @@ function contents() {
             }
         }
     }
-
-    this.debugLog(`JQ.contents: Found ${contents.length} child nodes`);
     return new this.constructor(contents);
 }
 

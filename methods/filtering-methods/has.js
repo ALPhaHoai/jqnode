@@ -1,8 +1,6 @@
 const {selectNodes} = require('../../selector');
 
 function has(selectorOrElement) {
-    this.debugLog(`JQ.has: Finding elements with descendants matching ${typeof selectorOrElement}`);
-
     const matchingElements = [];
 
     if (typeof selectorOrElement === 'string') {
@@ -35,8 +33,6 @@ function has(selectorOrElement) {
             }
         }
     }
-
-    this.debugLog(`JQ.has: Found ${matchingElements.length} elements with matching descendants`);
     return new this.constructor(matchingElements);
 }
 

@@ -5,13 +5,10 @@
  * @returns {JQ} The JQ instance for chaining
  */
 module.exports = function removeProp(name) {
-    this.debugLog(`JQ.removeProp: Removing property "${name}" from ${this.nodes.length} elements`);
-
     // jQuery doesn't remove standard HTML properties with removeProp
     const standardProperties = ['checked', 'selected', 'disabled', 'readonly', 'required', 'type', 'name'];
 
     if (standardProperties.includes(name)) {
-        this.debugLog(`JQ.removeProp: Not removing standard HTML property "${name}"`);
         return this;
     }
 

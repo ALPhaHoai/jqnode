@@ -7,8 +7,6 @@ const {isCSSSelector, selectNodes} = require('../../../selector');
  * @returns {JQ} New JQ instance with the inserted elements
  */
 module.exports = function insertBefore(target) {
-    this.debugLog(`JQ.insertBefore: Inserting ${this.nodes.length} elements before target`);
-
     let targetJQ;
     let isDynamicTarget = false;
     if (target && target.constructor && target.constructor.name === 'JQ') {
@@ -28,8 +26,6 @@ module.exports = function insertBefore(target) {
         targetJQ = new this.constructor(this._normalizeContent(target));
         isDynamicTarget = true;
     }
-    this.debugLog(`JQ.insertBefore: Target has ${targetJQ.nodes.length} elements`);
-
     for (const targetElement of targetJQ.nodes) {
         if (targetElement.parent && targetElement.parent.children) {
             const siblings = targetElement.parent.children;
@@ -62,8 +58,6 @@ module.exports = function insertBefore(target) {
                 for (const clonedNode of clonedNodes) {
                     clonedNode.parent = targetElement.parent;
                 }
-
-                this.debugLog(`JQ.insertBefore: Cloned ${clonedNodes.length} elements before target <${targetElement.tagName}>`);
             }
         }
 
@@ -151,8 +145,6 @@ module.exports = function insertBefore(target) {
         for (const clonedNode of clonedNodes) {
             clonedNode.parent = null;
         }
-
-        this.debugLog(`JQ.insertBefore: Cloned ${clonedNodes.length} elements before ${targetJQ.nodes.length} targets at root level`);
     }
 
     return this;
