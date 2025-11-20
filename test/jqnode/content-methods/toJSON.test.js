@@ -1,6 +1,6 @@
 const jq = require('../../../index');
 
-describe('table2json', () => {
+describe('toJSON', () => {
     test('converts simple table to JSON', () => {
         const html = `
             <table>
@@ -22,7 +22,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([
             { Name: 'Alice', Age: '25', City: 'New York' },
@@ -52,7 +52,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([
             { Product: 'Apple', Price: '$1.00' },
@@ -74,7 +74,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([
             { column_0: 'Row 1', Value: '100' }
@@ -102,7 +102,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json({ ignoreColumns: [0] });
+        const result = $table.toJSON({ ignoreColumns: [0] });
 
         expect(result).toEqual([
             { Name: 'Alice', Status: 'Active' },
@@ -128,7 +128,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json({ onlyColumns: [1, 2] });
+        const result = $table.toJSON({ onlyColumns: [1, 2] });
 
         expect(result).toEqual([
             { Name: 'Alice', Email: 'alice@example.com' }
@@ -149,7 +149,7 @@ describe('table2json', () => {
             </div>
         `;
         const $tables = jq(html).find('table');
-        const result = $tables.table2json();
+        const result = $tables.toJSON();
 
         expect(result).toEqual([
             { A: '1' },
@@ -170,7 +170,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([]);
     });
@@ -178,7 +178,7 @@ describe('table2json', () => {
     test('returns empty array for non-table elements', () => {
         const html = '<div>Not a table</div>';
         const $div = jq(html);
-        const result = $div.table2json();
+        const result = $div.toJSON();
 
         expect(result).toEqual([]);
     });
@@ -197,7 +197,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([
             { Name: 'Alice', Details: 'Engineer at TechCo' }
@@ -218,7 +218,7 @@ describe('table2json', () => {
             </table>
         `;
         const $table = jq(html);
-        const result = $table.table2json();
+        const result = $table.toJSON();
 
         expect(result).toEqual([
             { Name: 'Alice', Age: '25' }

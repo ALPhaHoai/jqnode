@@ -7,7 +7,7 @@ This directory contains comprehensive documentation for all jqnode methods.
 ### ✅ Content Methods
 - [x] [findTableWithHeader](./findTableWithHeader.md) - Find tables by header content
 - [x] [title](./title-method.md) - Get document title  
-- [x] [table2json](./table2json.md) - Convert tables to JSON
+- [x] [toJSON](./toJSON.md) - Convert tables to JSON
 - [ ] [html](./html.md) - Get/set HTML content
 - [ ] [text](./text.md) - Get/set text content
 

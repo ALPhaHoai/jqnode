@@ -56,11 +56,11 @@ const $caseInsensitive = jq(html1).findTableWithHeader('name');
 console.log(`Found ${$caseInsensitive.length} table(s) (case-insensitive)`);
 console.log();
 
-// Example 4: Combine with table2json
-console.log('Example 4: Find table and extract data with table2json()');
+// Example 4: Combine with toJSON
+console.log('Example 4: Find table and extract data with toJSON()');
 const userData = jq(html1)
     .findTableWithHeader('Name')
-    .table2json();
+    .toJSON();
 console.log('User data:', JSON.stringify(userData, null, 2));
 console.log();
 
@@ -145,7 +145,7 @@ const html3 = `
 // Find only sales tables (with Revenue column)
 const salesData = jq(html3)
     .findTableWithHeader(['Product Name', 'Revenue'])
-    .table2json();
+    .toJSON();
 
 console.log('Sales data:', JSON.stringify(salesData, null, 2));
 console.log();
@@ -173,7 +173,7 @@ const html4 = `
 
 const $simpleTable = jq(html4).findTableWithHeader('Score');
 console.log(`Found ${$simpleTable.length} table(s) with "Score" header`);
-const scores = $simpleTable.table2json();
+const scores = $simpleTable.toJSON();
 console.log('Scores:', JSON.stringify(scores, null, 2));
 console.log();
 

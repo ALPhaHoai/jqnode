@@ -15,7 +15,7 @@ docs/
 ├── 📂 content/                     ← Content Manipulation (5 methods)
 │   ├── html.md                     - Get/set HTML content
 │   ├── text.md                     - Get/set text content
-│   ├── table2json.md              - Convert tables to JSON
+│   ├── toJSON.md              - Convert tables to JSON
 │   ├── findTableWithHeader.md     - Find tables by headers
 │   └── title-method.md            - Get document title
 │
@@ -87,7 +87,7 @@ docs/
 
 ### ⭐ Comprehensive (Full Docs + Examples)
 These have detailed documentation AND runnable example files:
-- content/table2json.md
+- content/toJSON.md
 - content/findTableWithHeader.md
 - content/title-method.md
 - content/html.md

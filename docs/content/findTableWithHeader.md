@@ -34,7 +34,7 @@ Returns a new JQ instance containing all matching table elements.
 
 ### ✅ Chainable
 - Returns JQ instance for method chaining
-- Works seamlessly with other methods like `table2json()`
+- Works seamlessly with other methods like `toJSON()`
 
 ## Examples
 
@@ -112,12 +112,12 @@ const $tables = jq(html).findTableWithHeader('Name');
 console.log($tables.length); // 2 (employees and customers)
 ```
 
-### Combined with table2json()
+### Combined with toJSON()
 ```javascript
 // Find table and extract data in one chain
 const data = jq(html)
     .findTableWithHeader('Name')
-    .table2json();
+    .toJSON();
 
 console.log(data);
 // [{ Name: 'John', Email: 'john@example.com', Age: '30' }]
@@ -150,7 +150,7 @@ const html = `
 // Find only tables with Revenue column (sales tables)
 const salesData = jq(html)
     .findTableWithHeader(['Product Name', 'Revenue'])
-    .table2json();
+    .toJSON();
 ```
 
 ## Edge Cases
@@ -206,7 +206,7 @@ The method:
 
 ## Related Methods
 
-- **table2json()**: Convert table to JSON data
+- **toJSON()**: Convert table to JSON data
 - **find()**: Find descendant elements
 - **filter()**: Filter current selection
 

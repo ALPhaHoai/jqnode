@@ -3,15 +3,16 @@ const { getTextContent } = require('../../utils');
 /**
  * Converts HTML table elements to JSON data (array of objects).
  * Each object represents a row with properties from table headers.
- * @see Similar to jQuery table2json plugins
+ * @see Similar to jQuery's toArray() pattern
  * @param {Object} [options] - Configuration options
  * @param {boolean} [options.ignoreColumns] - Array of column indices to ignore (0-based)
  * @param {boolean} [options.onlyColumns] - Array of column indices to include (0-based)
  * @param {string} [options.headings] - Selector for custom heading elements (defaults to thead th/td or first tr)
+ * @param {boolean} [options.normalizeKeys] - Replace non-alphanumeric characters in keys with underscores
  * @returns {Array} Array of objects representing table rows
  */
-module.exports = function table2json(options = {}) {
-    const { ignoreColumns = [], onlyColumns = null, headings = null } = options;
+module.exports = function toJSON(options = {}) {
+    const { ignoreColumns = [], onlyColumns = null, headings = null, normalizeKeys = false } = options;
     const results = [];
 
     this.nodes.forEach(tableNode => {
@@ -86,7 +87,8 @@ module.exports = function table2json(options = {}) {
             cells.forEach((cell, index) => {
                 const header = headers[index];
                 if (header !== null && header !== undefined) {
-                    rowData[header] = getTextContent(cell).trim();
+                    const key = normalizeKeys ? header.replace(/[^a-zA-Z0-9]/g, "_") : header;
+                    rowData[key] = getTextContent(cell).trim();
                 }
             });
 

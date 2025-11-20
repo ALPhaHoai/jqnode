@@ -1,11 +1,11 @@
-# table2json() Method
+# toJSON() Method
 
 ## Overview
-The `table2json()` method converts HTML table elements into a JSON array of objects. Each object represents a table row with properties named after the table headers, making it easy to work with tabular data programmatically.
+The `toJSON()` method converts HTML table elements into a JSON array of objects. Each object represents a table row with properties named after the table headers, making it easy to work with tabular data programmatically.
 
 ## Syntax
 ```javascript
-jq(selector).table2json(options)
+jq(selector).toJSON(options)
 ```
 
 ### Parameters
@@ -13,6 +13,7 @@ jq(selector).table2json(options)
   - **ignoreColumns** (Array): Column indices to exclude from results (0-based)
   - **onlyColumns** (Array): Column indices to include exclusively (0-based)
   - **headings** (String): Custom selector for heading elements (reserved for future use)
+  - **normalizeKeys** (Boolean): Replace non-alphanumeric characters in keys with underscores (default: false)
 
 ### Return Value
 Returns an array of objects where each object represents a table row. Property names are derived from table headers.
@@ -34,6 +35,7 @@ Returns an array of objects where each object represents a table row. Property n
 - Automatically trims whitespace from cell values
 - Skips empty rows
 - Generates default column names (`column_0`, `column_1`, etc.) for missing headers
+- Optional key normalization for cleaner property names
 
 ## Examples
 
@@ -65,7 +67,7 @@ const html = `
     </table>
 `;
 
-const data = jq(html).find('table').table2json();
+const data = jq(html).find('table').toJSON();
 console.log(data);
 // [
 //   { Name: 'John Doe', Email: 'john@example.com', Age: '30' },
@@ -95,7 +97,7 @@ const html = `
     </table>
 `;
 
-const data = jq(html).find('table').table2json();
+const data = jq(html).find('table').toJSON();
 console.log(data);
 // [
 //   { Product: 'Widget A', Price: '$19.99', Stock: '50' },
@@ -130,7 +132,7 @@ const html = `
 `;
 
 // Ignore first column (ID)
-const data = jq(html).find('table').table2json({
+const data = jq(html).find('table').toJSON({
     ignoreColumns: [0]
 });
 console.log(data);
@@ -143,7 +145,7 @@ console.log(data);
 ### Including Only Specific Columns
 ```javascript
 // Include only columns 0 and 2 (ID and Email)
-const data = jq(html).find('table').table2json({
+const data = jq(html).find('table').toJSON({
     onlyColumns: [0, 2]
 });
 console.log(data);
@@ -169,7 +171,7 @@ const html = `
 `;
 
 // Convert all tables to JSON
-const allData = jq(html).find('table').table2json();
+const allData = jq(html).find('table').toJSON();
 console.log(allData);
 // [
 //   { Name: 'Alice', Role: 'Developer' },
@@ -195,7 +197,7 @@ const html = `
 // Find table with "Email" header and convert to JSON
 const contacts = jq(html)
     .findTableWithHeader('Email')
-    .table2json();
+    .toJSON();
     
 console.log(contacts);
 // [{ Name: 'John', Email: 'john@example.com' }]
@@ -218,7 +220,7 @@ const html = `
     </table>
 `;
 
-const data = jq(html).find('table').table2json();
+const data = jq(html).find('table').toJSON();
 console.log(data);
 // [{ column_0: 'A', 'Value 1': 'B', column_2: 'C' }]
 ```
@@ -252,11 +254,33 @@ const html = `
     </table>
 `;
 
-const financialData = jq(html).find('table').table2json();
+const financialData = jq(html).find('table').toJSON();
 console.log(financialData);
 // [
 //   { Quarter: 'Q1 2024', Revenue: '$100,000', Expenses: '$60,000', Profit: '$40,000' },
 //   { Quarter: 'Q2 2024', Revenue: '$120,000', Expenses: '$65,000', Profit: '$55,000' }
+// ]
+```
+
+### Normalizing Keys
+```javascript
+const html = `
+    <table>
+        <tr>
+            <th>My Name</th>
+            <th>E-mail Address</th>
+        </tr>
+        <tr>
+            <td>Alice</td>
+            <td>alice@example.com</td>
+        </tr>
+    </table>
+`;
+
+const data = jq(html).find('table').toJSON({ normalizeKeys: true });
+console.log(data);
+// [
+//   { My_Name: 'Alice', E_mail_Address: 'alice@example.com' }
 // ]
 ```
 
@@ -265,7 +289,7 @@ console.log(financialData);
 ### Empty Table
 ```javascript
 const html = `<table><thead><tr><th>Name</th></tr></thead></table>`;
-const data = jq(html).find('table').table2json();
+const data = jq(html).find('table').toJSON();
 console.log(data); // []
 ```
 
@@ -277,14 +301,14 @@ const html = `
         <tbody></tbody>
     </table>
 `;
-const data = jq(html).find('table').table2json();
+const data = jq(html).find('table').toJSON();
 console.log(data); // []
 ```
 
 ### Non-Table Elements
 ```javascript
 const html = `<div>Not a table</div>`;
-const data = jq(html).find('div').table2json();
+const data = jq(html).find('div').toJSON();
 console.log(data); // []
 ```
 
@@ -312,7 +336,7 @@ The method:
 3. Locates headers in `<thead>` or first row
 4. Applies column filtering (ignoreColumns/onlyColumns)
 5. Extracts cell text content with trimming
-6. Constructs objects with header-named properties
+6. Constructs objects with header-named properties (optionally normalized)
 7. Returns flattened array of all row objects
 
 ## Related Methods
@@ -324,9 +348,9 @@ The method:
 
 ## Files
 
-- **Implementation**: `methods/content-methods/table2json.js`
-- **Tests**: `test/table2json.test.js`
-- **Examples**: `examples/table2json-usage.js`
+- **Implementation**: `methods/content-methods/toJSON.js`
+- **Tests**: `test/jqnode/content-methods/toJSON.test.js`
+- **Examples**: `examples/content/toJSON-usage.js`
 
 ## Browser Compatibility
 

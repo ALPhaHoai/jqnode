@@ -25,7 +25,7 @@ examples/
 ### Run Any Example
 ```bash
 node examples/basic-usage.js
-node examples/content/table2json-usage.js
+node examples/content/toJSON-usage.js
 node examples/attributes/addClass-usage.js
 ```
 
@@ -52,7 +52,8 @@ node examples/traversal/traversal-usage.js
 ### Content (`/content`)
 - **html-usage.js** - Get/set HTML content
 - **text-usage.js** - Get/set text content
-- **table2json-usage.js** - Convert tables to JSON (9 examples)
+- **normalizedText-usage.js** - Get/set text with whitespace normalization (12 examples)
+- **toJSON-usage.js** - Convert tables to JSON (9 examples)
 - **findTableWithHeader-usage.js** - Find tables by headers
 - **title-usage.js** - Get document title
 
@@ -86,7 +87,7 @@ node examples/traversal/traversal-usage.js
 → `attributes/addClass-usage.js`, `attributes/class-methods-usage.js`
 
 **Extract table data**
-→ `content/table2json-usage.js`
+→ `content/toJSON-usage.js`
 
 **Navigate the DOM**
 → `traversal/traversal-usage.js`, `traversal/navigation-usage.js`
@@ -144,7 +145,7 @@ All examples are self-contained. Feel free to:
 - `addClass-usage.js` - 12 examples
 - `each-usage.js` - 12 examples
 - `data-usage.js` - 12 examples
-- `table2json-usage.js` - 9 examples
+- `toJSON-usage.js` - 9 examples
 
 ### Quick Demos
 - `basic-usage.js` - Getting started

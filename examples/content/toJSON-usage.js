@@ -1,6 +1,6 @@
 const jq = require('../index');
 
-console.log('=== table2json() Method Examples ===\n');
+console.log('=== toJSON() Method Examples ===\n');
 
 // Example 1: Basic table with thead
 console.log('Example 1: Basic Table');
@@ -32,7 +32,7 @@ const basicTable = `
         </tbody>
     </table>
 `;
-const basicData = jq(basicTable).find('table').table2json();
+const basicData = jq(basicTable).find('table').toJSON();
 console.log('Basic table data:');
 console.log(JSON.stringify(basicData, null, 2));
 
@@ -62,7 +62,7 @@ const noTheadTable = `
         </tr>
     </table>
 `;
-const noTheadData = jq(noTheadTable).find('table').table2json();
+const noTheadData = jq(noTheadTable).find('table').toJSON();
 console.log('Table without thead:');
 console.log(JSON.stringify(noTheadData, null, 2));
 
@@ -95,7 +95,7 @@ const employeeTable = `
     </table>
 `;
 // Ignore ID (index 0) and Salary (index 3) columns
-const filteredData = jq(employeeTable).find('table').table2json({
+const filteredData = jq(employeeTable).find('table').toJSON({
     ignoreColumns: [0, 3]
 });
 console.log('Data without ID and Salary columns:');
@@ -103,7 +103,7 @@ console.log(JSON.stringify(filteredData, null, 2));
 
 // Example 4: Including only specific columns
 console.log('\n\nExample 4: Including Only Specific Columns');
-const onlyNameEmail = jq(employeeTable).find('table').table2json({
+const onlyNameEmail = jq(employeeTable).find('table').toJSON({
     onlyColumns: [1, 2]  // Only Name and Department
 });
 console.log('Only Name and Department:');
@@ -136,7 +136,7 @@ const multipleTables = `
         </table>
     </div>
 `;
-const allTablesData = jq(multipleTables).find('table').table2json();
+const allTablesData = jq(multipleTables).find('table').toJSON();
 console.log('All tables combined:');
 console.log(JSON.stringify(allTablesData, null, 2));
 
@@ -144,7 +144,7 @@ console.log(JSON.stringify(allTablesData, null, 2));
 console.log('\n\nExample 6: Chaining with findTableWithHeader()');
 const specificTable = jq(multipleTables)
     .findTableWithHeader('Region')
-    .table2json();
+    .toJSON();
 console.log('Only tables with "Region" header:');
 console.log(JSON.stringify(specificTable, null, 2));
 
@@ -186,7 +186,7 @@ const financialTable = `
         </tbody>
     </table>
 `;
-const financialData = jq(financialTable).find('table').table2json();
+const financialData = jq(financialTable).find('table').toJSON();
 console.log('Financial data:');
 console.log(JSON.stringify(financialData, null, 2));
 
@@ -214,7 +214,7 @@ const missingHeadersTable = `
         </tr>
     </table>
 `;
-const missingHeaderData = jq(missingHeadersTable).find('table').table2json();
+const missingHeaderData = jq(missingHeadersTable).find('table').toJSON();
 console.log('Table with auto-generated column names:');
 console.log(JSON.stringify(missingHeaderData, null, 2));
 
@@ -261,7 +261,7 @@ const inventoryTable = `
     </table>
 `;
 
-const inventory = jq(inventoryTable).find('table').table2json();
+const inventory = jq(inventoryTable).find('table').toJSON();
 // Filter active products with stock
 const activeProducts = inventory.filter(item =>
     item.Status === 'Active' && parseInt(item.Stock) > 0
