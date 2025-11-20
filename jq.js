@@ -147,7 +147,7 @@ JQ.prototype.wrapAll = require('./methods/insertion-methods/wrapping/wrapAll');
 JQ.prototype.wrapInner = require('./methods/insertion-methods/wrapping/wrapInner');
 JQ.prototype.toArray = require('./methods/miscellaneous-methods/toArray');
 JQ.prototype.get = require('./methods/miscellaneous-methods/get');
-JQ.prototype.size = require('./methods/miscellaneous-methods/size');
+
 JQ.prototype.index = require('./methods/miscellaneous-methods/index');
 JQ.prototype.data = require('./methods/data-methods/data');
 JQ.prototype.removeData = require('./methods/data-methods/removeData');
