@@ -11,10 +11,13 @@ const result = {
 };
 
 const $ = jq.load(result?.data || "");
-const tables = $.find("table");
+const tables = $("table");  // ✅ Now you can use callable syntax!
 
 console.log('Number of tables:', tables.length);
 console.log('Table 1 ID:', tables.eq(0).attr('id'));
 console.log('Table 2 ID:', tables.eq(1).attr('id'));
 
 console.log('\n✅ Success! The jq.load() method is working correctly.');
+console.log('✅ Both syntaxes work:');
+console.log('   - $("selector")      // jQuery-like callable syntax');
+console.log('   - $.find("selector") // Traditional method syntax');

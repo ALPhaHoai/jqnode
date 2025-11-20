@@ -6,7 +6,9 @@
 npm install @alphahoai/jqnode
 ```
 
-## ✅ Your Requested Syntax
+## ✅ Your Requested Syntax (NEW!)
+
+**The `.load()` method now returns a callable object!**
 
 ```javascript
 const jq = require('@alphahoai/jqnode');
@@ -14,8 +16,8 @@ const jq = require('@alphahoai/jqnode');
 // Load HTML from API response
 const $ = jq.load(result?.data || "");
 
-// Find tables
-const tables = $.find("table");
+// ✨ NEW: Use jQuery-like callable syntax!
+const tables = $("table");  // This now works!
 ```
 
 ## ✅ Complete Working Example
@@ -38,9 +40,14 @@ const result = {
     `
 };
 
+
 // Load and query
 const $ = jq.load(result?.data || "");
-const tables = $.find("table");
+
+// ✨ NEW: Use callable syntax (jQuery-like)!
+const tables = $("table");  // Works!
+// OR use traditional syntax:
+// const tables = $.find("table");
 
 console.log('Found', tables.length, 'tables'); // Found 2 tables
 
@@ -54,18 +61,22 @@ tables.each(function(index, table) {
 ## ✅ Key Points
 
 1. **Use `jq.load()`** to parse HTML strings
-2. **Use `.find()`** to query the loaded HTML  
-3. **Always include fallback** with `|| ""` for safety
-4. **Works with any HTML source**: API responses, files, strings, etc.
+2. **NEW: Use callable syntax** `$("selector")` - jQuery-like!
+3. **OR use `.find()`** - Traditional method syntax still works
+4. **Always include fallback** with `|| ""` for safety
+5. **Works with any HTML source**: API responses, files, strings, etc.
 
 ## ✅ Method Reference
 
 | Method | Description | Example |
 |--------|-------------|---------|
-| `jq.load(html)` | Parse HTML string | `const $ = jq.load(html)` |
-| `$.find(selector)` | Find elements | `$.find("table")` |
+| `jq.load(html)` | Parse HTML string (returns callable) | `const $ = jq.load(html)` |
+| `$("selector")` | **NEW!** Find elements (callable) | `$("table")` |
+| `$.find(selector)` | Find elements (traditional) | `$.find("table")` |
 | `$.find(selector).each()` | Iterate elements | See example above |
 | `jq(element)` | Wrap single element | `const $el = jq(element)` |
+
+**Note:** Both `$("selector")` and `$.find("selector")` work identically!
 
 ## ✅ Run the Examples
 

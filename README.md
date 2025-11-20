@@ -61,9 +61,10 @@ const title = root.find('.title');
 console.log(title.text()); // "Hello World"
 ```
 
+
 ### Using .load() Method
 
-The `.load()` static method provides a convenient way to parse HTML, especially useful when working with API responses:
+The `.load()` static method provides a convenient way to parse HTML, especially useful when working with API responses. **New:** The returned object is callable, supporting jQuery-like syntax!
 
 ```javascript
 const jq = require('@alphahoai/jqnode');
@@ -71,21 +72,30 @@ const jq = require('@alphahoai/jqnode');
 // Load HTML from API response
 const result = { data: '<table><tr><td>Data</td></tr></table>' };
 const $ = jq.load(result?.data || "");
-const tables = $.find("table");
+
+// ✨ NEW: You can now use jQuery-like callable syntax!
+const tables = $("table");  // Callable syntax
+// or use traditional method:
+const tables2 = $.find("table");  // Traditional syntax
 
 console.log('Tables found:', tables.length);
 ```
 
-**Note:** Both `jq(html)` and `jq.load(html)` are functionally equivalent. Use `.load()` when it makes your code more readable, especially when dealing with optional data from API responses.
+**Callable Syntax:** The `.load()` method returns a special callable object that acts like both a function and a JQ instance:
 
 ```javascript
-// These are equivalent:
-const $1 = jq(html);
-const $2 = jq.load(html);
+const $ = jq.load('<div><p class="text">Hello</p><p class="text">World</p></div>');
 
-// Both return a JQ instance that you can query with .find()
-$1.find('table');
-$2.find('table');
+// jQuery-like syntax (NEW!)
+const paragraphs1 = $('p');           // ✅ Works!
+const paragraphs2 = $('p.text');      // ✅ Works!
+
+// Traditional syntax (still works)
+const paragraphs3 = $.find('p');      // ✅ Works!
+
+// All methods still available
+paragraphs1.each((i, el) => console.log(jq(el).text()));
+console.log('Length:', $.length);    // ✅ Properties work too!
 ```
 
 ### Browser

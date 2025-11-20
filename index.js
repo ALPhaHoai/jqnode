@@ -336,21 +336,98 @@ JQFactory.map = function (collection, callback) {
 };
 
 /**
- * Loads and parses HTML string, creating a new JQ instance.
- * This is a convenience method that wraps the JQFactory constructor.
+ * Creates a callable wrapper around a JQ instance.
+ * This allows the returned object to be called as a function for finding elements.
+ * @param {JQ} jqInstance - The JQ instance to wrap
+ * @returns {Function} A callable function with all JQ methods attached
+ * @private
+ */
+function makeCallable(jqInstance) {
+    // Create a function that calls .find() on the JQ instance
+    const callable = function (selector) {
+        return jqInstance.find(selector);
+    };
+
+    // Copy all properties and methods from the JQ instance to the callable function
+    // This includes all prototype methods and instance properties
+    Object.setPrototypeOf(callable, Object.getPrototypeOf(jqInstance));
+
+    // Copy instance properties
+    for (let key in jqInstance) {
+        if (jqInstance.hasOwnProperty(key)) {
+            callable[key] = jqInstance[key];
+        }
+    }
+
+    // Ensure the callable function has access to all JQ prototype methods
+    for (let key of Object.getOwnPropertyNames(JQ.prototype)) {
+        if (key !== 'constructor' && typeof jqInstance[key] === 'function') {
+            callable[key] = jqInstance[key].bind(jqInstance);
+        } else if (key !== 'constructor') {
+            Object.defineProperty(callable, key, {
+                get: function () { return jqInstance[key]; },
+                set: function (value) { jqInstance[key] = value; },
+                enumerable: true,
+                configurable: true
+            });
+        }
+    }
+
+    // Copy special properties
+    callable.nodes = jqInstance.nodes;
+    callable.length = jqInstance.length;
+
+    // Make it iterable
+    callable[Symbol.iterator] = function () {
+        return jqInstance.nodes[Symbol.iterator]();
+    };
+
+    // Array-like numeric access
+    return new Proxy(callable, {
+        get(target, prop) {
+            // Handle numeric indices
+            if (typeof prop === 'string' && /^\d+$/.test(prop)) {
+                const index = parseInt(prop, 10);
+                return jqInstance.nodes[index];
+            }
+            // Handle length property
+            if (prop === 'length') {
+                return jqInstance.nodes.length;
+            }
+            // Handle nodes property
+            if (prop === 'nodes') {
+                return jqInstance.nodes;
+            }
+            // Handle other properties
+            return target[prop];
+        },
+        apply(target, thisArg, args) {
+            // When called as a function, delegate to find()
+            return jqInstance.find(args[0]);
+        }
+    });
+}
+
+/**
+ * Loads and parses HTML string, creating a callable JQ instance.
+ * The returned object can be called as a function to find elements within the loaded HTML.
  * @param {string} html - HTML string to parse
- * @returns {JQ} New JQ instance containing the parsed HTML
+ * @returns {Function} Callable JQ instance that supports both $("selector") and $.find("selector")
  * @example
  * const jq = require('@alphahoai/jqnode');
- * const $ = jq.load('<div>Hello</div>');
- * const divs = $('div');
+ * const $ = jq.load('<div><p>Hello</p></div>');
+ * 
+ * // Both syntaxes work:
+ * const paragraphs1 = $('p');        // jQuery-like syntax
+ * const paragraphs2 = $.find('p');   // Traditional syntax
  */
 JQFactory.load = function (html) {
     if (typeof html !== 'string') {
         console.warn('[jqnode] .load() expects a string argument, received:', typeof html);
-        return new JQ([]);
+        return makeCallable(new JQ([]));
     }
-    return JQFactory(html);
+    const jqInstance = JQFactory(html);
+    return makeCallable(jqInstance);
 };
 
 // Attach static utility methods
