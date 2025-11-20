@@ -402,8 +402,29 @@ function makeCallable(jqInstance) {
             return target[prop];
         },
         apply(target, thisArg, args) {
-            // When called as a function, delegate to find()
-            return jqInstance.find(args[0]);
+            // When called as a function, behave like JQFactory
+            // If it's a string selector, use find() within the current context
+            // If it's a node, array, or other input, use JQFactory to wrap it
+            const input = args[0];
+
+            if (typeof input === 'string') {
+                // String: could be HTML or selector
+                // If it looks like HTML, create new nodes (not within context)
+                const trimmed = input.trim();
+                if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
+                    // HTML string - use JQFactory to parse it
+                    return JQFactory(input);
+                } else {
+                    // CSS selector - search within current context using find()
+                    return jqInstance.find(input);
+                }
+            } else if (input && (typeof input === 'object' || Array.isArray(input))) {
+                // Node object or array - wrap it using JQFactory
+                return JQFactory(input);
+            }
+
+            // Default: return empty
+            return JQFactory([]);
         }
     });
 }
