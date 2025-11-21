@@ -318,7 +318,11 @@ function makeCallable(jqInstance) {
 
     // Copy special properties
     callable.nodes = jqInstance.nodes;
-    callable.length = jqInstance.length;
+    Object.defineProperty(callable, 'length', {
+        value: jqInstance.length,
+        writable: true,
+        configurable: true
+    });
 
     // Make it iterable
     callable[Symbol.iterator] = function () {
