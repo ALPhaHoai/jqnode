@@ -3,6 +3,9 @@
  * Supports comprehensive CSS selectors including attribute selectors, pseudo-selectors, combinators, etc.
  */
 
+const { decodeHTMLEntities } = require('./helpers/html-entities');
+
+
 /**
  * Tokenizes a CSS selector string.
  * @param {string} selector - CSS selector string
@@ -237,11 +240,11 @@ function parseSelector(selector) {
             return sel.selectors.some(hasMeaningfulParts);
         }
         return sel.tagName !== null ||
-               (sel.id !== null && sel.id !== '') ||
-               (sel.classes && sel.classes.length > 0) ||
-               (sel.attributes && sel.attributes.length > 0) ||
-               (sel.pseudos && sel.pseudos.length > 0) ||
-               sel.universal === true;
+            (sel.id !== null && sel.id !== '') ||
+            (sel.classes && sel.classes.length > 0) ||
+            (sel.attributes && sel.attributes.length > 0) ||
+            (sel.pseudos && sel.pseudos.length > 0) ||
+            sel.universal === true;
     };
 
     if (!hasMeaningfulParts(finalSelector)) {
@@ -326,14 +329,16 @@ function parseSimpleSelector(tokens, startIndex) {
                 }
             }
 
+            // Decode HTML entities to match decoded attribute values from HTML parser
             if (idValue) { // Only set non-empty IDs
-                part.id = idValue;
+                part.id = decodeHTMLEntities(idValue);
             }
             i++;
         } else if (token.type === 'class') {
             const className = token.value.substring(1); // Remove .
             if (className) { // Only add non-empty class names
-                part.classes.push(className);
+                // Decode HTML entities to match decoded attribute values from HTML parser
+                part.classes.push(decodeHTMLEntities(className));
             }
             i++;
         } else if (token.type === 'attribute') {
@@ -629,7 +634,7 @@ function matchesPseudo(node, pseudo, context) {
 
         case 'empty':
             return !node.children || node.children.length === 0 ||
-                   node.children.every(child => child.type === 'text' && !child.value.trim());
+                node.children.every(child => child.type === 'text' && !child.value.trim());
 
         case 'root':
             return context.isRoot || false;

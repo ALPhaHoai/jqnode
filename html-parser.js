@@ -3,6 +3,8 @@
  * Each node has the format: { type: 'element'|'text', tag?, attributes?, children?, value? }
  */
 
+const { decodeHTMLEntities } = require('./helpers/html-entities');
+
 /**
  * HTML5 void elements that are always self-closing
  * @const {Set<string>}
@@ -47,52 +49,6 @@ const AUTO_CLOSE_RULES = {
  * @const {number}
  */
 const MAX_ATTRIBUTE_VALUE_LENGTH = 100000;
-
-/**
- * Decodes HTML entities in a string to match jQuery/Cheerio behavior
- * @param {string} text - Text containing HTML entities
- * @returns {string} Decoded text
- */
-function decodeHTMLEntities(text) {
-    const entities = {
-        'amp': '&',
-        'lt': '<',
-        'gt': '>',
-        'quot': '"',
-        'apos': "'",
-        'nbsp': '\u00A0',
-        'copy': '©',
-        'reg': '®',
-        'trade': '™',
-        'euro': '€',
-        'pound': '£',
-        'yen': '¥',
-        'cent': '¢',
-        'mdash': '—',
-        'ndash': '–',
-        'hellip': '…',
-        'laquo': '«',
-        'raquo': '»',
-        'lsquo': '\u2018',
-        'rsquo': '\u2019',
-        'ldquo': '\u201C',
-        'rdquo': '\u201D'
-    };
-
-    return text.replace(/&(?:#(\d+)|#x([0-9a-fA-F]+)|([a-zA-Z0-9]+));/g,
-        (match, dec, hex, named) => {
-            if (dec) {
-                const code = parseInt(dec, 10);
-                return code >= 0 && code <= 0x10FFFF ? String.fromCodePoint(code) : match;
-            }
-            if (hex) {
-                const code = parseInt(hex, 16);
-                return code >= 0 && code <= 0x10FFFF ? String.fromCodePoint(code) : match;
-            }
-            return entities[named] || match;
-        }
-    );
-}
 
 /**
  * Parses an HTML string into a node tree.
@@ -149,7 +105,9 @@ function parseHTML(html) {
             skipWhitespace();
 
             // Parse attribute value
-            let value = ''; // Default for boolean attributes is empty string (HTML5 standard)
+            // For boolean attributes, HTML5 allows: disabled, disabled="", or disabled="disabled"
+            // jQuery returns the attribute name when present, so we default to that
+            let value = name; // Default to attribute name for boolean attributes
             if (html[index] === '=') {
                 index++;
                 skipWhitespace();
@@ -169,7 +127,10 @@ function parseHTML(html) {
                     index++;
                 }
 
-                value = decodeHTMLEntities(val);
+                // Decode HTML entities in attribute value
+                const decodedValue = decodeHTMLEntities(val);
+                // If value is non-empty, use it; otherwise keep the attribute name (matches jQuery behavior)
+                value = decodedValue || name;
             }
 
             attributes[name] = value;
@@ -352,7 +313,7 @@ function parseHTML(html) {
                     if (selfClosing) {
                         const element = {
                             type: 'element',
-                            tagName: tagName.toLowerCase(),
+                            tagName: tagName.toUpperCase(),
                             attributes,
                             children: []
                         };
@@ -385,7 +346,7 @@ function parseHTML(html) {
 
                             const element = {
                                 type: 'element',
-                                tagName: tagName.toLowerCase(),
+                                tagName: tagName.toUpperCase(),
                                 attributes,
                                 children: rawText ? [{ type: 'text', value: rawText }] : []
                             };
@@ -396,7 +357,7 @@ function parseHTML(html) {
                             const children = parseNodes(tagName, openTags);
                             const element = {
                                 type: 'element',
-                                tagName: tagName.toLowerCase(),
+                                tagName: tagName.toUpperCase(),
                                 attributes,
                                 children
                             };
