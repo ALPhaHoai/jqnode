@@ -19,10 +19,11 @@ docs/
 │   ├── findTableWithHeader.md     - Find tables by headers
 │   └── title-method.md            - Get document title
 │
-├── 📂 attributes/                  ← Attributes & Classes (7 methods)
+├── 📂 attributes/                  ← Attributes & Classes (8 methods)
 │   ├── attr.md                     - Get/set HTML attributes
 │   ├── prop.md                     - Get/set DOM properties
 │   ├── val.md                      - Get/set form values
+│   ├── css.md                      - Get/set CSS styles
 │   ├── addClass.md                 - Add CSS classes
 │   ├── removeClass.md              - Remove CSS classes
 │   ├── toggleClass.md              - Toggle CSS classes

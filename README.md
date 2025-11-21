@@ -210,6 +210,8 @@ jqnode provides a jQuery-compatible API. Key methods include:
 - `attr(name)` / `attr(name, value)` - Get/set attributes
 - `prop(name)` / `prop(name, value)` - Get/set properties
 - `val()` / `val(value)` - Get/set form values
+- `css(property)` / `css(property, value)` - Get/set CSS styles
+- `cssCamel(property)` / `cssCamel(property, value)` - Get/set CSS styles with camelCase property names (React-compatible)
 
 ### Filtering
 - `filter(selector)` - Filter elements
