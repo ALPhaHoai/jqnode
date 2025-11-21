@@ -1,5 +1,4 @@
-const {parseHTML} = require('../html-parser');
-const debugLog = require('../jq').debugLog;
+const { parseHTML } = require('../html-parser');
 
 /**
  * Helper method to normalize content into an array of nodes.

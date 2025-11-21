@@ -1,5 +1,3 @@
-const debugLog = require('../jq').debugLog;
-
 /**
  * Helper method to check if an element has a specific descendant.
  * @param {Object} element - The element to check

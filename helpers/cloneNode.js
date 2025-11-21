@@ -1,5 +1,3 @@
-const debugLog = require('../jq').debugLog;
-
 /**
  * Helper method to deep clone a node.
  * @param {Object} node - Node to clone
@@ -12,7 +10,7 @@ function _cloneNode(node) {
         type: node.type,
         value: node.value,
         tagName: node.tagName,
-        attributes: node.attributes ? {...node.attributes} : undefined,
+        attributes: node.attributes ? { ...node.attributes } : undefined,
         children: node.children ? node.children.map(child => _cloneNode(child)) : undefined
     };
 

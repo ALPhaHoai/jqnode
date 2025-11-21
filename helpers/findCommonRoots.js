@@ -1,5 +1,3 @@
-const debugLog = require('../jq').debugLog;
-
 /**
  * Helper method to find common root nodes for selector matching.
  * @returns {Array} Array of root nodes
