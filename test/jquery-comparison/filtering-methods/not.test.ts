@@ -1,9 +1,12 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
+
+import JQ from '../../../jq';
 
 describe('not() method - Node-Query vs jQuery Comparison', () => {
-    let elements, jqElements;
+    let elements: JQ, jqElements: JQuery<HTMLElement>;
 
     beforeEach(() => {
         const html = `
@@ -32,7 +35,7 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(nqText).toBe('Inactive ItemInactive Item 2');
 
         // Verify all remaining elements are inactive
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             const jqElement = jqResult.eq(index);
             expect(nqElement.hasClass('active')).toBe(false);
@@ -48,22 +51,22 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(4);
 
         // Verify no elements have the special class
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             expect(nqElement.hasClass('special')).toBe(false);
         });
 
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             const jqElement = jQuery(element);
             expect(jqElement.hasClass('special')).toBe(false);
         });
     });
 
     test('not() should exclude elements using function that returns true/false - jquery-comparison', () => {
-        const nqResult = elements.not(function (index, element) {
+        const nqResult = elements.not(function (index: number, element: HtmlNode) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
-        const jqResult = jqElements.not(function (index, element) {
+        const jqResult = jqElements.not(function (index: number, element: HTMLElement) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
 
@@ -125,11 +128,11 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(nqText).toBe('Span 1Span 2');
 
         // Verify all remaining elements are spans
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             expect(element.tagName && element.tagName.toLowerCase()).toBe('span');
         });
 
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             expect(element.tagName.toLowerCase()).toBe('span');
         });
     });
@@ -170,8 +173,8 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('not() should handle invalid function gracefully - jquery-comparison', () => {
-        const nqResult = elements.not(null);
-        const jqResult = jqElements.not(null);
+        const nqResult = elements.not(null as any);
+        const jqResult = jqElements.not(null as any);
 
         expect(nqResult.nodes).toHaveLength(5);
         expect(jqResult.length).toBe(5);

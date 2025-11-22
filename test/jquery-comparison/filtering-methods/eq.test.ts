@@ -300,8 +300,8 @@ describe('eq() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('eq() should work with chaining - eq() after filter() - jquery-comparison', () => {
-        const nqFiltered = elements.filter((index) => index % 2 === 0); // indices 0, 2, 4
-        const jqFiltered = jqElements.filter((index) => index % 2 === 0);
+        const nqFiltered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
+        const jqFiltered = jqElements.filter((index: number) => index % 2 === 0);
 
         const nqResult = nqFiltered.eq(1); // Should be index 2 from original (Third)
         const jqResult = jqFiltered.eq(1);
@@ -420,7 +420,7 @@ describe('eq() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('eq() should work with large collections - jquery-comparison', () => {
-        const html = Array.from({length: 100}, (_, i) =>
+        const html = Array.from({ length: 100 }, (_, i) =>
             `<div class="item">Item ${i + 1}</div>`
         ).join('');
         const { jquery: jqLarge, nodeQuery: nqLarge } = createTestDom(html);

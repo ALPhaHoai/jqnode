@@ -142,7 +142,7 @@ describe('eq() method', () => {
     });
 
     test('eq() should work with chaining - eq() after filter()', () => {
-        const filtered = elements.filter((index) => index % 2 === 0); // indices 0, 2, 4
+        const filtered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
         const result = filtered.eq(1); // Should be index 2 from original (Third)
 
         expect(result.nodes).toHaveLength(1);
@@ -199,7 +199,7 @@ describe('eq() method', () => {
     });
 
     test('eq() should work with large collections', () => {
-        const html = Array.from({length: 100}, (_, i) =>
+        const html = Array.from({ length: 100 }, (_, i) =>
             `<div class="item">Item ${i + 1}</div>`
         ).join('');
         const largeCollection = $(html).find('.item');

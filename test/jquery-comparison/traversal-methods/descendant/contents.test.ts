@@ -1,6 +1,7 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../../types';
 
 describe('contents() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -42,15 +43,15 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqContents.length).toBeGreaterThan(3);
 
         // Check for comment node
-        const nqHasComment = nqContents.nodes.some(node => node.type === 'comment');
-        const jqHasComment = jqContents.toArray().some(node => node.nodeType === 8); // COMMENT_NODE
+        const nqHasComment = nqContents.nodes.some((node: HtmlNode) => node.type === 'comment');
+        const jqHasComment = jqContents.toArray().some((node: any) => node.nodeType === 8); // COMMENT_NODE
 
         expect(nqHasComment).toBe(jqHasComment);
         expect(nqHasComment).toBe(true);
 
         // Check for element nodes
-        const nqHasH1 = nqContents.nodes.some(node => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
-        const jqHasH1 = jqContents.toArray().some(node => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
+        const nqHasH1 = nqContents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
+        const jqHasH1 = jqContents.toArray().some((node: any) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
 
         expect(nqHasH1).toBe(jqHasH1);
         expect(nqHasH1).toBe(true);
@@ -68,8 +69,8 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqContents.length).toBeGreaterThan(3);
 
         // Check for text nodes
-        const nqHasText = nqContents.nodes.some(node => node.type === 'text');
-        const jqHasText = jqContents.toArray().some(node => node.nodeType === 3); // TEXT_NODE
+        const nqHasText = nqContents.nodes.some((node: HtmlNode) => node.type === 'text');
+        const jqHasText = jqContents.toArray().some((node: any) => node.nodeType === 3); // TEXT_NODE
 
         expect(nqHasText).toBe(jqHasText);
         expect(nqHasText).toBe(true);
@@ -145,10 +146,10 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('contents() should work with chaining - jquery-comparison', () => {
-        const nqResult = nqRoot.find('#main').contents().filter((index, node) => {
+        const nqResult = nqRoot.find('#main').contents().filter((index: number, node: HtmlNode) => {
             return node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div';
         });
-        const jqResult = jqRoot.find('#main').contents().filter((index, node) => {
+        const jqResult = jqRoot.find('#main').contents().filter((index: number, node: any) => {
             return node.nodeType === 1 && node.tagName.toLowerCase() === 'div';
         });
 
@@ -181,8 +182,8 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         const jqContents = jqMainDiv.contents();
 
         // Get the types of all child nodes
-        const nqTypes = nqContents.nodes.map(node => node.type);
-        const jqTypes = jqContents.toArray().map(node => {
+        const nqTypes = nqContents.nodes.map((node: HtmlNode) => node.type);
+        const jqTypes = jqContents.toArray().map((node: any) => {
             switch (node.nodeType) {
                 case 1: return 'element';
                 case 3: return 'text';

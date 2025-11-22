@@ -1,5 +1,6 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('siblings() method', () => {
     let root: JQ;
@@ -27,19 +28,19 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(5); // All sibling elements except itself
 
-        const hasFirstSibling = siblings.nodes.some(node => node.attributes.class.includes('first'));
+        const hasFirstSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('first'));
         expect(hasFirstSibling).toBe(true);
 
-        const hasThirdSibling = siblings.nodes.some(node => node.attributes.class.includes('third'));
+        const hasThirdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('third'));
         expect(hasThirdSibling).toBe(true);
 
-        const hasFourthSibling = siblings.nodes.some(node => node.attributes.class.includes('fourth'));
+        const hasFourthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fourth'));
         expect(hasFourthSibling).toBe(true);
 
-        const hasNotSibling = siblings.nodes.some(node => node.attributes.class.includes('not-sibling'));
+        const hasNotSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('not-sibling'));
         expect(hasNotSibling).toBe(true);
 
-        const hasFifthSibling = siblings.nodes.some(node => node.attributes.class.includes('fifth'));
+        const hasFifthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fifth'));
         expect(hasFifthSibling).toBe(true);
     });
 
@@ -59,7 +60,7 @@ describe('siblings() method', () => {
         const siblingElements = secondElement.siblings('.sibling');
 
         expect(siblingElements.nodes).toHaveLength(4);
-        const allHaveSiblingClass = siblingElements.nodes.every(node => node.attributes.class.includes('sibling'));
+        const allHaveSiblingClass = siblingElements.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
         expect(allHaveSiblingClass).toBe(true);
     });
 
@@ -68,7 +69,7 @@ describe('siblings() method', () => {
         const divSiblings = secondElement.siblings('div');
 
         expect(divSiblings.nodes).toHaveLength(4); // All div siblings
-        const allAreDivs = divSiblings.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'div');
+        const allAreDivs = divSiblings.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
         expect(allAreDivs).toBe(true);
     });
 
@@ -103,10 +104,10 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(2); // Only the span and second div
 
-        const hasSpanSibling = siblings.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'span');
+        const hasSpanSibling = siblings.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span');
         expect(hasSpanSibling).toBe(true);
 
-        const hasDivSibling = siblings.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'div');
+        const hasDivSibling = siblings.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
         expect(hasDivSibling).toBe(true);
     });
 
@@ -123,10 +124,10 @@ describe('siblings() method', () => {
 
         expect(complexSiblings.nodes).toHaveLength(2);
 
-        const hasThirdComplexSibling = complexSiblings.nodes.some(node => node.attributes.class.includes('third'));
+        const hasThirdComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('third'));
         expect(hasThirdComplexSibling).toBe(true);
 
-        const hasFifthComplexSibling = complexSiblings.nodes.some(node => node.attributes.class.includes('fifth'));
+        const hasFifthComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fifth'));
         expect(hasFifthComplexSibling).toBe(true);
     });
 
@@ -158,10 +159,10 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(2);
 
-        const hasTypeASibling = siblings.nodes.some(node => node.attributes['data-type'] === 'a');
+        const hasTypeASibling = siblings.nodes.some((node: HtmlNode) => node.attributes['data-type'] === 'a');
         expect(hasTypeASibling).toBe(true);
 
-        const hasTypeCSibling = siblings.nodes.some(node => node.attributes['data-type'] === 'c');
+        const hasTypeCSibling = siblings.nodes.some((node: HtmlNode) => node.attributes['data-type'] === 'c');
         expect(hasTypeCSibling).toBe(true);
     });
 
@@ -202,10 +203,10 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(2);
 
-        const hasFirstIdSibling = siblings.nodes.some(node => node.attributes.id === 'first');
+        const hasFirstIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.id === 'first');
         expect(hasFirstIdSibling).toBe(true);
 
-        const hasThirdIdSibling = siblings.nodes.some(node => node.attributes.id === 'third');
+        const hasThirdIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.id === 'third');
         expect(hasThirdIdSibling).toBe(true);
     });
 

@@ -1,6 +1,7 @@
 import $ from '../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../types';
 
 describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', () => {
   test('should support find() and attr() chaining - jquery-comparison', () => {
@@ -477,7 +478,8 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     jqCaptions.text('Updated caption');
 
     // Verify all captions were updated
-    nqCaptions.each((index, element) => {
+    // Verify all captions were updated
+    nqCaptions.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqCaptions.eq(index);
       expect(nqElement.text()).toBe('Updated caption');
@@ -543,7 +545,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     nqButtons.attr('data-active', 'false');
     jqButtons.attr('data-active', 'false');
 
-    nqButtons.each((index, element) => {
+    nqButtons.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqButtons.eq(index);
       expect(nqElement.attr('data-active')).toBe('false');
@@ -584,7 +586,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     nqFields.attr('data-touched', 'false');
     jqFields.attr('data-touched', 'false');
 
-    nqFields.each((index, element) => {
+    nqFields.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqFields.eq(index);
       expect(nqElement.attr('data-touched')).toBe('false');
@@ -640,7 +642,8 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     jqAvailable.attr('data-status', 'available');
 
     // Verify identical attribute setting results
-    nqAvailable.each((index, element) => {
+    // Verify identical attribute setting results
+    nqAvailable.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqAvailable.eq(index);
       expect(nqElement.attr('data-status')).toBe(jqElement.attr('data-status'));
@@ -658,7 +661,8 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     expect(nqPrices.nodes.length).toBe(2);
 
     // Verify identical results
-    nqPrices.each((index, element) => {
+    // Verify identical results
+    nqPrices.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqPrices.eq(index);
       expect(nqElement.attr('data-currency')).toBe(jqElement.attr('data-currency'));
@@ -780,7 +784,8 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     const jqUpdatedTitles = jqRoot.find('.card-title');
 
     // Verify all titles were updated identically
-    nqUpdatedTitles.each((index, element) => {
+    // Verify all titles were updated identically
+    nqUpdatedTitles.each((index: number, element: HtmlNode) => {
       const nqElement = $(element);
       const jqElement = jqUpdatedTitles.eq(index);
       expect(nqElement.text()).toBe(jqElement.text());
@@ -820,8 +825,8 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     const nqEmailInput = nqRoot.find('#input2');
     const jqEmailInput = jqRoot.find('#input2');
 
-    nqEmailInput.attr('required', true);
-    jqEmailInput.attr('required', true);
+    nqEmailInput.attr('required', 'required');
+    jqEmailInput.attr('required', 'required');
 
     const nqRequired = nqEmailInput.attr('required');
     const jqRequired = jqEmailInput.attr('required');
@@ -1099,7 +1104,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     expect(nqFeaturedPrices.nodes.length).toBe(2);
 
     // Check that all featured prices got the discount attribute identically
-    nqFeaturedPrices.each((index, element) => {
+    nqFeaturedPrices.each((index: number, element: any) => {
       const nqElement = $(element);
       const jqElement = jqFeaturedPrices.eq(index);
       expect(nqElement.attr('data-discount')).toBe(jqElement.attr('data-discount'));
@@ -1113,7 +1118,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     expect(nqFeaturedStatuses.nodes.length).toBe(2);
 
     // Check that all featured statuses got the priority attribute identically
-    nqFeaturedStatuses.each((index, element) => {
+    nqFeaturedStatuses.each((index: number, element: any) => {
       const nqElement = $(element);
       const jqElement = jqFeaturedStatuses.eq(index);
       expect(nqElement.attr('data-priority')).toBe(jqElement.attr('data-priority'));

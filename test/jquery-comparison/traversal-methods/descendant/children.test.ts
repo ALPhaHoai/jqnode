@@ -1,6 +1,7 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../../types';
 
 describe('children() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -41,18 +42,18 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map(node => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags = [];
-        jqChildren.each((index, element) => {
+        jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
         expect(nqTags).toEqual(jqTags);
         expect(nqTags).toEqual(['h1', 'div', 'ul']);
 
-        const nqClasses = nqChildren.nodes.map(node => node.attributes.class);
+        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.attributes.class);
         const jqClasses = [];
-        jqChildren.each((index, element) => {
+        jqChildren.each((index: number, element: any) => {
             jqClasses.push(element.className);
         });
 
@@ -71,9 +72,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map(node => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags = [];
-        jqChildren.each((index, element) => {
+        jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -108,9 +109,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(2);
         expect(jqChildren.length).toBe(2);
 
-        const nqTexts = nqChildren.nodes.map(node => node.children[0]?.value || '');
+        const nqTexts = nqChildren.nodes.map((node: HtmlNode) => node.children[0]?.value || '');
         const jqTexts = [];
-        jqChildren.each((index, element) => {
+        jqChildren.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -128,9 +129,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map(node => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags = [];
-        jqChildren.each((index, element) => {
+        jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -173,9 +174,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqTexts = nqResult.nodes.map(node => node.children[0]?.value || '');
+        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children[0]?.value || '');
         const jqTexts = [];
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 

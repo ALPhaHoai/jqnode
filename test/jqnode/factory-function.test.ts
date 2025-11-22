@@ -29,7 +29,7 @@ describe('JQ Factory Function', () => {
     });
 
     test('should create JQ instance from nodes array', () => {
-        const nodes = [{type: 'text', value: 'test'}];
+        const nodes = [{ type: 'text', value: 'test' }];
         const result = $(nodes);
 
         // This test is only valid for node-query, not jQuery
@@ -59,7 +59,7 @@ describe('JQ Factory Function', () => {
             let result = [];
             let indices = [];
 
-            $.each(array, function (index, value) {
+            $.each(array, function (index: number, value: any) {
                 result.push(value);
                 indices.push(index);
             });
@@ -69,11 +69,11 @@ describe('JQ Factory Function', () => {
         });
 
         test('$.each() should iterate over objects', () => {
-            const obj = {a: 1, b: 2, c: 3};
+            const obj = { a: 1, b: 2, c: 3 };
             let keys = [];
             let values = [];
 
-            $.each(obj, function (key, value) {
+            $.each(obj, function (key: string, value: any) {
                 keys.push(key);
                 values.push(value);
             });
@@ -89,7 +89,7 @@ describe('JQ Factory Function', () => {
             const array = [1, 2, 3, 4];
             let result = [];
 
-            $.each(array, function (index, value) {
+            $.each(array, function (index: number, value: any) {
                 result.push(value);
                 if (index === 1) {
                     return false; // Break after second element

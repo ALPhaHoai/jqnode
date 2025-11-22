@@ -77,8 +77,9 @@ describe('Performance and large document handling - Node-Query vs jQuery Compari
         expect(jqAllItems.length).toBe(500);
 
         // Test filtering on large collection
-        const nqEvenItems = nqAllItems.filter((index) => index % 2 === 0);
-        const jqEvenItems = jqAllItems.filter((index) => index % 2 === 0);
+        // Test filtering on large collection
+        const nqEvenItems = nqAllItems.filter((index: number) => index % 2 === 0);
+        const jqEvenItems = jqAllItems.filter((index: number) => index % 2 === 0);
 
         expect(nqEvenItems.nodes).toHaveLength(250);
         expect(jqEvenItems.length).toBe(250);

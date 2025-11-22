@@ -1,9 +1,12 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
+
+import JQ from '../../../jq';
 
 describe('each() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -29,13 +32,13 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         let nqIndices = [];
         let jqIndices = [];
 
-        nqElements.each(function (index, element) {
+        nqElements.each(function (index: number, element: HtmlNode) {
             nqCount++;
             nqIndices.push(index);
             expect(element).toBe(this); // 'this' should be the element
         });
 
-        jqElements.each(function (index, element) {
+        jqElements.each(function (index: number, element: any) {
             jqCount++;
             jqIndices.push(index);
             expect(element).toBe(this); // 'this' should be the element
@@ -43,8 +46,8 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
 
         expect(nqCount).toBe(nqElements.nodes.length);
         expect(jqCount).toBe(jqElements.length);
-        expect(nqIndices).toEqual(Array.from({length: nqCount}, (_, i) => i));
-        expect(jqIndices).toEqual(Array.from({length: jqCount}, (_, i) => i));
+        expect(nqIndices).toEqual(Array.from({ length: nqCount }, (_, i) => i));
+        expect(jqIndices).toEqual(Array.from({ length: jqCount }, (_, i) => i));
     });
 
     test('each() should support chaining - jquery-comparison', () => {
@@ -70,14 +73,14 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         let nqCount = 0;
         let jqCount = 0;
 
-        nqElements.each(function (index) {
+        nqElements.each(function (index: number) {
             nqCount++;
             if (index === 1) {
                 return false; // Break at second element
             }
         });
 
-        jqElements.each(function (index) {
+        jqElements.each(function (index: number) {
             jqCount++;
             if (index === 1) {
                 return false; // Break at second element
@@ -114,11 +117,11 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const nqTags = [];
         const jqTags = [];
 
-        nqElements.each(function (index, element) {
+        nqElements.each(function (index: number, element: HtmlNode) {
             nqTags.push(element.tagName && element.tagName.toLowerCase());
         });
 
-        jqElements.each(function (index, element) {
+        jqElements.each(function (index: number, element: any) {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -130,12 +133,12 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const nqElements = nqRoot.find('h1, p');
         const jqElements = jqRoot.find('h1, p');
 
-        nqElements.each(function (index, element) {
+        nqElements.each(function (index: number, element: HtmlNode) {
             element.attributes = element.attributes || {};
             element.attributes['data-index'] = index.toString();
         });
 
-        jqElements.each(function (index, element) {
+        jqElements.each(function (index: number, element: any) {
             jQuery(element).attr('data-index', index.toString());
         });
 

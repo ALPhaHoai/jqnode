@@ -1,6 +1,7 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
 
 describe('slice() method - Node-Query vs jQuery Comparison', () => {
     let elements, jqElements;
@@ -169,11 +170,11 @@ describe('slice() method - Node-Query vs jQuery Comparison', () => {
         const nqTexts = [];
         const jqTexts = [];
 
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 

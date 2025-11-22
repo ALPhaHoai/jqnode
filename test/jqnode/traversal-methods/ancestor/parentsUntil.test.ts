@@ -1,11 +1,12 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('parentsUntil() method', () => {
-    let root: JQ;
+  let root: JQ;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <html>
         <head>
           <title>Test Page</title>
@@ -43,47 +44,47 @@ describe('parentsUntil() method', () => {
         </body>
       </html>
     `;
-        root = $(html);
+    root = $(html);
+  });
+
+  test('parentsUntil() should get ancestors until specified selector', () => {
+    const innerSpan = root.find('span.inner-span');
+    const ancestors = innerSpan.parentsUntil('section');
+
+    // Should include: div.nested, article, but not section or higher
+
+    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
+    expect(hasNestedDiv).toBe(true);
+
+    const hasArticle = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'article');
+    expect(hasArticle).toBe(true);
+
+    const hasSection = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'section');
+    expect(hasSection).toBe(false);
+  });
+
+  test('parentsUntil() should work with filter selector', () => {
+    const innerSpan = root.find('span.inner-span');
+    const ancestors = innerSpan.parentsUntil('section', 'div');
+
+    // Should include only div ancestors until section
+    ancestors.nodes.forEach((node: HtmlNode) => {
+      expect(node.tagName && node.tagName.toLowerCase()).toBe('div');
     });
 
-    test('parentsUntil() should get ancestors until specified selector', () => {
-        const innerSpan = root.find('span.inner-span');
-        const ancestors = innerSpan.parentsUntil('section');
+    const hasNestedClass = ancestors.nodes.some((node: HtmlNode) => node.attributes.class === 'nested');
+    expect(hasNestedClass).toBe(true);
 
-        // Should include: div.nested, article, but not section or higher
+    const hasContentClass = ancestors.nodes.some((node: HtmlNode) => node.attributes.class === 'content');
+    expect(hasContentClass).toBe(false); // content div is after section
+  });
 
-        const hasNestedDiv = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
-        expect(hasNestedDiv).toBe(true);
+  test('parentsUntil() should return all ancestors if stop selector not found', () => {
+    const innerSpan = root.find('span.inner-span');
+    const ancestors = innerSpan.parentsUntil('.non-existent');
 
-        const hasArticle = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'article');
-        expect(hasArticle).toBe(true);
-
-        const hasSection = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'section');
-        expect(hasSection).toBe(false);
-    });
-
-    test('parentsUntil() should work with filter selector', () => {
-        const innerSpan = root.find('span.inner-span');
-        const ancestors = innerSpan.parentsUntil('section', 'div');
-
-        // Should include only div ancestors until section
-        ancestors.nodes.forEach(node => {
-            expect(node.tagName && node.tagName.toLowerCase()).toBe('div');
-        });
-
-        const hasNestedClass = ancestors.nodes.some(node => node.attributes.class === 'nested');
-        expect(hasNestedClass).toBe(true);
-
-        const hasContentClass = ancestors.nodes.some(node => node.attributes.class === 'content');
-        expect(hasContentClass).toBe(false); // content div is after section
-    });
-
-    test('parentsUntil() should return all ancestors if stop selector not found', () => {
-        const innerSpan = root.find('span.inner-span');
-        const ancestors = innerSpan.parentsUntil('.non-existent');
-
-        // Should include all ancestors since stop selector doesn't exist
-        const ancestorsNodesCount = ancestors.nodes.length;
-        expect(ancestorsNodesCount).toBeGreaterThan(3);
-    });
+    // Should include all ancestors since stop selector doesn't exist
+    const ancestorsNodesCount = ancestors.nodes.length;
+    expect(ancestorsNodesCount).toBeGreaterThan(3);
+  });
 });

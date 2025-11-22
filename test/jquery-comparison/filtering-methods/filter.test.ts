@@ -1,9 +1,12 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
+
+import JQ from '../../../jq';
 
 describe('filter() method - Node-Query vs jQuery Comparison', () => {
-    let elements, jqElements;
+    let elements: JQ, jqElements: JQuery<HTMLElement>;
 
     beforeEach(() => {
         const html = `
@@ -26,7 +29,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(3);
 
         // Verify all filtered elements have the active class
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             const jqElement = jqResult.eq(index);
             expect(nqElement.hasClass('active')).toBe(true);
@@ -53,10 +56,10 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should filter elements using function that returns true/false - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index, element) {
+        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
             return index % 2 === 0; // Keep even indices (0, 2, 4)
         });
-        const jqResult = jqElements.filter(function (index, element) {
+        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             return index % 2 === 0; // Keep even indices (0, 2, 4)
         });
 
@@ -70,10 +73,10 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should filter elements using function that checks element properties - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index, element) {
-            return element.attributes.class.includes('special');
+        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
+            return (element.attributes?.class as string | undefined)?.includes('special') ?? false;
         });
-        const jqResult = jqElements.filter(function (index, element) {
+        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             return $(element).hasClass('special');
         });
 
@@ -140,11 +143,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         const nqTexts = [];
         const jqTexts = [];
 
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -153,11 +156,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should handle function with different contexts - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index, element) {
+        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
             return index < 3; // keep 0,1,2
         });
 
-        const jqResult = jqElements.filter(function (index, element) {
+        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             return index < 3;
         });
 
@@ -179,7 +182,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(3);
 
         // Verify all filtered elements got the attribute
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             const jqElement = jqResult.eq(index);
             expect(nqElement.attr('data-filtered')).toBe('true');
@@ -188,14 +191,14 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should handle complex function logic - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index, element) {
+        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
             const text = $(element).text();
             const hasActive = $(element).hasClass('active');
             const hasSpecial = $(element).hasClass('special');
             return hasActive && (index < 3 || hasSpecial);
         });
 
-        const jqResult = jqElements.filter(function (index, element) {
+        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             const text = jQuery(element).text();
             const hasActive = jQuery(element).hasClass('active');
             const hasSpecial = jQuery(element).hasClass('special');
@@ -208,11 +211,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         const nqTexts = [];
         const jqTexts = [];
 
-        nqResult.each((index, element) => {
+        nqResult.each((index: number, element: HtmlNode) => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index, element) => {
+        jqResult.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -266,8 +269,8 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(2);
 
         const nqTags = nqResult.nodes.map(node => node.tagName && node.tagName.toLowerCase());
-        const jqTags = [];
-        jqResult.each((index, element) => {
+        const jqTags: string[] = [];
+        jqResult.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -276,13 +279,13 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should handle function that modifies elements during filtering - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index, element) {
+        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
             // Modify element during filtering
             $(element).attr('data-processed', 'true');
             return index < 2; // Only keep first 2 elements
         });
 
-        const jqResult = jqElements.filter(function (index, element) {
+        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             // Modify element during filtering
             jQuery(element).attr('data-processed', 'true');
             return index < 2; // Only keep first 2 elements
@@ -292,12 +295,12 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(2);
 
         // Check that all elements (not just filtered ones) got the attribute
-        elements.each((index, element) => {
+        elements.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             expect(nqElement.attr('data-processed')).toBe('true');
         });
 
-        jqElements.each((index, element) => {
+        jqElements.each((index: number, element: any) => {
             const jqElement = jQuery(element);
             expect(jqElement.attr('data-processed')).toBe('true');
         });

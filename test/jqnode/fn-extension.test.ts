@@ -1,5 +1,6 @@
 import $ from '../../index';
 import JQ from '../../jq';
+import { HtmlNode } from '../../types';
 
 describe('$.fn Extension Pattern', () => {
     let root: JQ;
@@ -17,7 +18,7 @@ describe('$.fn Extension Pattern', () => {
 
     test('$.fn should be defined and point to JQ prototype', () => {
         expect($.fn).toBeDefined();
-        expect($.fn).toBe(import('../../jq').prototype);
+        expect($.fn).toBe(JQ.prototype);
     });
 
     test('should be able to add custom methods using $.fn', () => {
@@ -44,7 +45,7 @@ describe('$.fn Extension Pattern', () => {
 
     test('custom methods should support chaining', () => {
         // Add another custom method
-        $.fn.addClass = function (className) {
+        $.fn.addClass = function (className: string) {
             return this.attr('class', (this.attr('class') || '') + ' ' + className);
         };
 
@@ -76,8 +77,8 @@ describe('$.fn Extension Pattern', () => {
 
         // Test with class selector
         root.find('.item').markAsSelected();
-        root.find('.item').nodes.forEach(node => {
-            expect(node.attributes['data-selected']).toBe('true');
+        root.find('.item').nodes.forEach((node: HtmlNode) => {
+            expect($(node).attr('data-selected')).toBe('true');
         });
     });
 
@@ -103,8 +104,8 @@ describe('$.fn Extension Pattern', () => {
         expect(consoleSpy).toHaveBeenCalledWith('Called yourFunctionName on 3 elements.');
 
         // Should have added the custom attribute
-        root.find('.item').nodes.forEach(node => {
-            expect(node.attributes['data-custom-method-called']).toBe('true');
+        root.find('.item').nodes.forEach((node: HtmlNode) => {
+            expect($(node).attr('data-custom-method-called')).toBe('true');
         });
 
         // Should return this for chaining
@@ -115,10 +116,8 @@ describe('$.fn Extension Pattern', () => {
 
     test('custom methods should iterate over individual elements when needed', () => {
         $.fn.addIndex = function () {
-            this.nodes.forEach((node, index) => {
-                if (node.attributes) {
-                    node.attributes['data-index'] = index.toString();
-                }
+            this.nodes.forEach((node: HtmlNode, index: number) => {
+                $(node).attr('data-index', index.toString());
             });
             return this;
         };
@@ -148,7 +147,7 @@ describe('$.fn Extension Pattern', () => {
     });
 
     test('custom methods can accept multiple parameters', () => {
-        $.fn.setMultipleAttrs = function (attr1, value1, attr2, value2) {
+        $.fn.setMultipleAttrs = function (attr1: string, value1: string, attr2: string, value2: string) {
             return this.attr(attr1, value1).attr(attr2, value2);
         };
 
@@ -181,7 +180,7 @@ describe('$.fn Extension Pattern', () => {
     });
 
     test('custom methods can use built-in JQ methods internally', () => {
-        $.fn.addAndFind = function (selector) {
+        $.fn.addAndFind = function (selector: string) {
             this.attr('data-added', 'true');
             return this.find(selector);
         };
@@ -219,8 +218,8 @@ describe('$.fn Extension Pattern', () => {
     });
 
     test('custom methods can handle callback functions', () => {
-        $.fn.eachWithCallback = function (callback) {
-            this.nodes.forEach((node, index) => {
+        $.fn.eachWithCallback = function (callback: (node: HtmlNode, index: number) => void) {
+            this.nodes.forEach((node: HtmlNode, index: number) => {
                 callback.call(this, node, index);
             });
             return this;
@@ -229,11 +228,9 @@ describe('$.fn Extension Pattern', () => {
         let callCount = 0;
         const items = root.find('.item');
 
-        items.eachWithCallback(function (node, index) {
+        items.eachWithCallback(function (node: HtmlNode, index: number) {
             callCount++;
-            if (node.attributes) {
-                node.attributes['data-callback-index'] = index.toString();
-            }
+            $(node).attr('data-callback-index', index.toString());
         });
 
         expect(callCount).toBe(3);
@@ -274,7 +271,7 @@ describe('$.fn Extension Pattern', () => {
     test('custom methods can return new JQ instances', () => {
         $.fn.createNewInstance = function () {
             // Create a new JQ instance with the same nodes
-            const newInstance = new (import('../../jq'))(this.nodes.slice());
+            const newInstance = new JQ(this.nodes.slice());
             return newInstance;
         };
 
@@ -310,7 +307,7 @@ describe('$.fn Extension Pattern', () => {
     });
 
     test('custom methods should handle undefined/null parameters gracefully', () => {
-        $.fn.safeAttr = function (name, value) {
+        $.fn.safeAttr = function (name: string | null, value: string | null) {
             if (name && value !== undefined) {
                 return this.attr(name, value);
             }
@@ -333,7 +330,7 @@ describe('$.fn Extension Pattern', () => {
 
     test('custom methods can access and modify node properties directly', () => {
         $.fn.modifyNodeType = function () {
-            this.nodes.forEach(node => {
+            this.nodes.forEach((node: HtmlNode) => {
                 if (node.type === 'element') {
                     node.customProperty = 'modified';
                 }
@@ -366,7 +363,7 @@ describe('$.fn Extension Pattern', () => {
     `;
         const nestedRoot = $(nestedHtml);
 
-        $.fn.addDepth = function (depth) {
+        $.fn.addDepth = function (depth: string) {
             return this.attr('data-depth', depth);
         };
 

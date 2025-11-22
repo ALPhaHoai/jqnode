@@ -1,9 +1,12 @@
 import $ from '../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../types';
+
+import JQ from '../../jq';
 
 describe('find() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot, cleanup;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -27,14 +30,9 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         `;
 
         // Use the helper to create consistent DOM setup
-        const { jquery, nodeQuery, cleanup: cleanupFn } = createTestDom(html);
+        const { jquery, nodeQuery } = createTestDom(html);
         jqRoot = jquery;
         nqRoot = nodeQuery;
-        cleanup = cleanupFn;
-    });
-
-    afterEach(() => {
-        if (cleanup) cleanup();
     });
 
     test('find() should locate elements by tag name - jquery-comparison', () => {
@@ -52,17 +50,17 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqPElements = jqRoot.find('p');
 
         expect(nqPElements.nodes).toHaveLength(2);
-        expect(nqPElements.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'p')).toBe(true);
+        expect(nqPElements.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p')).toBe(true);
         expect(jqPElements.length).toBe(2);
-        expect(Array.from(jqPElements).every(el => el.tagName.toLowerCase() === 'p')).toBe(true);
+        expect(Array.from(jqPElements).every((el: HTMLElement) => el.tagName.toLowerCase() === 'p')).toBe(true);
 
         const nqSpanElements = nqRoot.find('span');
         const jqSpanElements = jqRoot.find('span');
 
         expect(nqSpanElements.nodes).toHaveLength(2);
-        expect(nqSpanElements.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'span')).toBe(true);
+        expect(nqSpanElements.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span')).toBe(true);
         expect(jqSpanElements.length).toBe(2);
-        expect(Array.from(jqSpanElements).every(el => el.tagName.toLowerCase() === 'span')).toBe(true);
+        expect(Array.from(jqSpanElements).every((el: HTMLElement) => el.tagName.toLowerCase() === 'span')).toBe(true);
     });
 
     test('find() should locate nested elements by class - jquery-comparison', () => {
@@ -70,7 +68,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqHighlights = jqRoot.find('.highlight');
 
         expect(nqHighlights.nodes).toHaveLength(1);
-        expect(nqHighlights.nodes[0].attributes.class).toBe('highlight');
+        expect(nqHighlights.nodes[0].attributes?.class).toBe('highlight');
         expect(nqHighlights.text()).toBe('Highlighted text');
 
         expect(jqHighlights.length).toBe(1);
@@ -84,7 +82,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqMain = jqRoot.find('#main');
 
         expect(nqMain.nodes).toHaveLength(1);
-        expect(nqMain.nodes[0].attributes.id).toBe('main');
+        expect(nqMain.nodes[0].attributes?.id).toBe('main');
 
         expect(jqMain.length).toBe(1);
         expect(jqMain.attr('id')).toBe('main');
@@ -96,7 +94,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
 
         expect(nqSpecialItems.nodes).toHaveLength(1);
         expect(nqSpecialItems.nodes[0].tagName && nqSpecialItems.nodes[0].tagName.toLowerCase()).toBe('li');
-        expect(nqSpecialItems.nodes[0].attributes.class).toBe('item special');
+        expect(nqSpecialItems.nodes[0].attributes?.class).toBe('item special');
 
         expect(jqSpecialItems.length).toBe(1);
         expect(jqSpecialItems[0].tagName.toLowerCase()).toBe('li');
@@ -109,7 +107,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqAllItems = jqRoot.find('.item');
 
         expect(nqAllItems.nodes).toHaveLength(3);
-        expect(nqAllItems.nodes.every(node => node.attributes.class.includes('item'))).toBe(true);
+        expect(nqAllItems.nodes.every((node: HtmlNode) => node.attributes.class.includes('item'))).toBe(true);
 
         expect(jqAllItems.length).toBe(3);
         jqAllItems.each(function () {

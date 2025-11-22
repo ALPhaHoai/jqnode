@@ -94,13 +94,13 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
             let jqIndices = [];
 
             // Node-query each
-            $.each(array, function (index, value) {
+            $.each(array, function (index: number, value: any) {
                 nqResult.push(value);
                 nqIndices.push(index);
             });
 
             // jQuery each - identical operation
-            jQuery.each(array, function (index, value) {
+            jQuery.each(array, function (index: number, value: any) {
                 jqResult.push(value);
                 jqIndices.push(index);
             });
@@ -120,13 +120,13 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
             let jqValues = [];
 
             // Node-query each
-            $.each(obj, function (key, value) {
+            $.each(obj, function (key: string, value: any) {
                 nqKeys.push(key);
                 nqValues.push(value);
             });
 
             // jQuery each - identical operation
-            jQuery.each(obj, function (key, value) {
+            jQuery.each(obj, function (key: string, value: any) {
                 jqKeys.push(key);
                 jqValues.push(value);
             });
@@ -150,7 +150,7 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
             let jqResult = [];
 
             // Node-query each with break
-            $.each(array, function (index, value) {
+            $.each(array, function (index: number, value: any) {
                 nqResult.push(value);
                 if (index === 1) {
                     return false; // Break after second element
@@ -158,7 +158,7 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
             });
 
             // jQuery each with break - identical operation
-            jQuery.each(array, function (index, value) {
+            jQuery.each(array, function (index: number, value: any) {
                 jqResult.push(value);
                 if (index === 1) {
                     return false; // Break after second element
@@ -246,14 +246,14 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
             let nqFlat = [];
             let jqFlat = [];
 
-            $.each(nested, function (index, subArray) {
-                $.each(subArray, function (subIndex, value) {
+            $.each(nested, function (index: number, subArray: any[]) {
+                $.each(subArray, function (subIndex: number, value: any) {
                     nqFlat.push(value);
                 });
             });
 
-            jQuery.each(nested, function (index, subArray) {
-                jQuery.each(subArray, function (subIndex, value) {
+            jQuery.each(nested, function (index: number, subArray: any[]) {
+                jQuery.each(subArray, function (subIndex: number, value: any) {
                     jqFlat.push(value);
                 });
             });

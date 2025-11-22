@@ -142,7 +142,7 @@ describe('not() method', () => {
     });
 
     test('not() should work with function that uses this context', () => {
-        const result = elements.not(function (index) {
+        const result = elements.not(function (index: number) {
             // Exclude elements that have exactly 'Inactive Item' as text content
             const textContent = this.children.map((child: any) => child.value || '').join('');
             return textContent === 'Inactive Item';
@@ -197,7 +197,7 @@ describe('not() method', () => {
     });
 
     test('not() should handle function that returns non-boolean values', () => {
-        const result = elements.not(function (index) {
+        const result = elements.not(function (index: number) {
             // Return falsy for indices 1 and 2, truthy for others
             // This tests that non-boolean return values are properly coerced
             return index === 1 || index === 2 ? false : 'truthy';

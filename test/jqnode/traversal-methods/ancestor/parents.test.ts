@@ -1,11 +1,12 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('parents() method', () => {
-    let root: JQ;
+  let root: JQ;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <html>
         <head>
           <title>Test Page</title>
@@ -43,46 +44,46 @@ describe('parents() method', () => {
         </body>
       </html>
     `;
-        root = $(html);
+    root = $(html);
+  });
+
+  test('parents() should get all ancestors', () => {
+    const innerSpan = root.find('span.inner-span');
+    const ancestors = innerSpan.parents();
+
+    // Should include: div.nested, article, section, div.content, body, html
+    const ancestorsNodesCount = ancestors.nodes.length;
+    expect(ancestorsNodesCount).toBeGreaterThan(3);
+
+    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
+    expect(hasNestedDiv).toBe(true);
+
+    const hasArticle = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'article');
+    expect(hasArticle).toBe(true);
+
+    const hasSection = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'section');
+    expect(hasSection).toBe(true);
+
+    const hasBody = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'body');
+    expect(hasBody).toBe(true);
+  });
+
+  test('parents() should work with selector filter', () => {
+    const innerSpan = root.find('span.inner-span');
+    const divAncestors = innerSpan.parents('div');
+
+    // Should include div.nested, div.content
+    const divAncestorsNodesCount = divAncestors.nodes.length;
+    expect(divAncestorsNodesCount).toBeGreaterThanOrEqual(2);
+    divAncestors.nodes.forEach((node: HtmlNode) => {
+      expect(node.tagName && node.tagName.toLowerCase()).toBe('div');
     });
+  });
 
-    test('parents() should get all ancestors', () => {
-        const innerSpan = root.find('span.inner-span');
-        const ancestors = innerSpan.parents();
+  test('parents() should return empty for root elements', () => {
+    const html = root.find('html');
+    const ancestors = html.parents();
 
-        // Should include: div.nested, article, section, div.content, body, html
-        const ancestorsNodesCount = ancestors.nodes.length;
-        expect(ancestorsNodesCount).toBeGreaterThan(3);
-
-        const hasNestedDiv = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
-        expect(hasNestedDiv).toBe(true);
-
-        const hasArticle = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'article');
-        expect(hasArticle).toBe(true);
-
-        const hasSection = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'section');
-        expect(hasSection).toBe(true);
-
-        const hasBody = ancestors.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'body');
-        expect(hasBody).toBe(true);
-    });
-
-    test('parents() should work with selector filter', () => {
-        const innerSpan = root.find('span.inner-span');
-        const divAncestors = innerSpan.parents('div');
-
-        // Should include div.nested, div.content
-        const divAncestorsNodesCount = divAncestors.nodes.length;
-        expect(divAncestorsNodesCount).toBeGreaterThanOrEqual(2);
-        divAncestors.nodes.forEach(node => {
-            expect(node.tagName && node.tagName.toLowerCase()).toBe('div');
-        });
-    });
-
-    test('parents() should return empty for root elements', () => {
-        const html = root.find('html');
-        const ancestors = html.parents();
-
-        expect(ancestors.nodes).toHaveLength(0);
-    });
+    expect(ancestors.nodes).toHaveLength(0);
+  });
 });

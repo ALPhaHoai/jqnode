@@ -1,6 +1,7 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../../types';
 
 describe('prevAll() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -29,14 +30,14 @@ describe('prevAll() method - Node-Query vs jQuery Comparison', () => {
         expect(nqPrevAll.nodes).toHaveLength(3);
         expect(jqPrevAll.length).toBe(3);
 
-        const nqTexts = nqPrevAll.nodes.map(node => {
+        const nqTexts = nqPrevAll.nodes.map((node: HtmlNode) => {
             if (node._originalElement) {
                 return node._originalElement.textContent;
             }
             return node.children[0]?.value || '';
         });
         const jqTexts = [];
-        jqPrevAll.each((index, element) => {
+        jqPrevAll.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
 

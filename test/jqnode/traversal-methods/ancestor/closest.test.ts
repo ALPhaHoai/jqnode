@@ -1,11 +1,12 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('closest() method', () => {
-    let root: JQ;
+  let root: JQ;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <html>
         <head>
           <title>Test Page</title>
@@ -43,81 +44,81 @@ describe('closest() method', () => {
         </body>
       </html>
     `;
-        root = $(html);
+    root = $(html);
+  });
+
+  test('closest() should find element itself if it matches', () => {
+    const articles = root.find('article');
+    const closest = articles.closest('article');
+
+    expect(closest.nodes).toHaveLength(2); // Should find both articles
+
+    const closestNodeTags = closest.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
+    closestNodeTags.forEach((tag: string | undefined) => {
+      expect(tag).toBe('article');
     });
+  });
 
-    test('closest() should find element itself if it matches', () => {
-        const articles = root.find('article');
-        const closest = articles.closest('article');
+  test('closest() should find closest ancestor that matches', () => {
+    const innerSpan = root.find('span.inner-span');
+    const closest = innerSpan.closest('article');
 
-        expect(closest.nodes).toHaveLength(2); // Should find both articles
+    expect(closest.nodes).toHaveLength(1);
+    const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
+    expect(closestTag).toBe('article');
+    const closestArticleClass = closest.nodes[0].attributes.class;
+    expect(closestArticleClass).toBe('article');
+  });
 
-        const closestNodeTags = closest.nodes.map(node => node.tagName && node.tagName.toLowerCase());
-        closestNodeTags.forEach(tag => {
-            expect(tag).toBe('article');
-        });
-    });
+  test('closest() should return empty if no match found', () => {
+    const span = root.find('span.inner-span');
+    const closest = span.closest('.non-existent');
 
-    test('closest() should find closest ancestor that matches', () => {
-        const innerSpan = root.find('span.inner-span');
-        const closest = innerSpan.closest('article');
+    expect(closest.nodes).toHaveLength(0);
+  });
 
-        expect(closest.nodes).toHaveLength(1);
-        const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
-        expect(closestTag).toBe('article');
-        const closestArticleClass = closest.nodes[0].attributes.class;
-        expect(closestArticleClass).toBe('article');
-    });
+  test('closest() should work with complex selectors', () => {
+    const innerSpan = root.find('span.inner-span');
+    const closest = innerSpan.closest('div.nested');
 
-    test('closest() should return empty if no match found', () => {
-        const span = root.find('span.inner-span');
-        const closest = span.closest('.non-existent');
+    expect(closest.nodes).toHaveLength(1);
+    const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
+    expect(closestTag).toBe('div');
+    const closestNestedClass = closest.nodes[0].attributes.class;
+    expect(closestNestedClass).toBe('nested');
+  });
 
-        expect(closest.nodes).toHaveLength(0);
-    });
+  test('closest() should return the closest match, not all matches', () => {
+    const innerSpan = root.find('span.inner-span');
+    const closest = innerSpan.closest('div');
 
-    test('closest() should work with complex selectors', () => {
-        const innerSpan = root.find('span.inner-span');
-        const closest = innerSpan.closest('div.nested');
+    // Should return the immediate div.nested, not the higher div.content
+    expect(closest.nodes).toHaveLength(1);
+    const closestDivClass = closest.nodes[0].attributes.class;
+    expect(closestDivClass).toBe('nested');
+  });
 
-        expect(closest.nodes).toHaveLength(1);
-        const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
-        expect(closestTag).toBe('div');
-        const closestNestedClass = closest.nodes[0].attributes.class;
-        expect(closestNestedClass).toBe('nested');
-    });
+  test('closest() should handle multiple elements', () => {
+    const spans = root.find('span');
+    const closest = spans.closest('article');
 
-    test('closest() should return the closest match, not all matches', () => {
-        const innerSpan = root.find('span.inner-span');
-        const closest = innerSpan.closest('div');
+    // Both spans are within the same article, so should find 1 article
+    expect(closest.nodes).toHaveLength(1);
+    const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
+    expect(closestTag).toBe('article');
+  });
 
-        // Should return the immediate div.nested, not the higher div.content
-        expect(closest.nodes).toHaveLength(1);
-        const closestDivClass = closest.nodes[0].attributes.class;
-        expect(closestDivClass).toBe('nested');
-    });
+  test('closest() should return empty for empty selector', () => {
+    const span = root.find('span.inner-span');
+    const closest = span.closest('');
 
-    test('closest() should handle multiple elements', () => {
-        const spans = root.find('span');
-        const closest = spans.closest('article');
+    expect(closest.nodes).toHaveLength(0);
+  });
 
-        // Both spans are within the same article, so should find 1 article
-        expect(closest.nodes).toHaveLength(1);
-        const closestTag = closest.nodes[0].tagName && closest.nodes[0].tagName.toLowerCase();
-        expect(closestTag).toBe('article');
-    });
+  test('closest() should return empty for undefined selector', () => {
+    const span = root.find('span.inner-span');
+    const closest = span.closest();
 
-    test('closest() should return empty for empty selector', () => {
-        const span = root.find('span.inner-span');
-        const closest = span.closest('');
-
-        expect(closest.nodes).toHaveLength(0);
-    });
-
-    test('closest() should return empty for undefined selector', () => {
-        const span = root.find('span.inner-span');
-        const closest = span.closest();
-
-        expect(closest.nodes).toHaveLength(0);
-    });
+    expect(closest.nodes).toHaveLength(0);
+  });
 });

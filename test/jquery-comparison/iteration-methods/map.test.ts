@@ -1,6 +1,7 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
 
 describe('map() method - Node-Query vs jQuery Comparison', () => {
     let elements, jqElements;
@@ -19,10 +20,10 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should transform elements into new values - jquery-comparison', () => {
-        const nqResult = elements.map((index, element) => {
+        const nqResult = elements.map((index: number, element: HtmlNode) => {
             return `Item ${index + 1}: ${$(element).text()}`;
         });
-        const jqResult = jqElements.map((index, element) => {
+        const jqResult = jqElements.map((index: number, element: any) => {
             return `Item ${index + 1}: ${jQuery(element).text()}`;
         });
 
@@ -39,10 +40,10 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should filter out null values - jquery-comparison', () => {
-        const nqResult = elements.map((index, element) => {
+        const nqResult = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : null;
         });
-        const jqResult = jqElements.map((index, element) => {
+        const jqResult = jqElements.map((index: number, element: any) => {
             return index % 2 === 0 ? jQuery(element).text() : null;
         });
 
@@ -54,10 +55,10 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should filter out undefined values - jquery-comparison', () => {
-        const nqResult = elements.map((index, element) => {
+        const nqResult = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : undefined;
         });
-        const jqResult = jqElements.map((index, element) => {
+        const jqResult = jqElements.map((index: number, element: any) => {
             return index % 2 === 0 ? jQuery(element).text() : undefined;
         });
 
@@ -93,11 +94,11 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqTypeElements = nqTypes.find('.test');
         const jqTypeElements = jqTypes.find('.test');
 
-        const nqResult = nqTypeElements.map((index, element) => {
+        const nqResult = nqTypeElements.map((index: number, element: HtmlNode) => {
             if (index === 0) return $(element).attr('data-value'); // string
             if (index === 1) return parseInt($(element).attr('data-value')); // number
         });
-        const jqResult = jqTypeElements.map((index, element) => {
+        const jqResult = jqTypeElements.map((index: number, element: any) => {
             if (index === 0) return jQuery(element).attr('data-value'); // string
             if (index === 1) return parseInt(jQuery(element).attr('data-value')); // number
         });
@@ -111,14 +112,14 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle object returns - jquery-comparison', () => {
-        const nqResult = elements.map((index, element) => {
+        const nqResult = elements.map((index: number, element: HtmlNode) => {
             return {
                 index: index,
                 text: $(element).text(),
                 id: $(element).attr('data-id')
             };
         });
-        const jqResult = jqElements.map((index, element) => {
+        const jqResult = jqElements.map((index: number, element: any) => {
             return {
                 index: index,
                 text: jQuery(element).text(),
@@ -130,15 +131,15 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(5);
 
         expect(nqResult.nodes).toEqual(jqResult.get());
-        expect(nqResult.nodes[0]).toEqual({index: 0, text: 'First', id: '1'});
-        expect(nqResult.nodes[1]).toEqual({index: 1, text: 'Second', id: '2'});
+        expect(nqResult.nodes[0]).toEqual({ index: 0, text: 'First', id: '1' });
+        expect(nqResult.nodes[1]).toEqual({ index: 1, text: 'Second', id: '2' });
     });
 
     test('map() should handle array returns - jquery-comparison', () => {
-        const nqResult = elements.map((index, element) => {
+        const nqResult = elements.map((index: number, element: HtmlNode) => {
             return [index, $(element).text()];
         });
-        const jqResult = jqElements.map((index, element) => {
+        const jqResult = jqElements.map((index: number, element: any) => {
             return [index, jQuery(element).text()];
         });
 
@@ -181,11 +182,11 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should work with chaining - map() after filter() - jquery-comparison', () => {
-        const nqFiltered = elements.filter((index) => index % 2 === 0); // indices 0, 2, 4
-        const jqFiltered = jqElements.filter((index) => index % 2 === 0); // indices 0, 2, 4
+        const nqFiltered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
+        const jqFiltered = jqElements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
 
-        const nqResult = nqFiltered.map((index, element) => $(element).text().toUpperCase());
-        const jqResult = jqFiltered.map((index, element) => jQuery(element).text().toUpperCase());
+        const nqResult = nqFiltered.map((index: number, element: HtmlNode) => $(element).text().toUpperCase());
+        const jqResult = jqFiltered.map((index: number, element: any) => jQuery(element).text().toUpperCase());
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -198,8 +199,8 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqSliced = elements.slice(1, 4); // Second, Third, Fourth
         const jqSliced = jqElements.slice(1, 4); // Second, Third, Fourth
 
-        const nqResult = nqSliced.map((index, element) => $(element).attr('data-id'));
-        const jqResult = jqSliced.map((index, element) => jQuery(element).attr('data-id'));
+        const nqResult = nqSliced.map((index: number, element: HtmlNode) => $(element).attr('data-id'));
+        const jqResult = jqSliced.map((index: number, element: any) => jQuery(element).attr('data-id'));
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -211,14 +212,14 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     test('map() should support chaining - map() results can be chained further - jquery-comparison', () => {
         // Note: This test is tricky because jQuery's map() returns a regular array, not a jQuery object
         // So we'll test the mapping behavior directly
-        const nqMapped = elements.map((index, element) => $(element).text());
-        const jqMapped = jqElements.map((index, element) => jQuery(element).text()).get();
+        const nqMapped = elements.map((index: number, element: HtmlNode) => $(element).text());
+        const jqMapped = jqElements.map((index: number, element: any) => jQuery(element).text()).get();
 
         // Filter the node-query results (JQ object)
-        const nqFiltered = nqMapped.filter((index, value) => value.length > 5);
+        const nqFiltered = nqMapped.filter((index: number, value: any) => value.length > 5);
 
         // Filter the jQuery results (plain array) manually
-        const jqFiltered = jqMapped.filter(value => value.length > 5);
+        const jqFiltered = jqMapped.filter((value: any) => value.length > 5);
 
         expect(nqFiltered.nodes).toHaveLength(2); // "Second" and "Fourth" both have length > 5
         expect(jqFiltered.length).toBe(2);
@@ -228,8 +229,8 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle zero values (not filter them out) - jquery-comparison', () => {
-        const nqResult = elements.map((index) => index % 2 === 0 ? index : null);
-        const jqResult = jqElements.map((index) => index % 2 === 0 ? index : null);
+        const nqResult = elements.map((index: number) => index % 2 === 0 ? index : null);
+        const jqResult = jqElements.map((index: number) => index % 2 === 0 ? index : null);
 
         expect(nqResult.nodes).toHaveLength(3); // indices 0, 2, 4
         expect(jqResult.length).toBe(3);
@@ -239,8 +240,8 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle empty string values (not filter them out) - jquery-comparison', () => {
-        const nqResult = elements.map((index) => index % 2 === 0 ? $(elements.nodes[index]).text() : '');
-        const jqResult = jqElements.map((index) => index % 2 === 0 ? jQuery(jqElements[index]).text() : '');
+        const nqResult = elements.map((index: number) => index % 2 === 0 ? $(elements.nodes[index]).text() : '');
+        const jqResult = jqElements.map((index: number) => index % 2 === 0 ? jQuery(jqElements[index]).text() : '');
 
         expect(nqResult.nodes).toHaveLength(5); // Empty strings are not null/undefined
         expect(jqResult.length).toBe(5);
@@ -250,8 +251,8 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle false values (not filter them out) - jquery-comparison', () => {
-        const nqResult = elements.map((index) => index % 2 === 0);
-        const jqResult = jqElements.map((index) => index % 2 === 0);
+        const nqResult = elements.map((index: number) => index % 2 === 0);
+        const jqResult = jqElements.map((index: number) => index % 2 === 0);
 
         expect(nqResult.nodes).toHaveLength(5); // false is not null/undefined
         expect(jqResult.length).toBe(5);

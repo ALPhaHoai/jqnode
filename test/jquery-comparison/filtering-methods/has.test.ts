@@ -55,13 +55,13 @@ describe('has() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(2);
 
         // Check first div has 2 spans
-        const nqFirstDivChildren = nqResult.nodes[0].children.filter(c => c.type === 'element');
+        const nqFirstDivChildren = nqResult.nodes[0].children.filter((c: any) => c.type === 'element');
         const jqFirstDivChildren = jqResult.eq(0).children().filter('span');
         expect(nqFirstDivChildren).toHaveLength(2);
         expect(jqFirstDivChildren.length).toBe(2);
 
         // Check second div has 1 span
-        const nqSecondDivChildren = nqResult.nodes[1].children.filter(c => c.type === 'element');
+        const nqSecondDivChildren = nqResult.nodes[1].children.filter((c: any) => c.type === 'element');
         const jqSecondDivChildren = jqResult.eq(1).children().filter('span');
         expect(nqSecondDivChildren).toHaveLength(1);
         expect(jqSecondDivChildren.length).toBe(1);

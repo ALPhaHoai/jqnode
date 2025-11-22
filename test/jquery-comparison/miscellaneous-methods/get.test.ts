@@ -1,6 +1,7 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../types';
 
 describe('get() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -104,8 +105,8 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqArray = nqItems.get();
         const jqArray = jqItems.get();
 
-        const nqIds = nqArray.map(el => el.id);
-        const jqIds = jqArray.map(el => el.id);
+        const nqIds = nqArray.map((el: HtmlNode) => el.id);
+        const jqIds = jqArray.map((el: any) => el.id);
 
         expect(nqIds).toEqual(jqIds);
         expect(nqIds).toEqual(['item1', 'item2', 'item3']);

@@ -1,4 +1,5 @@
 import $ from '../../../index';
+import { HtmlNode } from '../../../types';
 
 describe('HTML5 Void Elements', () => {
     beforeEach(() => {
@@ -42,7 +43,7 @@ describe('HTML5 Void Elements', () => {
 
         const cols = root.find('col');
         expect(cols.nodes).toHaveLength(2);
-        cols.nodes.forEach(col => {
+        cols.nodes.forEach((col: HtmlNode) => {
             expect(col.children).toHaveLength(0);
         });
 
@@ -109,7 +110,7 @@ describe('HTML5 Void Elements', () => {
 
         const metas = root.find('meta');
         expect(metas.nodes).toHaveLength(2);
-        metas.nodes.forEach(meta => {
+        metas.nodes.forEach((meta: HtmlNode) => {
             expect(meta.children).toHaveLength(0);
         });
 
@@ -134,7 +135,7 @@ describe('HTML5 Void Elements', () => {
 
         const sources = root.find('source');
         expect(sources.nodes).toHaveLength(2);
-        sources.nodes.forEach(source => {
+        sources.nodes.forEach((source: HtmlNode) => {
             expect(source.children).toHaveLength(0);
         });
 
@@ -160,7 +161,7 @@ describe('HTML5 Void Elements', () => {
 
         const wbrs = root.find('wbr');
         expect(wbrs.nodes).toHaveLength(2);
-        wbrs.nodes.forEach(wbr => {
+        wbrs.nodes.forEach((wbr: HtmlNode) => {
             expect(wbr.children).toHaveLength(0);
         });
     });
@@ -193,7 +194,7 @@ describe('HTML5 Void Elements', () => {
             'param', 'source', 'track', 'wbr'
         ];
 
-        voidElements.forEach(tag => {
+        voidElements.forEach((tag: string) => {
             const element = root.find(tag);
             expect(element.nodes).toHaveLength(1);
             expect(element.nodes[0].children).toHaveLength(0);

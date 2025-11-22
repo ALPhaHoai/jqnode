@@ -1,12 +1,13 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../../types';
 
 describe('parent() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot;
+  let nqRoot, jqRoot;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <div id="header" class="header">
         <h1 class="title">Main Title</h1>
       </div>
@@ -37,112 +38,112 @@ describe('parent() method - Node-Query vs jQuery Comparison', () => {
         <p class="footer-text">Footer content</p>
       </footer>
     `;
-        const { jquery, nodeQuery } = createTestDom(html);
-        jqRoot = jquery;
-        nqRoot = nodeQuery;
+    const { jquery, nodeQuery } = createTestDom(html);
+    jqRoot = jquery;
+    nqRoot = nodeQuery;
+  });
+
+  test('parent() should get immediate parent of elements - jquery-comparison', () => {
+    const nqSpans = nqRoot.find('span');
+    const jqSpans = jqRoot.find('span');
+
+    const nqParents = nqSpans.parent();
+    const jqParents = jqSpans.parent();
+
+    expect(nqParents.length).toBe(jqParents.length);
+    expect(nqParents.length).toBe(2);
+
+    // Compare parent tags
+    const nqParentTags: string[] = [];
+    nqParents.each((index: number, element: HtmlNode) => {
+      nqParentTags.push(element.tagName.toLowerCase());
+    });
+    const jqParentTags: string[] = [];
+    jqParents.each((index: number, element: any) => {
+      jqParentTags.push(element.tagName.toLowerCase());
     });
 
-    test('parent() should get immediate parent of elements - jquery-comparison', () => {
-        const nqSpans = nqRoot.find('span');
-        const jqSpans = jqRoot.find('span');
+    expect(nqParentTags.sort()).toEqual(jqParentTags.sort());
+    expect(nqParentTags).toEqual(['div', 'p']);
+  });
 
-        const nqParents = nqSpans.parent();
-        const jqParents = jqSpans.parent();
+  test('parent() should get immediate parent of single element - jquery-comparison', () => {
+    const nqTitle = nqRoot.find('.title');
+    const jqTitle = jqRoot.find('.title');
 
-        expect(nqParents.length).toBe(jqParents.length);
-        expect(nqParents.length).toBe(2);
+    const nqParent = nqTitle.parent();
+    const jqParent = jqTitle.parent();
 
-        // Compare parent tags
-        const nqParentTags = [];
-        nqParents.each((index, element) => {
-            nqParentTags.push(element.tagName.toLowerCase());
-        });
-        const jqParentTags = [];
-        jqParents.each((index, element) => {
-            jqParentTags.push(element.tagName.toLowerCase());
-        });
+    expect(nqParent.length).toBe(jqParent.length);
+    expect(nqParent.length).toBe(1);
 
-        expect(nqParentTags.sort()).toEqual(jqParentTags.sort());
-        expect(nqParentTags).toEqual(['div', 'p']);
-    });
+    const nqParentId = nqParent.attr('id');
+    const jqParentId = jqParent.attr('id');
 
-    test('parent() should get immediate parent of single element - jquery-comparison', () => {
-        const nqTitle = nqRoot.find('.title');
-        const jqTitle = jqRoot.find('.title');
-
-        const nqParent = nqTitle.parent();
-        const jqParent = jqTitle.parent();
-
-        expect(nqParent.length).toBe(jqParent.length);
-        expect(nqParent.length).toBe(1);
-
-        const nqParentId = nqParent.attr('id');
-        const jqParentId = jqParent.attr('id');
-
-        expect(nqParentId).toBe(jqParentId);
-        expect(nqParentId).toBe('header');
-    });
+    expect(nqParentId).toBe(jqParentId);
+    expect(nqParentId).toBe('header');
+  });
 
 
-    test('parent() should work with filtered collections - jquery-comparison', () => {
-        const nqArticles = nqRoot.find('.article');
-        const jqArticles = jqRoot.find('.article');
+  test('parent() should work with filtered collections - jquery-comparison', () => {
+    const nqArticles = nqRoot.find('.article');
+    const jqArticles = jqRoot.find('.article');
 
-        const nqFilteredParents = nqArticles.filter(':first-child').parent();
-        const jqFilteredParents = jqArticles.filter(':first-child').parent();
+    const nqFilteredParents = nqArticles.filter(':first-child').parent();
+    const jqFilteredParents = jqArticles.filter(':first-child').parent();
 
-        expect(nqFilteredParents.length).toBe(jqFilteredParents.length);
-        expect(nqFilteredParents.length).toBe(1);
+    expect(nqFilteredParents.length).toBe(jqFilteredParents.length);
+    expect(nqFilteredParents.length).toBe(1);
 
-        const nqParentClass = nqFilteredParents.attr('class');
-        const jqParentClass = jqFilteredParents.attr('class');
+    const nqParentClass = nqFilteredParents.attr('class');
+    const jqParentClass = jqFilteredParents.attr('class');
 
-        expect(nqParentClass).toBe(jqParentClass);
-        expect(nqParentClass).toBe('section');
-    });
+    expect(nqParentClass).toBe(jqParentClass);
+    expect(nqParentClass).toBe('section');
+  });
 
-    test('parent() should handle elements with same parent - jquery-comparison', () => {
-        const nqListItems = nqRoot.find('.list-item');
-        const jqListItems = jqRoot.find('.list-item');
+  test('parent() should handle elements with same parent - jquery-comparison', () => {
+    const nqListItems = nqRoot.find('.list-item');
+    const jqListItems = jqRoot.find('.list-item');
 
-        const nqParents = nqListItems.parent();
-        const jqParents = jqListItems.parent();
+    const nqParents = nqListItems.parent();
+    const jqParents = jqListItems.parent();
 
-        expect(nqParents.length).toBe(jqParents.length); // Both li elements have the same ul parent
-        expect(nqParents.length).toBe(1);
+    expect(nqParents.length).toBe(jqParents.length); // Both li elements have the same ul parent
+    expect(nqParents.length).toBe(1);
 
-        const nqParentTag = nqParents[0].tagName.toLowerCase();
-        const jqParentTag = jqParents[0].tagName.toLowerCase();
+    const nqParentTag = nqParents[0].tagName.toLowerCase();
+    const jqParentTag = jqParents[0].tagName.toLowerCase();
 
-        expect(nqParentTag).toBe(jqParentTag);
-        expect(nqParentTag).toBe('ul');
-    });
+    expect(nqParentTag).toBe(jqParentTag);
+    expect(nqParentTag).toBe('ul');
+  });
 
-    test('parent() should work with chaining - jquery-comparison', () => {
-        const nqInnerSpan = nqRoot.find('.inner-span');
-        const jqInnerSpan = jqRoot.find('.inner-span');
+  test('parent() should work with chaining - jquery-comparison', () => {
+    const nqInnerSpan = nqRoot.find('.inner-span');
+    const jqInnerSpan = jqRoot.find('.inner-span');
 
-        const nqGrandParent = nqInnerSpan.parent().parent();
-        const jqGrandParent = jqInnerSpan.parent().parent();
+    const nqGrandParent = nqInnerSpan.parent().parent();
+    const jqGrandParent = jqInnerSpan.parent().parent();
 
-        expect(nqGrandParent.length).toBe(jqGrandParent.length);
-        expect(nqGrandParent.length).toBe(1);
+    expect(nqGrandParent.length).toBe(jqGrandParent.length);
+    expect(nqGrandParent.length).toBe(1);
 
-        const nqGrandParentClass = nqGrandParent.attr('class');
-        const jqGrandParentClass = jqGrandParent.attr('class');
+    const nqGrandParentClass = nqGrandParent.attr('class');
+    const jqGrandParentClass = jqGrandParent.attr('class');
 
-        expect(nqGrandParentClass).toBe(jqGrandParentClass);
-        expect(nqGrandParentClass).toBe('article');
-    });
+    expect(nqGrandParentClass).toBe(jqGrandParentClass);
+    expect(nqGrandParentClass).toBe('article');
+  });
 
-    test('parent() should handle empty collections - jquery-comparison', () => {
-        const nqEmpty = nqRoot.find('.nonexistent');
-        const jqEmpty = jqRoot.find('.nonexistent');
+  test('parent() should handle empty collections - jquery-comparison', () => {
+    const nqEmpty = nqRoot.find('.nonexistent');
+    const jqEmpty = jqRoot.find('.nonexistent');
 
-        const nqParents = nqEmpty.parent();
-        const jqParents = jqEmpty.parent();
+    const nqParents = nqEmpty.parent();
+    const jqParents = jqEmpty.parent();
 
-        expect(nqParents.length).toBe(jqParents.length);
-        expect(nqParents.length).toBe(0);
-    });
+    expect(nqParents.length).toBe(jqParents.length);
+    expect(nqParents.length).toBe(0);
+  });
 });

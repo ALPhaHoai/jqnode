@@ -1,6 +1,7 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { HtmlNode } from '../../../../types';
 
 describe('siblings() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -35,9 +36,9 @@ describe('siblings() method - Node-Query vs jQuery Comparison', () => {
         expect(jqSiblings.length).toBe(5);
 
         // Check that all expected siblings are present
-        const nqClasses = nqSiblings.nodes.map(node => node.attributes.class).sort();
+        const nqClasses = nqSiblings.nodes.map((node: HtmlNode) => node.attributes.class).sort();
         const jqClasses = [];
-        jqSiblings.each((index, element) => {
+        jqSiblings.each((index: number, element: any) => {
             jqClasses.push(element.className);
         });
         jqClasses.sort();
