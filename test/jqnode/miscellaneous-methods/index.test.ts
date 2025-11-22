@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import { JQ } from '../../../types';
 
 describe('index() method', () => {
-    let container;
+    let container: JQ;
 
     beforeEach(() => {
         const html = `

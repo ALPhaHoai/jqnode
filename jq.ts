@@ -29,6 +29,7 @@ class JQ {
      * Array of HTML nodes wrapped by this instance
      */
     nodes: HtmlNode[];
+    [index: number]: HtmlNode | undefined;
 
     /**
      * Length of the nodes array (jQuery compatibility)

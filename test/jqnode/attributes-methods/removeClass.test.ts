@@ -81,7 +81,7 @@ describe('removeClass() method', () => {
 
         // Check each element has 'item' class removed
         items.nodes.forEach((node: HtmlNode) => {
-            expect(node.attributes.class).not.toContain('item');
+            expect(node.attributes?.class).not.toContain('item');
         });
     });
 

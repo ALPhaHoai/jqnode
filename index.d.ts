@@ -6,7 +6,7 @@
 import JQ from './jq';
 import type { HtmlNode } from './types';
 
-declare function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[]): JQ;
+declare function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
 
 declare namespace JQFactory {
     // Static properties and methods

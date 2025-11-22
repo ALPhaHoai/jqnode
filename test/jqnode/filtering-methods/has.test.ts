@@ -18,7 +18,7 @@ describe('has() method', () => {
         const result = containers.has('span');
 
         expect(result.nodes).toHaveLength(1);
-        const resultText = result.text().trim();
+        const resultText = (result.text() as string).trim();
         expect(resultText).toBe('Has span');
     });
 
@@ -40,10 +40,10 @@ describe('has() method', () => {
 
         expect(result.nodes).toHaveLength(2);
 
-        const firstDivElementChildren = result.nodes[0].children.filter((c: HtmlNode) => c.type === 'element');
+        const firstDivElementChildren = (result.nodes[0].children || []).filter((c: HtmlNode) => c.type === 'element');
         expect(firstDivElementChildren).toHaveLength(2); // First div has 2 spans
 
-        const thirdDivElementChildren = result.nodes[1].children.filter((c: HtmlNode) => c.type === 'element');
+        const thirdDivElementChildren = (result.nodes[1].children || []).filter((c: HtmlNode) => c.type === 'element');
         expect(thirdDivElementChildren).toHaveLength(1); // Third div has 1 span
     });
 
@@ -154,7 +154,7 @@ describe('has() method', () => {
         const result = containers.has(targetSpan);
 
         expect(result.nodes).toHaveLength(1);
-        const resultText = result.text().trim();
+        const resultText = (result.text() as string).trim();
         expect(resultText).toBe('Span 1');
     });
 
@@ -314,7 +314,7 @@ describe('has() method', () => {
         const result = containers.has('span');
 
         expect(result.nodes).toHaveLength(1);
-        const containsMixedText = result.text().includes('mixed');
+        const containsMixedText = (result.text() as string).includes('mixed');
         expect(containsMixedText).toBe(true);
     });
 
@@ -330,7 +330,7 @@ describe('has() method', () => {
         const result = containers.has('span');
 
         expect(result.nodes).toHaveLength(1);
-        const resultText = result.text().trim();
+        const resultText = (result.text() as string).trim();
         expect(resultText).toBe('Content');
     });
 
@@ -551,7 +551,7 @@ describe('has() method', () => {
 
         expect(result.nodes).toHaveLength(1);
         expect(result.hasClass('priority')).toBe(true);
-        const containsPriorityContent = result.text().includes('Priority content');
+        const containsPriorityContent = (result.text() as string).includes('Priority content');
         expect(containsPriorityContent).toBe(true);
     });
 

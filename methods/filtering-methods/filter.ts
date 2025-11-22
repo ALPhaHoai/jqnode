@@ -12,7 +12,7 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
         if (!parsedSelector) {
             const result = Object.create(Object.getPrototypeOf(this));
             result.nodes = [];
-            result.length = 0;
+
             return result;
         }
 
@@ -47,8 +47,8 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
             }
         });
         const result = new JQClass(filtered) as JQ;
-    result._prevObject = this;
-    return result;
+        result._prevObject = this;
+        return result;
     } else if (typeof selectorOrFunction === 'function') {
         // Function filter
         const filtered: HtmlNode[] = [];
@@ -65,12 +65,12 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
             }
         }
         const result = new JQClass(filtered) as JQ;
-    result._prevObject = this;
-    return result;
+        result._prevObject = this;
+        return result;
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = [];
-    result.length = 0;
+
     result._prevObject = this;
     return result;
 }

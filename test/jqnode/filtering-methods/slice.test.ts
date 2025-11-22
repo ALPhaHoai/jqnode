@@ -1,7 +1,9 @@
 import $ from '../../../index';
 
+import { JQ } from '../../../types';
+
 describe('slice() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `
@@ -80,11 +82,11 @@ describe('slice() method', () => {
     test('slice() should maintain element order', () => {
         const result = elements.slice(1, 4);
         expect(result.nodes).toHaveLength(3);
-        const firstResultClass = result.nodes[0].attributes.class;
+        const firstResultClass = result.nodes[0].attributes?.class;
         expect(firstResultClass).toBe('item');
-        const secondResultClass = result.nodes[1].attributes.class;
+        const secondResultClass = result.nodes[1].attributes?.class;
         expect(secondResultClass).toBe('item');
-        const thirdResultClass = result.nodes[2].attributes.class;
+        const thirdResultClass = result.nodes[2].attributes?.class;
         expect(thirdResultClass).toBe('item');
     });
 
@@ -186,9 +188,9 @@ describe('slice() method', () => {
         const result = elements.slice(1, 3);
 
         expect(result.nodes).toHaveLength(2);
-        const firstResultDataId = result.nodes[0].attributes['data-id'];
+        const firstResultDataId = result.nodes[0].attributes?.['data-id'];
         expect(firstResultDataId).toBe('2');
-        const secondResultDataId = result.nodes[1].attributes['data-id'];
+        const secondResultDataId = result.nodes[1].attributes?.['data-id'];
         expect(secondResultDataId).toBe('3');
     });
 

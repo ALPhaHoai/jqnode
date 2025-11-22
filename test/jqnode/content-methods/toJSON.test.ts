@@ -1,4 +1,4 @@
-const jq = require('../../../index');
+import jq from '../../../index';
 
 describe('toJSON', () => {
     test('converts simple table to JSON', () => {

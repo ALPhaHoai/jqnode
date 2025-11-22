@@ -289,7 +289,9 @@ function parseHTML(html: string): HtmlNode[] {
                         const element: HtmlNode = {
                             type: 'element',
                             name: tagName,
+                            tagName: tagName,
                             attribs: attributes,
+                            attributes: attributes,
                             children: []
                         };
                         nodes.push(element);
@@ -321,7 +323,9 @@ function parseHTML(html: string): HtmlNode[] {
                             const element: HtmlNode = {
                                 type: 'element',
                                 name: tagName,
+                                tagName: tagName,
                                 attribs: attributes,
+                                attributes: attributes,
                                 children: rawText ? [{ type: 'text', data: rawText }] : []
                             };
                             nodes.push(element);
@@ -331,7 +335,9 @@ function parseHTML(html: string): HtmlNode[] {
                             const element: HtmlNode = {
                                 type: 'element',
                                 name: tagName,
+                                tagName: tagName,
                                 attribs: attributes,
+                                attributes: attributes,
                                 children
                             };
                             nodes.push(element);

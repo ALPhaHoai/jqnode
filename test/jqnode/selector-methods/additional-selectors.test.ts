@@ -54,9 +54,9 @@ describe('Additional selector tests', () => {
       expect(tagClassId.nodes).toHaveLength(1);
       const tagClassIdElement = tagClassId.nodes[0];
       expect(tagClassIdElement.tagName).toBe('ARTICLE');
-      const tagClassIdElementClass = tagClassIdElement.attributes.class;
+      const tagClassIdElementClass = tagClassIdElement.attributes?.class;
       expect(tagClassIdElementClass).toContain('post');
-      const tagClassIdElementId = tagClassIdElement.attributes.id;
+      const tagClassIdElementId = tagClassIdElement.attributes?.id;
       expect(tagClassIdElementId).toBe('article-1');
 
       const tagIdClass = complexRoot.find('article#article-1.post');
@@ -104,7 +104,7 @@ describe('Additional selector tests', () => {
       expect(primaryParagraphs.nodes).toHaveLength(1);
       const primaryParagraphElement = primaryParagraphs.nodes[0];
       expect(primaryParagraphElement.tagName).toBe('P');
-      const primaryParagraphElementClass = primaryParagraphElement.attributes.class;
+      const primaryParagraphElementClass = primaryParagraphElement.attributes?.class;
       expect(primaryParagraphElementClass).toContain('text');
       expect(primaryParagraphElementClass).toContain('primary');
 
@@ -403,9 +403,9 @@ describe('Additional selector tests', () => {
       expect(titles.nodes).toHaveLength(2);
 
       // Verify the titles are correct
-      const firstTitleValue = titles.nodes[0].children[0].value;
+      const firstTitleValue = titles.nodes[0].children?.[0]?.value;
       expect(firstTitleValue).toBe('Title 1');
-      const secondTitleValue = titles.nodes[1].children[0].value;
+      const secondTitleValue = titles.nodes[1].children?.[0]?.value;
       expect(secondTitleValue).toBe('Title 2');
     });
 
@@ -437,7 +437,7 @@ describe('Additional selector tests', () => {
       expect(menu.nodes).toHaveLength(1);
       expect(activeItem.nodes).toHaveLength(1);
       expect(link.nodes).toHaveLength(1);
-      const linkValue = link.nodes[0].children[0].value;
+      const linkValue = link.nodes[0].children?.[0]?.value;
       expect(linkValue).toBe('Link 1');
     });
 
@@ -475,7 +475,7 @@ describe('Additional selector tests', () => {
       // Search within inner context
       const innerTarget = $('.target', innerDiv.nodes);
       expect(innerTarget.nodes).toHaveLength(1);
-      const innerTargetValue = innerTarget.nodes[0].children[0].value;
+      const innerTargetValue = innerTarget.nodes[0].children?.[0]?.value;
       expect(innerTargetValue).toBe('Inner target');
 
       // Search in full document context
@@ -506,7 +506,7 @@ describe('Additional selector tests', () => {
       expect(allTexts.nodes).toHaveLength(3);
 
       // Verify all texts are found
-      const textContents = allTexts.nodes.map(node => node.children[0].value);
+      const textContents = allTexts.nodes.map(node => node.children?.[0]?.value);
       expect(textContents).toContain('Section 1 text');
       expect(textContents).toContain('Section 2 text');
       expect(textContents).toContain('Section 3 text');
@@ -556,13 +556,13 @@ describe('Additional selector tests', () => {
       expect(group2Items.nodes).toHaveLength(2);
 
       // Verify they contain different content
-      const group1FirstItemValue = group1Items.nodes[0].children[0].value;
+      const group1FirstItemValue = group1Items.nodes[0].children?.[0]?.value;
       expect(group1FirstItemValue).toBe('Item 1');
-      const group1SecondItemValue = group1Items.nodes[1].children[0].value;
+      const group1SecondItemValue = group1Items.nodes[1].children?.[0]?.value;
       expect(group1SecondItemValue).toBe('Item 2');
-      const group2FirstItemValue = group2Items.nodes[0].children[0].value;
+      const group2FirstItemValue = group2Items.nodes[0].children?.[0]?.value;
       expect(group2FirstItemValue).toBe('Item 3');
-      const group2SecondItemValue = group2Items.nodes[1].children[0].value;
+      const group2SecondItemValue = group2Items.nodes[1].children?.[0]?.value;
       expect(group2SecondItemValue).toBe('Item 4');
     });
   });
@@ -581,9 +581,9 @@ describe('Additional selector tests', () => {
       expect(allItems.nodes).toHaveLength(50);
 
       // Verify first and last items
-      const firstItemDataId = allItems.nodes[0].attributes['data-id'];
+      const firstItemDataId = allItems.nodes[0].attributes?.['data-id'];
       expect(firstItemDataId).toBe('1');
-      const lastItemDataId = allItems.nodes[49].attributes['data-id'];
+      const lastItemDataId = allItems.nodes[49].attributes?.['data-id'];
       expect(lastItemDataId).toBe('50');
     });
 
@@ -602,7 +602,7 @@ describe('Additional selector tests', () => {
       const nestedRoot = $(nestedHtml);
       const deepest = nestedRoot.find('.deepest');
       expect(deepest.nodes).toHaveLength(1);
-      const deepestClass = deepest.nodes[0].attributes.class;
+      const deepestClass = deepest.nodes[0].attributes?.class;
       expect(deepestClass).toBe('deepest');
     });
 
@@ -635,7 +635,7 @@ describe('Additional selector tests', () => {
       // Test specific ID selector
       const specificSection = mixedRoot.find('#section-15');
       expect(specificSection.nodes).toHaveLength(1);
-      const specificSectionId = specificSection.nodes[0].attributes.id;
+      const specificSectionId = specificSection.nodes[0].attributes?.id;
       expect(specificSectionId).toBe('section-15');
     });
 
@@ -692,7 +692,7 @@ describe('Additional selector tests', () => {
 
       const specificPost = largeRoot.find('#post-50');
       expect(specificPost.nodes).toHaveLength(1);
-      const specificPostId = specificPost.nodes[0].attributes.id;
+      const specificPostId = specificPost.nodes[0].attributes?.id;
       expect(specificPostId).toBe('post-50');
 
       const footers = largeRoot.find('footer.meta');
@@ -1197,7 +1197,7 @@ describe('Additional selector tests', () => {
 
       const activeNavItem = idClassRoot.find('.nav-item.active');
       expect(activeNavItem.nodes).toHaveLength(1);
-      const activeNavItemId = activeNavItem.nodes[0].attributes.id;
+      const activeNavItemId = activeNavItem.nodes[0].attributes?.id;
       expect(activeNavItemId).toBe('home-link');
     });
 
@@ -1383,12 +1383,12 @@ describe('Additional selector tests', () => {
       // Test finding elements at different depths
       const deepest = deepRoot.find('.deepest');
       expect(deepest.nodes).toHaveLength(1);
-      const deepestId = deepest.nodes[0].attributes.id;
+      const deepestId = deepest.nodes[0].attributes?.id;
       expect(deepestId).toBe('target');
 
       const targetById = deepRoot.find('#target');
       expect(targetById.nodes).toHaveLength(1);
-      const targetByIdClass = targetById.nodes[0].attributes.class;
+      const targetByIdClass = targetById.nodes[0].attributes?.class;
       expect(targetByIdClass).toBe('deepest');
     });
 
@@ -1555,10 +1555,10 @@ describe('Additional selector tests', () => {
         expect(allItems.nodes).toHaveLength(5);
 
         const firstItem = repeatRoot.find('.item').nodes[0];
-        expect(firstItem.attributes['data-value']).toBe('1');
+        expect(firstItem.attributes?.['data-value']).toBe('1');
 
         const lastItem = repeatRoot.find('.item').nodes[4];
-        expect(lastItem.attributes['data-value']).toBe('5');
+        expect(lastItem.attributes?.['data-value']).toBe('5');
       }
 
       // Test alternating different selectors
@@ -2184,9 +2184,9 @@ describe('Additional selector tests', () => {
 
       // Test that data attributes are preserved and accessible
       const firstComponent = components.nodes[0];
-      expect(firstComponent.attributes['data-type']).toBe('button');
-      expect(firstComponent.attributes['data-size']).toBe('large');
-      expect(firstComponent.attributes['data-variant']).toBe('primary');
+      expect(firstComponent.attributes?.['data-type']).toBe('button');
+      expect(firstComponent.attributes?.['data-size']).toBe('large');
+      expect(firstComponent.attributes?.['data-variant']).toBe('primary');
     });
   });
 
@@ -2319,10 +2319,10 @@ describe('Additional selector tests', () => {
 
       // Verify order preservation
       const firstCard = featureCards.nodes[0];
-      expect(firstCard.attributes['data-order']).toBe('1');
+      expect(firstCard.attributes?.['data-order']).toBe('1');
 
       const secondCard = featureCards.nodes[1];
-      expect(secondCard.attributes['data-order']).toBe('2');
+      expect(secondCard.attributes?.['data-order']).toBe('2');
     });
 
     test('should handle DOM structures with repeated patterns', () => {
@@ -2391,7 +2391,7 @@ describe('Additional selector tests', () => {
       expect(links.nodes).toHaveLength(4);
 
       // Verify content
-      const titleTexts = titles.nodes.map(node => node.children[0].value);
+      const titleTexts = titles.nodes.map(node => node.children?.[0]?.value);
       expect(titleTexts).toContain('Card 1');
       expect(titleTexts).toContain('Card 2');
       expect(titleTexts).toContain('Card 3');
@@ -2655,7 +2655,7 @@ describe('Additional selector tests', () => {
     });
 
     test('should handle non-array context', () => {
-      const result = $('#title', 'invalid');
+      const result = $('#title', 'invalid' as any);
       expect(result.nodes).toHaveLength(0);
     });
 
@@ -2921,7 +2921,7 @@ describe('Additional selector tests', () => {
 
       // Test attribute operations on multiple elements
       activeItems.attr('data-status', 'highlighted');
-      const allHighlighted = activeItems.nodes.every(node => node.attributes['data-status'] === 'highlighted');
+      const allHighlighted = activeItems.nodes.every(node => node.attributes?.['data-status'] === 'highlighted');
       expect(allHighlighted).toBe(true);
     });
 
@@ -3038,8 +3038,8 @@ describe('Additional selector tests', () => {
 
       // Collect form values
       const formData = {
-        username: inputs.nodes[0].attributes.value,
-        email: inputs.nodes[1].attributes.value,
+        username: inputs.nodes[0]?.attributes?.value,
+        email: inputs.nodes[1]?.attributes?.value,
         role: select.attr('value') || 'user', // Default if no value attribute
         bio: textarea.attr('value') || textarea.text(),
         newsletter: !!checkbox.attr('checked')
@@ -3089,13 +3089,17 @@ describe('Additional selector tests', () => {
 
       // Set up tab functionality attributes
       tabButtons.nodes.forEach((btn: HtmlNode, index: number) => {
-        const tabId = btn.attributes['data-tab'];
-        btn.attributes['aria-controls'] = tabId;
-        btn.attributes['aria-selected'] = index === 0 ? 'true' : 'false';
+        const tabId = btn.attributes?.['data-tab'];
+        if (btn.attributes) {
+          btn.attributes['aria-controls'] = tabId;
+          btn.attributes['aria-selected'] = index === 0 ? 'true' : 'false';
+        }
       });
 
       tabContents.nodes.forEach((content: HtmlNode, index: number) => {
-        content.attributes['aria-hidden'] = index === 0 ? 'false' : 'true';
+        if (content.attributes) {
+          content.attributes['aria-hidden'] = index === 0 ? 'false' : 'true';
+        }
       });
 
       // Verify event handling setup
@@ -3104,12 +3108,12 @@ describe('Additional selector tests', () => {
       expect(navMenu.attr('id')).toBe('nav-menu');
 
       const firstTab = tabButtons.nodes[0];
-      expect(firstTab.attributes['aria-controls']).toBe('tab1');
-      expect(firstTab.attributes['aria-selected']).toBe('true');
+      expect(firstTab.attributes?.['aria-controls']).toBe('tab1');
+      expect(firstTab.attributes?.['aria-selected']).toBe('true');
 
       const secondTab = tabButtons.nodes[1];
-      expect(secondTab.attributes['aria-controls']).toBe('tab2');
-      expect(secondTab.attributes['aria-selected']).toBe('false');
+      expect(secondTab.attributes?.['aria-controls']).toBe('tab2');
+      expect(secondTab.attributes?.['aria-selected']).toBe('false');
     });
 
     test('should handle jQuery-style content filtering and sorting', () => {
@@ -3149,10 +3153,10 @@ describe('Additional selector tests', () => {
 
       // Filter by category
       const electronics = products.nodes.filter((node: HtmlNode) =>
-        node.attributes['data-category'] === 'electronics'
+        node.attributes?.['data-category'] === 'electronics'
       );
       const books = products.nodes.filter((node: HtmlNode) =>
-        node.attributes['data-category'] === 'books'
+        node.attributes?.['data-category'] === 'books'
       );
 
       expect(electronics).toHaveLength(2);
@@ -3160,25 +3164,27 @@ describe('Additional selector tests', () => {
 
       // Sort by price (simulate jQuery sorting)
       const sortedByPrice = [...products.nodes].sort((a, b) => {
-        const priceA = parseInt(a.attributes['data-price']);
-        const priceB = parseInt(b.attributes['data-price']);
+        const priceA = parseInt(a.attributes!['data-price'] as string);
+        const priceB = parseInt(b.attributes!['data-price'] as string);
         return priceA - priceB;
       });
 
-      const cheapestPrice = sortedByPrice[0].attributes['data-price'];
+      const cheapestPrice = sortedByPrice[0].attributes!['data-price'];
       expect(cheapestPrice).toBe('19'); // Cheapest
-      const mostExpensivePrice = sortedByPrice[3].attributes['data-price'];
+      const mostExpensivePrice = sortedByPrice[3].attributes!['data-price'];
       expect(mostExpensivePrice).toBe('299'); // Most expensive
 
       // Apply visual filtering (hide non-electronics)
       products.nodes.forEach((node: HtmlNode) => {
-        if (node.attributes['data-category'] !== 'electronics') {
-          node.attributes.style = 'display: none;';
+        if (node.attributes?.['data-category'] !== 'electronics') {
+          if (node.attributes) {
+            node.attributes.style = 'display: none;';
+          }
         }
       });
 
       const visibleProducts = products.nodes.filter((node: HtmlNode) =>
-        !node.attributes.style || !node.attributes.style.includes('display: none')
+        !node.attributes?.style || !(node.attributes?.style as string).includes('display: none')
       );
       expect(visibleProducts).toHaveLength(2);
     });
@@ -3225,8 +3231,12 @@ describe('Additional selector tests', () => {
       // Set up ARIA relationships
       toggles.nodes.forEach((toggle: HtmlNode, index: number) => {
         const contentId = `accordion-content-${index + 1}`;
-        toggle.attributes['aria-controls'] = contentId;
-        contents.nodes[index].attributes.id = contentId;
+        if (toggle.attributes) {
+          toggle.attributes['aria-controls'] = contentId;
+        }
+        if (contents.nodes[index]?.attributes) {
+          contents.nodes[index].attributes.id = contentId;
+        }
       });
 
       // Test active state management
@@ -3244,12 +3254,16 @@ describe('Additional selector tests', () => {
       const firstToggle = toggles.nodes[0];
       const firstContent = contents.nodes[0];
 
-      firstToggle.attributes['aria-expanded'] = 'true';
-      firstContent.attributes.style = 'display: block;';
+      if (firstToggle.attributes) {
+        firstToggle.attributes['aria-expanded'] = 'true';
+      }
+      if (firstContent.attributes) {
+        firstContent.attributes.style = 'display: block;';
+      }
 
-      const firstToggleAriaExpanded = firstToggle.attributes['aria-expanded'];
+      const firstToggleAriaExpanded = firstToggle.attributes?.['aria-expanded'];
       expect(firstToggleAriaExpanded).toBe('true');
-      const firstContentStyle = firstContent.attributes.style;
+      const firstContentStyle = firstContent.attributes?.style;
       expect(firstContentStyle).toBe('display: block;');
     });
 
@@ -3806,7 +3820,7 @@ describe('Additional selector tests', () => {
       const section1Items = section1Content.find('.item');
 
       expect(section1Items.nodes).toHaveLength(2);
-      const section1FirstItemValue = section1Items.nodes[0].children[0].value;
+      const section1FirstItemValue = section1Items.nodes[0].children?.[0]?.value;
       expect(section1FirstItemValue).toBe('Item 1.1');
 
       // Different section context
@@ -3814,7 +3828,7 @@ describe('Additional selector tests', () => {
       const section2Items = section2.find('.panel').find('.content').find('.item');
 
       expect(section2Items.nodes).toHaveLength(2);
-      const section2FirstItemValue = section2Items.nodes[0].children[0].value;
+      const section2FirstItemValue = section2Items.nodes[0].children?.[0]?.value;
       expect(section2FirstItemValue).toBe('Item 2.1');
 
       // Compare contexts - items from different sections are different
@@ -3980,7 +3994,7 @@ describe('Additional selector tests', () => {
       const allInputs = siblingRoot.find('.input-field');
       expect(allInputs.nodes).toHaveLength(3);
 
-      const allNames = allInputs.nodes.map(node => node.attributes.name);
+      const allNames = allInputs.nodes.map(node => node.attributes?.name);
       expect(allNames).toContain('name');
       expect(allNames).toContain('email');
       expect(allNames).toContain('age');
@@ -4042,9 +4056,9 @@ describe('Additional selector tests', () => {
       expect(secondSectionItems.nodes).toHaveLength(2);
 
       // Compare different contexts
-      const firstSectionFirstItemValue = firstSectionItems.nodes[0].children[0].children[0].value;
+      const firstSectionFirstItemValue = firstSectionItems.nodes[0].children?.[0]?.children?.[0]?.value;
       expect(firstSectionFirstItemValue).toBe('Dashboard');
-      const secondSectionFirstItemValue = secondSectionItems.nodes[0].children[0].children[0].value;
+      const secondSectionFirstItemValue = secondSectionItems.nodes[0].children?.[0]?.children?.[0]?.value;
       expect(secondSectionFirstItemValue).toBe('Sales');
 
       // Main content context
@@ -4053,430 +4067,6 @@ describe('Additional selector tests', () => {
       const widgetTitle = widget.find('h4');
 
       expect(widgetTitle.text()).toBe('Widget Title');
-    });
-  });
-
-  describe('Complex class combinations', () => {
-    test('should handle jQuery-style complex multiple class combinations', () => {
-      const complexClassHtml = `
-        <div class="components">
-          <div class="component primary large active visible">Primary Large Active</div>
-          <div class="component secondary small inactive hidden">Secondary Small Inactive</div>
-          <div class="component primary medium active visible">Primary Medium Active</div>
-          <div class="component secondary large inactive visible">Secondary Large Inactive</div>
-          <div class="component tertiary small active hidden">Tertiary Small Active</div>
-        </div>
-      `;
-      const complexRoot = $(complexClassHtml);
-
-      // Complex multiple class combinations
-      const primaryLargeActive = complexRoot.find('.component.primary.large.active');
-      expect(primaryLargeActive.nodes).toHaveLength(1);
-      expect(primaryLargeActive.text()).toBe('Primary Large Active');
-
-      const secondarySmallInactive = complexRoot.find('.component.secondary.small.inactive');
-      expect(secondarySmallInactive.nodes).toHaveLength(1);
-      expect(secondarySmallInactive.text()).toBe('Secondary Small Inactive');
-
-      const primaryActiveVisible = complexRoot.find('.component.primary.active.visible');
-      expect(primaryActiveVisible.nodes).toHaveLength(2);
-
-      const secondaryInactive = complexRoot.find('.component.secondary.inactive');
-      expect(secondaryInactive.nodes).toHaveLength(2);
-
-      const allActive = complexRoot.find('.component.active');
-      expect(allActive.nodes).toHaveLength(3);
-
-      const allVisible = complexRoot.find('.component.visible');
-      expect(allVisible.nodes).toHaveLength(3);
-    });
-
-    test('should handle jQuery-style class order independence', () => {
-      const orderHtml = `
-        <div class="test-cases">
-          <div class="item a b c">ABC</div>
-          <div class="item b a c">BAC</div>
-          <div class="item c b a">CBA</div>
-          <div class="item a c b">ACB</div>
-          <div class="item b c a">BCA</div>
-        </div>
-      `;
-      const orderRoot = $(orderHtml);
-
-      // Class order should not matter - each selector should find all 5 elements
-      // because our implementation treats .item.a.b.c as (.item AND .a AND .b AND .c)
-      const abc1 = orderRoot.find('.item.a.b.c');
-      expect(abc1.nodes).toHaveLength(5); // All elements have all classes
-
-      const abc2 = orderRoot.find('.item.b.a.c');
-      expect(abc2.nodes).toHaveLength(5); // All elements have all classes
-
-      const abc3 = orderRoot.find('.item.c.b.a');
-      expect(abc3.nodes).toHaveLength(5); // All elements have all classes
-
-      const abc4 = orderRoot.find('.item.a.c.b');
-      expect(abc4.nodes).toHaveLength(5); // All elements have all classes
-
-      const abc5 = orderRoot.find('.item.b.c.a');
-      expect(abc5.nodes).toHaveLength(5); // All elements have all classes
-
-      // All should find the same elements regardless of order
-      const abc1Length = abc1.nodes.length;
-      const abc2Length = abc2.nodes.length;
-      const abc3Length = abc3.nodes.length;
-      const abc4Length = abc4.nodes.length;
-      const abc5Length = abc5.nodes.length;
-      expect(abc1Length).toBe(abc2Length);
-      expect(abc2Length).toBe(abc3Length);
-      expect(abc3Length).toBe(abc4Length);
-      expect(abc4Length).toBe(abc5Length);
-    });
-
-    test('should handle jQuery-style complex class subset matching', () => {
-      const subsetHtml = `
-        <div class="elements">
-          <div class="element type-a size-large color-red state-active">Element 1</div>
-          <div class="element type-a size-medium color-blue state-inactive">Element 2</div>
-          <div class="element type-b size-large color-red state-active">Element 3</div>
-          <div class="element type-b size-small color-green state-active">Element 4</div>
-          <div class="element type-a size-large color-blue state-inactive">Element 5</div>
-        </div>
-      `;
-      const subsetRoot = $(subsetHtml);
-
-      // Complex subset matching
-      const typeAElements = subsetRoot.find('.element.type-a');
-      expect(typeAElements.nodes).toHaveLength(3);
-
-      const largeElements = subsetRoot.find('.element.size-large');
-      expect(largeElements.nodes).toHaveLength(3);
-
-      const redElements = subsetRoot.find('.element.color-red');
-      expect(redElements.nodes).toHaveLength(2);
-
-      const activeElements = subsetRoot.find('.element.state-active');
-      expect(activeElements.nodes).toHaveLength(3);
-
-      // Combined subset matching
-      const typeALarge = subsetRoot.find('.element.type-a.size-large');
-      expect(typeALarge.nodes).toHaveLength(2);
-
-      const redActive = subsetRoot.find('.element.color-red.state-active');
-      expect(redActive.nodes).toHaveLength(2);
-
-      const typeARedActive = subsetRoot.find('.element.type-a.color-red.state-active');
-      expect(typeARedActive.nodes).toHaveLength(1);
-
-      // Verify specific combinations
-      expect(typeARedActive.text()).toBe('Element 1');
-    });
-
-    test('should handle jQuery-style class combination with mixed attributes', () => {
-      const mixedAttrHtml = `
-        <div class="mixed-elements">
-          <div class="card primary featured" id="card1" data-type="hero">Hero Card</div>
-          <div class="card secondary" id="card2" data-type="normal">Normal Card</div>
-          <div class="card primary archived" id="card3" data-type="hero">Archived Hero</div>
-          <div class="card tertiary featured" id="card4" data-type="special">Special Card</div>
-        </div>
-      `;
-      const mixedRoot = $(mixedAttrHtml);
-
-      // Class combinations with IDs
-      const primaryFeatured = mixedRoot.find('.card.primary.featured');
-      expect(primaryFeatured.nodes).toHaveLength(1);
-      expect(primaryFeatured.attr('id')).toBe('card1');
-
-      const secondaryCard = mixedRoot.find('.card.secondary');
-      expect(secondaryCard.nodes).toHaveLength(1);
-      expect(secondaryCard.attr('id')).toBe('card2');
-
-      const primaryArchived = mixedRoot.find('.card.primary.archived');
-      expect(primaryArchived.nodes).toHaveLength(1);
-      expect(primaryArchived.attr('id')).toBe('card3');
-
-      const tertiaryFeatured = mixedRoot.find('.card.tertiary.featured');
-      expect(tertiaryFeatured.nodes).toHaveLength(1);
-      expect(tertiaryFeatured.attr('id')).toBe('card4');
-
-      // Class combinations with data attributes
-      const heroCards = mixedRoot.find('.card[data-type="hero"]');
-      expect(heroCards.nodes).toHaveLength(2); // Attribute selectors now supported
-
-      // Work with supported selectors
-      const primaryCards = mixedRoot.find('.card.primary');
-      expect(primaryCards.nodes).toHaveLength(2);
-
-      const featuredCards = mixedRoot.find('.card.featured');
-      expect(featuredCards.nodes).toHaveLength(2);
-    });
-
-    test('should handle jQuery-style complex class negation patterns', () => {
-      const negationHtml = `
-        <div class="items">
-          <div class="item active visible primary">Active Primary</div>
-          <div class="item inactive visible primary">Inactive Primary</div>
-          <div class="item active hidden secondary">Active Secondary</div>
-          <div class="item inactive hidden tertiary">Inactive Tertiary</div>
-          <div class="item active visible secondary">Active Secondary Visible</div>
-        </div>
-      `;
-      const negationRoot = $(negationHtml);
-
-      // All items
-      const allItems = negationRoot.find('.item');
-      expect(allItems.nodes).toHaveLength(5);
-
-      // Positive selections
-      const activeItems = negationRoot.find('.item.active');
-      expect(activeItems.nodes).toHaveLength(3);
-
-      const visibleItems = negationRoot.find('.item.visible');
-      expect(visibleItems.nodes).toHaveLength(3);
-
-      const primaryItems = negationRoot.find('.item.primary');
-      expect(primaryItems.nodes).toHaveLength(2);
-
-      // Complex combinations
-      const activeVisible = negationRoot.find('.item.active.visible');
-      expect(activeVisible.nodes).toHaveLength(2);
-
-      const activePrimary = negationRoot.find('.item.active.primary');
-      expect(activePrimary.nodes).toHaveLength(1);
-
-      const visiblePrimary = negationRoot.find('.item.visible.primary');
-      expect(visiblePrimary.nodes).toHaveLength(2);
-
-      // Since we don't have :not selectors, we test by filtering arrays
-      const inactiveItems = allItems.nodes.filter(node =>
-        node.attributes.class && node.attributes.class.includes('inactive')
-      );
-      expect(inactiveItems).toHaveLength(2);
-
-      const hiddenItems = allItems.nodes.filter(node =>
-        node.attributes.class && node.attributes.class.includes('hidden')
-      );
-      expect(hiddenItems).toHaveLength(2);
-    });
-
-    test('should handle jQuery-style class combination performance', () => {
-      // Create many elements with complex class combinations
-      let performanceHtml = '<div class="container">';
-      const classes = ['primary', 'secondary', 'tertiary'];
-      const sizes = ['small', 'medium', 'large'];
-      const states = ['active', 'inactive'];
-
-      for (let i = 1; i <= 100; i++) {
-        const cls = `item ${classes[i % 3]} ${sizes[i % 3]} ${states[i % 2]}`;
-        performanceHtml += `<div class="${cls}">Item ${i}</div>`;
-      }
-      performanceHtml += '</div>';
-
-      const performanceRoot = $(performanceHtml);
-
-      // Performance testing with complex combinations
-      const allItems = performanceRoot.find('.item');
-      expect(allItems.nodes).toHaveLength(100);
-
-      const primaryItems = performanceRoot.find('.item.primary');
-      expect(primaryItems.nodes).toHaveLength(33); // Roughly 1/3 (33 items with primary)
-
-      const mediumItems = performanceRoot.find('.item.medium');
-      expect(mediumItems.nodes).toHaveLength(34); // Roughly 1/3 (34 items with medium)
-
-      const activeItems = performanceRoot.find('.item.active');
-      expect(activeItems.nodes).toHaveLength(50); // Roughly 1/2 (50 items with active)
-
-      // Complex combinations
-      const primaryActive = performanceRoot.find('.item.primary.active');
-      expect(primaryActive.nodes).toHaveLength(16); // Roughly 1/6 (16 items with both primary and active)
-
-      const mediumInactive = performanceRoot.find('.item.medium.inactive');
-      expect(mediumInactive.nodes).toHaveLength(17); // Roughly 1/6 (17 items with both medium and inactive)
-
-      const primaryMediumActive = performanceRoot.find('.item.primary.medium.active');
-      expect(primaryMediumActive.nodes).toHaveLength(0); // No items have all three classes in this pattern
-    });
-
-    test('should handle jQuery-style class combinations with special characters', () => {
-      const specialCharHtml = `
-        <div class="special-elements">
-          <div class="item js-hook data-item_1 active">JS Hook Item</div>
-          <div class="item css-class-1 data-item_2 inactive">CSS Class Item</div>
-          <div class="item component_name data-item_3 active">Component Item</div>
-          <div class="item utility-class data-item_4 inactive">Utility Item</div>
-        </div>
-      `;
-      const specialRoot = $(specialCharHtml);
-
-      // Class names with underscores and numbers
-      const jsHook = specialRoot.find('.js-hook');
-      expect(jsHook.nodes).toHaveLength(1);
-
-      const cssClass = specialRoot.find('.css-class-1');
-      expect(cssClass.nodes).toHaveLength(1);
-
-      const componentName = specialRoot.find('.component_name');
-      expect(componentName.nodes).toHaveLength(1);
-
-      const utilityClass = specialRoot.find('.utility-class');
-      expect(utilityClass.nodes).toHaveLength(1);
-
-      // Complex combinations with special chars
-      const activeItems = specialRoot.find('.item.active');
-      expect(activeItems.nodes).toHaveLength(2);
-
-      const inactiveItems = specialRoot.find('.item.inactive');
-      expect(inactiveItems.nodes).toHaveLength(2);
-
-      // Mixed combinations
-      const jsHookActive = specialRoot.find('.item.js-hook.active');
-      expect(jsHookActive.nodes).toHaveLength(1);
-
-      const componentActive = specialRoot.find('.item.component_name.active');
-      expect(componentActive.nodes).toHaveLength(1);
-    });
-
-    test('should handle jQuery-style dynamic class combination changes', () => {
-      const dynamicClassHtml = `
-        <div class="dynamic-container">
-          <div class="element">Element 1</div>
-          <div class="element">Element 2</div>
-          <div class="element">Element 3</div>
-        </div>
-      `;
-      const dynamicRoot = $(dynamicClassHtml);
-
-      // Initial state - no classes
-      const initialElements = dynamicRoot.find('.element');
-      expect(initialElements.nodes).toHaveLength(3);
-
-      const noPrimary = dynamicRoot.find('.element.primary');
-      expect(noPrimary.nodes).toHaveLength(0);
-
-      // Add classes dynamically
-      initialElements.nodes[0].attributes.class = 'element primary active';
-      initialElements.nodes[1].attributes.class = 'element secondary active';
-      initialElements.nodes[2].attributes.class = 'element primary inactive';
-
-      // Test new combinations
-      const primaryElements = dynamicRoot.find('.element.primary');
-      expect(primaryElements.nodes).toHaveLength(2);
-
-      const activeElements = dynamicRoot.find('.element.active');
-      expect(activeElements.nodes).toHaveLength(2);
-
-      const secondaryElements = dynamicRoot.find('.element.secondary');
-      expect(secondaryElements.nodes).toHaveLength(1);
-
-      const inactiveElements = dynamicRoot.find('.element.inactive');
-      expect(inactiveElements.nodes).toHaveLength(1);
-
-      // Complex combinations
-      const primaryActive = dynamicRoot.find('.element.primary.active');
-      expect(primaryActive.nodes).toHaveLength(1);
-
-      const secondaryActive = dynamicRoot.find('.element.secondary.active');
-      expect(secondaryActive.nodes).toHaveLength(1);
-
-      const primaryInactive = dynamicRoot.find('.element.primary.inactive');
-      expect(primaryInactive.nodes).toHaveLength(1);
-    });
-  });
-
-  describe('Selector specificity and ordering rules', () => {
-    test('should handle jQuery-style ID vs class specificity', () => {
-      const specificityHtml = `
-        <div class="container">
-          <div id="specific" class="item special">ID Specific</div>
-          <div class="item special">Class Specific</div>
-          <div id="another" class="item">Another ID</div>
-        </div>
-      `;
-      const specificityRoot = $(specificityHtml);
-
-      // ID selectors have higher specificity
-      const idSpecific = specificityRoot.find('#specific');
-      expect(idSpecific.nodes).toHaveLength(1);
-      expect(idSpecific.text()).toBe('ID Specific');
-
-      const anotherId = specificityRoot.find('#another');
-      expect(anotherId.nodes).toHaveLength(1);
-      expect(anotherId.text()).toBe('Another ID');
-
-      // Class selectors
-      const specialItems = specificityRoot.find('.special');
-      expect(specialItems.nodes).toHaveLength(2);
-
-      const allItems = specificityRoot.find('.item');
-      expect(allItems.nodes).toHaveLength(3);
-
-      // Combined selectors work as expected
-      const idAndClass = specificityRoot.find('#specific.item');
-      expect(idAndClass.nodes).toHaveLength(1);
-
-      const classOnly = specificityRoot.find('.item.special');
-      expect(classOnly.nodes).toHaveLength(2);
-    });
-
-    test('should handle jQuery-style tag vs class vs ID precedence', () => {
-      const precedenceHtml = `
-        <div class="test">
-          <div id="target" class="test target">Universal Target</div>
-          <div class="test target">Class Target</div>
-          <div class="target">Tag Target</div>
-        </div>
-      `;
-      const precedenceRoot = $(precedenceHtml);
-
-      // ID has highest precedence
-      const idTarget = precedenceRoot.find('#target');
-      expect(idTarget.nodes).toHaveLength(1);
-      expect(idTarget.text()).toBe('Universal Target');
-
-      // Class combinations
-      const classTargets = precedenceRoot.find('.test.target');
-      expect(classTargets.nodes).toHaveLength(2);
-
-      // Tag + class combinations
-      const divTargets = precedenceRoot.find('div.target');
-      expect(divTargets.nodes).toHaveLength(3);
-
-      // More specific class combinations
-      const testTarget = precedenceRoot.find('.test.target');
-      expect(testTarget.nodes).toHaveLength(2);
-    });
-
-    test('should handle jQuery-style selector matching order', () => {
-      const orderHtml = `
-        <div class="ordered">
-          <div class="item first">First</div>
-          <div class="item second">Second</div>
-          <div class="item third">Third</div>
-          <div class="item first second">Both</div>
-        </div>
-      `;
-      const orderRoot = $(orderHtml);
-
-      // Order of results should be document order
-      const firstItems = orderRoot.find('.item.first');
-      expect(firstItems.nodes).toHaveLength(2);
-      const firstItemsFirstValue = firstItems.nodes[0].children[0].value;
-      expect(firstItemsFirstValue).toBe('First');
-      const firstItemsSecondValue = firstItems.nodes[1].children[0].value;
-      expect(firstItemsSecondValue).toBe('Both');
-
-      const secondItems = orderRoot.find('.item.second');
-      expect(secondItems.nodes).toHaveLength(2);
-      const secondItemsFirstValue = secondItems.nodes[0].children[0].value;
-      expect(secondItemsFirstValue).toBe('Second');
-      const secondItemsSecondValue = secondItems.nodes[1].children[0].value;
-      expect(secondItemsSecondValue).toBe('Both');
-
-      // Combined selectors
-      const bothClasses = orderRoot.find('.item.first.second');
-      expect(bothClasses.nodes).toHaveLength(1);
-      expect(bothClasses.text()).toBe('Both');
     });
 
     test('should handle jQuery-style complex specificity scenarios', () => {
@@ -4602,7 +4192,7 @@ describe('Additional selector tests', () => {
       expect(specialItems.nodes).toHaveLength(2);
 
       // Verify no duplicates in results
-      const itemTexts = allItems.nodes.map(node => node.children[0].value);
+      const itemTexts = allItems.nodes.map(node => node.children?.[0]?.value);
       const uniqueTexts = [...new Set(itemTexts)];
       expect(uniqueTexts).toHaveLength(4);
 

@@ -66,7 +66,7 @@ describe('is() method', () => {
         const firstElement = elements.nodes[0];
 
         expect(elements.is(firstElement)).toBe(true);
-        expect(elements.is({type: 'element', tagName: 'div'})).toBe(false); // Not in the collection
+        expect(elements.is({ type: 'element', tagName: 'div' })).toBe(false); // Not in the collection
     });
 
     test('is() should work with JQ objects', () => {
@@ -92,8 +92,8 @@ describe('is() method', () => {
         const elements = $(html).filter('.item');
 
         expect(elements.is('')).toBe(false);
-        expect(elements.is(null)).toBe(false);
-        expect(elements.is(undefined)).toBe(false);
+        expect(elements.is(null as any)).toBe(false);
+        expect(elements.is(undefined as any)).toBe(false);
     });
 
     test('is() should work with single element collection', () => {

@@ -4,7 +4,7 @@ import JQClass from '../../jq';
 /**
  * Creates a subset of matched elements using array slice.
  */
-function slice(this: JQ, start?: number, end?: number): JQ {
+function slice(this: JQ, start?: any, end?: any): JQ {
     const sliced = this.nodes.slice(start, end);
     return new JQClass(sliced);
 }

@@ -116,7 +116,7 @@ function domElementToNode(element: any): HtmlNode {
  * Factory function that creates JQ instances from HTML strings, CSS selectors, or node arrays.
  * Similar to jQuery's $ function.
  */
-function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[]): JQ {
+function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ {
     if (typeof htmlOrSelectorOrNodes === 'string') {
         const trimmed = htmlOrSelectorOrNodes.trim();
         if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
@@ -369,4 +369,5 @@ function makeCallable(jqInstance: JQ): any {
 
 
 const JQExport = JQFactory as unknown as JQStatic;
-export = JQExport;
+export default JQExport;
+export { JQ };

@@ -13,7 +13,7 @@ function is(this: JQ, selectorOrElement: CssSelector | HtmlNode | JQ): boolean {
         const result = this.nodes.some((node: HtmlNode) => allMatches.includes(node));
         return result;
     } else if (selectorOrElement && typeof selectorOrElement === 'object') {
-        if (selectorOrElement.type === 'element') {
+        if ('type' in selectorOrElement && selectorOrElement.type === 'element') {
             // Direct element reference
             const result = this.nodes.includes(selectorOrElement);
             return result;

@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import { JQ } from '../../../types';
 
 describe('get() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `
@@ -13,7 +14,7 @@ describe('get() method', () => {
     });
 
     test('get() should return array of all elements when no index provided', () => {
-        const result = elements.get();
+        const result = elements.get() as import('../../../types').HtmlNode[];
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(3);
         // Internal nodes don't have textContent property, use $().text() instead

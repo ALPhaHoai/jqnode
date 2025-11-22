@@ -32,7 +32,7 @@ function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = this.nodes;
-    result.length = this.nodes.length;
+    // result.length is a getter that returns result.nodes.length, so we don't need to set it
     return result;
 }
 

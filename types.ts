@@ -15,6 +15,7 @@ export interface HtmlNode {
     name?: string;
     tagName?: string; // Tag name for elements
     data?: string;
+    value?: string; // Alternative text content property (used by some parsers)
     attribs?: Record<string, string>;
     children?: HtmlNode[];
     parent?: HtmlNode;
@@ -43,8 +44,9 @@ export interface HtmlNode {
 
 /**
  * CSS selector pattern
+ * Can be undefined or null, which will be handled gracefully (returns empty results)
  */
-export type CssSelector = string;
+export type CssSelector = string | undefined | null;
 
 /**
  * Content that can be inserted/appended
@@ -122,6 +124,8 @@ export interface JQ {
     nodes: HtmlNode[];
     length: number;
     [index: number]: HtmlNode | undefined;
+    [Symbol.iterator](): Iterator<HtmlNode>;
+    [Symbol.toStringTag]: string;
     _prevObject?: JQ; // For end() method
 
     // Selector methods
@@ -143,10 +147,15 @@ export interface JQ {
     val(value: FormValueInput): JQ;
 
     css(propertyName: string): GetterSetterReturn<string>;
+    css(propertyNames: string[]): Record<string, string>;
     css(propertyName: string, value: CssValueInput): JQ;
     css(properties: CssProperties): JQ;
 
+
     cssCamel(propertyName: string): GetterSetterReturn<string>;
+    cssCamel(propertyNames: string[]): Record<string, string>;
+    cssCamel(propertyName: string, value: CssValueInput): JQ;
+    cssCamel(properties: Record<string, string | number>): JQ;
 
     addClass(className: ClassNameInput): JQ;
     removeClass(className?: ClassNameInput): JQ;
@@ -169,21 +178,22 @@ export interface JQ {
     title(): string;
 
     // Data methods
+    data(): Record<string, unknown>;
     data(key: string): unknown;
     data(key: string, value: unknown): JQ;
     data(obj: Record<string, unknown>): JQ;
 
-    removeData(key: string): JQ;
+    removeData(key?: string | string[]): JQ;
 
     // Filtering methods
-    eq(index: number): JQ;
+    eq(index: any): JQ;
     first(): JQ;
     last(): JQ;
     filter(selector: CssSelector | FilterCallback): JQ;
     not(selector: CssSelector | FilterCallback): JQ;
-    has(selector: CssSelector): JQ;
-    is(selector: CssSelector): boolean;
-    slice(start: number, end?: number): JQ;
+    has(selector: CssSelector | HtmlNode): JQ;
+    is(selector: CssSelector | HtmlNode | JQ): boolean;
+    slice(start: any, end?: any): JQ;
 
     // Insertion methods
     append(content: ContentInput): JQ;
@@ -204,10 +214,11 @@ export interface JQ {
 
     // Miscellaneous methods
     toArray(): HtmlNode[];
-    get(index?: number): HtmlNode | HtmlNode[] | undefined;
+    get(): HtmlNode[];
+    get(index: number): HtmlNode | undefined;
     index(element?: IndexTarget): number;
     remove(selector?: CssSelector): JQ;
-    clone(withDataAndEvents?: boolean): JQ;
+    clone(withDataAndEvents?: boolean, deepWithDataAndEvents?: boolean): JQ;
     position(): { top: number; left: number } | undefined;
 
     // Traversal methods
@@ -231,31 +242,13 @@ export interface JQ {
     _cloneNode(node: HtmlNode, deep?: boolean): HtmlNode;
     _hasDescendant(ancestor: HtmlNode, descendant: HtmlNode): boolean;
     _findCommonRoots(nodes: HtmlNode[]): HtmlNode[];
-    noop(): void;
-    param(obj: Record<string, unknown>): string;
-    parseHTML(html: string): HtmlNode[];
-    isArray(obj: unknown): obj is unknown[];
-    isFunction(obj: unknown): obj is Function;
-    isNumeric(obj: unknown): boolean;
-    isPlainObject(obj: unknown): obj is Record<string, unknown>;
-    isEmptyObject(obj: unknown): boolean;
-    type(obj: unknown): string;
-    trim(str: string): string;
-    merge<T>(first: T[], second: T[]): T[];
-    grep<T>(array: T[], callback: (element: T, index: number) => boolean, invert?: boolean): T[];
-    makeArray<T>(arrayLike: ArrayLike<T> | T): T[];
-    inArray<T>(value: T, array: T[], fromIndex?: number): number;
-    unique<T>(array: T[]): T[];
-    escapeSelector(selector: string): string;
-    title(html: string): string;
-    normalizeHTML(html: string): string;
 }
 
 /**
  * Static interface for the JQ factory function
  */
 export interface JQStatic {
-    (htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[]): JQ;
+    (htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
     fn: any;
     clearRootNodesRegistry(): void;
 

@@ -19,14 +19,17 @@ describe('filter() method', () => {
     test('filter() should filter elements using CSS selector', () => {
         const result = elements.filter('.active');
         expect(result.nodes).toHaveLength(3);
-        const allActive = result.nodes.every((node: HtmlNode) => node.attributes.class.includes('active'));
+        const allActive = result.nodes.every((node: HtmlNode) => {
+            const cls = node.attributes?.class;
+            return typeof cls === 'string' && cls.includes('active');
+        });
         expect(allActive).toBe(true);
     });
 
     test('filter() should filter elements using complex CSS selector', () => {
         const result = elements.filter('.active.special');
         expect(result.nodes).toHaveLength(1);
-        const resultClass = result.nodes[0].attributes.class;
+        const resultClass = result.nodes[0].attributes?.class;
         expect(resultClass).toBe('item active special');
         expect(result.text()).toBe('Active Special Item');
     });
@@ -41,7 +44,8 @@ describe('filter() method', () => {
 
     test('filter() should filter elements using function that checks element properties', () => {
         const result = elements.filter(function (index: number, element: HtmlNode) {
-            return element.attributes.class.includes('special');
+            const className = element.attributes?.class;
+            return typeof className === 'string' && className.includes('special');
         });
         expect(result.nodes).toHaveLength(1);
         expect(result.text()).toBe('Active Special Item');
@@ -80,11 +84,11 @@ describe('filter() method', () => {
     test('filter() should maintain element order', () => {
         const result = elements.filter('.active');
         expect(result.nodes).toHaveLength(3);
-        const firstResultClass = result.nodes[0].attributes.class;
+        const firstResultClass = result.nodes[0].attributes?.class;
         expect(firstResultClass).toBe('item active');
-        const secondResultClass = result.nodes[1].attributes.class;
+        const secondResultClass = result.nodes[1].attributes?.class;
         expect(secondResultClass).toBe('item active');
-        const thirdResultClass = result.nodes[2].attributes.class;
+        const thirdResultClass = result.nodes[2].attributes?.class;
         expect(thirdResultClass).toBe('item active special');
     });
 
@@ -119,7 +123,8 @@ describe('filter() method', () => {
         const elements = $(html).filter('.item');
 
         const result = elements.filter(function (index: number, element: HtmlNode) {
-            return parseInt(element.attributes['data-value']) > 15;
+            const val = element.attributes?.['data-value'];
+            return typeof val === 'string' && parseInt(val) > 15;
         });
 
         expect(result.nodes).toHaveLength(2);
@@ -128,7 +133,8 @@ describe('filter() method', () => {
 
     test('filter() should work with function that uses this context', () => {
         const result = elements.filter(function (index: number) {
-            return this.attributes.class.includes('special');
+            const cls = this.attributes?.class;
+            return typeof cls === 'string' && cls.includes('special');
         });
 
         expect(result.nodes).toHaveLength(1);
@@ -180,7 +186,10 @@ describe('filter() method', () => {
 
         const result = elements.filter('[data-classes*="btn"]');
         expect(result.nodes).toHaveLength(2);
-        const allHaveBtnClass = result.nodes.every(node => node.attributes['data-classes'].includes('btn'));
+        const allHaveBtnClass = result.nodes.every(node => {
+            const classes = node.attributes?.['data-classes'];
+            return typeof classes === 'string' && classes.includes('btn');
+        });
         expect(allHaveBtnClass).toBe(true);
     });
 
@@ -194,7 +203,7 @@ describe('filter() method', () => {
 
         const result = elements.filter(function (index: number, element: HtmlNode) {
             // Filter should not be affected by modifications during iteration
-            if (index === 1) {
+            if (index === 1 && element.attributes) {
                 element.attributes.class = 'item modified';
             }
             return index % 2 === 0;
@@ -211,15 +220,16 @@ describe('filter() method', () => {
         const largeCollection = $(html).filter('.item');
 
         const result = largeCollection.filter(function (index: number, element: HtmlNode) {
-            const numIndex = parseInt(element.attributes['data-index']);
+            const idx = element.attributes?.['data-index'];
+            const numIndex = typeof idx === 'string' ? parseInt(idx) : -1;
             return numIndex % 3 === 0 && numIndex % 5 === 0; // Multiples of both 3 and 5
         });
 
         const expectedMultiplesOf15 = Math.floor(99 / 15) + 1; // Multiples of 15 up to 99
         expect(result.nodes).toHaveLength(expectedMultiplesOf15);
-        const firstResultDataIndex = result.nodes[0].attributes['data-index'];
+        const firstResultDataIndex = result.nodes[0].attributes?.['data-index'];
         expect(firstResultDataIndex).toBe('0');
-        const secondResultDataIndex = result.nodes[1].attributes['data-index'];
+        const secondResultDataIndex = result.nodes[1].attributes?.['data-index'];
         expect(secondResultDataIndex).toBe('15');
     });
 
@@ -246,7 +256,7 @@ describe('filter() method', () => {
 
         const result = elements.filter(function (index: number, element: HtmlNode) {
             // Check if parent has class 'container'
-            return element.parent && element.parent.attributes.class === 'container';
+            return !!(element.parent && element.parent.attributes?.class === 'container');
         });
 
         expect(result.nodes).toHaveLength(1);
@@ -292,16 +302,17 @@ describe('filter() method', () => {
         });
 
         expect(result.nodes).toHaveLength(3);
-        const orderValues = result.nodes.map(node => node.attributes['data-order']);
+        const orderValues = result.nodes.map(node => node.attributes?.['data-order']);
         expect(orderValues).toEqual(['1', '3', '5']);
     });
 
     test('filter() should work with nested filtering functions', () => {
         const result = elements.filter(function (index: number, element: HtmlNode) {
             // Nested condition: active AND (index < 3 OR has 'special' class)
-            const isActive = element.attributes.class.includes('active');
+            const cls = element.attributes?.class;
+            const isActive = typeof cls === 'string' && cls.includes('active');
             const isEarly = index < 3;
-            const isSpecial = element.attributes.class.includes('special');
+            const isSpecial = typeof cls === 'string' && cls.includes('special');
 
             return isActive && (isEarly || isSpecial);
         });

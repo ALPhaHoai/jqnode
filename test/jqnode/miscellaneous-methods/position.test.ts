@@ -48,9 +48,10 @@ describe('position() method', () => {
         const $elem = $(html);
         const result = $elem.position();
 
+        expect(result).toBeDefined();
         expect(result).toHaveProperty('top');
         expect(result).toHaveProperty('left');
-        expect(typeof result.top).toBe('number');
-        expect(typeof result.left).toBe('number');
+        expect(typeof result!.top).toBe('number');
+        expect(typeof result!.left).toBe('number');
     });
 });

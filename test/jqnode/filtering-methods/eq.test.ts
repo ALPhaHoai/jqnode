@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import { JQ } from '../../../types';
 
 describe('eq() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `
@@ -181,7 +182,7 @@ describe('eq() method', () => {
         const result = mixedElements.eq(1);
 
         expect(result.nodes).toHaveLength(1);
-        const resultTag = result.nodes[0].tagName && result.nodes[0].tagName.toLowerCase();
+        const resultTag = (result.nodes[0].tagName || result.nodes[0].name || '').toLowerCase();
         expect(resultTag).toBe('span');
         expect(result.text()).toBe('Span');
     });

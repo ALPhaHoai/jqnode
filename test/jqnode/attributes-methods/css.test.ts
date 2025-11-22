@@ -168,7 +168,7 @@ describe('css() method - jqnode-specific tests', () => {
             `;
 
             const $boxes = $(html).find('.box');
-            const indices = [];
+            const indices: number[] = [];
 
             $boxes.css('width', function (index: number, value: string) {
                 indices.push(index);

@@ -1,7 +1,7 @@
-import $ from '../../../index';
+import $, { JQ } from '../../../index';
 
 describe('toArray() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `

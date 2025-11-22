@@ -1,10 +1,10 @@
 import type { HtmlNode, JQ } from '../../types';
-import JQClass from '../../jq';
+
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
  */
-function eq(this: JQ, index: number | undefined): JQ {
+function eq(this: JQ, index: number | string | undefined): JQ {
     const originalIndex = index;
 
     // jQuery behavior:
@@ -20,14 +20,12 @@ function eq(this: JQ, index: number | undefined): JQ {
     if (index === undefined) {
         const result = Object.create(Object.getPrototypeOf(this));
         result.nodes = [];
-        result.length = 0;
         return result;
     }
 
     if (isNaN(numericIndex)) {
         const result = Object.create(Object.getPrototypeOf(this));
         result.nodes = [];
-        result.length = 0;
         return result;
     }
 
@@ -50,13 +48,11 @@ function eq(this: JQ, index: number | undefined): JQ {
 
         const result = Object.create(Object.getPrototypeOf(this));
         result.nodes = [selectedNode];
-        result.length = 1;
         result._prevObject = this;
         return result;
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = [];
-    result.length = 0;
     result._prevObject = this;
     return result;
 }
