@@ -1,12 +1,10 @@
 import { selectNodes } from '../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../types';
-
-type NotCallback = (this: HtmlNode, index: number, element: HtmlNode) => boolean;
+import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
 
 /**
  * Removes elements from the set of matched elements.
  */
-function not(this: JQ, selectorOrFunction: CssSelector | NotCallback): JQ {
+function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
     if (typeof selectorOrFunction === 'string') {
         // CSS selector filter
         const rootNodes = this._findCommonRoots(this.nodes);

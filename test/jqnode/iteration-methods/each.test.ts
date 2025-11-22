@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('each() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         // Clear global root nodes registry for test isolation

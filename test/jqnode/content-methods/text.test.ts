@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('text() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         $.clearRootNodesRegistry();

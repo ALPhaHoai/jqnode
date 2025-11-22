@@ -1,7 +1,8 @@
 import $ from '../../index';
+import JQ from '../../jq';
 
 describe('$.fn Extension Pattern', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

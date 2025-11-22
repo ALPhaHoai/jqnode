@@ -1,7 +1,8 @@
 import $ from '../../../../index';
+import JQ from '../../../../jq';
 
 describe('prepend() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `
@@ -46,7 +47,7 @@ describe('prepend() method', () => {
             type: 'element',
             tagName: 'span',
             attributes: {},
-            children: [{type: 'text', value: 'Prepended content'}]
+            children: [{ type: 'text', value: 'Prepended content' }]
         };
         root.find('.container').prepend(newNode);
 
@@ -83,7 +84,7 @@ describe('prepend() method', () => {
     });
 
     test('prepend() should handle text nodes', () => {
-        const textNode = {type: 'text', value: 'Text content'};
+        const textNode = { type: 'text', value: 'Text content' };
         root.find('.container').prepend(textNode);
 
         const container = root.find('.container');

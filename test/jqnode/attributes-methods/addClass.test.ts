@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('addClass() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         $.clearRootNodesRegistry();
@@ -44,7 +45,7 @@ describe('addClass() method', () => {
     test('addClass() should handle function parameter', () => {
         const divs = root.find('.item');
 
-        divs.addClass(function(index, currentClass) {
+        divs.addClass(function (index, currentClass) {
             return 'dynamic-' + index;
         });
 

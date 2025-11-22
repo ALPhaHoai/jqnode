@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('removeProp() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         $.clearRootNodesRegistry();
@@ -95,12 +96,12 @@ describe('removeProp() method', () => {
         inputElement.prop('stringProp', 'string value');
         inputElement.prop('numberProp', 42);
         inputElement.prop('booleanProp', true);
-        inputElement.prop('objectProp', {key: 'value'});
+        inputElement.prop('objectProp', { key: 'value' });
 
         expect(inputElement.prop('stringProp')).toBe('string value');
         expect(inputElement.prop('numberProp')).toBe(42);
         expect(inputElement.prop('booleanProp')).toBe(true);
-        expect(inputElement.prop('objectProp')).toEqual({key: 'value'});
+        expect(inputElement.prop('objectProp')).toEqual({ key: 'value' });
 
         inputElement.removeProp('stringProp');
         inputElement.removeProp('numberProp');

@@ -1,11 +1,11 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Removes one or more classes from each element.
  */
 function removeClass(
     this: JQ,
-    className?: string | ((index: number, currentClass: string) => string)
+    className?: ClassNameInput
 ): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {

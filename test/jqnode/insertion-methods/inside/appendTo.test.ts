@@ -1,7 +1,8 @@
 import $ from '../../../../index';
+import JQ from '../../../../jq';
 
 describe('appendTo() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

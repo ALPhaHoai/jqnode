@@ -1,10 +1,10 @@
 import { selectNodes } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
 
 /**
  * Gets the ancestors of each element, up to but not including the element matched by the selector.
  */
-function parentsUntil(this: JQ, selector?: CssSelector, filter?: CssSelector): JQ {
+function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const ancestors: HtmlNode[] = [];
     const seen = new Set<string>();
     const stopElements = new Set<HtmlNode>();

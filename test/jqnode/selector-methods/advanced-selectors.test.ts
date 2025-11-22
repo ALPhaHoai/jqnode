@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('Advanced selectors (now supported)', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

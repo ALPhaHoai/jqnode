@@ -1,9 +1,9 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, IndexTarget } from '../../types';
 
 /**
  * Search for a given element from among the matched elements.
  */
-function index(this: JQ, arg?: string | HtmlNode | JQ): number {
+function index(this: JQ, arg?: IndexTarget): number {
     // Case 1: No argument - return index of first element among its siblings
     if (arg === undefined) {
         const first: HtmlNode = this.nodes[0];

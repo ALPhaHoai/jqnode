@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, FormValueInput, GetterSetterReturn } from '../../types';
 
 /**
  * Gets the current value of the first element or sets the value of every matched element.
@@ -8,8 +8,8 @@ import type { HtmlNode, JQ } from '../../types';
  */
 function val(
     this: JQ,
-    value?: string | string[] | number | ((index: number, currentValue: string | string[]) => string | number)
-): string | string[] | JQ | undefined {
+    value?: FormValueInput
+): GetterSetterReturn<string | string[]> {
     if (value === undefined) {
         // Get value from first element
         const element = this.nodes[0];

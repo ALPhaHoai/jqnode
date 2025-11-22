@@ -1,10 +1,10 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
 
 /**
  * Gets all following siblings up to but not including the element matched by the selector.
  */
-function nextUntil(this: JQ, selector?: CssSelector | HtmlNode, filter?: CssSelector): JQ {
+function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const followingSiblings: HtmlNode[] = [];
     const parsedStopSelector = selector && typeof selector === 'string' ? parseSelector(selector) : null;
     const parsedFilterSelector = filter ? parseSelector(filter) : null;

@@ -1,7 +1,8 @@
 import $ from '../../../../index';
+import JQ from '../../../../jq';
 
 describe('method chaining with ancestors', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

@@ -1,7 +1,8 @@
 import $ from '../../../../index';
+import JQ from '../../../../jq';
 
 describe('insertAfter() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         // Clear the global root nodes registry to ensure test isolation

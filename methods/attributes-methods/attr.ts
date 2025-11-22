@@ -1,9 +1,9 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets an attribute on the first element in the collection.
  */
-function attr(this: JQ, name: string, value?: string | number | boolean | null): string | undefined | JQ {
+function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterReturn<string> {
     const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple'];
 
     if (value === undefined) {

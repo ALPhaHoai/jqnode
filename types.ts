@@ -67,6 +67,55 @@ export type MapCallback<T = HtmlNode, R = unknown> = (this: T, index: number, el
 export type FilterCallback = (this: HtmlNode, index: number, element: HtmlNode) => boolean;
 
 /**
+ * Class name input for class manipulation methods (addClass, removeClass, toggleClass)
+ * Can be either a string of class names or a function that returns class names
+ */
+export type ClassNameInput = string | ((index: number, currentClass: string) => string);
+
+/**
+ * Value that can be set for HTML attributes and properties
+ * Used by attr() and prop() methods
+ */
+export type AttributeValue = string | number | boolean | null;
+
+/**
+ * Input value for form elements
+ * Can be a primitive value, array, or function that returns a value
+ */
+export type FormValueInput = string | string[] | number | ((index: number, currentValue: string | string[]) => string | number);
+
+/**
+ * CSS property value input
+ * Can be a primitive value or a function that computes the value
+ */
+export type CssValueInput = string | number | ((index: number, currentValue: string) => string | number);
+
+/**
+ * CSS properties object for setting multiple styles
+ */
+export type CssProperties = Record<string, CssValueInput>;
+
+/**
+ * Selector or element to use as stopping point in traversal "Until" methods
+ */
+export type UntilSelector = CssSelector | HtmlNode;
+
+/**
+ * Element or selector to search for when finding index position
+ */
+export type IndexTarget = HtmlNode | JQ | CssSelector;
+
+/**
+ * Return type for getter/setter methods that can return value or chain
+ */
+export type GetterSetterReturn<T> = T | undefined | JQ;
+
+/**
+ * Callback for sorting methods
+ */
+export type SortCallback = (a: HtmlNode, b: HtmlNode) => number;
+
+/**
  * JQ instance interface
  */
 export interface JQ {
@@ -79,38 +128,38 @@ export interface JQ {
     find(selector: CssSelector): JQ;
 
     // Attribute methods
-    attr(name: string): string | undefined;
-    attr(name: string, value: string | number | null): JQ;
-    attr(attributes: Record<string, string | number | null>): JQ;
+    attr(name: string): GetterSetterReturn<string>;
+    attr(name: string, value: AttributeValue): JQ;
+    attr(attributes: Record<string, AttributeValue>): JQ;
 
-    prop(name: string): unknown;
-    prop(name: string, value: unknown): JQ;
-    prop(properties: Record<string, unknown>): JQ;
+    prop(name: string): GetterSetterReturn<AttributeValue>;
+    prop(name: string, value: AttributeValue): JQ;
+    prop(properties: Record<string, AttributeValue>): JQ;
 
     removeAttr(attributeName: string): JQ;
     removeProp(propertyName: string): JQ;
 
-    val(): string | undefined;
-    val(value: string | number): JQ;
+    val(): GetterSetterReturn<string | string[]>;
+    val(value: FormValueInput): JQ;
 
-    css(propertyName: string): string | undefined;
-    css(propertyName: string, value: string | number): JQ;
-    css(properties: Record<string, string | number>): JQ;
+    css(propertyName: string): GetterSetterReturn<string>;
+    css(propertyName: string, value: CssValueInput): JQ;
+    css(properties: CssProperties): JQ;
 
-    cssCamel(propertyName: string): string | undefined;
+    cssCamel(propertyName: string): GetterSetterReturn<string>;
 
-    addClass(className: string | ((index: number, currentClass: string) => string)): JQ;
-    removeClass(className: string): JQ;
-    toggleClass(className: string): JQ;
+    addClass(className: ClassNameInput): JQ;
+    removeClass(className?: ClassNameInput): JQ;
+    toggleClass(className: ClassNameInput, state?: boolean): JQ;
     hasClass(className: string): boolean;
 
     // Content methods
-    text(): string;
+    text(): GetterSetterReturn<string>;
     text(content: string): JQ;
 
     normalizedText(): string;
 
-    html(): string;
+    html(): GetterSetterReturn<string>;
     html(htmlString: string): JQ;
 
     toJSON(): unknown;
@@ -156,7 +205,7 @@ export interface JQ {
     // Miscellaneous methods
     toArray(): HtmlNode[];
     get(index?: number): HtmlNode | HtmlNode[] | undefined;
-    index(element?: HtmlNode | JQ | CssSelector): number;
+    index(element?: IndexTarget): number;
     remove(selector?: CssSelector): JQ;
     clone(withDataAndEvents?: boolean): JQ;
     position(): { top: number; left: number } | undefined;
@@ -164,17 +213,17 @@ export interface JQ {
     // Traversal methods
     parent(selector?: CssSelector): JQ;
     parents(selector?: CssSelector): JQ;
-    parentsUntil(selector?: CssSelector | HtmlNode, filter?: CssSelector): JQ;
+    parentsUntil(selector?: UntilSelector, filter?: CssSelector): JQ;
     closest(selector: CssSelector): JQ;
     children(selector?: CssSelector): JQ;
     contents(): JQ;
     siblings(selector?: CssSelector): JQ;
     next(selector?: CssSelector): JQ;
     nextAll(selector?: CssSelector): JQ;
-    nextUntil(selector?: CssSelector | HtmlNode, filter?: CssSelector): JQ;
+    nextUntil(selector?: UntilSelector, filter?: CssSelector): JQ;
     prev(selector?: CssSelector): JQ;
     prevAll(selector?: CssSelector): JQ;
-    prevUntil(selector?: CssSelector | HtmlNode, filter?: CssSelector): JQ;
+    prevUntil(selector?: UntilSelector, filter?: CssSelector): JQ;
     end(): JQ;
 
     // Private helpers (prefixed with _)

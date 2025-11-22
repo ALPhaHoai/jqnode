@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('Complex selector combinations and edge cases', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

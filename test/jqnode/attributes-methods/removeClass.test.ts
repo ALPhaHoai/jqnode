@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('removeClass() method', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         $.clearRootNodesRegistry();
@@ -38,7 +39,7 @@ describe('removeClass() method', () => {
     test('removeClass() should handle function parameter', () => {
         const divs = root.find('.item');
 
-        divs.removeClass(function(index, currentClass) {
+        divs.removeClass(function (index, currentClass) {
             // Remove the first class from each element
             const classes = currentClass.split(/\s+/).filter(cls => cls.length > 0);
             return classes[0];

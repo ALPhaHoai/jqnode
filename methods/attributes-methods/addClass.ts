@@ -1,11 +1,11 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds one or more classes to each element.
  */
 function addClass(
     this: JQ,
-    className: string | ((index: number, currentClass: string) => string)
+    className: ClassNameInput
 ): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {

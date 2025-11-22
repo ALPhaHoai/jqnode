@@ -5,10 +5,16 @@ import type { JQ } from '../../types';
  */
 function title(this: JQ): string {
     // Use the find method to search for "head > title" within current nodes
-    const titleElement = this.find("head > title");
-
-    // Get the text content and trim it
-    return titleElement.text().trim();
+    const titleElement = this.find('title');
+    if (titleElement.nodes.length === 0) {
+        return '';
+    }
+    const textResult = titleElement.text();
+    // Handle GetterSetterReturn type - ensure we have a string
+    if (typeof textResult === 'string') {
+        return textResult.trim();
+    }
+    return '';
 }
 
 export = title;

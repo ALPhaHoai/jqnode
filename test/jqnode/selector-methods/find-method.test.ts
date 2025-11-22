@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('JQ find() method with CSS selectors', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

@@ -1,11 +1,11 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds or removes one or more classes from each element, depending on the class's presence or the state argument.
  */
 function toggleClass(
     this: JQ,
-    className: string | ((index: number, currentClass: string) => string),
+    className: ClassNameInput,
     state?: boolean
 ): JQ {
     this.nodes.forEach((element: HtmlNode) => {

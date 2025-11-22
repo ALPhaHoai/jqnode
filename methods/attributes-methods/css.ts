@@ -1,12 +1,12 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, CssValueInput, CssProperties } from '../../types';
 
 /**
  * Gets or sets CSS properties on elements.
  */
 function css(
     this: JQ,
-    prop: string | string[] | Record<string, string | number>,
-    value?: string | number | ((index: number, currentValue: string) => string | number)
+    prop: string | string[] | CssProperties,
+    value?: CssValueInput
 ): JQ {
     // Helper: Convert hyphenated CSS property to camelCase
     // e.g., 'background-color' -> 'backgroundColor'
@@ -182,7 +182,11 @@ function css(
             if (!element) return;
 
             Object.keys(prop).forEach(function (property: string) {
-                setStyleValue(element, property, prop[property]);
+                const value = prop[property];
+                // Only string | number values allowed in object syntax (not functions)
+                if (typeof value !== 'function') {
+                    setStyleValue(element, property, value);
+                }
             });
         });
         return this;

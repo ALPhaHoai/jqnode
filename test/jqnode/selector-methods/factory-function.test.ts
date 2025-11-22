@@ -1,7 +1,8 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
 
 describe('Factory function with CSS selectors', () => {
-    let root;
+    let root: JQ;
 
     beforeEach(() => {
         const html = `

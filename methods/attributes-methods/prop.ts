@@ -1,9 +1,9 @@
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets a property on the first element in the collection.
  */
-function prop(this: JQ, name: string, value?: string | number | boolean | null): string | number | boolean | null | undefined | JQ {
+function prop(this: JQ, name: string, value?: AttributeValue): GetterSetterReturn<AttributeValue> {
     if (value === undefined) {
         const element = this.nodes[0];
         if (!element) return undefined;

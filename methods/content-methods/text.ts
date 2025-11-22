@@ -1,10 +1,10 @@
 import { getTextContent, unescapeHtml } from '../../utils';
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the text content of elements.
  */
-function text(this: JQ, value?: string): string | JQ {
+function text(this: JQ, value?: string): GetterSetterReturn<string> {
     if (value === undefined) {
         // Get text content from element nodes only
         const elementNodes = this.nodes.filter((node: HtmlNode) =>

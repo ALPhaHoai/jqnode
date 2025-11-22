@@ -1,11 +1,11 @@
 import { nodeToHTML } from '../../utils';
 import { parseHTML } from '../../html-parser';
-import type { HtmlNode, JQ } from '../../types';
+import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the inner HTML of elements in the collection.
  */
-function html(this: JQ, htmlString?: string): string | undefined | JQ {
+function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
     if (htmlString === undefined) {
         // Get inner HTML from first element
         if (this.nodes.length === 0) {
