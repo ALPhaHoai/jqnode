@@ -1,5 +1,6 @@
 import { selectNodes } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the ancestors of each element, up to but not including the element matched by the selector.
@@ -84,10 +85,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
         resultNodes = ancestors.filter((ancestor: HtmlNode) => matchingAncestors.includes(ancestor));
     }
 
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = resultNodes;
-    result.length = resultNodes.length;
-    return result;
+    return new JQClass(resultNodes);
 }
 
 export = parentsUntil;

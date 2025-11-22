@@ -1,5 +1,6 @@
 import { selectNodes } from '../../selector';
 import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Removes elements from the set of matched elements.
@@ -11,10 +12,7 @@ function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
         const allMatches = selectNodes(rootNodes, selectorOrFunction);
 
         const filtered = this.nodes.filter((node: HtmlNode) => !allMatches.includes(node));
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = filtered;
-        result.length = filtered.length;
-        return result;
+        return new JQClass(filtered);
     } else if (typeof selectorOrFunction === 'function') {
         // Function filter
         const filtered: HtmlNode[] = [];
@@ -30,10 +28,7 @@ function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
                 filtered.push(node);
             }
         }
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = filtered;
-        result.length = filtered.length;
-        return result;
+        return new JQClass(filtered);
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = this.nodes;

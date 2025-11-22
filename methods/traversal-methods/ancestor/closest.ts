@@ -1,5 +1,6 @@
 import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.
@@ -46,10 +47,7 @@ function closest(this: JQ, selector?: CssSelector): JQ {
             current = (current.parent || current.parentNode) as HtmlNode | undefined;
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = results;
-    result.length = results.length;
-    return result;
+    return new JQClass(results);
 }
 
 export = closest;

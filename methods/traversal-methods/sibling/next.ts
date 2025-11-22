@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the immediately following sibling of each element, optionally filtered by a selector.
@@ -62,10 +63,7 @@ function next(this: JQ, selector?: CssSelector): JQ {
             }
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = nextSiblings;
-    result.length = nextSiblings.length;
-    return result;
+    return new JQClass(nextSiblings);
 }
 
 export = next;

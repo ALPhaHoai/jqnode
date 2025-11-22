@@ -1,5 +1,6 @@
 import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the ancestors of each element in the current set of matched elements, optionally filtered by a selector.
@@ -75,10 +76,7 @@ function parents(this: JQ, selector?: CssSelector): JQ {
             }
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = ancestors;
-    result.length = ancestors.length;
-    return result;
+    return new JQClass(ancestors);
 }
 
 export = parents;

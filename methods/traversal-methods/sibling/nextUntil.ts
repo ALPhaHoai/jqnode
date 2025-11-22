@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets all following siblings up to but not including the element matched by the selector.
@@ -80,10 +81,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             }
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = followingSiblings;
-    result.length = followingSiblings.length;
-    return result;
+    return new JQClass(followingSiblings);
 }
 
 export = nextUntil;

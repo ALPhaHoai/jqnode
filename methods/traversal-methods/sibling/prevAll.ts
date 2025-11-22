@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets all preceding siblings of each element, optionally filtered by a selector.
@@ -92,10 +93,7 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
             uniqueSiblings.push(sibling);
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = uniqueSiblings;
-    result.length = uniqueSiblings.length;
-    return result;
+    return new JQClass(uniqueSiblings);
 }
 
 export = prevAll;

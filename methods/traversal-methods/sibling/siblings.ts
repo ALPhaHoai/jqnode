@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the siblings of each element in the set of matched elements, optionally filtered by a selector.
@@ -35,10 +36,7 @@ function siblings(this: JQ, selector?: CssSelector): JQ {
             });
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = allSiblings;
-    result.length = allSiblings.length;
-    return result;
+    return new JQClass(allSiblings);
 }
 
 export = siblings;

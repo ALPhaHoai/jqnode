@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../selector';
 import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Reduces the set of matched elements to those that match the selector or pass the function's test.
@@ -45,11 +46,9 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
                 }
             }
         });
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = filtered;
-        result.length = filtered.length;
-        result._prevObject = this;
-        return result;
+        const result = new JQClass(filtered) as JQ;
+    result._prevObject = this;
+    return result;
     } else if (typeof selectorOrFunction === 'function') {
         // Function filter
         const filtered: HtmlNode[] = [];
@@ -65,11 +64,9 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
                 // Skip elements that cause errors in the filter function
             }
         }
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = filtered;
-        result.length = filtered.length;
-        result._prevObject = this;
-        return result;
+        const result = new JQClass(filtered) as JQ;
+    result._prevObject = this;
+    return result;
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = [];

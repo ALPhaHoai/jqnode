@@ -1,5 +1,6 @@
 import { getTextContent } from '../../utils';
 import type { HtmlNode, JQ } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Finds table elements that contain specific headers.
@@ -79,10 +80,7 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
         );
     });
 
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = matchingTables;
-    result.length = matchingTables.length;
-    return result;
+    return new JQClass(matchingTables);
 }
 
 export = findTableWithHeader;

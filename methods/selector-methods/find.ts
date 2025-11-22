@@ -1,14 +1,13 @@
 import { selectNodes } from '../../selector';
 import type { CssSelector, JQ } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Finds descendant elements by CSS selector or tag name.
  */
 function find(this: JQ, selector: CssSelector): JQ {
     const selectedNodes = selectNodes(this.nodes, selector);
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = selectedNodes;
-    result.length = selectedNodes.length;
+    const result = new JQClass(selectedNodes) as JQ;
     result._prevObject = this;
     return result;
 }

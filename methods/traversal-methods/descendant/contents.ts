@@ -1,4 +1,5 @@
 import type { HtmlNode, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the children of each element in the set, including text and comment nodes.
@@ -99,10 +100,7 @@ function contents(this: JQ): JQ {
             }
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = contents;
-    result.length = contents.length;
-    return result;
+    return new JQClass(contents);
 }
 
 export = contents;

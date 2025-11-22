@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets all preceding siblings up to but not including the element matched by the selector.
@@ -156,10 +157,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
         }
     }
 
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = uniqueSiblings;
-    result.length = uniqueSiblings.length;
-    return result;
+    return new JQClass(uniqueSiblings);
 }
 
 export = prevUntil;

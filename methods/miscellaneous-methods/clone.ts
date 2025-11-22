@@ -1,4 +1,5 @@
 import type { HtmlNode, JQ } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Recursively copy data from source node tree to cloned node tree.
@@ -49,10 +50,7 @@ function clone(this: JQ, withDataAndEvents: boolean = false, deepWithDataAndEven
     });
 
     // Return a new JQ instance with the cloned nodes
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = clonedNodes;
-    result.length = clonedNodes.length;
-    return result;
+    return new JQClass(clonedNodes);
 }
 
 export = clone;

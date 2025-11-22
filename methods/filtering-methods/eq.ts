@@ -1,4 +1,5 @@
 import type { HtmlNode, JQ } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).

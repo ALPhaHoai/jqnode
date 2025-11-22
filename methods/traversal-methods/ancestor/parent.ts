@@ -1,5 +1,6 @@
 import { selectNodes } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the parent of each element in the current set of matched elements, optionally filtered by a selector.
@@ -42,9 +43,7 @@ function parent(this: JQ, selector?: CssSelector): JQ {
 
         resultNodes = parents.filter((p: HtmlNode) => matchingParents.includes(p));
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = resultNodes;
-    result.length = resultNodes.length;
+    const result = new JQClass(resultNodes) as JQ;
     result._prevObject = this;
     return result;
 }

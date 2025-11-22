@@ -1,5 +1,6 @@
 import { selectNodes } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Gets the children of each element in the set of matched elements, optionally filtered by a selector.
@@ -28,9 +29,7 @@ function children(this: JQ, selector?: CssSelector): JQ {
         const matchingChildren = selectNodes(rootNodes, selector);
         resultNodes = children.filter((child: HtmlNode) => matchingChildren.includes(child));
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = resultNodes;
-    result.length = resultNodes.length;
+    const result = new JQClass(resultNodes) as JQ;
     result._prevObject = this;
     return result;
 }

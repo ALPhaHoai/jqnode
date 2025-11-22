@@ -1,5 +1,6 @@
 import { selectNodes } from '../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../types';
+import JQClass from '../../jq';
 
 /**
  * Reduces the set of matched elements to those that have a descendant that matches the selector or element.
@@ -37,10 +38,7 @@ function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
             }
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = matchingElements;
-    result.length = matchingElements.length;
-    return result;
+    return new JQClass(matchingElements);
 }
 
 export = has;
