@@ -23,7 +23,7 @@ function text(this: JQ, value?: string): string | JQ {
         const result = elementNodes.map((node: HtmlNode) => {
             // Handle DOM elements
             if (node.nodeType === 1) {
-                return ('textContent' in node ? node.textContent : null) || '';
+                return node.textContent || '';
             }
             // Handle internal nodes
             return getTextContent(node);
@@ -37,9 +37,7 @@ function text(this: JQ, value?: string): string | JQ {
     this.nodes.forEach((node: HtmlNode) => {
         // Handle DOM elements
         if (node.nodeType === 1) {
-            if ('textContent' in node) {
-                node.textContent = value;
-            }
+            node.textContent = value;
         } else {
             // Handle internal nodes
             node.children = [{ type: 'text', data: value }];

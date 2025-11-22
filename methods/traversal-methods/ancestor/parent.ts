@@ -6,7 +6,7 @@ import type { HtmlNode, CssSelector, JQ } from '../../../types';
  */
 function parent(this: JQ, selector?: CssSelector): JQ {
     const parents: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>(); // Avoid duplicates
+    const seen = new Set<HtmlNode | ParentNode>(); // Avoid duplicates
 
     for (const node of this.nodes) {
         // Handle both internal nodes and DOM elements

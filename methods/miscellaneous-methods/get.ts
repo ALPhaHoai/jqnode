@@ -3,7 +3,7 @@ import type { HtmlNode, JQ } from '../../types';
 /**
  * Retrieve the DOM elements matched by the jQuery object.
  */
-function get(this: JQ, index?: number): HtmlNode[] | HtmlNode | undefined {
+function get(this: JQ, index?: number): (HtmlNode | Element)[] | HtmlNode | Element | undefined {
     if (index === undefined) {
         return this.nodes.map((node: HtmlNode) => node._originalElement || node);
     }

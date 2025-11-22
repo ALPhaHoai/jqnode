@@ -28,8 +28,8 @@ function remove(this: JQ, selector?: string): JQ {
             }
         }
         // For DOM nodes
-        else if (parent.childNodes) {
-            parent.removeChild(node);
+        else if (parent.childNodes && parent.removeChild) {
+            parent.removeChild(node as unknown as Node);
         }
 
         // Clear data associated with the node

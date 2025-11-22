@@ -27,8 +27,7 @@ function copyDataRecursive(sourceNode: HtmlNode, clonedNode: HtmlNode): void {
  * Create a deep copy of the set of matched elements.
  */
 function clone(this: JQ, withDataAndEvents: boolean = false, deepWithDataAndEvents: boolean = withDataAndEvents): JQ {
-    // Get the JQ constructor from the instance
-    const JQ = this.constructor;
+    // Use the helper to perform deep clone
     const _cloneNode = this._cloneNode;
 
     // Clone all matched elements
@@ -50,7 +49,10 @@ function clone(this: JQ, withDataAndEvents: boolean = false, deepWithDataAndEven
     });
 
     // Return a new JQ instance with the cloned nodes
-    return new JQ(clonedNodes);
+    const result = Object.create(Object.getPrototypeOf(this));
+    result.nodes = clonedNodes;
+    result.length = clonedNodes.length;
+    return result;
 }
 
 export = clone;

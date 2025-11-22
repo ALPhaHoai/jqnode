@@ -15,7 +15,7 @@ function normalizedText(this: JQ, value?: string): string | JQ {
         );
 
         // Check if any element is detached (from fractional eq() indices)
-        if (elementNodes.some((node: HtmlNode) => ('_detached' in node && node._detached))) {
+        if (elementNodes.some((node: HtmlNode) => node._detached)) {
             return '';
         }
 

@@ -26,6 +26,7 @@ export interface HtmlNode {
     // Extended properties for DOM integration
     _originalElement?: Element | null; // DOM element reference
     _jqData?: Record<string, unknown>; // jQuery-style data storage
+    _detached?: boolean; // Marks nodes from fractional eq() indices as detached
     properties?: Record<string, unknown>; // Custom properties storage
     nodeType?: number; // DOM node type
     childNodes?: ChildNode[]; // DOM childNodes
@@ -33,6 +34,8 @@ export interface HtmlNode {
     getAttribute?: (name: string) => string | null;
     setAttribute?: (name: string, value: string | number) => void;
     removeAttribute?: (name: string) => void;
+    removeChild?: (child: Node) => Node | null; // DOM removeChild method
+    textContent?: string | null; // DOM text content
     offsetTop?: number; // DOM offset properties
     offsetLeft?: number;
 }

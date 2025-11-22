@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, EachCallback } from '../../types';
+import type { JQ, EachCallback } from '../../types';
 
 /**
  * Iterates over each element in the collection, similar to jQuery's .each().
