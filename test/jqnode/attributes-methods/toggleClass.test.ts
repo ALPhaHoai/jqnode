@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('toggleClass() method', () => {
     let root: JQ;
@@ -118,7 +119,7 @@ describe('toggleClass() method', () => {
 
     test('toggleClass() with function should use function return value', () => {
         const div2 = root.find('#div2');
-        const toggleFunc = function (index, currentClass) {
+        const toggleFunc = function (index: number, currentClass: string) {
             return 'dynamic-class';
         };
 
@@ -134,7 +135,7 @@ describe('toggleClass() method', () => {
         const div3 = root.find('#div3');
         let receivedIndex, receivedClass;
 
-        const testFunc = function (index, currentClass) {
+        const testFunc = function (index: number, currentClass: string) {
             receivedIndex = index;
             receivedClass = currentClass;
             return 'test-class';

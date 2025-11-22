@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('addClass() method', () => {
     let root: JQ;
@@ -45,7 +46,7 @@ describe('addClass() method', () => {
     test('addClass() should handle function parameter', () => {
         const divs = root.find('.item');
 
-        divs.addClass(function (index, currentClass) {
+        divs.addClass(function (index: number, currentClass: string) {
             return 'dynamic-' + index;
         });
 
@@ -77,8 +78,8 @@ describe('addClass() method', () => {
         divs.addClass('bulk-add');
 
         // Check each element has the new class
-        divs.nodes.forEach(node => {
-            expect(node.attributes.class).toContain('bulk-add');
+        divs.nodes.forEach((node: HtmlNode) => {
+            expect(node.attributes?.class).toContain('bulk-add');
         });
     });
 

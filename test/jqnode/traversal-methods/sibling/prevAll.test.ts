@@ -1,4 +1,5 @@
 import $ from '../../../../index';
+import { HtmlNode } from '../../../../types';
 import JQ from '../../../../jq';
 
 describe('prevAll() method', () => {
@@ -55,7 +56,7 @@ describe('prevAll() method', () => {
         const prevSiblings = fifthElement.prevAll('.sibling');
 
         expect(prevSiblings.nodes).toHaveLength(4);
-        const allPrevHaveSiblingClass = prevSiblings.nodes.every(node => node.attributes.class.includes('sibling'));
+        const allPrevHaveSiblingClass = prevSiblings.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
         expect(allPrevHaveSiblingClass).toBe(true);
     });
 
@@ -64,7 +65,7 @@ describe('prevAll() method', () => {
         const prevDivs = sixthElement.prevAll('div');
 
         expect(prevDivs.nodes).toHaveLength(5); // first, second, third, fourth, fifth
-        const allPrevAreDivs = prevDivs.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'div');
+        const allPrevAreDivs = prevDivs.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
         expect(allPrevAreDivs).toBe(true);
     });
 
@@ -175,7 +176,7 @@ describe('prevAll() method', () => {
         const allPrev = fifthElement.prevAll();
 
         expect(allPrev.nodes).toHaveLength(5); // first, second, third, fourth, span
-        const prevClassNames = allPrev.nodes.map(node => node.attributes.class.split(' ')[1] || node.attributes.class);
+        const prevClassNames = allPrev.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1] || node.attributes.class);
         expect(prevClassNames).toEqual(
             ['first', 'second', 'third', 'fourth', 'not-sibling']
         );
@@ -198,7 +199,7 @@ describe('prevAll() method', () => {
         const prevSiblings = lastDiv.prevAll('.item');
 
         expect(prevSiblings.nodes).toHaveLength(3);
-        const divValues = prevSiblings.nodes.map(node => node.children[0].value);
+        const divValues = prevSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
         expect(divValues).toEqual(['Div 1', 'Div 2', 'Div 3']);
     });
 
@@ -255,7 +256,7 @@ describe('prevAll() method', () => {
         const prevSiblings = child3.prevAll('.child');
 
         expect(prevSiblings.nodes).toHaveLength(2);
-        const childValues = prevSiblings.nodes.map(node => node.children[0].value);
+        const childValues = prevSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
         expect(childValues).toEqual(['Child 1', 'Child 2']);
     });
 });

@@ -1,4 +1,5 @@
 import $ from '../../../index';
+import { HtmlNode } from '../../../types';
 
 describe('css() method - jqnode-specific tests', () => {
     describe('Basic functionality', () => {
@@ -152,7 +153,7 @@ describe('css() method - jqnode-specific tests', () => {
             const html = '<div style="width: 100px">Test</div>';
             const $div = $(html).find('div');
 
-            $div.css('width', function (index, value) {
+            $div.css('width', function (index: number, value: string) {
                 return parseInt(value) + 50 + 'px';
             });
 
@@ -169,7 +170,7 @@ describe('css() method - jqnode-specific tests', () => {
             const $boxes = $(html).find('.box');
             const indices = [];
 
-            $boxes.css('width', function (index, value) {
+            $boxes.css('width', function (index: number, value: string) {
                 indices.push(index);
                 return value;
             });
@@ -182,7 +183,7 @@ describe('css() method - jqnode-specific tests', () => {
             const $div = $(html).find('div');
 
             let receivedValue;
-            $div.css('width', function (index, value) {
+            $div.css('width', function (index: number, value: string) {
                 receivedValue = value;
                 return value;
             });
@@ -226,7 +227,7 @@ describe('css() method - jqnode-specific tests', () => {
             const $items = $(html).find('.item');
             $items.css('color', 'blue');
 
-            $items.each(function () {
+            $items.each(function (this: HtmlNode) {
                 expect($(this).css('color')).toBe('blue');
             });
         });

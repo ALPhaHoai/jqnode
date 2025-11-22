@@ -1,6 +1,7 @@
 import $ from '../../../../index';
+import { HtmlNode } from '../../../../types';
 import JQ from '../../../../jq';
-const {getTextContent} = require('../../../../utils');
+const { getTextContent } = require('../../../../utils');
 
 describe('after() method', () => {
     let root: JQ;
@@ -76,8 +77,8 @@ describe('after() method', () => {
         const newNode = {
             type: 'element',
             tagName: 'span',
-            attributes: {class: 'inserted'},
-            children: [{type: 'text', value: 'Node content'}]
+            attributes: { class: 'inserted' },
+            children: [{ type: 'text', value: 'Node content' }]
         };
         root.find('p').first().after(newNode);
 
@@ -119,20 +120,20 @@ describe('after() method', () => {
     });
 
     test('after() should handle text nodes', () => {
-        const textNode = {type: 'text', value: 'Text sibling'};
+        const textNode = { type: 'text', value: 'Text sibling' };
         root.find('p').first().after(textNode);
 
         const container = root.find('.container');
         const children = container.nodes[0].children;
         // Skip whitespace text nodes and find the actual elements
-        const pElements = children.filter(child => child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'p');
+        const pElements = children.filter((child: any) => child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'p');
         const firstPElementText = getTextContent(pElements[0]);
         expect(firstPElementText).toBe('First');
         const secondPElementText = getTextContent(pElements[1]);
         expect(secondPElementText).toBe('Second');
 
         // Find the inserted text node
-        const textNodes = children.filter(child => child.type === 'text' && child.value === 'Text sibling');
+        const textNodes = children.filter((child: any) => child.type === 'text' && child.value === 'Text sibling');
         const textNodesCount = textNodes.length;
         expect(textNodesCount).toBe(1);
         const firstTextNodeValue = textNodes[0].value;

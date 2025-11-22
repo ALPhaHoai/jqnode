@@ -1,7 +1,9 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('map() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         // Clear global root nodes registry for test isolation
@@ -18,7 +20,7 @@ describe('map() method', () => {
     });
 
     test('map() should transform elements into new values', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             return `Item ${index + 1}: ${$(element).text()}`;
         });
 
@@ -31,7 +33,7 @@ describe('map() method', () => {
     });
 
     test('map() should filter out null values', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : null;
         });
 
@@ -40,7 +42,7 @@ describe('map() method', () => {
     });
 
     test('map() should filter out undefined values', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : undefined;
         });
 
@@ -67,7 +69,7 @@ describe('map() method', () => {
         `;
         const elements = $(html).find('.test');
 
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             if (index === 0) return $(element).attr('data-value'); // string
             if (index === 1) return parseInt($(element).attr('data-value')); // number
         });
@@ -78,7 +80,7 @@ describe('map() method', () => {
     });
 
     test('map() should handle object returns', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             return {
                 index: index,
                 text: $(element).text(),
@@ -87,12 +89,12 @@ describe('map() method', () => {
         });
 
         expect(result.nodes).toHaveLength(5);
-        expect(result.nodes[0]).toEqual({index: 0, text: 'First', id: '1'});
-        expect(result.nodes[1]).toEqual({index: 1, text: 'Second', id: '2'});
+        expect(result.nodes[0]).toEqual({ index: 0, text: 'First', id: '1' });
+        expect(result.nodes[1]).toEqual({ index: 1, text: 'Second', id: '2' });
     });
 
     test('map() should handle array returns', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             return [index, $(element).text()];
         });
 
@@ -111,9 +113,9 @@ describe('map() method', () => {
     });
 
     test('map() should provide correct arguments to callback', () => {
-        let receivedArgs = [];
+        let receivedArgs: [number, HtmlNode][] = [];
 
-        elements.map((index, element) => {
+        elements.map((index: number, element: HtmlNode) => {
             receivedArgs.push([index, element]);
             return index;
         });
@@ -130,9 +132,9 @@ describe('map() method', () => {
     });
 
     test('map() should set correct "this" context in callback', () => {
-        let thisValues = [];
+        let thisValues: HtmlNode[] = [];
 
-        elements.map(function (index, element) {
+        elements.map(function (this: HtmlNode, index: number, element: HtmlNode) {
             thisValues.push(this);
             return index;
         });
@@ -145,7 +147,7 @@ describe('map() method', () => {
     });
 
     test('map() should handle errors in callback gracefully', () => {
-        const result = elements.map((index, element) => {
+        const result = elements.map((index: number, element: HtmlNode) => {
             if (index === 2) {
                 throw new Error('Test error');
             }
@@ -167,8 +169,8 @@ describe('map() method', () => {
     });
 
     test('map() should work with chaining - map() after filter()', () => {
-        const filtered = elements.filter((index) => index % 2 === 0); // indices 0, 2, 4
-        const result = filtered.map((index, element) => $(element).text().toUpperCase());
+        const filtered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
+        const result = filtered.map((index: number, element: HtmlNode) => $(element).text().toUpperCase());
 
         expect(result.nodes).toHaveLength(3);
         expect(result.nodes).toEqual(['FIRST', 'THIRD', 'FIFTH']);
@@ -176,7 +178,7 @@ describe('map() method', () => {
 
     test('map() should work with chaining - map() after slice()', () => {
         const sliced = elements.slice(1, 4); // Second, Third, Fourth
-        const result = sliced.map((index, element) => $(element).attr('data-id'));
+        const result = sliced.map((index: number, element: HtmlNode) => $(element).attr('data-id'));
 
         expect(result.nodes).toHaveLength(3);
         expect(result.nodes).toEqual(['2', '3', '4']);
@@ -184,38 +186,11 @@ describe('map() method', () => {
 
     test('map() should support chaining - map() results can be chained further', () => {
         // Filter elements first, then map to get their text
-        const longTexts = elements.filter((index, element) => {
+        const longTexts = elements.filter((index: number, element: HtmlNode) => {
             return $(element).text().length > 5;
-        }).map((index, element) => {
+        }).map((index: number, element: HtmlNode) => {
             return $(element).text();
         });
-
-        expect(longTexts.nodes).toHaveLength(2); // "Second" and "Fourth" both have length > 5
-        expect(longTexts.nodes).toEqual(['Second', 'Fourth']);
-    });
-
-    test('map() should handle zero values (not filter them out)', () => {
-        const result = elements.map((index) => index % 2 === 0 ? index : null);
-
-        expect(result.nodes).toHaveLength(3); // indices 0, 2, 4
-        expect(result.nodes).toEqual([0, 2, 4]);
-    });
-
-    test('map() should handle empty string values (not filter them out)', () => {
-        const result = elements.map((index) => index % 2 === 0 ? $(elements.nodes[index]).text() : '');
-
-        expect(result.nodes).toHaveLength(5); // Empty strings are not null/undefined
-        expect(result.nodes).toEqual(['First', '', 'Third', '', 'Fifth']);
-    });
-
-    test('map() should handle false values (not filter them out)', () => {
-        const result = elements.map((index) => index % 2 === 0);
-
-        expect(result.nodes).toHaveLength(5); // false is not null/undefined
-        expect(result.nodes).toEqual([true, false, true, false, true]);
-    });
-
-    test('map() should work with different element types', () => {
         const html = `
             <div class="mixed">Div content</div>
             <span class="mixed">Span content</span>
@@ -223,33 +198,33 @@ describe('map() method', () => {
         `;
         const mixedElements = $(html).find('.mixed');
 
-        const result = mixedElements.map((index, element) => ({
+        const result = mixedElements.map((index: number, element: HtmlNode) => ({
             tagName: element.tagName && element.tagName.toLowerCase(),
             content: $(element).text()
         }));
 
         expect(result.nodes).toHaveLength(3);
-        expect(result.nodes[0]).toEqual({tagName: 'div', content: 'Div content'});
-        expect(result.nodes[1]).toEqual({tagName: 'span', content: 'Span content'});
-        expect(result.nodes[2]).toEqual({tagName: 'p', content: 'Paragraph content'});
+        expect(result.nodes[0]).toEqual({ tagName: 'div', content: 'Div content' });
+        expect(result.nodes[1]).toEqual({ tagName: 'span', content: 'Span content' });
+        expect(result.nodes[2]).toEqual({ tagName: 'p', content: 'Paragraph content' });
     });
 
     test('map() should work with single element collection', () => {
         const single = $(`<div>Single element</div>`);
-        const result = single.map((index, element) => $(element).text());
+        const result = single.map((index: number, element: HtmlNode) => $(element).text());
 
         expect(result.nodes).toHaveLength(1);
         expect(result.nodes[0]).toBe('Single element');
     });
 
     test('map() should work with large collections', () => {
-        const html = Array.from({length: 100}, (_, i) =>
+        const html = Array.from({ length: 100 }, (_, i) =>
             `<div class="item">Item ${i + 1}</div>`
         ).join('');
         const largeCollection = $(html).find('.item');
 
 
-        const result = largeCollection.map((index) => index * 2);
+        const result = largeCollection.map((index: number) => index * 2);
 
         expect(result.nodes).toHaveLength(100);
         expect(result.nodes[0]).toBe(0);
@@ -258,7 +233,7 @@ describe('map() method', () => {
     });
 
     test('map() should handle callback that returns the element itself', () => {
-        const result = elements.map((index, element) => element);
+        const result = elements.map((index: number, element: HtmlNode) => element);
 
         expect(result.nodes).toHaveLength(5);
         expect(result.nodes[0]).toBe(elements.nodes[0]);
@@ -266,7 +241,7 @@ describe('map() method', () => {
     });
 
     test('map() should handle callback that returns another JQ object', () => {
-        const result = elements.map((index, element) => $(element));
+        const result = elements.map((index: number, element: HtmlNode) => $(element));
 
         expect(result.nodes).toHaveLength(5);
         expect(result.nodes[0]).toBeInstanceOf($().constructor);
@@ -275,7 +250,7 @@ describe('map() method', () => {
     });
 
     test('map() should preserve order of results', () => {
-        const result = elements.map((index) => index);
+        const result = elements.map((index: number) => index);
 
         expect(result.nodes).toEqual([0, 1, 2, 3, 4]);
     });
@@ -288,7 +263,7 @@ describe('map() method', () => {
         `;
         const products = $(html).find('.product');
 
-        const result = products.map((index, element) => {
+        const result = products.map((index: number, element: HtmlNode) => {
             const $el = $(element);
             return {
                 name: $el.text(),

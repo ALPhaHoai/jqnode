@@ -39,10 +39,10 @@ describe('has() method', () => {
 
         expect(result.nodes).toHaveLength(2);
 
-        const firstDivElementChildren = result.nodes[0].children.filter(c => c.type === 'element');
+        const firstDivElementChildren = result.nodes[0].children.filter((c: any) => c.type === 'element');
         expect(firstDivElementChildren).toHaveLength(2); // First div has 2 spans
 
-        const thirdDivElementChildren = result.nodes[1].children.filter(c => c.type === 'element');
+        const thirdDivElementChildren = result.nodes[1].children.filter((c: any) => c.type === 'element');
         expect(thirdDivElementChildren).toHaveLength(1); // Third div has 1 span
     });
 
@@ -472,7 +472,7 @@ describe('has() method', () => {
     });
 
     test('has() should work with large collections', () => {
-        const html = Array.from({length: 50}, (_, i) => `
+        const html = Array.from({ length: 50 }, (_, i) => `
             <div class="container">
                 ${i % 3 === 0 ? '<span>Has span</span>' : '<div>No span</div>'}
             </div>

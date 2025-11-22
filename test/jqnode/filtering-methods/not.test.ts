@@ -1,7 +1,9 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('not() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `
@@ -17,7 +19,7 @@ describe('not() method', () => {
     test('not() should exclude elements matching CSS selector', () => {
         const result = elements.not('.active');
         expect(result.nodes).toHaveLength(2);
-        const allInactive = result.nodes.every(node => !node.attributes.class.includes('active'));
+        const allInactive = result.nodes.every((node: HtmlNode) => !node.attributes.class.includes('active'));
         expect(allInactive).toBe(true);
         expect(result.text()).toBe('Inactive ItemInactive Item 2');
     });
@@ -25,12 +27,12 @@ describe('not() method', () => {
     test('not() should exclude elements matching complex CSS selector', () => {
         const result = elements.not('.active.special');
         expect(result.nodes).toHaveLength(4);
-        const noneHaveSpecialClass = result.nodes.every(node => !node.attributes.class.includes('special'));
+        const noneHaveSpecialClass = result.nodes.every((node: HtmlNode) => !node.attributes.class.includes('special'));
         expect(noneHaveSpecialClass).toBe(true);
     });
 
     test('not() should exclude elements using function that returns true/false', () => {
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
         expect(result.nodes).toHaveLength(2); // Should keep indices 1 and 3
@@ -38,11 +40,11 @@ describe('not() method', () => {
     });
 
     test('not() should exclude elements using function that checks element properties', () => {
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             return element.attributes.class.includes('special');
         });
         expect(result.nodes).toHaveLength(4);
-        const noSpecialElements = result.nodes.every(node => !node.attributes.class.includes('special'));
+        const noSpecialElements = result.nodes.every((node: HtmlNode) => !node.attributes.class.includes('special'));
         expect(noSpecialElements).toBe(true);
     });
 
@@ -72,7 +74,7 @@ describe('not() method', () => {
         const result = mixedElements.not('div');
 
         expect(result.nodes).toHaveLength(2);
-        const allSpans = result.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'span');
+        const allSpans = result.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span');
         expect(allSpans).toBe(true);
         expect(result.text()).toBe('Span 1Span 2');
     });
@@ -131,7 +133,7 @@ describe('not() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             return parseInt(element.attributes['data-value']) <= 15;
         });
 
@@ -142,7 +144,7 @@ describe('not() method', () => {
     test('not() should work with function that uses this context', () => {
         const result = elements.not(function (index) {
             // Exclude elements that have exactly 'Inactive Item' as text content
-            const textContent = this.children.map(child => child.value || '').join('');
+            const textContent = this.children.map((child: any) => child.value || '').join('');
             return textContent === 'Inactive Item';
         });
 
@@ -217,7 +219,7 @@ describe('not() method', () => {
         `;
         const elements = $(html).find('.item');
 
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             // Exclude elements that are children of containers with class 'container'
             return element.parent && element.parent.attributes.class === 'container';
         });
@@ -245,7 +247,7 @@ describe('not() method', () => {
 
         const result = mixedElements.not('div');
         expect(result.nodes).toHaveLength(2);
-        const noDivElements = result.nodes.every(node => !node.tagName || node.tagName.toLowerCase() !== 'div');
+        const noDivElements = result.nodes.every((node: HtmlNode) => !node.tagName || node.tagName.toLowerCase() !== 'div');
         expect(noDivElements).toBe(true);
         expect(result.text()).toBe('SpanParagraph');
     });
@@ -260,17 +262,17 @@ describe('not() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.not(function (index) {
+        const result = elements.not(function (index: number) {
             return index % 2 === 0; // Exclude even indices: 0, 2, 4
         });
 
         expect(result.nodes).toHaveLength(2);
-        const dataOrderValues = result.nodes.map(node => node.attributes['data-order']);
+        const dataOrderValues = result.nodes.map((node: HtmlNode) => node.attributes['data-order']);
         expect(dataOrderValues).toEqual(['2', '4']);
     });
 
     test('not() should work with nested exclusion functions', () => {
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             // Nested condition: exclude active elements OR (index >= 3 AND has 'special' class)
             const isActive = element.attributes.class.includes('active');
             const isLateAndSpecial = index >= 3 && element.attributes.class.includes('special');
@@ -283,7 +285,7 @@ describe('not() method', () => {
     });
 
     test('not() should handle function that throws errors gracefully', () => {
-        const result = elements.not(function (index) {
+        const result = elements.not(function (index: number) {
             if (index === 2) {
                 throw new Error('Test error');
             }
@@ -297,7 +299,7 @@ describe('not() method', () => {
 
     test('not() should work with function that uses external variables', () => {
         const excludeThreshold = 2;
-        const result = elements.not(function (index) {
+        const result = elements.not(function (index: number) {
             return index < excludeThreshold;
         });
 
@@ -380,12 +382,12 @@ describe('not() method', () => {
     });
 
     test('not() should work with large collections and complex functions', () => {
-        const html = Array.from({length: 100}, (_, i) =>
+        const html = Array.from({ length: 100 }, (_, i) =>
             `<div class="item" data-index="${i}">Item ${i}</div>`
         ).join('');
         const largeCollection = $(html).find('.item');
 
-        const result = largeCollection.not(function (index, element) {
+        const result = largeCollection.not(function (index: number, element: HtmlNode) {
             const numIndex = parseInt(element.attributes['data-index']);
             return numIndex % 3 === 0; // Exclude multiples of 3
         });
@@ -402,7 +404,7 @@ describe('not() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.not(function (index, element) {
+        const result = elements.not(function (index: number, element: HtmlNode) {
             // Modify element during iteration
             if (index === 1) {
                 element.attributes.class = 'item modified';

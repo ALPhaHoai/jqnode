@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('each() method', () => {
     let root: JQ;
@@ -21,9 +22,9 @@ describe('each() method', () => {
     test('each() should iterate over all elements in collection', () => {
         const elements = root.find('*'); // All elements
         let count = 0;
-        let indices = [];
+        let indices: number[] = [];
 
-        elements.each(function (index, element) {
+        elements.each(function (this: HtmlNode, index: number, element: HtmlNode) {
             count++;
             indices.push(index);
             expect(element).toBe(this); // 'this' should be the element
@@ -47,7 +48,7 @@ describe('each() method', () => {
         const elements = root.find('*');
         let count = 0;
 
-        elements.each(function (index) {
+        elements.each(function (index: number) {
             count++;
             if (index === 1) {
                 return false; // Break after second element
@@ -70,9 +71,9 @@ describe('each() method', () => {
 
     test('each() should allow modifying elements during iteration', () => {
         const paragraphs = root.find('p');
-        let indices = [];
+        let indices: number[] = [];
 
-        paragraphs.each(function (index, element) {
+        paragraphs.each(function (index: number, element: HtmlNode) {
             indices.push(index);
             // Set attribute on the internal node object
             if (element.attributes) {

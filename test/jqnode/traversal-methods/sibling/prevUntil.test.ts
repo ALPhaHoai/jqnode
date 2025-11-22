@@ -1,4 +1,5 @@
 import $ from '../../../../index';
+import { HtmlNode } from '../../../../types';
 import JQ from '../../../../jq';
 
 describe('prevUntil() method', () => {
@@ -39,7 +40,7 @@ describe('prevUntil() method', () => {
         const prevUntilWithFilter = seventhElement.prevUntil('.stop', '.sibling');
 
         expect(prevUntilWithFilter.nodes).toHaveLength(2); // sixth, fifth (filtered, stops before .stop)
-        const filteredClassNames = prevUntilWithFilter.nodes.map(node => node.attributes.class.split(' ')[1]);
+        const filteredClassNames = prevUntilWithFilter.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1]);
         expect(filteredClassNames).toEqual(['sixth', 'fifth']);
     });
 
@@ -48,7 +49,7 @@ describe('prevUntil() method', () => {
         const prevUntilFiltered = seventhElement.prevUntil('.first', '.sibling');
 
         expect(prevUntilFiltered.nodes).toHaveLength(5); // sixth, fifth, fourth, third, second (stops before first)
-        const siblingClassNames = prevUntilFiltered.nodes.map(node => node.attributes.class.split(' ')[1]);
+        const siblingClassNames = prevUntilFiltered.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1]);
         expect(siblingClassNames).toEqual(['sixth', 'fifth', 'fourth', 'third', 'second']);
     });
 
@@ -120,7 +121,7 @@ describe('prevUntil() method', () => {
         const prevUntilStop = seventhElement.prevUntil('.first');
 
         expect(prevUntilStop.nodes).toHaveLength(6); // sixth, fifth, not-sibling, fourth stop, third, second (stops before first)
-        const mappedNodes = prevUntilStop.nodes.map(node => node.attributes.class || node.tagName && node.tagName.toLowerCase());
+        const mappedNodes = prevUntilStop.nodes.map((node: HtmlNode) => node.attributes.class || node.tagName && node.tagName.toLowerCase());
         expect(mappedNodes).toEqual(['sibling sixth', 'sibling fifth', 'not-sibling', 'sibling fourth stop', 'sibling third', 'sibling second']);
     });
 
@@ -201,7 +202,7 @@ describe('prevUntil() method', () => {
         const prevUntilFirstStop = seventhElement.prevUntil('.first');
 
         expect(prevUntilFirstStop.nodes).toHaveLength(6); // sixth, fifth, not-sibling, fourth stop, third, second (farthest first)
-        const allClassNames = prevUntilFirstStop.nodes.map(node => node.attributes.class);
+        const allClassNames = prevUntilFirstStop.nodes.map((node: HtmlNode) => node.attributes.class);
         expect(allClassNames).toEqual(['sibling sixth', 'sibling fifth', 'not-sibling', 'sibling fourth stop', 'sibling third', 'sibling second']);
     });
 
@@ -255,7 +256,7 @@ describe('prevUntil() method', () => {
         const prevUntilFiltered = startElement.prevUntil('.stop', 'div');
 
         expect(prevUntilFiltered.nodes).toHaveLength(2); // Only Middle 3 and Middle 2 (div elements before stop, farthest first)
-        const middleValues = prevUntilFiltered.nodes.map(node => node.children[0].value);
+        const middleValues = prevUntilFiltered.nodes.map((node: HtmlNode) => node.children[0].value);
         expect(middleValues).toEqual(['Middle 3', 'Middle 2']);
     });
 

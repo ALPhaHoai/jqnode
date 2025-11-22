@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('prop() method', () => {
     let root: JQ;
@@ -39,7 +40,7 @@ describe('prop() method', () => {
         const inputs = root.find('input');
         inputs.prop('sharedProp', 'sharedValue');
 
-        inputs.each((index, element) => {
+        inputs.each((index: number, element: HtmlNode) => {
             expect($(element).prop('sharedProp')).toBe('sharedValue');
         });
     });

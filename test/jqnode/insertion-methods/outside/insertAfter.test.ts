@@ -1,4 +1,5 @@
 import $ from '../../../../index';
+import { HtmlNode } from '../../../../types';
 import JQ from '../../../../jq';
 
 describe('insertAfter() method', () => {
@@ -88,7 +89,7 @@ describe('insertAfter() method', () => {
         expect(dynamicTargetCount).toBe(1);
         // Find the inserted p element by its text content
         const allPElements = $('p');
-        const insertedPElement = allPElements.filter((i, el) => $(el).text() === 'Dynamic insert');
+        const insertedPElement = allPElements.filter((i: number, el: HtmlNode) => $(el).text() === 'Dynamic insert');
         const insertedPElementCount = insertedPElement.length;
         expect(insertedPElementCount).toBe(2); // Original + cloned
         const firstInsertedText = insertedPElement.first().text();

@@ -1,7 +1,9 @@
 import $ from '../../../index';
+import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('filter() method', () => {
-    let elements;
+    let elements: JQ;
 
     beforeEach(() => {
         const html = `
@@ -17,7 +19,7 @@ describe('filter() method', () => {
     test('filter() should filter elements using CSS selector', () => {
         const result = elements.filter('.active');
         expect(result.nodes).toHaveLength(3);
-        const allActive = result.nodes.every(node => node.attributes.class.includes('active'));
+        const allActive = result.nodes.every((node: HtmlNode) => node.attributes.class.includes('active'));
         expect(allActive).toBe(true);
     });
 
@@ -30,7 +32,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should filter elements using function that returns true/false', () => {
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             return index % 2 === 0; // Keep even indices (0, 2, 4)
         });
         expect(result.nodes).toHaveLength(3);
@@ -38,7 +40,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should filter elements using function that checks element properties', () => {
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             return element.attributes.class.includes('special');
         });
         expect(result.nodes).toHaveLength(1);
@@ -71,7 +73,7 @@ describe('filter() method', () => {
         const result = mixedElements.filter('div');
 
         expect(result.nodes).toHaveLength(2);
-        const allDivs = result.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'div');
+        const allDivs = result.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
         expect(allDivs).toBe(true);
     });
 
@@ -116,7 +118,7 @@ describe('filter() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             return parseInt(element.attributes['data-value']) > 15;
         });
 
@@ -125,7 +127,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should work with function that uses this context', () => {
-        const result = elements.filter(function (index) {
+        const result = elements.filter(function (index: number) {
             return this.attributes.class.includes('special');
         });
 
@@ -190,7 +192,7 @@ describe('filter() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             // Filter should not be affected by modifications during iteration
             if (index === 1) {
                 element.attributes.class = 'item modified';
@@ -203,12 +205,12 @@ describe('filter() method', () => {
     });
 
     test('filter() should work with large collections and complex functions', () => {
-        const html = Array.from({length: 100}, (_, i) =>
+        const html = Array.from({ length: 100 }, (_, i) =>
             `<div class="item" data-index="${i}">Item ${i}</div>`
         ).join('');
         const largeCollection = $(html).filter('.item');
 
-        const result = largeCollection.filter(function (index, element) {
+        const result = largeCollection.filter(function (index: number, element: HtmlNode) {
             const numIndex = parseInt(element.attributes['data-index']);
             return numIndex % 3 === 0 && numIndex % 5 === 0; // Multiples of both 3 and 5
         });
@@ -222,7 +224,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should handle function that returns non-boolean values', () => {
-        const result = elements.filter(function (index) {
+        const result = elements.filter(function (index: number) {
             return index || 'truthy'; // 0 || 'truthy' returns 'truthy', others return their index (all truthy)
         });
 
@@ -242,7 +244,7 @@ describe('filter() method', () => {
         `;
         const elements = $(html).find('.item');
 
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             // Check if parent has class 'container'
             return element.parent && element.parent.attributes.class === 'container';
         });
@@ -285,7 +287,7 @@ describe('filter() method', () => {
         `;
         const elements = $(html).filter('.item');
 
-        const result = elements.filter(function (index) {
+        const result = elements.filter(function (index: number) {
             return index % 2 === 0; // Even indices: 0, 2, 4
         });
 
@@ -295,7 +297,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should work with nested filtering functions', () => {
-        const result = elements.filter(function (index, element) {
+        const result = elements.filter(function (index: number, element: HtmlNode) {
             // Nested condition: active AND (index < 3 OR has 'special' class)
             const isActive = element.attributes.class.includes('active');
             const isEarly = index < 3;
@@ -309,7 +311,7 @@ describe('filter() method', () => {
     });
 
     test('filter() should handle function that throws errors gracefully', () => {
-        const result = elements.filter(function (index) {
+        const result = elements.filter(function (index: number) {
             if (index === 2) {
                 throw new Error('Test error');
             }
@@ -323,7 +325,7 @@ describe('filter() method', () => {
 
     test('filter() should work with function that uses external variables', () => {
         const threshold = 2;
-        const result = elements.filter(function (index) {
+        const result = elements.filter(function (index: number) {
             return index >= threshold;
         });
 

@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('removeClass() method', () => {
     let root: JQ;
@@ -39,9 +40,9 @@ describe('removeClass() method', () => {
     test('removeClass() should handle function parameter', () => {
         const divs = root.find('.item');
 
-        divs.removeClass(function (index, currentClass) {
+        divs.removeClass(function (index: number, currentClass: string) {
             // Remove the first class from each element
-            const classes = currentClass.split(/\s+/).filter(cls => cls.length > 0);
+            const classes = currentClass.split(/\s+/).filter((cls: string) => cls.length > 0);
             return classes[0];
         });
 
@@ -79,7 +80,7 @@ describe('removeClass() method', () => {
         items.removeClass('item');
 
         // Check each element has 'item' class removed
-        items.nodes.forEach(node => {
+        items.nodes.forEach((node: HtmlNode) => {
             expect(node.attributes.class).not.toContain('item');
         });
     });

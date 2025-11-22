@@ -1,4 +1,5 @@
 import $ from '../../../index';
+import { HtmlNode } from '../../../types';
 
 describe('cssCamel() method - jqnode-specific tests', () => {
     describe('Basic functionality', () => {
@@ -238,7 +239,7 @@ describe('cssCamel() method - jqnode-specific tests', () => {
             const html = '<div style="width: 100px">Test</div>';
             const $div = $(html).find('div');
 
-            $div.cssCamel('width', function (index, value) {
+            $div.cssCamel('width', function (index: number, value: string) {
                 return parseInt(value) + 50 + 'px';
             });
 
@@ -253,9 +254,9 @@ describe('cssCamel() method - jqnode-specific tests', () => {
             `;
 
             const $boxes = $(html).find('.box');
-            const indices = [];
+            const indices: number[] = [];
 
-            $boxes.cssCamel('width', function (index, value) {
+            $boxes.cssCamel('width', function (index: number, value: string) {
                 indices.push(index);
                 return value;
             });
@@ -268,7 +269,7 @@ describe('cssCamel() method - jqnode-specific tests', () => {
             const $div = $(html).find('div');
 
             let receivedValue;
-            $div.cssCamel('width', function (index, value) {
+            $div.cssCamel('width', function (index: number, value: string) {
                 receivedValue = value;
                 return value;
             });
@@ -280,7 +281,7 @@ describe('cssCamel() method - jqnode-specific tests', () => {
             const html = '<div style="background-color: red">Test</div>';
             const $div = $(html).find('div');
 
-            $div.cssCamel('background-color', function (index, value) {
+            $div.cssCamel('background-color', function (index: number, value: string) {
                 return value === 'red' ? 'blue' : 'green';
             });
 
@@ -337,7 +338,7 @@ describe('cssCamel() method - jqnode-specific tests', () => {
             const $items = $(html).find('.item');
             $items.cssCamel('color', 'blue');
 
-            $items.each(function () {
+            $items.each(function (this: HtmlNode) {
                 expect($(this).cssCamel('color')).toBe('blue');
             });
         });
@@ -364,7 +365,7 @@ describe('cssCamel() method - jqnode-specific tests', () => {
                 fontSize: '14px'
             });
 
-            $items.each(function () {
+            $items.each(function (this: HtmlNode) {
                 expect($(this).cssCamel('backgroundColor')).toBe('yellow');
                 expect($(this).cssCamel('fontSize')).toBe('14px');
             });

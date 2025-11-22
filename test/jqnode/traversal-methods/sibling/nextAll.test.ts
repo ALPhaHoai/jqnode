@@ -1,4 +1,5 @@
 import $ from '../../../../index';
+import { HtmlNode } from '../../../../types';
 import JQ from '../../../../jq';
 
 describe('nextAll() method', () => {
@@ -57,7 +58,7 @@ describe('nextAll() method', () => {
         const nextSiblings = secondElement.nextAll('.sibling');
 
         expect(nextSiblings.nodes).toHaveLength(4);
-        const allHaveSiblingClass = nextSiblings.nodes.every(node => node.attributes.class.includes('sibling'));
+        const allHaveSiblingClass = nextSiblings.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
         expect(allHaveSiblingClass).toBe(true);
     });
 
@@ -66,7 +67,7 @@ describe('nextAll() method', () => {
         const nextDivs = thirdElement.nextAll('div');
 
         expect(nextDivs.nodes).toHaveLength(3); // fourth, fifth, sixth
-        const allAreDivs = nextDivs.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'div');
+        const allAreDivs = nextDivs.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
         expect(allAreDivs).toBe(true);
     });
 
@@ -179,11 +180,11 @@ describe('nextAll() method', () => {
         const allNext = firstElement.nextAll();
 
         expect(allNext.nodes).toHaveLength(6); // second, third, fourth, span, fifth, sixth
-        const nextTags = allNext.nodes.map(node => node.tagName && node.tagName.toLowerCase());
+        const nextTags = allNext.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         expect(nextTags).toEqual(
             ['div', 'div', 'div', 'span', 'div', 'div']
         );
-        const nextClassNames = allNext.nodes.map(node => node.attributes.class.split(' ')[1] || node.attributes.class.split(' ')[0]);
+        const nextClassNames = allNext.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1] || node.attributes.class.split(' ')[0]);
         expect(nextClassNames).toEqual(
             ['second', 'third', 'fourth', 'not-sibling', 'fifth', 'sixth']
         );
@@ -206,7 +207,7 @@ describe('nextAll() method', () => {
         const nextSiblings = firstDiv.nextAll('.item');
 
         expect(nextSiblings.nodes).toHaveLength(3);
-        const nextDivValues = nextSiblings.nodes.map(node => node.children[0].value);
+        const nextDivValues = nextSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
         expect(nextDivValues).toEqual(['Div 2', 'Div 3', 'Div 4']);
     });
 

@@ -1,5 +1,6 @@
 import $ from '../../../index';
 import JQ from '../../../jq';
+import { HtmlNode } from '../../../types';
 
 describe('removeProp() method', () => {
     let root: JQ;
@@ -52,13 +53,13 @@ describe('removeProp() method', () => {
         const inputs = root.find('input');
 
         inputs.prop('sharedProp', 'sharedValue');
-        inputs.each((index, element) => {
+        inputs.each((index: number, element: HtmlNode) => {
             expect($(element).prop('sharedProp')).toBe('sharedValue');
         });
 
         inputs.removeProp('sharedProp');
 
-        inputs.each((index, element) => {
+        inputs.each((index: number, element: HtmlNode) => {
             expect($(element).prop('sharedProp')).toBeUndefined();
         });
     });
