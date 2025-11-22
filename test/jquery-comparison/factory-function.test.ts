@@ -184,7 +184,7 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
         });
 
         test('$.each() should handle empty arrays - identical behavior', () => {
-            const array = [];
+            const array: number[] = [];
             let nqCount = 0;
             let jqCount = 0;
 

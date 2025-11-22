@@ -1,4 +1,5 @@
 import $ from '../../../index';
+import { HtmlNode } from '../../../types';
 
 describe('has() method', () => {
     test('has() should filter elements that have descendants matching selector', () => {
@@ -39,10 +40,10 @@ describe('has() method', () => {
 
         expect(result.nodes).toHaveLength(2);
 
-        const firstDivElementChildren = result.nodes[0].children.filter((c: any) => c.type === 'element');
+        const firstDivElementChildren = result.nodes[0].children.filter((c: HtmlNode) => c.type === 'element');
         expect(firstDivElementChildren).toHaveLength(2); // First div has 2 spans
 
-        const thirdDivElementChildren = result.nodes[1].children.filter((c: any) => c.type === 'element');
+        const thirdDivElementChildren = result.nodes[1].children.filter((c: HtmlNode) => c.type === 'element');
         expect(thirdDivElementChildren).toHaveLength(1); // Third div has 1 span
     });
 
