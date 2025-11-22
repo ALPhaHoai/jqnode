@@ -367,4 +367,5 @@ function makeCallable(jqInstance: JQ): any {
 (JQFactory as any).title = titleUtil;
 (JQFactory as any).normalizeHTML = normalizeHTMLUtil;
 
+
 export = JQFactory;
