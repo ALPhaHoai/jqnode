@@ -82,8 +82,8 @@ describe('position() method', () => {
 
         expect(pos).toHaveProperty('top');
         expect(pos).toHaveProperty('left');
-        expect(typeof pos.top).toBe('number');
-        expect(typeof pos.left).toBe('number');
+        expect(typeof pos!.top).toBe('number');
+        expect(typeof pos!.left).toBe('number');
     });
 
     it('should return undefined for empty set', () => {
@@ -103,7 +103,7 @@ describe('position() method', () => {
         // Should return a single position object, not multiple
         expect(pos).toHaveProperty('top');
         expect(pos).toHaveProperty('left');
-        expect(typeof pos.top).toBe('number');
+        expect(typeof pos!.top).toBe('number');
     });
 
     it('should return default position in server environment', () => {
@@ -114,7 +114,7 @@ describe('position() method', () => {
         const pos = $p.position();
 
         // Server-side should return default values
-        expect(pos.top).toBe(0);
-        expect(pos.left).toBe(0);
+        expect(pos!.top).toBe(0);
+        expect(pos!.left).toBe(0);
     });
 });

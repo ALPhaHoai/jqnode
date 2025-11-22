@@ -4,7 +4,7 @@ import { createTestDom, compareResults } from '../../../utils/jquery-comparison-
 import { HtmlNode } from '../../../../types';
 
 describe('parents() method - Node-Query vs jQuery Comparison', () => {
-  let nqRoot, jqRoot;
+  let nqRoot: any, jqRoot: any;
 
   beforeEach(() => {
     const html = `

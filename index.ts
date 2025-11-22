@@ -8,7 +8,7 @@
 import { parseHTML } from './html-parser';
 import JQ from './jq';
 import { selectNodes } from './selector';
-import type { HtmlNode, CssSelector } from './types';
+import type { HtmlNode, CssSelector, JQStatic } from './types';
 import {
     now,
     noop,
@@ -368,4 +368,5 @@ function makeCallable(jqInstance: JQ): any {
 (JQFactory as any).normalizeHTML = normalizeHTMLUtil;
 
 
-export = JQFactory;
+const JQExport = JQFactory as unknown as JQStatic;
+export = JQExport;

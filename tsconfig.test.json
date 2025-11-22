@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        "test/**/*.ts",
+        "*.ts",
+        "helpers/**/*.ts",
+        "methods/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "browser-test",
+        "examples",
+        "scripts",
+        "demo",
+        "**/*.js"
+    ]
+}

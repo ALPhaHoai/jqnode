@@ -250,3 +250,41 @@ export interface JQ {
     title(html: string): string;
     normalizeHTML(html: string): string;
 }
+
+/**
+ * Static interface for the JQ factory function
+ */
+export interface JQStatic {
+    (htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[]): JQ;
+    fn: any;
+    clearRootNodesRegistry(): void;
+
+    // Utility methods
+    each(collection: any[] | Record<string, any>, callback: (indexOrKey: any, value: any) => any): any;
+    map(collection: any[] | Record<string, any>, callback: (value: any, indexOrKey: any) => any): any[];
+    load(html: string, options?: { normalize?: boolean }): any;
+
+    // Static utility methods
+    now(): number;
+    noop(): void;
+    param(obj: any, traditional?: boolean): string;
+    parseHTML(html: string): HtmlNode[];
+    parseJSON(json: string): any;
+    parseXML(xml: string): any;
+    trim(str: string | null | undefined): string;
+    type(obj: any): string;
+    unique(array: any[]): any[];
+    uniqueSort(array: any[]): any[];
+    makeArray(arrayLike: any): any[];
+    isPlainObject(obj: any): boolean;
+    isNumeric(value: any): boolean;
+    isFunction(value: any): boolean;
+    isEmptyObject(obj: any): boolean;
+    isArray(value: any): boolean;
+    inArray(value: any, array: any[], fromIndex?: number): number;
+    hasData(element: any): boolean;
+    extend(...args: any[]): any;
+    escapeSelector(selector: string): string;
+    title(newTitle?: string): string;
+    normalizeHTML(html: string): string;
+}

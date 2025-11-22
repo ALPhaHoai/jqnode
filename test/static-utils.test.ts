@@ -26,7 +26,7 @@ describe('jQuery static utility methods', () => {
     describe('$.type()', () => {
         it('should detect undefined', () => {
             expect($.type(undefined)).toBe('undefined');
-            expect($.type()).toBe('undefined');
+            expect($.type(undefined)).toBe('undefined');
         });
 
         it('should detect null', () => {

@@ -4,7 +4,7 @@ import { createTestDom, compareResults } from '../../../utils/jquery-comparison-
 import { HtmlNode } from '../../../../types';
 
 describe('children() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot;
+    let nqRoot: any, jqRoot: any;
 
     beforeEach(() => {
         const html = `
@@ -43,7 +43,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
-        const jqTags = [];
+        const jqTags: string[] = [];
         jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
@@ -51,8 +51,8 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTags).toEqual(jqTags);
         expect(nqTags).toEqual(['h1', 'div', 'ul']);
 
-        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.attributes.class);
-        const jqClasses = [];
+        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.attributes?.class);
+        const jqClasses: string[] = [];
         jqChildren.each((index: number, element: any) => {
             jqClasses.push(element.className);
         });
@@ -73,7 +73,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
-        const jqTags = [];
+        const jqTags: string[] = [];
         jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
@@ -109,8 +109,8 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(2);
         expect(jqChildren.length).toBe(2);
 
-        const nqTexts = nqChildren.nodes.map((node: HtmlNode) => node.children[0]?.value || '');
-        const jqTexts = [];
+        const nqTexts = nqChildren.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const jqTexts: string[] = [];
         jqChildren.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });
@@ -130,7 +130,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
-        const jqTags = [];
+        const jqTags: string[] = [];
         jqChildren.each((index: number, element: any) => {
             jqTags.push(element.tagName.toLowerCase());
         });
@@ -174,8 +174,8 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children[0]?.value || '');
-        const jqTexts = [];
+        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const jqTexts: string[] = [];
         jqResult.each((index: number, element: any) => {
             jqTexts.push(jQuery(element).text());
         });

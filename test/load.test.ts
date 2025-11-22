@@ -72,7 +72,7 @@ describe('$.load()', () => {
         test('should handle null or undefined data gracefully', () => {
             const result1 = { data: null };
             const result2 = { data: undefined };
-            const result3 = {};
+            const result3: { data?: string } = {};
 
             const root1 = $.load(result1?.data || "");
             const root2 = $.load(result2?.data || "");
@@ -199,7 +199,7 @@ describe('$.load()', () => {
 
             const root = $.load(apiResponse?.data || "");
             const table = root('.data-table');
-            const headers = table.find('th').map((i, th) => $(th).text()).get();
+            const headers = table.find('th').map((i: number, th: any) => $(th).text()).get();
             const rows = table.find('tr:not(:first-child)');
 
             expect(headers).toEqual(['ID', 'Name']);
@@ -219,7 +219,7 @@ describe('$.load()', () => {
             `;
 
             const root = $.load(html);
-            const products = root('.product').map(function (i, el) {
+            const products = root('.product').map(function (i: number, el: any) {
                 const $el = $(el);
                 return {
                     id: $el.attr('data-id'),
