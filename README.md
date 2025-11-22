@@ -17,6 +17,7 @@ A lightweight jQuery-like library for DOM manipulation and traversal in both Nod
 - **Filtering Methods**: Filter selections with `filter()`, `not()`, `has()`, `is()`, `eq()`
 - **Iteration**: Process collections with `each()`, `map()`
 - **Chaining**: Method chaining for fluent API usage
+- **TypeScript Support**: Full type definitions with 22 declaration files
 - **Cross-platform**: Works identically in Node.js and browser environments
 - **Comprehensive Testing**: 821 automated tests ensuring compatibility
 
@@ -25,6 +26,99 @@ A lightweight jQuery-like library for DOM manipulation and traversal in both Nod
 ```bash
 npm install @alphahoai/jqnode
 ```
+
+## TypeScript Support
+
+jqnode is written in TypeScript and includes full type definitions for enhanced development experience.
+
+### Installation with Types
+
+```bash
+npm install @alphahoai/jqnode
+```
+
+Type definitions are included automatically - no need for `@types` packages!
+
+### TypeScript Usage
+
+**Node.js (CommonJS):**
+
+```typescript
+import $ = require('@alphahoai/jqnode');
+
+const html = `
+<div class="container">
+    <h1 class="title">Hello TypeScript</h1>
+    <p>Some content</p>
+</div>
+`;
+
+const root = $(html);
+const title = root.find('.title');
+console.log(title.text()); // Type-safe!
+```
+
+**ES Modules:**
+
+```typescript
+import $ from '@alphahoai/jqnode';
+
+// Full type inference
+const root = $('<div class="test">Content</div>');
+const text: string = root.text(); // Type: string
+const length: number = root.length; // Type: number
+```
+
+### Type Definitions
+
+All methods are fully typed with:
+- Parameter types
+- Return type inference
+- Generic support where applicable
+- JSDoc documentation
+
+**Example with Types:**
+
+```typescript
+import $ = require('@alphahoai/jqnode');
+
+// Type inference works throughout
+const html = '<div><p class="text">Hello</p></div>';
+const root = $(html);
+
+// Find returns typed JQ instance
+const paragraphs = root.find('p.text');
+
+// Methods have proper signatures
+paragraphs.each((index: number, element: any) => {
+    const $el = $(element);
+    console.log($el.text()); // string
+});
+
+// Attribute methods are typed
+const className: string = root.find('.text').attr('class');
+const hasClass: boolean = root.hasClass('text');
+
+// Chaining preserves types
+root.find('p')
+    .attr('data-index', '1')
+    .text('New text')
+    .addClass('modified');
+```
+
+### Available Type Files
+
+The package includes 22 TypeScript declaration files covering:
+- Core JQ class and factory function
+- All DOM manipulation methods
+- Traversal and filtering methods
+- Insertion methods  
+- Attribute and CSS methods
+- Selector engine
+- HTML parser
+- Utility functions
+
+All located in `dist/*.d.ts` with source maps for IDE navigation.
 
 ## Building
 
@@ -236,11 +330,13 @@ See the test files in `test/` for comprehensive examples and edge cases.
 ## Available Scripts
 
 - `npm run build` - Build all targets (Node.js + Browser)
+- `npm run build:types` - Generate TypeScript declaration files
 - `npm run build:watch` - Build and watch for changes during development
 - `npm run build:node` - Build Node.js CommonJS version only
 - `npm run build:browser` - Build browser UMD version only
 - `npm test` - Run Node.js Jest tests
 - `npm run test:debug` - Run tests with debug logging
+- `npm run typecheck` - Run TypeScript type checking without emitting files
 - `npm run test:browser` - Build and prepare basic browser tests
 - `npm run test:browser:generate` - Convert Jest tests to browser format
 - `npm run test:browser:full` - Build + generate comprehensive browser tests

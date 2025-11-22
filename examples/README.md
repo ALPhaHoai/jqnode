@@ -7,8 +7,8 @@ Comprehensive, runnable examples for all jqnode methods.
 ```
 examples/
 ├── README.md (this file)
-├── basic-usage.js              ← Start here!
-├── comprehensive-methods-demo.js
+├── basic-usage.ts              ← Start here!
+├── comprehensive-methods-demo.ts
 │
 ├── content/                     ← HTML/text manipulation
 ├── attributes/                  ← Classes & attributes
@@ -24,25 +24,25 @@ examples/
 
 ### Run Any Example
 ```bash
-node examples/basic-usage.js
-node examples/content/toJSON-usage.js
-node examples/attributes/addClass-usage.js
+npx ts-node examples/basic-usage.ts
+npx ts-node examples/content/toJSON-usage.ts
+npx ts-node examples/attributes/addClass-usage.ts
 ```
 
 ### Run by Category
 ```bash
 # Content manipulation
-node examples/content/html-usage.js
-node examples/content/text-usage.js
+npx ts-node examples/content/html-usage.ts
+npx ts-node examples/content/text-usage.ts
 
 # Attributes
-node examples/attributes/attr-usage.js  
+npx ts-node examples/attributes/attr-usage.ts  
 
 # Data storage
-node examples/data/data-usage.js
+npx ts-node examples/data/data-usage.ts
 
 # Traversal
-node examples/traversal/traversal-usage.js
+npx ts-node examples/traversal/traversal-usage.ts
 
 # And more...
 ```
@@ -50,59 +50,59 @@ node examples/traversal/traversal-usage.js
 ## 📚 Examples by Category
 
 ### Content (`/content`)
-- **html-usage.js** - Get/set HTML content
-- **text-usage.js** - Get/set text content
-- **normalizedText-usage.js** - Get/set text with whitespace normalization (12 examples)
-- **toJSON-usage.js** - Convert tables to JSON (9 examples)
-- **findTableWithHeader-usage.js** - Find tables by headers
-- **title-usage.js** - Get document title
+- **html-usage.ts** - Get/set HTML content
+- **text-usage.ts** - Get/set text content
+- **normalizedText-usage.ts** - Get/set text with whitespace normalization (12 examples)
+- **toJSON-usage.ts** - Convert tables to JSON (9 examples)
+- **findTableWithHeader-usage.ts** - Find tables by headers
+- **title-usage.ts** - Get document title
 
 ### Attributes (`/attributes`)
-- **attr-usage.js** - Get/set attributes (11 examples)
-- **addClass-usage.js** - Add CSS classes (12 examples)
-- **class-methods-usage.js** - removeClass, toggleClass, hasClass
+- **attr-usage.ts** - Get/set attributes (11 examples)
+- **addClass-usage.ts** - Add CSS classes (12 examples)
+- **class-methods-usage.ts** - removeClass, toggleClass, hasClass
 
 ### Data (`/data`)
-- **data-usage.js** - Store/retrieve data (12 examples)
+- **data-usage.ts** - Store/retrieve data (12 examples)
 
 ### Traversal (`/traversal`)
-- **traversal-usage.js** - find, filter, children, parent
-- **navigation-usage.js** - siblings, next, prev, eq, first, last
-- **advanced-usage.js** - map, closest, combinations
+- **traversal-usage.ts** - find, filter, children, parent
+- **navigation-usage.ts** - siblings, next, prev, eq, first, last
+- **advanced-usage.ts** - map, closest, combinations
 
 ### Insertion (`/insertion`)
-- **form-and-dom-usage.js** - val, prop, append, remove
+- **form-and-dom-usage.ts** - val, prop, append, remove
 
 ### Iteration (`/iteration`)
-- **each-usage.js** - Iterate over elements (12 examples)
+- **each-usage.ts** - Iterate over elements (12 examples)
 
 ## 🎯 Examples by Use Case
 
 ### I want to...
 
 **Manipulate content**
-→ `content/html-usage.js`, `content/text-usage.js`
+→ `content/html-usage.ts`, `content/text-usage.ts`
 
 **Work with CSS classes**
-→ `attributes/addClass-usage.js`, `attributes/class-methods-usage.js`
+→ `attributes/addClass-usage.ts`, `attributes/class-methods-usage.ts`
 
 **Extract table data**
-→ `content/toJSON-usage.js`
+→ `content/toJSON-usage.ts`
 
 **Navigate the DOM**
-→ `traversal/traversal-usage.js`, `traversal/navigation-usage.js`
+→ `traversal/traversal-usage.ts`, `traversal/navigation-usage.ts`
 
 **Store custom data**
-→ `data/data-usage.js`
+→ `data/data-usage.ts`
 
 **Loop through elements**
-→ `iteration/each-usage.js`
+→ `iteration/each-usage.ts`
 
 **Work with forms**
-→ `insertion/form-and-dom-usage.js`
+→ `insertion/form-and-dom-usage.ts`
 
 **See everything**
-→ `comprehensive-methods-demo.js`
+→ `comprehensive-methods-demo.ts`
 
 ## 📖 Example Format
 
@@ -118,17 +118,17 @@ Each example file includes:
 ### Running Examples
 ```bash
 # Single example
-node examples/content/html-usage.js
+npx ts-node examples/content/html-usage.ts
 
 # Watch for changes (if you have nodemon)
-nodemon examples/content/html-usage.js
+nodemon --exec "npx ts-node" examples/content/html-usage.ts
 ```
 
 ### Enable Debug Mode
 ```bash
 # See internal jqnode debug logs
 set JQNODE_DEBUG=true
-node examples/basic-usage.js
+npx ts-node examples/basic-usage.ts
 ```
 
 ### Modify and Experiment
@@ -141,15 +141,15 @@ All examples are self-contained. Feel free to:
 ## 📦 What's Included
 
 ### Comprehensive Examples (10+ examples each)
-- `attr-usage.js` - 11 examples
-- `addClass-usage.js` - 12 examples
-- `each-usage.js` - 12 examples
-- `data-usage.js` - 12 examples
-- `toJSON-usage.js` - 9 examples
+- `attr-usage.ts` - 11 examples
+- `addClass-usage.ts` - 12 examples
+- `each-usage.ts` - 12 examples
+- `data-usage.ts` - 12 examples
+- `toJSON-usage.ts` - 9 examples
 
 ### Quick Demos
-- `basic-usage.js` - Getting started
-- `comprehensive-methods-demo.js` - 20+ methods overview
+- `basic-usage.ts` - Getting started
+- `comprehensive-methods-demo.ts` - 20+ methods overview
 
 ### Category Examples
 - Individual files for each major method category
@@ -165,7 +165,7 @@ All examples are self-contained. Feel free to:
 
 When adding new examples:
 1. Place in appropriate category folder
-2. Follow existing file naming: `method-usage.js`
+2. Follow existing file naming: `method-usage.ts`
 3. Include 5-10 progressively complex examples
 4. Add console.log statements to show output
 5. Update this README
@@ -181,6 +181,6 @@ Examples use test HTML (not real DOM). Performance characteristics:
 ---
 
 **Quick Links:**
-[Basic Usage](./basic-usage.js) |
+[Basic Usage](./basic-usage.ts) |
 [Documentation](/docs/) |
 [Project README](../README.md)

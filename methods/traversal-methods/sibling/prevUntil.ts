@@ -1,0 +1,165 @@
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { HtmlNode, CssSelector, JQ } from '../../../types';
+
+/**
+ * Gets all preceding siblings up to but not including the element matched by the selector.
+ */
+function prevUntil(this: JQ, selector?: CssSelector | HtmlNode, filter?: CssSelector): JQ {
+    const precedingSiblings: HtmlNode[] = [];
+    let parsedStopSelector = null;
+    let stopElement: HtmlNode | Element | null = null;
+
+    if (selector) {
+        if (typeof selector === 'string') {
+            parsedStopSelector = parseSelector(selector);
+        } else {
+            // Selector is HtmlNode or JQ - use type guard to check structure
+            const selectorObj = selector as HtmlNode | JQ;
+            if ('nodes' in selectorObj && Array.isArray(selectorObj.nodes) && selectorObj.nodes.length > 0) {
+                // It's a JQ object
+                stopElement = selectorObj.nodes[0]._originalElement || selectorObj.nodes[0];
+            } else if ('_originalElement' in selectorObj && selectorObj._originalElement) {
+                // It's an HtmlNode with DOM reference
+                stopElement = selectorObj._originalElement;
+            } else if ('nodeType' in selectorObj && selectorObj.nodeType !== undefined) {
+                // It's an HtmlNode
+                stopElement = selectorObj;
+            }
+        }
+    }
+
+    const parsedFilterSelector = filter ? parseSelector(filter) : null;
+
+    for (const node of this.nodes) {
+        if (node._originalElement) {
+            const element = node._originalElement;
+            let sibling = element.previousElementSibling;
+
+            while (sibling) {
+                let shouldStop = false;
+                if (parsedStopSelector) {
+                    const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                    const tempNode: HtmlNode = {
+                        type: 'element',
+                        tagName: sibling.tagName.toLowerCase(),
+                        attributes: {},
+                        _originalElement: sibling
+                    };
+                    if (tempNode.attributes) {
+                        for (let i = 0; i < sibling.attributes.length; i++) {
+                            const attr = sibling.attributes[i];
+                            tempNode.attributes[attr.name] = attr.value;
+                        }
+                    }
+                    if (selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
+                        shouldStop = true;
+                    }
+                } else if (stopElement) {
+                    // Compare with type-safe checks - both are DOM Elements
+                    const isSameElement = sibling === (stopElement as unknown as Element);
+                    if (isSameElement) {
+                        shouldStop = true;
+                    }
+                }
+
+                if (shouldStop) break;
+
+                let shouldInclude = true;
+                if (parsedFilterSelector) {
+                    const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                    const tempNode: HtmlNode = {
+                        type: 'element',
+                        tagName: sibling.tagName.toLowerCase(),
+                        attributes: {},
+                        _originalElement: sibling
+                    };
+                    for (let i = 0; i < sibling.attributes.length; i++) {
+                        const attr = sibling.attributes[i];
+                        if (tempNode.attributes) {
+                            tempNode.attributes[attr.name] = attr.value;
+                        }
+                    }
+                    if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
+                        shouldInclude = false;
+                    }
+                }
+
+                if (shouldInclude) {
+                    const internalNode: HtmlNode = {
+                        type: 'element',
+                        tagName: sibling.tagName.toLowerCase(),
+                        attributes: {},
+                        properties: {},
+                        children: [],
+                        parent: undefined,
+                        _originalElement: sibling
+                    };
+
+                    if (internalNode.attributes) {
+                        for (let i = 0; i < sibling.attributes.length; i++) {
+                            const attr = sibling.attributes[i];
+                            internalNode.attributes[attr.name] = attr.value;
+                        }
+                    }
+
+                    precedingSiblings.push(internalNode);
+                }
+
+                sibling = sibling.previousElementSibling;
+            }
+        } else if (node.parent && node.parent.children) {
+            const siblings = node.parent.children.filter((child: HtmlNode) => child.type === 'element');
+            const currentIndex = siblings.indexOf(node);
+
+            if (currentIndex > 0) {
+                for (let i = currentIndex - 1; i >= 0; i--) {
+                    const sibling = siblings[i];
+
+                    let shouldStop = false;
+                    if (parsedStopSelector) {
+                        const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                        if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                            shouldStop = true;
+                        }
+                    } else if (stopElement) {
+                        // Type-safe comparison - check both _originalElement and direct reference
+                        const stopAsElement = stopElement as HtmlNode | Element;
+                        const isSameElement = sibling._originalElement === stopAsElement ||
+                            sibling === stopAsElement;
+                        if (isSameElement) {
+                            shouldStop = true;
+                        }
+                    }
+
+                    if (shouldStop) break;
+
+                    if (parsedFilterSelector) {
+                        const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                        if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                            continue;
+                        }
+                    }
+
+                    precedingSiblings.push(sibling);
+                }
+            }
+        }
+    }
+
+    // Remove duplicates
+    const uniqueSiblings: HtmlNode[] = [];
+    const seen = new Set<HtmlNode>();
+    for (const sibling of precedingSiblings) {
+        if (!seen.has(sibling)) {
+            seen.add(sibling);
+            uniqueSiblings.push(sibling);
+        }
+    }
+
+    const result = Object.create(Object.getPrototypeOf(this));
+    result.nodes = uniqueSiblings;
+    result.length = uniqueSiblings.length;
+    return result;
+}
+
+export = prevUntil;

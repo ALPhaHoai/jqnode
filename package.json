@@ -4,14 +4,18 @@
   "description": "A lightweight jQuery-compatible library for DOM manipulation and traversal in both Node.js and browsers",
   "main": "dist/jqnode.cjs.js",
   "module": "dist/jqnode.cjs.js",
+  "types": "dist/index.d.ts",
   "browser": "dist/jqnode.umd.js",
   "files": [
     "dist/",
     "index.js",
-    "browser-entry.js"
+    "index.ts",
+    "browser-entry.js",
+    "browser-entry.ts"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run build:types && rollup -c",
+    "build:types": "tsc --emitDeclarationOnly",
     "build:watch": "rollup -c -w",
     "build:node": "rollup -c --environment TARGET:node",
     "build:browser": "rollup -c --environment TARGET:browser",
@@ -25,7 +29,8 @@
     "debug": "cross-env JQNODE_DEBUG=1 node",
     "example": "node examples/basic-usage.js",
     "example:debug": "cross-env JQNODE_DEBUG=1 node examples/basic-usage.js",
-    "refactor:scan": "node scripts/refactor-test-expressions.js"
+    "refactor:scan": "node scripts/refactor-test-expressions.js",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "jquery",
@@ -40,7 +45,9 @@
     "cheerio",
     "jsdom",
     "browser",
-    "node"
+    "node",
+    "typescript",
+    "types"
   ],
   "author": "",
   "license": "ISC",
@@ -55,6 +62,9 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
     "acorn": "^8.15.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
@@ -68,6 +78,11 @@
     "prettier": "^3.6.2",
     "rollup": "^2.79.2",
     "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3",
     "playwright": "^1.56.1"
+  },
+  "dependencies": {
+    "tslib": "^2.8.1"
   }
 }
