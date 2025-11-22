@@ -106,7 +106,7 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const jqArray = jqItems.get();
 
         const nqIds = nqArray.map((el: HtmlNode) => el.id);
-        const jqIds = jqArray.map((el: any) => el.id);
+        const jqIds = jqArray.map((el: HTMLElement) => el.id);
 
         expect(nqIds).toEqual(jqIds);
         expect(nqIds).toEqual(['item1', 'item2', 'item3']);

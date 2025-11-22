@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('parents() method - Node-Query vs jQuery Comparison', () => {
-  let nqRoot: any, jqRoot: any;
+  let nqRoot: JQ, jqRoot: JQuery<Document>;
 
   beforeEach(() => {
     const html = `
@@ -63,7 +63,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
     // Check the chain of parent tags
     const nqTags = nqParents.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
     const jqTags: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqTags.push(element.tagName.toLowerCase());
     });
 
@@ -83,7 +83,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
 
     const nqClasses = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
     const jqClasses: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 
@@ -104,7 +104,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
     // Should get unique parents (no duplicates)
     const nqIds = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
     const jqIds: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqIds.push(element.className);
     });
 
@@ -163,7 +163,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
 
     const nqClasses = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
     const jqClasses: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 

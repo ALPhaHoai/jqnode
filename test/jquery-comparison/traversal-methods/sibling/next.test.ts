@@ -3,7 +3,7 @@ import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
 
 describe('next() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: any, jqRoot: any;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `

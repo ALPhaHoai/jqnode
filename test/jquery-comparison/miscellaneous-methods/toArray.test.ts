@@ -88,7 +88,7 @@ describe('toArray() method - Node-Query vs jQuery Comparison', () => {
 
         // Should support array methods like map
         const nqIds = nqArray.map((el: HtmlNode) => el.id);
-        const jqIds = jqArray.map((el: any) => el.id);
+        const jqIds = jqArray.map((el: HTMLElement) => el.id);
 
         expect(nqIds).toEqual(jqIds);
         expect(nqIds).toEqual(['item1', 'item2', 'item3']);
@@ -140,7 +140,7 @@ describe('toArray() method - Node-Query vs jQuery Comparison', () => {
         const jqArray = jqItems.toArray();
 
         const nqFiltered = nqArray.filter((el: HtmlNode) => el.id === 'item2');
-        const jqFiltered = jqArray.filter((el: any) => el.id === 'item2');
+        const jqFiltered = jqArray.filter((el: HTMLElement) => el.id === 'item2');
 
         expect(nqFiltered.length).toBe(jqFiltered.length);
         expect(nqFiltered.length).toBe(1);

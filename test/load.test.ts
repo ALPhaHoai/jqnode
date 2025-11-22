@@ -199,7 +199,7 @@ describe('$.load()', () => {
 
             const root = $.load(apiResponse?.data || "");
             const table = root('.data-table');
-            const headers = table.find('th').map((i: number, th: any) => $(th).text()).get();
+            const headers = table.find('th').map((i: number, th: HtmlNode) => $(th).text()).get();
             const rows = table.find('tr:not(:first-child)');
 
             expect(headers).toEqual(['ID', 'Name']);
@@ -219,7 +219,7 @@ describe('$.load()', () => {
             `;
 
             const root = $.load(html);
-            const products = root('.product').map(function (i: number, el: any) {
+            const products = root('.product').map(function (i: number, el: HtmlNode) {
                 const $el = $(el);
                 return {
                     id: $el.attr('data-id'),

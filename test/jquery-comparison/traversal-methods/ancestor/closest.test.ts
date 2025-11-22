@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('closest() method - Node-Query vs jQuery Comparison', () => {
-  let nqRoot: any, jqRoot: any;
+  let nqRoot: JQ, jqRoot: JQuery<Document>;
 
   beforeEach(() => {
     const html = `
@@ -63,7 +63,7 @@ describe('closest() method - Node-Query vs jQuery Comparison', () => {
     // Should return the articles themselves
     const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.attributes.class);
     const jqClasses: string[] = [];
-    jqClosest.each((index: number, element: any) => {
+    jqClosest.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 
@@ -83,7 +83,7 @@ describe('closest() method - Node-Query vs jQuery Comparison', () => {
 
     const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.attributes.class);
     const jqClasses: string[] = [];
-    jqClosest.each((index: number, element: any) => {
+    jqClosest.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 
@@ -149,7 +149,7 @@ describe('closest() method - Node-Query vs jQuery Comparison', () => {
     // Check that we get the content ancestor
     const nqIds = nqClosest.nodes.map((node: HtmlNode) => node.attributes.id).filter(id => id);
     const jqIds: string[] = [];
-    jqClosest.each((index: number, element: any) => {
+    jqClosest.each((index: number, element: HTMLElement) => {
       if (element.id) jqIds.push(element.id);
     });
 

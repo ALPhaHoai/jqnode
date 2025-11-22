@@ -83,7 +83,7 @@ describe('Ancestor traversal chaining - Node-Query vs jQuery Comparison', () => 
 
     const nqClasses = nqParents.nodes.map(node => node.attributes.class);
     const jqClasses: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 
@@ -103,7 +103,7 @@ describe('Ancestor traversal chaining - Node-Query vs jQuery Comparison', () => 
 
     const nqTags = nqParents.nodes.map(node => node.tagName && node.tagName.toLowerCase());
     const jqTags: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqTags.push(element.tagName.toLowerCase());
     });
 
@@ -141,7 +141,7 @@ describe('Ancestor traversal chaining - Node-Query vs jQuery Comparison', () => 
 
     const nqClasses = nqResult.nodes.map(node => node.attributes.class);
     const jqClasses: string[] = [];
-    jqResult.each((index: number, element: any) => {
+    jqResult.each((index: number, element: HTMLElement) => {
       jqClasses.push(element.className);
     });
 

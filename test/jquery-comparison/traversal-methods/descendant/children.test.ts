@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('children() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: any, jqRoot: any;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -44,7 +44,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags: string[] = [];
-        jqChildren.each((index: number, element: any) => {
+        jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -53,7 +53,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.attributes?.class);
         const jqClasses: string[] = [];
-        jqChildren.each((index: number, element: any) => {
+        jqChildren.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
         });
 
@@ -74,7 +74,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags: string[] = [];
-        jqChildren.each((index: number, element: any) => {
+        jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -111,7 +111,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTexts = nqChildren.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
         const jqTexts: string[] = [];
-        jqChildren.each((index: number, element: any) => {
+        jqChildren.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -131,7 +131,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
         const jqTags: string[] = [];
-        jqChildren.each((index: number, element: any) => {
+        jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -176,7 +176,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
         const jqTexts: string[] = [];
-        jqResult.each((index: number, element: any) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 

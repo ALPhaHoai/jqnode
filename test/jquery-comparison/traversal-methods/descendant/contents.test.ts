@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('contents() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: any, jqRoot: any;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -44,14 +44,14 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Check for comment node
         const nqHasComment = nqContents.nodes.some((node: HtmlNode) => node.type === 'comment');
-        const jqHasComment = jqContents.toArray().some((node: any) => node.nodeType === 8); // COMMENT_NODE
+        const jqHasComment = jqContents.toArray().some((node: Node) => node.nodeType === 8); // COMMENT_NODE
 
         expect(nqHasComment).toBe(jqHasComment);
         expect(nqHasComment).toBe(true);
 
         // Check for element nodes
         const nqHasH1 = nqContents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
-        const jqHasH1 = jqContents.toArray().some((node: any) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
+        const jqHasH1 = jqContents.toArray().some((node: Node) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
 
         expect(nqHasH1).toBe(jqHasH1);
         expect(nqHasH1).toBe(true);
@@ -70,7 +70,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Check for text nodes
         const nqHasText = nqContents.nodes.some((node: HtmlNode) => node.type === 'text');
-        const jqHasText = jqContents.toArray().some((node: any) => node.nodeType === 3); // TEXT_NODE
+        const jqHasText = jqContents.toArray().some((node: Node) => node.nodeType === 3); // TEXT_NODE
 
         expect(nqHasText).toBe(jqHasText);
         expect(nqHasText).toBe(true);
@@ -183,7 +183,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Get the types of all child nodes
         const nqTypes = nqContents.nodes.map((node: HtmlNode) => node.type);
-        const jqTypes = jqContents.toArray().map((node: any) => {
+        const jqTypes = jqContents.toArray().map((node: Node) => {
             switch (node.nodeType) {
                 case 1: return 'element';
                 case 3: return 'text';

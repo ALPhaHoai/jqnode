@@ -23,7 +23,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqResult = elements.map((index: number, element: HtmlNode) => {
             return `Item ${index + 1}: ${$(element).text()}`;
         });
-        const jqResult = jqElements.map((index: number, element: any) => {
+        const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return `Item ${index + 1}: ${jQuery(element).text()}`;
         });
 
@@ -43,7 +43,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqResult = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : null;
         });
-        const jqResult = jqElements.map((index: number, element: any) => {
+        const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return index % 2 === 0 ? jQuery(element).text() : null;
         });
 
@@ -58,7 +58,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqResult = elements.map((index: number, element: HtmlNode) => {
             return index % 2 === 0 ? $(element).text() : undefined;
         });
-        const jqResult = jqElements.map((index: number, element: any) => {
+        const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return index % 2 === 0 ? jQuery(element).text() : undefined;
         });
 
@@ -98,7 +98,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
             if (index === 0) return $(element).attr('data-value'); // string
             if (index === 1) return parseInt($(element).attr('data-value')); // number
         });
-        const jqResult = jqTypeElements.map((index: number, element: any) => {
+        const jqResult = jqTypeElements.map((index: number, element: HTMLElement) => {
             if (index === 0) return jQuery(element).attr('data-value'); // string
             if (index === 1) return parseInt(jQuery(element).attr('data-value')); // number
         });
@@ -119,7 +119,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
                 id: $(element).attr('data-id')
             };
         });
-        const jqResult = jqElements.map((index: number, element: any) => {
+        const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return {
                 index: index,
                 text: jQuery(element).text(),
@@ -139,7 +139,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqResult = elements.map((index: number, element: HtmlNode) => {
             return [index, $(element).text()];
         });
-        const jqResult = jqElements.map((index: number, element: any) => {
+        const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return [index, jQuery(element).text()];
         });
 
@@ -186,7 +186,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const jqFiltered = jqElements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
 
         const nqResult = nqFiltered.map((index: number, element: HtmlNode) => $(element).text().toUpperCase());
-        const jqResult = jqFiltered.map((index: number, element: any) => jQuery(element).text().toUpperCase());
+        const jqResult = jqFiltered.map((index: number, element: HTMLElement) => jQuery(element).text().toUpperCase());
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -200,7 +200,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const jqSliced = jqElements.slice(1, 4); // Second, Third, Fourth
 
         const nqResult = nqSliced.map((index: number, element: HtmlNode) => $(element).attr('data-id'));
-        const jqResult = jqSliced.map((index: number, element: any) => jQuery(element).attr('data-id'));
+        const jqResult = jqSliced.map((index: number, element: HTMLElement) => jQuery(element).attr('data-id'));
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -213,13 +213,13 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         // Note: This test is tricky because jQuery's map() returns a regular array, not a jQuery object
         // So we'll test the mapping behavior directly
         const nqMapped = elements.map((index: number, element: HtmlNode) => $(element).text());
-        const jqMapped = jqElements.map((index: number, element: any) => jQuery(element).text()).get();
+        const jqMapped = jqElements.map((index: number, element: HTMLElement) => jQuery(element).text()).get();
 
         // Filter the node-query results (JQ object)
         const nqFiltered = nqMapped.filter((index: number, value: any) => value.length > 5);
 
         // Filter the jQuery results (plain array) manually
-        const jqFiltered = jqMapped.filter((value: any) => value.length > 5);
+        const jqFiltered = jqMapped.filter((value: string) => value.length > 5);
 
         expect(nqFiltered.nodes).toHaveLength(2); // "Second" and "Fourth" both have length > 5
         expect(jqFiltered.length).toBe(2);

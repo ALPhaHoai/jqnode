@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('parent() method - Node-Query vs jQuery Comparison', () => {
-  let nqRoot: any, jqRoot: any;
+  let nqRoot: JQ, jqRoot: JQuery<Document>;
 
   beforeEach(() => {
     const html = `
@@ -59,7 +59,7 @@ describe('parent() method - Node-Query vs jQuery Comparison', () => {
       nqParentTags.push(element.tagName.toLowerCase());
     });
     const jqParentTags: string[] = [];
-    jqParents.each((index: number, element: any) => {
+    jqParents.each((index: number, element: HTMLElement) => {
       jqParentTags.push(element.tagName.toLowerCase());
     });
 

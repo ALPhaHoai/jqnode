@@ -84,7 +84,7 @@ describe('Additional selector tests - Node-Query vs jQuery Comparison', () => {
 
       const nqNames = nqRequiredTexts.nodes.map(node => node.attributes.name);
       const jqNames = [];
-      jqRequiredTexts.each((index: number, element: any) => {
+      jqRequiredTexts.each((index: number, element: HTMLElement) => {
         jqNames.push(element.name);
       });
 

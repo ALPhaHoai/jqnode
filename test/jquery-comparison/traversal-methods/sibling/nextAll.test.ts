@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('nextAll() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: any, jqRoot: any;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -32,7 +32,7 @@ describe('nextAll() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTexts = nqNextAll.nodes.map((node: HtmlNode) => node.children[0]?.value || '');
         const jqTexts = [];
-        jqNextAll.each((index: number, element: any) => {
+        jqNextAll.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 

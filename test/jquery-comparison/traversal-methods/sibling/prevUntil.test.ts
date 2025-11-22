@@ -1,10 +1,10 @@
 import $ from '../../../../index';
 import jQuery from 'jquery';
 import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../../types';
+import type { HtmlNode, JQ } from '../../../../types';
 
 describe('prevUntil() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: any, jqRoot: any;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `
@@ -37,7 +37,7 @@ describe('prevUntil() method - Node-Query vs jQuery Comparison', () => {
             return node.children[0]?.value || '';
         });
         const jqTexts = [];
-        jqPrevUntil.each((index: number, element: any) => {
+        jqPrevUntil.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 

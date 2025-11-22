@@ -38,7 +38,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
             expect(element).toBe(this); // 'this' should be the element
         });
 
-        jqElements.each(function (index: number, element: any) {
+        jqElements.each(function (index: number, element: HTMLElement) {
             jqCount++;
             jqIndices.push(index);
             expect(element).toBe(this); // 'this' should be the element
@@ -121,7 +121,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
             nqTags.push(element.tagName && element.tagName.toLowerCase());
         });
 
-        jqElements.each(function (index: number, element: any) {
+        jqElements.each(function (index: number, element: HTMLElement) {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -138,7 +138,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
             element.attributes['data-index'] = index.toString();
         });
 
-        jqElements.each(function (index: number, element: any) {
+        jqElements.each(function (index: number, element: HTMLElement) {
             jQuery(element).attr('data-index', index.toString());
         });
 

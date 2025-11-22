@@ -85,7 +85,7 @@ describe('Factory function with CSS selectors - Node-Query vs jQuery Comparison'
     const nqTags = nqArticles.nodes.map(node => node.tagName && node.tagName.toLowerCase());
     const jqTags = [];
     const jqTags = [];
-    jqArticles.each((index: number, element: any) => {
+    jqArticles.each((index: number, element: HTMLElement) => {
       jqTags.push(element.tagName.toLowerCase());
     });
 
