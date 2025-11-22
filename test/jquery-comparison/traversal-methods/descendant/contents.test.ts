@@ -149,8 +149,8 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         const nqResult = nqRoot.find('#main').contents().filter((index: number, node: HtmlNode) => {
             return node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div';
         });
-        const jqResult = jqRoot.find('#main').contents().filter((index: number, node: any) => {
-            return node.nodeType === 1 && node.tagName.toLowerCase() === 'div';
+        const jqResult = jqRoot.find('#main').contents().filter((index: number, node: Node) => {
+            return node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'div';
         });
 
         expect(nqResult.nodes).toHaveLength(1);

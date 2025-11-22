@@ -174,7 +174,7 @@ describe('slice() method - Node-Query vs jQuery Comparison', () => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index: number, element: any) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 

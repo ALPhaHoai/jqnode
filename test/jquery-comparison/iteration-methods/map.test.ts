@@ -216,7 +216,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const jqMapped = jqElements.map((index: number, element: HTMLElement) => jQuery(element).text()).get();
 
         // Filter the node-query results (JQ object)
-        const nqFiltered = nqMapped.filter((index: number, value: any) => value.length > 5);
+        const nqFiltered = nqMapped.filter((index: number, value: string) => value.length > 5);
 
         // Filter the jQuery results (plain array) manually
         const jqFiltered = jqMapped.filter((value: string) => value.length > 5);

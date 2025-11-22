@@ -126,14 +126,14 @@ describe('after() method', () => {
         const container = root.find('.container');
         const children = container.nodes[0].children;
         // Skip whitespace text nodes and find the actual elements
-        const pElements = children.filter((child: any) => child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'p');
+        const pElements = children.filter((child: HtmlNode) => child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'p');
         const firstPElementText = getTextContent(pElements[0]);
         expect(firstPElementText).toBe('First');
         const secondPElementText = getTextContent(pElements[1]);
         expect(secondPElementText).toBe('Second');
 
         // Find the inserted text node
-        const textNodes = children.filter((child: any) => child.type === 'text' && child.value === 'Text sibling');
+        const textNodes = children.filter((child: HtmlNode) => child.type === 'text' && child.value === 'Text sibling');
         const textNodesCount = textNodes.length;
         expect(textNodesCount).toBe(1);
         const firstTextNodeValue = textNodes[0].value;

@@ -1104,7 +1104,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     expect(nqFeaturedPrices.nodes.length).toBe(2);
 
     // Check that all featured prices got the discount attribute identically
-    nqFeaturedPrices.each((index: number, element: any) => {
+    nqFeaturedPrices.each((index: number, element: HTMLElement) => {
       const nqElement = $(element);
       const jqElement = jqFeaturedPrices.eq(index);
       expect(nqElement.attr('data-discount')).toBe(jqElement.attr('data-discount'));
@@ -1118,7 +1118,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
     expect(nqFeaturedStatuses.nodes.length).toBe(2);
 
     // Check that all featured statuses got the priority attribute identically
-    nqFeaturedStatuses.each((index: number, element: any) => {
+    nqFeaturedStatuses.each((index: number, element: HTMLElement) => {
       const nqElement = $(element);
       const jqElement = jqFeaturedStatuses.eq(index);
       expect(nqElement.attr('data-priority')).toBe(jqElement.attr('data-priority'));

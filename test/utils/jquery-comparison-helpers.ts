@@ -1,5 +1,6 @@
 import $ from '../../index';
 import jQuery from 'jquery';
+import { HtmlNode } from '../../types';
 
 /**
  * Creates a DOM environment for testing node-query vs jQuery comparisons
@@ -141,8 +142,8 @@ function extractTextContent(element: any): string {
     // Handle node-query node structures
     if (element.nodes && Array.isArray(element.nodes)) {
         return element.nodes
-            .filter((node: any) => node.type === 'text')
-            .map((node: any) => node.value || '')
+            .filter((node: HtmlNode) => node.type === 'text')
+            .map((node: HtmlNode) => (node as any).value || '')
             .join('');
     }
 

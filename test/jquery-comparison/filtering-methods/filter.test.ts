@@ -147,7 +147,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index: number, element: any) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -215,7 +215,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
             nqTexts.push($(element).text());
         });
 
-        jqResult.each((index: number, element: any) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
         });
 
@@ -270,7 +270,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
         const nqTags = nqResult.nodes.map(node => node.tagName && node.tagName.toLowerCase());
         const jqTags: string[] = [];
-        jqResult.each((index: number, element: any) => {
+        jqResult.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
         });
 
@@ -300,7 +300,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
             expect(nqElement.attr('data-processed')).toBe('true');
         });
 
-        jqElements.each((index: number, element: any) => {
+        jqElements.each((index: number, element: HTMLElement) => {
             const jqElement = jQuery(element);
             expect(jqElement.attr('data-processed')).toBe('true');
         });

@@ -59,7 +59,7 @@ describe('JQ Factory Function', () => {
             let result = [];
             let indices = [];
 
-            $.each(array, function (index: number, value: any) {
+            $.each(array, function (index: number, value: number) {
                 result.push(value);
                 indices.push(index);
             });
@@ -73,7 +73,7 @@ describe('JQ Factory Function', () => {
             let keys = [];
             let values = [];
 
-            $.each(obj, function (key: string, value: any) {
+            $.each(obj, function (key: string, value: number) {
                 keys.push(key);
                 values.push(value);
             });
@@ -89,7 +89,7 @@ describe('JQ Factory Function', () => {
             const array = [1, 2, 3, 4];
             let result = [];
 
-            $.each(array, function (index: number, value: any) {
+            $.each(array, function (index: number, value: number) {
                 result.push(value);
                 if (index === 1) {
                     return false; // Break after second element

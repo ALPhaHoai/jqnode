@@ -144,7 +144,7 @@ describe('not() method', () => {
     test('not() should work with function that uses this context', () => {
         const result = elements.not(function (index: number) {
             // Exclude elements that have exactly 'Inactive Item' as text content
-            const textContent = this.children.map((child: any) => child.value || '').join('');
+            const textContent = this.children.map((child: HtmlNode) => child.value || '').join('');
             return textContent === 'Inactive Item';
         });
 
