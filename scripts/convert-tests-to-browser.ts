@@ -33,11 +33,125 @@
  * - Supports both jqnode library and jQuery for testing compatibility
  */
 
-const fs = require('fs');
-const path = require('path');
-const acorn = require('acorn');
-const estraverse = require('estraverse');
-const prettier = require('prettier');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as acorn from 'acorn';
+import * as estraverse from 'estraverse';
+import * as prettier from 'prettier';
+import * as ts from 'typescript';
+
+
+// TypeScript interfaces
+interface ProgressOptions {
+    width?: number;
+    showPercentage?: boolean;
+    showCount?: boolean;
+}
+
+interface TestInfo {
+    name: string;
+    passed: boolean;
+    error?: string;
+}
+
+interface FileTestResults {
+    passed: number;
+    failed: number;
+    tests: TestInfo[];
+}
+
+interface TestStructure {
+    setupCode: string;
+    variableDeclarations: string[];
+    describeBlocks: any[];
+    testContexts: Map<string, string>;
+}
+
+interface ParsedTestFile {
+    filePath: string;
+    content: string;
+    setupCode: string;
+    variableDeclarations: string[];
+    describes: string[];
+    tests: string[];
+    testCount: number;
+}
+
+interface ExpectStatement {
+    start: number;
+    end: number;
+    text: string;
+}
+
+interface Replacement {
+    start: number;
+    end: number;
+    replacement: string;
+}
+
+interface TestCase {
+    name: string;
+    code: string;
+}
+
+interface FileToMethodMapping {
+    [key: string]: string;
+}
+
+// AST Interfaces
+interface ASTNode {
+    type: string;
+    start: number;
+    end: number;
+    [key: string]: any;
+}
+
+interface CallExpression extends ASTNode {
+    type: 'CallExpression';
+    callee: Identifier | MemberExpression;
+    arguments: (ASTNode | Literal)[];
+}
+
+interface Identifier extends ASTNode {
+    type: 'Identifier';
+    name: string;
+}
+
+interface MemberExpression extends ASTNode {
+    type: 'MemberExpression';
+    object: ASTNode;
+    property: Identifier;
+}
+
+interface Literal extends ASTNode {
+    type: 'Literal';
+    value: string | number | boolean | null;
+    raw: string;
+}
+
+interface DescribeBlock {
+    name: string;
+    setupFunction: string | null;
+    variableDeclarations: string[];
+}
+
+// Window interface augmentation
+declare global {
+    interface Window {
+        $: any;
+        jQuery: any;
+    }
+}
+
+/**
+ * Safely extracts the error message from an unknown error object.
+ * @param {unknown} error - The error object
+ * @returns {string} The error message
+ */
+function getErrorMessage(error: unknown): string {
+    if (error instanceof Error) return error.message;
+    return String(error);
+}
 
 // Configuration
 const TEST_DIR = path.join(__dirname, '../test/jqnode');
@@ -52,7 +166,15 @@ const OUTPUT_TEST_FILES_DIR = path.join(OUTPUT_DIR, 'test-files');
  * Provides visual feedback for file processing, parsing, and generation tasks.
  */
 class ProgressIndicator {
-    constructor(options = {}) {
+    width: number;
+    showPercentage: boolean;
+    showCount: boolean;
+    current: number;
+    total: number;
+    startTime: number | null;
+    lastUpdate: number | null;
+
+    constructor(options: ProgressOptions = {}) {
         this.width = options.width || 40;
         this.showPercentage = options.showPercentage !== false;
         this.showCount = options.showCount !== false;
@@ -67,7 +189,7 @@ class ProgressIndicator {
      * @param {string} title - The operation title to display
      * @param {number} total - Total number of items to process
      */
-    start(title, total) {
+    start(title: string, total: number): void {
         this.current = 0;
         this.total = total;
         this.startTime = Date.now();
@@ -81,12 +203,12 @@ class ProgressIndicator {
      * @param {number} current - Current progress count
      * @param {string} [item] - Optional item name being processed
      */
-    update(current, item = null) {
+    update(current: number, item: string | null = null): void {
         this.current = current;
         const now = Date.now();
 
         // Throttle updates to avoid spam (max 10 updates per second)
-        if (now - this.lastUpdate < 100) return;
+        if (this.lastUpdate !== null && now - this.lastUpdate < 100) return;
         this.lastUpdate = now;
 
         const percentage = this.total > 0 ? Math.round((current / this.total) * 100) : 0;
@@ -130,7 +252,7 @@ class ProgressIndicator {
      * Marks the progress as complete and displays final statistics.
      * @param {string} [message] - Optional completion message
      */
-    complete(message = 'Complete') {
+    complete(message: string): void {
         const duration = this.startTime ? ((Date.now() - this.startTime) / 1000).toFixed(2) : '0.00';
         console.log(` ✅ ${message} (${duration}s)`);
     }
@@ -139,7 +261,7 @@ class ProgressIndicator {
      * Displays an error message for failed operations.
      * @param {string} error - Error message to display
      */
-    error(error) {
+    error(error: string): void {
         console.log(` ❌ Error: ${error}`);
     }
 }
@@ -153,7 +275,7 @@ class ProgressIndicator {
  * @returns {string[]} Array of paths to valid .test.js files
  * @throws {Error} If directory doesn't exist, isn't readable, or is not a directory
  */
-function getAllTestFiles(dir, fileList = [], progressCallback = null) {
+function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback: ((filePath: string, count: number) => void) | null = null): string[] {
     // Validate input directory
     if (!dir || typeof dir !== 'string') {
         throw new Error('Directory path must be a non-empty string');
@@ -174,7 +296,7 @@ function getAllTestFiles(dir, fileList = [], progressCallback = null) {
     try {
         files = fs.readdirSync(dir);
     } catch (error) {
-        throw new Error(`Failed to read directory ${dir}: ${error.message}`);
+        throw new Error(`Failed to read directory ${dir}: ${getErrorMessage(error)}`);
     }
 
     files.forEach(file => {
@@ -184,7 +306,7 @@ function getAllTestFiles(dir, fileList = [], progressCallback = null) {
         try {
             stat = fs.statSync(filePath);
         } catch (error) {
-            console.warn(`⚠️  Could not stat file ${filePath}: ${error.message}`);
+            console.warn(`⚠️  Could not stat file ${filePath}: ${getErrorMessage(error)}`);
             return; // Skip this file
         }
 
@@ -193,9 +315,9 @@ function getAllTestFiles(dir, fileList = [], progressCallback = null) {
             try {
                 getAllTestFiles(filePath, fileList);
             } catch (error) {
-                console.warn(`⚠️  Could not process subdirectory ${filePath}: ${error.message}`);
+                console.warn(`⚠️  Could not process subdirectory ${filePath}: ${getErrorMessage(error)}`);
             }
-        } else if (file.endsWith('.test.js')) {
+        } else if (file.endsWith('.test.js') || file.endsWith('.test.ts')) {
             // Validate the test file before adding it to the list
             try {
                 validateTestFile(filePath);
@@ -205,7 +327,7 @@ function getAllTestFiles(dir, fileList = [], progressCallback = null) {
                     progressCallback(filePath, fileList.length);
                 }
             } catch (error) {
-                console.warn(`⚠️  Skipping invalid test file ${filePath}: ${error.message}`);
+                console.warn(`⚠️  Skipping invalid test file ${filePath}: ${getErrorMessage(error)}`);
             }
         }
     });
@@ -221,7 +343,7 @@ function getAllTestFiles(dir, fileList = [], progressCallback = null) {
  * @param {string} code - The JavaScript code containing Jest assertions to convert
  * @returns {string} The converted code with browser-compatible assertions
  */
-function convertAssertions(code) {
+function convertAssertions(code: string): string {
     // Preprocess: remove require() calls that are common in Node.js tests
     let processedCode = code
         // Remove require assignments at the top level (like const $ = require('...'))
@@ -230,6 +352,9 @@ function convertAssertions(code) {
         .replace(/require\(['"]\.\.\/jq['"]\)\.prototype/g, '$.fn')
         .replace(/require\(['"]\.\.\/jq['"]\)/g, '$')
         .replace(/new\s*\(\s*require\(['"][^'"]*['"]\)\s*\)/g, '$')
+        .replace(/import\(['"]\.\.\/jq['"]\)\.prototype/g, '$.fn')
+        .replace(/import\(['"]\.\.\/jq['"]\)/g, '$')
+        .replace(/new\s*\(\s*import\(['"][^'"]*['"]\)\s*\)/g, '$')
         // Handle Jest spy methods - replace with browser-compatible alternatives
         .replace(/const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\)\.mockImplementation\([\s\S]*?\);/g, 'const $1 = { called: false, calls: [], mockRestore: () => {} };')
         .replace(/const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\);/g, 'const $1 = { called: false, calls: [], mockRestore: () => {} };')
@@ -254,31 +379,31 @@ function convertAssertions(code) {
             ranges: true // Enable range tracking
         });
     } catch (error) {
-        console.warn(`⚠️  AST parsing failed, falling back to basic string replacement: ${error.message}`);
+        console.warn(`⚠️  AST parsing failed, falling back to basic string replacement: ${getErrorMessage(error)}`);
         // Fallback: return processed code without AST transformations
         return processedCode;
     }
 
     let convertedCode = processedCode;
-    const replacements = [];
+    const replacements: Replacement[] = [];
 
     // Collect all expect() call positions and their full statements
-    const expectCalls = [];
+    const expectCalls: Array<{ node: CallExpression; statement: ExpectStatement }> = [];
 
     // Traverse the AST to find expect() calls
-    estraverse.traverse(ast, {
+    estraverse.traverse(ast as any, {
         enter: function (node) {
             // Look for CallExpression where callee is 'expect'
             if (node.type === 'CallExpression' &&
-                node.callee.type === 'Identifier' &&
-                node.callee.name === 'expect' &&
-                node.arguments.length > 0) {
+                (node as any).callee.type === 'Identifier' &&
+                ((node as any).callee as Identifier).name === 'expect' &&
+                (node as any).arguments.length > 0) {
 
                 // Find the complete expect statement by walking up the AST
-                const expectStatement = findCompleteExpectStatement(node, processedCode);
+                const expectStatement = findCompleteExpectStatement(node as unknown as ASTNode, processedCode);
                 if (expectStatement) {
                     expectCalls.push({
-                        node: node,
+                        node: node as unknown as CallExpression,
                         statement: expectStatement
                     });
                 }
@@ -313,6 +438,9 @@ function convertAssertions(code) {
         .replace(/require\(['"]\.\.\/jq['"]\)\.prototype/g, '$.fn')
         .replace(/require\(['"]\.\.\/jq['"]\)/g, '$')
         .replace(/new\s*\(\s*require\(['"][^'"]*['"]\)\s*\)/g, '$')
+        .replace(/import\(['"]\.\.\/jq['"]\)\.prototype/g, '$.fn')
+        .replace(/import\(['"]\.\.\/jq['"]\)/g, '$')
+        .replace(/new\s*\(\s*import\(['"][^'"]*['"]\)\s*\)/g, '$')
         .replace(/\.nodes\.length/g, '.length')
         // Handle .nodes[index] access to work with both jqnode and jQuery
         .replace(/(\w+)\.nodes\[(\d+)\]/g, '($1.nodes ? $1.nodes[$2] : ($1.get ? $1.get($2) : $1.eq($2)[0]))')
@@ -323,7 +451,7 @@ function convertAssertions(code) {
         // Handle .tag property access for DOM elements (final pass) - only when not in quotes
         .replace(/([^'".])\.tag([^'"])/g, '$1.tagName$2');
 
-
+    return convertedCode;
 }
 
 /**
@@ -333,7 +461,7 @@ function convertAssertions(code) {
  * @param {string} sourceCode - The original source code containing the expect statement
  * @returns {Object|null} Object with start, end, and text properties, or null if not found
  */
-function findCompleteExpectStatement(expectNode, sourceCode) {
+function findCompleteExpectStatement(expectNode: ASTNode, sourceCode: string): ExpectStatement {
     // Start from the expect call and find the statement boundary
     const start = expectNode.start;
 
@@ -385,7 +513,7 @@ function findCompleteExpectStatement(expectNode, sourceCode) {
  * @param {Object} statement - The statement object with text property containing the expect statement
  * @returns {string|null} The converted browser-compatible assertion code, or null if unsupported
  */
-function convertExpectStatement(statement) {
+function convertExpectStatement(statement: ExpectStatement): string | null {
     const text = statement.text.trim();
 
     // Handle expect(() => ...).not.toThrow() - special case for function callbacks
@@ -411,7 +539,7 @@ function convertExpectStatement(statement) {
         const notThrowMatch = text.match(/^expect\((\w+)\)\.not\.toThrow\(\);?$/);
         if (notThrowMatch) {
             const variableName = notThrowMatch[1];
-            return `try { ${variableName}(); } catch (error) { throw new Error('Expected function not to throw, but it threw: ' + error.message); }`;
+            return `try { ${variableName} (); } catch (error) { throw new Error('Expected function not to throw, but it threw: ' + error.message); } `;
         }
     }
 
@@ -445,7 +573,7 @@ function convertExpectStatement(statement) {
  * @param {boolean} isNegated - Whether the assertion is negated (.not)
  * @returns {string|null} The browser-compatible assertion code, or null if unsupported
  */
-function generateAssertionCode(expectArg, methodName, methodArgs, isNegated) {
+function generateAssertionCode(expectArg: string, methodName: string, methodArgs: string, isNegated: boolean): string | null {
     switch (methodName) {
         case 'toBeTruthy':
             const conditionTruthy = isNegated ? `!!(${expectArg})` : `!(${expectArg})`;
@@ -473,7 +601,7 @@ function generateAssertionCode(expectArg, methodName, methodArgs, isNegated) {
             return `if (${conditionNull}) throw new Error('Expected ${escapeString(expectArg)} ${msgNull}')`;
 
         case 'toBe':
-            const conditionBe = isNegated ? `(${expectArg}) === ${methodArgs}` : `(${expectArg}) !== ${methodArgs}`;
+            const conditionBe = isNegated ? `(${expectArg}) === ${methodArgs} ` : `(${expectArg}) !== ${methodArgs} `;
             const msgBe = isNegated ? 'not to be' : 'to be';
             return `if (${conditionBe}) throw new Error('Expected ' + (${expectArg}) + ' ${msgBe} ' + ${methodArgs})`;
 
@@ -487,12 +615,12 @@ function generateAssertionCode(expectArg, methodName, methodArgs, isNegated) {
         case 'toHaveLength':
             // Handle jqnode objects which have .nodes.length instead of .length
             const lengthExpr = `${expectArg}.nodes ? ${expectArg}.nodes.length : ${expectArg}.length`;
-            const conditionLength = isNegated ? `${lengthExpr} === ${methodArgs}` : `${lengthExpr} !== ${methodArgs}`;
+            const conditionLength = isNegated ? `${lengthExpr} === ${methodArgs} ` : `${lengthExpr} !== ${methodArgs} `;
             const msgLength = isNegated ? 'not to have length' : 'to have length';
             return `if (${conditionLength}) throw new Error('Expected length ' + (${lengthExpr}) + ' ${msgLength} ' + ${methodArgs})`;
 
         case 'toBeInstanceOf':
-            const conditionInstance = isNegated ? `${expectArg} instanceof ${methodArgs}` : `!(${expectArg} instanceof ${methodArgs})`;
+            const conditionInstance = isNegated ? `${expectArg} instanceof ${methodArgs} ` : `!(${expectArg} instanceof ${methodArgs})`;
             const msgInstance = isNegated ? 'not to be instance of' : 'to be instance of';
             return `if (${conditionInstance}) throw new Error('Expected ${msgInstance} ${escapeString(methodArgs)}')`;
 
@@ -502,22 +630,22 @@ function generateAssertionCode(expectArg, methodName, methodArgs, isNegated) {
             return `if (${conditionContain}) throw new Error('Expected ' + ${expectArg} + ' ${msgContain} ' + ${methodArgs})`;
 
         case 'toBeGreaterThan':
-            const conditionGT = isNegated ? `${expectArg} > ${methodArgs}` : `${expectArg} <= ${methodArgs}`;
+            const conditionGT = isNegated ? `${expectArg} > ${methodArgs} ` : `${expectArg} <= ${methodArgs} `;
             const msgGT = isNegated ? 'not to be greater than' : 'to be greater than';
             return `if (${conditionGT}) throw new Error('Expected ' + ${expectArg} + ' ${msgGT} ' + ${methodArgs})`;
 
         case 'toBeLessThan':
-            const conditionLT = isNegated ? `${expectArg} < ${methodArgs}` : `${expectArg} >= ${methodArgs}`;
+            const conditionLT = isNegated ? `${expectArg} <${methodArgs}` : `${expectArg} >= ${methodArgs} `;
             const msgLT = isNegated ? 'not to be less than' : 'to be less than';
             return `if (${conditionLT}) throw new Error('Expected ' + ${expectArg} + ' ${msgLT} ' + ${methodArgs})`;
 
         case 'toBeGreaterThanOrEqual':
-            const conditionGTE = isNegated ? `${expectArg} >= ${methodArgs}` : `${expectArg} < ${methodArgs}`;
+            const conditionGTE = isNegated ? `${expectArg} >= ${methodArgs} ` : `${expectArg} <${methodArgs}`;
             const msgGTE = isNegated ? 'not to be >=' : 'to be >=';
             return `if (${conditionGTE}) throw new Error('Expected ' + ${expectArg} + ' ${msgGTE} ' + ${methodArgs})`;
 
         case 'toBeLessThanOrEqual':
-            const conditionLTE = isNegated ? `${expectArg} <= ${methodArgs}` : `${expectArg} > ${methodArgs}`;
+            const conditionLTE = isNegated ? `${expectArg} <= ${methodArgs} ` : `${expectArg} > ${methodArgs} `;
             const msgLTE = isNegated ? 'not to be <=' : 'to be <=';
             return `if (${conditionLTE}) throw new Error('Expected ' + ${expectArg} + ' ${msgLTE} ' + ${methodArgs})`;
 
@@ -541,7 +669,7 @@ function generateAssertionCode(expectArg, methodName, methodArgs, isNegated) {
  * @param {string} methodName - The Jest assertion method name to check
  * @returns {boolean} True if the assertion method is supported, false otherwise
  */
-function isSupportedAssertion(methodName) {
+function isSupportedAssertion(methodName: string): boolean {
     const supportedMethods = [
         'toBe', 'toEqual', 'toHaveLength', 'toBeInstanceOf',
         'toBeTruthy', 'toBeFalsy', 'toContain', 'toBeDefined',
@@ -557,10 +685,10 @@ function isSupportedAssertion(methodName) {
  * @param {string} content - The test file content
  * @returns {Object} Parsed test structure with setup functions and contexts
  */
-function parseTestStructure(content) {
+function parseTestStructure(content: string): TestStructure {
     const result = {
         setupCode: '',
-        variableDeclarations: [],
+        variableDeclarations: [] as string[],
         describeBlocks: [],
         testContexts: new Map() // Maps test names to their setup functions
     };
@@ -574,33 +702,33 @@ function parseTestStructure(content) {
         });
 
         // Track the current describe context stack
-        const describeStack = [];
+        const describeStack: DescribeBlock[] = [];
         let currentSetupFunction = null;
 
-        estraverse.traverse(ast, {
+        estraverse.traverse(ast as any, {
             enter: function (node) {
                 // Handle describe blocks
                 if (node.type === 'CallExpression' &&
-                    node.callee.name === 'describe' &&
-                    node.arguments.length >= 2) {
+                    (node as any).callee.name === 'describe' &&
+                    (node as any).arguments.length >= 2) {
 
-                    const describeName = node.arguments[0].value || node.arguments[0].raw;
+                    const describeName = ((node as any).arguments[0] as Literal).value || ((node as any).arguments[0] as Literal).raw;
                     describeStack.push({
-                        name: describeName,
+                        name: String(describeName),
                         setupFunction: null,
                         variableDeclarations: []
                     });
 
                     // Extract variable declarations from the describe block
-                    if (node.arguments[1].type === 'FunctionExpression' ||
-                        node.arguments[1].type === 'ArrowFunctionExpression') {
-                        const body = node.arguments[1].body;
+                    if ((node as any).arguments[1].type === 'FunctionExpression' ||
+                        (node as any).arguments[1].type === 'ArrowFunctionExpression') {
+                        const body = (node as any).arguments[1].body;
                         if (body.type === 'BlockStatement') {
                             // Look for variable declarations at the top level of the describe block
-                            body.body.forEach(stmt => {
+                            (body as any).body.forEach((stmt: any) => {
                                 if (stmt.type === 'VariableDeclaration' &&
                                     stmt.kind === 'let') {
-                                    stmt.declarations.forEach(decl => {
+                                    stmt.declarations.forEach((decl: any) => {
                                         if (decl.id.type === 'Identifier') {
                                             describeStack[describeStack.length - 1].variableDeclarations.push(decl.id.name);
                                         }
@@ -613,17 +741,17 @@ function parseTestStructure(content) {
 
                 // Handle beforeEach blocks
                 if (node.type === 'CallExpression' &&
-                    node.callee.name === 'beforeEach' &&
-                    node.arguments.length >= 1 &&
+                    (node as any).callee.name === 'beforeEach' &&
+                    (node as any).arguments.length >= 1 &&
                     describeStack.length > 0) {
 
-                    const beforeEachArg = node.arguments[0];
+                    const beforeEachArg = (node as any).arguments[0];
                     if ((beforeEachArg.type === 'FunctionExpression' ||
                         beforeEachArg.type === 'ArrowFunctionExpression') &&
                         beforeEachArg.body.type === 'BlockStatement') {
 
                         // Extract the setup code
-                        const setupCode = content.substring(beforeEachArg.body.start, beforeEachArg.body.end);
+                        const setupCode = content.substring((beforeEachArg.body as any).start, (beforeEachArg.body as any).end);
                         // Remove the braces
                         const cleanSetupCode = setupCode.substring(1, setupCode.length - 1).trim();
 
@@ -639,10 +767,10 @@ function parseTestStructure(content) {
 
                 // Handle test blocks
                 if (node.type === 'CallExpression' &&
-                    node.callee.name === 'test' &&
-                    node.arguments.length >= 2) {
+                    (node as any).callee.name === 'test' &&
+                    (node as any).arguments.length >= 2) {
 
-                    const testName = node.arguments[0].value || node.arguments[0].raw;
+                    const testName = ((node as any).arguments[0] as Literal).value || ((node as any).arguments[0] as Literal).raw;
 
                     // Find the appropriate setup function for this test
                     // Start from the innermost describe block and work outwards
@@ -654,28 +782,28 @@ function parseTestStructure(content) {
                         }
                     }
 
-                    result.testContexts.set(testName, setupFunction || result.setupCode);
+                    result.testContexts.set(String(testName), setupFunction || result.setupCode);
 
                     // Collect variable declarations from all describe blocks in the hierarchy
-                    const allVars = new Set();
+                    const allVars = new Set<string>();
                     describeStack.forEach(describeBlock => {
-                        describeBlock.variableDeclarations.forEach(v => allVars.add(v));
+                        describeBlock.variableDeclarations.forEach((v: string) => allVars.add(v));
                     });
-                    result.variableDeclarations = Array.from(allVars);
+                    result.variableDeclarations = Array.from(allVars) as string[];
                 }
             },
 
             leave: function (node) {
                 // Pop describe blocks when we leave them
                 if (node.type === 'CallExpression' &&
-                    node.callee.name === 'describe') {
+                    (node as any).callee.name === 'describe') {
                     describeStack.pop();
                 }
             }
         });
 
     } catch (error) {
-        console.warn(`⚠️  AST parsing failed for test structure: ${error.message}`);
+        console.warn(`⚠️  AST parsing failed for test structure: ${getErrorMessage(error)} `);
         throw error;
     }
 
@@ -687,7 +815,7 @@ function parseTestStructure(content) {
  * @param {string} str - The string to escape
  * @returns {string} The string with single quotes escaped
  */
-function escapeString(str) {
+function escapeString(str: string) {
     return str.replace(/'/g, "\\'");
 }
 
@@ -698,7 +826,7 @@ function escapeString(str) {
  * @param {string} filePath - The path to the test file to validate
  * @throws {Error} If the file fails any validation check
  */
-function validateTestFile(filePath) {
+function validateTestFile(filePath: string): void {
     // Check if file path is provided
     if (!filePath || typeof filePath !== 'string') {
         throw new Error('File path must be a non-empty string');
@@ -706,24 +834,24 @@ function validateTestFile(filePath) {
 
     // Check if file exists
     if (!fs.existsSync(filePath)) {
-        throw new Error(`Test file does not exist: ${filePath}`);
+        throw new Error(`Test file does not exist: ${filePath} `);
     }
 
     // Check if it's actually a file (not a directory)
     const stat = fs.statSync(filePath);
     if (!stat.isFile()) {
-        throw new Error(`Path is not a file: ${filePath}`);
+        throw new Error(`Path is not a file: ${filePath} `);
     }
 
     // Check file extension
-    if (!filePath.endsWith('.test.js')) {
-        throw new Error(`Not a test file (must end with .test.js): ${filePath}`);
+    if (!filePath.endsWith('.test.js') && !filePath.endsWith('.test.ts')) {
+        throw new Error(`Not a test file(must end with .test.js or .test.ts): ${filePath} `);
     }
 
     // Check file size (prevent processing extremely large files)
     const maxFileSize = 10 * 1024 * 1024; // 10MB limit
     if (stat.size > maxFileSize) {
-        throw new Error(`Test file too large (${(stat.size / 1024 / 1024).toFixed(2)}MB): ${filePath}`);
+        throw new Error(`Test file too large(${(stat.size / 1024 / 1024).toFixed(2)}MB): ${filePath} `);
     }
 
     // Validate file content structure
@@ -731,37 +859,37 @@ function validateTestFile(filePath) {
     try {
         content = fs.readFileSync(filePath, 'utf8');
     } catch (error) {
-        throw new Error(`Failed to read test file: ${filePath} - ${error.message}`);
+        throw new Error(`Failed to read test file: ${filePath} - ${getErrorMessage(error)} `);
     }
 
     // Check for empty file
     if (!content.trim()) {
-        throw new Error(`Test file is empty: ${filePath}`);
+        throw new Error(`Test file is empty: ${filePath} `);
     }
 
     // Check for basic Jest structure
     if (!content.includes('describe(')) {
-        throw new Error(`Invalid test file structure - missing describe() block: ${filePath}`);
+        throw new Error(`Invalid test file structure - missing describe() block: ${filePath} `);
     }
 
     if (!content.includes('test(')) {
-        throw new Error(`Invalid test file structure - missing test() blocks: ${filePath}`);
+        throw new Error(`Invalid test file structure - missing test() blocks: ${filePath} `);
     }
 
     // Check for balanced parentheses and braces (basic syntax check)
     const openParen = (content.match(/\(/g) || []).length;
     const closeParen = (content.match(/\)/g) || []).length;
     if (openParen !== closeParen) {
-        throw new Error(`Unbalanced parentheses in test file: ${filePath}`);
+        throw new Error(`Unbalanced parentheses in test file: ${filePath} `);
     }
 
     const openBrace = (content.match(/\{/g) || []).length;
     const closeBrace = (content.match(/\}/g) || []).length;
     if (openBrace !== closeBrace) {
-        throw new Error(`Unbalanced braces in test file: ${filePath}`);
+        throw new Error(`Unbalanced braces in test file: ${filePath} `);
     }
 
-    console.log(`✅ Validated test file: ${filePath}`);
+    console.log(`✅ Validated test file: ${filePath} `);
 }
 
 /**
@@ -771,26 +899,42 @@ function validateTestFile(filePath) {
  * @returns {Object} Parsed test file information containing filePath, content, setupCode, etc.
  * @throws {Error} If the file cannot be parsed or contains no tests
  */
-function parseTestFile(filePath) {
+function parseTestFile(filePath: string): ParsedTestFile {
     // Validate the file first
     try {
         validateTestFile(filePath);
     } catch (error) {
-        throw new Error(`Validation failed for ${filePath}: ${error.message}`);
+        throw new Error(`Validation failed for ${filePath}: ${getErrorMessage(error)} `);
     }
 
     let content;
     try {
         content = fs.readFileSync(filePath, 'utf8');
+        // Transpile TypeScript files to JavaScript
+        if (filePath.endsWith('.ts')) {
+            try {
+                const result = ts.transpileModule(content, {
+                    compilerOptions: {
+                        module: ts.ModuleKind.ESNext,
+                        target: ts.ScriptTarget.ES2020,
+                        jsx: ts.JsxEmit.React,
+                    }
+                });
+                content = result.outputText;
+            } catch (tsError) {
+                console.warn(`⚠️  TypeScript transpilation failed for ${filePath}: ${getErrorMessage(tsError)}`);
+                // Continue with original content, might fail later but worth a try
+            }
+        }
     } catch (error) {
-        throw new Error(`Failed to read test file ${filePath}: ${error.message}`);
+        throw new Error(`Failed to read test file ${filePath}: ${getErrorMessage(error)} `);
     }
 
     let relativePath;
     try {
         relativePath = path.relative(TEST_DIR, filePath);
     } catch (error) {
-        console.warn(`⚠️  Could not determine relative path for ${filePath}: ${error.message}`);
+        console.warn(`⚠️  Could not determine relative path for ${filePath}: ${getErrorMessage(error)} `);
         relativePath = path.basename(filePath);
     }
 
@@ -799,11 +943,11 @@ function parseTestFile(filePath) {
     try {
         testStructure = parseTestStructure(content);
     } catch (error) {
-        console.warn(`⚠️  Could not parse test structure from ${filePath}: ${error.message}`);
+        console.warn(`⚠️  Could not parse test structure from ${filePath}: ${getErrorMessage(error)} `);
         // Fallback to simple parsing
         testStructure = {
             setupCode: '',
-            variableDeclarations: [],
+            variableDeclarations: [] as string[],
             describeBlocks: [],
             testContexts: new Map()
         };
@@ -818,7 +962,7 @@ function parseTestFile(filePath) {
         if (describeBlockMatch) {
             const beforeSetup = describeBlockMatch[1];
             const letMatches = beforeSetup.matchAll(/let\s+(\w+);/g);
-            testStructure.variableDeclarations = Array.from(letMatches).map(m => m[1]);
+            testStructure.variableDeclarations = Array.from(letMatches).map((m: any) => m[1]) as string[];
         }
     }
 
@@ -826,26 +970,26 @@ function parseTestFile(filePath) {
     const variableDeclarations = testStructure.variableDeclarations;
 
     // Extract describe blocks and test names
-    let describes = [];
-    let tests = [];
+    let describes: string[] = [];
+    let tests: string[] = [];
 
     try {
         const describeMatches = content.matchAll(/describe\(['"]([^'"]+)['"]/g);
         describes = Array.from(describeMatches).map(m => m[1]);
     } catch (error) {
-        console.warn(`⚠️  Could not extract describe blocks from ${filePath}: ${error.message}`);
+        console.warn(`⚠️  Could not extract describe blocks from ${filePath}: ${getErrorMessage(error)} `);
     }
 
     try {
         const testMatches = content.matchAll(/test\(['"]([^'"]+)['"]/g);
         tests = Array.from(testMatches).map(m => m[1]);
     } catch (error) {
-        console.warn(`⚠️  Could not extract test blocks from ${filePath}: ${error.message}`);
+        console.warn(`⚠️  Could not extract test blocks from ${filePath}: ${getErrorMessage(error)} `);
     }
 
     // Validate that we found some tests
     if (tests.length === 0) {
-        throw new Error(`No test() blocks found in ${filePath}`);
+        throw new Error(`No test() blocks found in ${filePath} `);
     }
 
     console.log(`✅ Parsed test file: ${filePath} (${tests.length} tests)`);
@@ -866,238 +1010,19 @@ function parseTestFile(filePath) {
  * Returns a complete CSS stylesheet with modern, responsive design.
  * @returns {string} Complete CSS stylesheet as a string
  */
-function generateCSS() {
-    return `* { box-sizing: border-box; }
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f5f7fa;
-}
-/* Test sandbox containers - hidden from view but accessible for testing */
-div[id^="test-sandbox-"] {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    left: -9999px !important;
-    top: -9999px !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 30px;
-}
-h1 {
-    color: #2c3e50;
-    margin: 0 0 10px 0;
-}
-.info {
-    color: #7f8c8d;
-    margin-bottom: 30px;
-}
-.controls {
-    margin-bottom: 30px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s;
-}
-.btn-primary {
-    background: #3498db;
-    color: white;
-}
-.btn-primary:hover { background: #2980b9; }
-.btn-secondary {
-    background: #95a5a6;
-    color: white;
-}
-.btn-secondary:hover { background: #7f8c8d; }
-#librarySelector, #fileSelector {
-    font-size: 14px;
-    min-width: 120px;
-    margin-right: 10px;
-}
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-.btn-primary.running {
-    background: #e74c3c;
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: #ecf0f1;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #3498db, #2ecc71);
-    transition: width 0.3s;
-    width: 0%;
-}
-.summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
-}
-.stat-card {
-    padding: 20px;
-    border-radius: 6px;
-    border-left: 4px solid;
-}
-.stat-card.total { background: #ecf0f1; border-color: #95a5a6; }
-.stat-card.passed { background: #d4edda; border-color: #28a745; }
-.stat-card.failed { background: #f8d7da; border-color: #dc3545; }
-.stat-card.duration { background: #e7f3ff; border-color: #007bff; }
-.stat-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: 600;
-    opacity: 0.7;
-    margin-bottom: 5px;
-}
-.stat-value {
-    font-size: 32px;
-    font-weight: bold;
-}
-.test-file {
-    margin-bottom: 20px;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px;
-    overflow: hidden;
-}
-.test-file-header {
-    background: #f6f8fa;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-}
-.test-file-header:hover { background: #e9ecef; }
-.test-file-title {
-    font-weight: 600;
-    color: #24292e;
-}
-.test-file-stats {
-    display: flex;
-    gap: 15px;
-    font-size: 14px;
-}
-.test-file-body {
-    padding: 0 20px 20px 20px;
-    display: none;
-}
-.test-file-body.expanded { display: block; }
-.test-case {
-    padding: 12px 15px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border-left: 4px solid;
-    background: #f8f9fa;
-}
-.test-case.passed {
-    background: #d4edda;
-    border-color: #28a745;
-}
-.test-case.failed {
-    background: #f8d7da;
-    border-color: #dc3545;
-}
-.test-case.pending {
-    background: #e2e3e5;
-    border-color: #6c757d;
-}
-.test-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-}
-.test-name {
-    font-weight: 500;
-    flex: 1;
-    margin-bottom: 5px;
-}
-.copy-btn {
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 4px 8px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left: 10px;
-    transition: all 0.2s;
-}
-.copy-btn:hover {
-    background: #5a6268;
-}
-.copy-btn:active {
-    transform: scale(0.95);
-}
-.test-error {
-    margin-top: 10px;
-    padding: 10px;
-    background: rgba(0,0,0,0.03);
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    color: #721c24;
-    white-space: pre-wrap;
-    overflow-x: auto;
-}
-.duration {
-    font-size: 12px;
-    color: #6c757d;
-    margin-top: 5px;
-}
-.filter-tabs {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e1e4e8;
-}
-.filter-tab {
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    cursor: pointer;
-    color: #586069;
-    font-weight: 500;
-}
-.filter-tab.active {
-    color: #0366d6;
-    border-bottom-color: #0366d6;
-}
-.filter-tab:hover { color: #0366d6; }`;
+function generateCSS(): string {
+    try {
+        const cssPath = path.join(__dirname, 'test-runner.css');
+        return fs.readFileSync(cssPath, 'utf8');
+    } catch (error) {
+        console.error(`Failed to load CSS file: ${getErrorMessage(error)}`);
+        // Fallback to basic CSS if file cannot be loaded
+        return `
+            * { box-sizing: border-box; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; }
+            .container { max-width: 1400px; margin: 0 auto; background: white; padding: 30px; }
+        `;
+    }
 }
 
 /**
@@ -1105,7 +1030,20 @@ button:disabled {
  * Handles test execution, progress tracking, and result display in the browser.
  */
 class BrowserTestRunner {
-    constructor(fileToMethodMap = {}) {
+    totalTests: number;
+    passedTests: number;
+    failedTests: number;
+    currentFilter: string;
+    results: { [key: string]: FileTestResults };
+    running: boolean;
+    startTime: number;
+    durationTimer: NodeJS.Timeout | null;
+    currentLibrary: string;
+    fileToMethodMap: Map<string, string>;
+    loadedMethods: Map<string, Function>;
+    [key: string]: any; // Index signature for dynamic test methods
+
+    constructor(fileToMethodMapping: FileToMethodMapping = {}) {
         this.totalTests = 0;
         this.passedTests = 0;
         this.failedTests = 0;
@@ -1117,7 +1055,8 @@ class BrowserTestRunner {
         this.currentLibrary = 'jqnode'; // Default library
 
         // Convert object mapping to Map for better performance
-        this.fileToMethodMap = new Map(Object.entries(fileToMethodMap));
+        this.fileToMethodMap = new Map(Object.entries(fileToMethodMapping));
+        this.loadedMethods = new Map();
 
         this.initUI();
     }
@@ -1127,25 +1066,28 @@ class BrowserTestRunner {
      * Sets up button click handlers and checks for auto-run parameters.
      */
     initUI() {
-        document.getElementById('runStopBtn').addEventListener('click', () => {
+        document.getElementById('runStopBtn')?.addEventListener('click', () => {
             if (this.running) {
                 this.stop();
             } else {
                 this.runAll();
             }
         });
-        document.getElementById('runFileBtn').addEventListener('click', () => {
+        document.getElementById('runFileBtn')?.addEventListener('click', () => {
             if (this.running) {
                 this.stop();
             } else {
                 this.runFile();
             }
         });
-        document.getElementById('clearBtn').addEventListener('click', () => this.clear());
+        document.getElementById('clearBtn')?.addEventListener('click', () => this.clear());
 
         // Library selector
-        document.getElementById('librarySelector').addEventListener('change', (e) => {
-            this.currentLibrary = e.target.value;
+        document.getElementById('librarySelector')?.addEventListener('change', (e) => {
+            const librarySelector = e.target as HTMLSelectElement;
+            if (librarySelector) {
+                this.currentLibrary = librarySelector.value;
+            }
             this.updateLibraryDisplay();
             // Clear results when switching libraries
             this.clear();
@@ -1156,8 +1098,8 @@ class BrowserTestRunner {
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-                this.currentFilter = e.target.dataset.filter;
+                (e.target as HTMLElement).classList.add('active');
+                this.currentFilter = (e.target as HTMLElement).dataset.filter || 'all';
                 this.updateDisplay();
             });
         });
@@ -1174,13 +1116,17 @@ class BrowserTestRunner {
 
         if (libraryParam && (libraryParam === 'jqnode' || libraryParam === 'jquery')) {
             this.currentLibrary = libraryParam;
-            document.getElementById('librarySelector').value = libraryParam;
+            const librarySelector = document.getElementById('librarySelector') as HTMLSelectElement;
+            if (librarySelector) {
+                librarySelector.value = libraryParam;
+            }
             this.updateLibraryDisplay();
-            console.log(`🔗 Auto-selected library: ${libraryParam}`);
+            console.log(`🔗 Auto - selected library: ${libraryParam} `);
         }
 
         if (fileParam) {
-            const fileSelector = document.getElementById('fileSelector');
+            const fileSelector = document.getElementById('fileSelector') as HTMLSelectElement;
+            if (!fileSelector) return;
             // Normalize path separators for cross-platform compatibility
             const normalizedFileParam = fileParam.replace(/\//g, '\\');
             // Try to find the option with this file name
@@ -1190,7 +1136,7 @@ class BrowserTestRunner {
 
             if (option) {
                 fileSelector.value = option.value;
-                console.log(`🔗 Auto-selected file: ${option.text}`);
+                console.log(`🔗 Auto - selected file: ${option.text} `);
 
                 if (autoRun) {
                     console.log('🚀 Auto-running tests...');
@@ -1218,7 +1164,7 @@ class BrowserTestRunner {
         }
 
         // Update the URL without reloading the page
-        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+        const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''} `;
         window.history.replaceState({}, '', newUrl);
     }
 
@@ -1233,6 +1179,7 @@ class BrowserTestRunner {
         this.clear();
 
         const runStopBtn = document.getElementById('runStopBtn');
+        if (!runStopBtn) return;
 
         runStopBtn.textContent = '⏹ Stop Tests';
         runStopBtn.classList.add('running');
@@ -1241,23 +1188,14 @@ class BrowserTestRunner {
         this.startDurationTimer();
 
         // Run all tests in main thread for both libraries
+        await this.runAllTestsInMainThread();
 
-        this.running = true;
-        this.startTime = Date.now();
-        this.clear();
-
-        const runFileBtn = document.getElementById('runFileBtn');
-
-        runFileBtn.textContent = '⏹ Stop Tests';
-        runFileBtn.classList.add('running');
-
-        // Start duration timer
-        this.startDurationTimer();
-
-        // Run specific test file in main thread for both libraries
-        await this.runFileTestsInMainThread(selectedFile);
+        // Finalize
+        this.running = false;
+        runStopBtn.textContent = '▶ Run All Tests';
+        runStopBtn.classList.remove('running');
+        this.stopDurationTimer();
     }
-
 
     /**
      * Stops the currently running test execution.
@@ -1271,10 +1209,14 @@ class BrowserTestRunner {
         const runStopBtn = document.getElementById('runStopBtn');
         const runFileBtn = document.getElementById('runFileBtn');
 
-        runStopBtn.textContent = '▶ Run All Tests';
-        runFileBtn.textContent = '▶ Run Selected File';
-        runStopBtn.classList.remove('running');
-        runFileBtn.classList.remove('running');
+        if (runStopBtn) {
+            runStopBtn.textContent = '▶ Run All Tests';
+            runStopBtn.classList.remove('running');
+        }
+        if (runFileBtn) {
+            runFileBtn.textContent = '▶ Run Selected File';
+            runFileBtn.classList.remove('running');
+        }
 
         this.updateDuration();
     }
@@ -1292,20 +1234,74 @@ class BrowserTestRunner {
         // For jqnode, keep the current $ (which should be jqnode)
 
         try {
-            // Execute all test methods available on this instance
-            const testMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(method =>
-                method.startsWith('runTestFile_') && typeof this[method] === 'function'
-            );
+            // Get all file names from the map
+            const fileNames = Array.from(this.fileToMethodMap.keys());
 
-            for (const methodName of testMethods) {
+            for (const fileName of fileNames) {
                 if (!this.running) break; // Allow stopping
-                await this[methodName]();
+
+                // Load and run each file
+                try {
+                    await this.loadTestFile(fileName);
+                    const method = this.loadedMethods.get(fileName);
+                    if (method) {
+                        await method.call(this);
+                    }
+                } catch (error) {
+                    console.error(`Failed to run tests for ${fileName}:`, error);
+                }
             }
         } finally {
             // Restore original $
             window.$ = original$;
             this.completeTests();
         }
+    }
+
+    /**
+     * Registers a test file's execution method.
+     * Called by dynamically loaded test files.
+     * @param {string} fileName - The original file path
+     * @param {Function} method - The async function containing the tests
+     */
+    registerTestFile(fileName, method) {
+        // Normalize path separators
+        const normalizedName = fileName.replace(/\//g, '\\');
+        this.loadedMethods.set(normalizedName, method);
+        console.log(`📦 Registered tests for: ${fileName}`);
+    }
+
+    /**
+     * Dynamically loads a test file script.
+     * @param {string} fileName - The file path to load
+     * @returns {Promise<void>}
+     */
+    loadTestFile(fileName) {
+        return new Promise((resolve, reject) => {
+            const normalizedName = fileName.replace(/\//g, '\\');
+
+            // If already loaded, resolve immediately
+            if (this.loadedMethods.has(normalizedName)) {
+                resolve();
+                return;
+            }
+
+            // Generate the script path
+            // We need to convert the original file path to the generated test file path
+            // e.g., "attributes-methods\addClass.test.ts" -> "test-files/attributes-methods_addClass.test.js"
+            const scriptName = fileName
+                .replace(/\.test\.(js|ts)$/, '.test.js')
+                .replace(/[/\\]/g, '_')
+                .replace(/[^a-zA-Z0-9._-]/g, '_');
+
+            const scriptPath = `test-files/${scriptName}`;
+
+            const script = document.createElement('script');
+            script.src = scriptPath;
+            script.onload = () => resolve();
+            script.onerror = (e) => reject(new Error(`Failed to load test file: ${scriptPath}`));
+            document.body.appendChild(script);
+        });
     }
 
     /**
@@ -1325,11 +1321,22 @@ class BrowserTestRunner {
             // Normalize the fileName to match the mapping keys
             const normalizedFileName = fileName.replace(/\//g, '\\');
 
-            // Find the method that corresponds to the selected file
-            const methodName = this.fileToMethodMap.get(normalizedFileName);
-            if (methodName && typeof this[methodName] === 'function') {
+            // Load the test file first
+            try {
+                await this.loadTestFile(fileName);
+            } catch (error) {
+                console.error(error);
+                this.addTestResult(fileName, 'File Load Error', false, error.message);
+                return;
+            }
+
+            // Get the registered method
+            const method = this.loadedMethods.get(normalizedFileName);
+
+            if (method && typeof method === 'function') {
                 if (this.running) {
-                    await this[methodName]();
+                    // Bind the method to this runner instance so it can access helper methods
+                    await method.call(this);
                 }
             } else {
                 console.warn(`No test method found for file: ${fileName}`);
@@ -1351,10 +1358,14 @@ class BrowserTestRunner {
         const runStopBtn = document.getElementById('runStopBtn');
         const runFileBtn = document.getElementById('runFileBtn');
 
-        runStopBtn.textContent = '▶ Run All Tests';
-        runFileBtn.textContent = '▶ Run Selected File';
-        runStopBtn.classList.remove('running');
-        runFileBtn.classList.remove('running');
+        if (runStopBtn) {
+            runStopBtn.textContent = '▶ Run All Tests';
+            runStopBtn.classList.remove('running');
+        }
+        if (runFileBtn) {
+            runFileBtn.textContent = '▶ Run Selected File';
+            runFileBtn.classList.remove('running');
+        }
 
         this.updateDuration();
     }
@@ -1369,8 +1380,14 @@ class BrowserTestRunner {
         this.failedTests = 0;
         this.results = {};
         this.updateStats();
-        document.getElementById('testResults').innerHTML = '';
-        document.getElementById('progressFill').style.width = '0%';
+        const testResults = document.getElementById('testResults');
+        if (testResults) {
+            testResults.innerHTML = '';
+        }
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill) {
+            progressFill.style.width = '0%';
+        }
         console.clear();
     }
 
@@ -1379,17 +1396,26 @@ class BrowserTestRunner {
      * Refreshes the total, passed, and failed test counts and progress bar.
      */
     updateStats() {
-        document.getElementById('totalTests').textContent = this.totalTests;
-        document.getElementById('passedTests').textContent = this.passedTests;
-        document.getElementById('failedTests').textContent = this.failedTests;
+        const totalNum = document.getElementById('totalTests');
+        const passedNum = document.getElementById('passedTests');
+        const failedNum = document.getElementById('failedTests');
+        if (totalNum) totalNum.textContent = this.totalTests.toString();
+        if (passedNum) passedNum.textContent = this.passedTests.toString();
+        if (failedNum) failedNum.textContent = this.failedTests.toString();
 
         const progress = this.totalTests > 0 ? (this.passedTests + this.failedTests) / this.totalTests * 100 : 0;
-        document.getElementById('progressFill').style.width = progress + '%';
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill) {
+            progressFill.style.width = progress + '%';
+        }
     }
 
     updateDuration() {
         const duration = ((Date.now() - this.startTime) / 1000).toFixed(2);
-        document.getElementById('duration').textContent = duration + 's';
+        const durationElement = document.getElementById('duration');
+        if (durationElement) {
+            durationElement.textContent = duration + 's';
+        }
     }
 
     updateLibraryDisplay() {
@@ -1399,12 +1425,16 @@ class BrowserTestRunner {
 
         // Update heading to show current library
         // Extract the base heading (everything after the emoji and any library prefix)
-        const baseHeading = heading.textContent.replace(/^🧪\s+.*?\s*-\s*/, '');
-        heading.textContent = `🧪 ${libraryName} - ${baseHeading}`;
+        if (heading && heading.textContent) {
+            const baseHeading = heading.textContent.replace(/^🧪\s+.*?\s*-\s*/, '');
+            heading.textContent = `🧪 ${libraryName} - ${baseHeading} `;
+        }
 
         // Update info text to show current library
-        const baseInfo = info.textContent.replace(/using.*$/, '').trim();
-        info.textContent = `${baseInfo} using ${libraryName}`;
+        if (info && info.textContent) {
+            const baseInfo = info.textContent.replace(/using.*$/, '').trim();
+            info.textContent = `${baseInfo} using ${libraryName}`;
+        }
     }
 
     startDurationTimer() {
@@ -1431,7 +1461,7 @@ class BrowserTestRunner {
      * @param {boolean} passed - Whether the test passed
      * @param {string|null} error - Error message if the test failed
      */
-    addTestResult(fileName, testName, passed, error = null) {
+    addTestResult(fileName: string, testName: string, passed: boolean, error?: string) {
         if (!this.results[fileName]) {
             this.results[fileName] = {
                 tests: [],
@@ -1469,6 +1499,7 @@ class BrowserTestRunner {
      */
     updateDisplay() {
         const container = document.getElementById('testResults');
+        if (!container) return;
         container.innerHTML = '';
 
         for (const [fileName, data] of Object.entries(this.results)) {
@@ -1485,26 +1516,27 @@ class BrowserTestRunner {
                 const testDiv = document.createElement('div');
                 testDiv.className = `test-case ${test.passed ? 'passed' : 'failed'}`;
                 testDiv.innerHTML = `
-                    <div class="test-header">
-                        <div class="test-name">${test.passed ? '✓' : '✗'} ${test.name}</div>
-                        <button class="copy-btn" data-test-name="${test.name.replace(/"/g, '&quot;')}" data-test-status="${test.passed ? 'PASSED' : 'FAILED'}" data-test-error="${test.error ? test.error.replace(/"/g, '&quot;') : ''}" data-file-name="${fileName.replace(/"/g, '&quot;')}" data-timestamp="${new Date().toISOString()}" title="Copy test result">📋</button>
-                    </div>
+    <div class="test-header">
+        <div class="test-name">${test.passed ? '✓' : '✗'} ${test.name}</div>
+            <button class="copy-btn" data-test-name="${test.name.replace(/"/g, '&quot;')}" data-test-status="${test.passed ? 'PASSED' : 'FAILED'}" data-test-error="${test.error ? test.error.replace(/"/g, '&quot;') : ''}" data-file-name="${fileName.replace(/"/g, '&quot;')}" data-timestamp="${new Date().toISOString()}" title="Copy test result">📋</button>
+                </div>
                     ${test.error ? `<div class="test-error">${test.error}</div>` : ''}
-                `;
+`;
                 body.appendChild(testDiv);
 
                 // Add copy functionality to the button
                 const copyBtn = testDiv.querySelector('.copy-btn');
-                copyBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const testName = copyBtn.getAttribute('data-test-name');
-                    const testStatus = copyBtn.getAttribute('data-test-status');
-                    const testError = copyBtn.getAttribute('data-test-error');
-                    const fileName = copyBtn.getAttribute('data-file-name');
-                    const timestamp = copyBtn.getAttribute('data-timestamp');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const testName = copyBtn.getAttribute('data-test-name');
+                        const testStatus = copyBtn.getAttribute('data-test-status');
+                        const testError = copyBtn.getAttribute('data-test-error');
+                        const fileName = copyBtn.getAttribute('data-file-name');
+                        const timestamp = copyBtn.getAttribute('data-timestamp');
 
-                    const libraryName = this.currentLibrary === 'jquery' ? 'jQuery' : 'jqnode';
-                    let copyText = `Test Result Details
+                        const libraryName = this.currentLibrary === 'jquery' ? 'jQuery' : 'jqnode';
+                        let copyText = `Test Result Details
 ==================
 File: ${fileName}
 Test: ${testName}
@@ -1513,45 +1545,47 @@ Library: ${libraryName}
 Timestamp: ${timestamp}
 Website URL: ${window.location.href}`;
 
-                    if (testError) {
-                        copyText += `\n\nError Details:
+                        if (testError) {
+                            copyText += `\n\nError Details:
 ${testError}`;
-                    }
+                        }
 
-                    copyText += `\n\n--- Test Summary ---
+                        copyText += `\n\n--- Test Summary ---
 Total Tests: ${this.totalTests}
 Passed: ${this.passedTests}
 Failed: ${this.failedTests}`;
 
-                    navigator.clipboard.writeText(copyText).then(() => {
-                        // Show visual feedback
-                        const originalText = copyBtn.textContent;
-                        copyBtn.textContent = '✅';
-                        copyBtn.style.background = '#28a745';
-                        setTimeout(() => {
-                            copyBtn.textContent = originalText;
-                            copyBtn.style.background = '';
-                        }, 1000);
-                    }).catch(err => {
-                        console.error('Failed to copy: ', err);
-                        // Fallback for older browsers
-                        const textArea = document.createElement('textarea');
-                        textArea.value = copyText;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textArea);
+                        navigator.clipboard.writeText(copyText).then(() => {
+                            // Show visual feedback
+                            const originalText = copyBtn.textContent;
+                            copyBtn.textContent = '✅';
+                            (copyBtn as HTMLElement).style.background = '#28a745';
+                            setTimeout(() => {
+                                copyBtn.textContent = originalText;
+                                (copyBtn as HTMLElement).style.background = '';
+                            }, 1000);
+                        }).catch(err => {
+                            console.error('Failed to copy: ', err);
+                            // Fallback for older browsers
+                            const textArea = document.createElement('textarea');
+                            textArea.value = copyText;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textArea);
 
-                        // Show feedback
-                        const originalText = copyBtn.textContent;
-                        copyBtn.textContent = '✅';
-                        copyBtn.style.background = '#28a745';
-                        setTimeout(() => {
-                            copyBtn.textContent = originalText;
-                            copyBtn.style.background = '';
-                        }, 1000);
+                            // Show feedback
+                            const originalText = copyBtn.textContent;
+                            copyBtn.textContent = '✅';
+                            (copyBtn as HTMLElement).style.background = '#28a745';
+                            setTimeout(() => {
+                                copyBtn.textContent = originalText;
+                                (copyBtn as HTMLElement).style.background = '';
+                            }, 1000);
+                        });
                     });
-                });
+                }
+
                 visibleTestsCount++;
             });
 
@@ -1587,11 +1621,11 @@ Failed: ${this.failedTests}`;
  * @param {Object[]} parsedFiles - Array of parsed test file objects
  * @returns {Object} Mapping of file paths to method names
  */
-function generateFileToMethodMap(parsedFiles) {
-    const map = {};
+function generateFileToMethodMap(parsedFiles: ParsedTestFile[]) {
+    const map: { [key: string]: string } = {};
     parsedFiles.forEach(file => {
         const functionName = file.filePath
-            .replace(/\.test\.js$/, '') // Remove .test.js extension
+            .replace(/\.test\.(js|ts)$/, '') // Remove .test.js or .test.ts extension
             .replace(/[/\\]/g, '_') // Replace path separators with underscores
             .replace(/[^a-zA-Z0-9_]/g, '_') // Replace any other invalid chars with underscores
             .replace(/^_+|_+$/g, ''); // Remove leading/trailing underscores
@@ -1607,35 +1641,43 @@ function generateFileToMethodMap(parsedFiles) {
  * @param {Object[]} parsedFiles - Array of parsed test file objects
  * @returns {string} Complete JavaScript code for the browser UI
  */
-function generateMainJavaScript(parsedFiles) {
+function generateMainJavaScript(parsedFiles: ParsedTestFile[]) {
     // Get the source code of the BrowserTestRunner class
     let classSource = BrowserTestRunner.toString();
 
-    // Generate test methods for each parsed file and add them to the class
-    const testMethods = parsedFiles.map((file, idx) => generateTestFileMethod(file, idx)).join('\n\n');
-
-    // Insert the test methods before the closing brace of the class
-    classSource = classSource.replace(/^}\s*$/m, `${testMethods}\n}`);
-
-    // Generate dynamic file-to-method mapping
+    // Generate file mapping
     const fileToMethodMap = generateFileToMethodMap(parsedFiles);
 
     return `
-    // Auto-generated test suite UI
 ${classSource}
 
-// Initialize test runner with dynamic mapping
-const fileToMethodMapData = ${JSON.stringify(fileToMethodMap, null, 4)};
-const runner = new BrowserTestRunner(fileToMethodMapData);
+// Initialize the test runner when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const fileToMethodMapping = ${JSON.stringify(fileToMethodMap, null, 2)};
+    
+    // Create the runner instance and expose it globally
+    const runner = new BrowserTestRunner(fileToMethodMapping);
+    window.runner = runner;
+    
+    // Handle URL parameters for auto-running
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileParam = urlParams.get('file');
+    const runParam = urlParams.get('run');
+    const libraryParam = urlParams.get('library');
 
-// Utility functions for browser tests
-function createTestDom(html = '<div></div>') {
-    // Clear jqnode registry for clean state (if available)
-    if (window.$ && typeof window.$.clearRootNodesRegistry === 'function') {
-        window.$.clearRootNodesRegistry();
+    // Set library if specified
+    if (libraryParam && (libraryParam === 'jquery' || libraryParam === 'jqnode')) {
+        runner.setLibrary(libraryParam);
     }
 
-    // Create a sandbox container to prevent modifying the test page HTML
+    if (fileParam) {
+        // Auto-select and run specific file
+        runner.autoSelectFile(fileParam, runParam === 'true');
+    }
+});
+
+// Helper to create a sandbox for tests
+function createTestSandbox(html) {
     const testSandbox = document.createElement('div');
     testSandbox.id = 'test-sandbox-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     testSandbox.style.cssText = 'position: absolute; left: -9999px; top: -9999px; visibility: hidden;';
@@ -1672,7 +1714,7 @@ function createTestDom(html = '<div></div>') {
  * @param {string} filePath - The original file path to sanitize
  * @returns {string} Sanitized path with forward slashes for web compatibility
  */
-function generatePreservedPath(filePath) {
+function generatePreservedPath(filePath: string) {
     // Keep directory structure but sanitize file/directory names
     const parts = filePath.split(/[\\\/]/);
     const sanitizedParts = parts.map(part => {
@@ -1693,7 +1735,7 @@ function generatePreservedPath(filePath) {
  * @param {string} filePath - The file path to convert to a function name
  * @returns {string} A valid JavaScript identifier prefixed with 'workerRunTestFile_'
  */
-function generateSafeFunctionName(filePath) {
+function generateSafeFunctionName(filePath: string) {
     // Create a valid JavaScript identifier
     return 'workerRunTestFile_' + filePath
         .replace(/[\\\/]/g, '_')  // Replace path separators
@@ -1710,7 +1752,7 @@ function generateSafeFunctionName(filePath) {
  * @param {number} totalTests - Total number of tests across all files
  * @returns {string} Complete HTML document as a string
  */
-function generateBrowserTestHTML(parsedFiles, totalTests) {
+function generateBrowserTestHTML(parsedFiles: ParsedTestFile[], totalTests: number) {
     const isSingleFile = parsedFiles.length === 1;
     const title = isSingleFile ? `jqnode - ${parsedFiles[0].filePath} Tests` : 'jqnode - All Browser Tests';
     const heading = isSingleFile ? `🧪 jqnode - ${parsedFiles[0].filePath} Tests` : '🧪 jqnode - Browser Test Suite';
@@ -1794,7 +1836,7 @@ ${parsedFiles.map(file => `                <option value="${file.filePath.replac
  * @param {number} startPos - The starting position in the content where the test body begins
  * @returns {string|null} The extracted test body, or null if extraction fails
  */
-function extractTestBody(content, startPos) {
+function extractTestBody(content: string, startPos: number) {
     // First, try to find a simple closing pattern: }); at line start or after whitespace
     const simpleClosePattern = /(?:^|\n)\s*\}\);/g;
     let match;
@@ -1863,7 +1905,13 @@ function extractTestBody(content, startPos) {
  * @param {number} idx - Index of the file (unused, kept for compatibility)
  * @returns {string} JavaScript method code for executing the test file
  */
-function generateTestFileMethod(fileInfo, idx) {
+/**
+ * Generates the content for an individual test file.
+ * The generated code registers itself with the global test runner.
+ * @param {Object} fileInfo - Parsed test file information
+ * @returns {string} Complete JavaScript code for the test file
+ */
+function generateIndividualTestFile(fileInfo: ParsedTestFile) {
     const content = fileInfo.content;
     const tests = [];
 
@@ -1908,62 +1956,57 @@ function generateTestFileMethod(fileInfo, idx) {
         ? `let ${fileInfo.variableDeclarations.join(', ')};`
         : '';
 
-    // Generate meaningful function name from file path
-    const functionName = fileInfo.filePath
-        .replace(/\.test\.js$/, '') // Remove .test.js extension
-        .replace(/[/\\]/g, '_') // Replace path separators with underscores
-        .replace(/[^a-zA-Z0-9_]/g, '_') // Replace any other invalid chars with underscores
-        .replace(/^_+|_+$/g, ''); // Remove leading/trailing underscores
+    const fileName = fileInfo.filePath.replace(/\\/g, '\\\\');
 
-    return `            async runTestFile_${functionName}() {
-                const fileName = '${fileInfo.filePath.replace(/\\/g, '\\\\')}';
-                ${varDecls ? varDecls : ''}
+    return `(function() {
+    const runner = window.runner;
+    if (!runner) {
+        console.error('Test runner not initialized!');
+        return;
+    }
 
-                // Setup function to run before each test
-                const setupTest = () => {
+    runner.registerTestFile('${fileName}', async function() {
+        const fileName = '${fileName}';
+        ${varDecls ? varDecls : ''}
+
+        // Setup function to run before each test
+        const setupTest = () => {
 ${setupCodeProcessed}
-                };
+        };
 
 ${tests.map(test => {
         const testCode = convertAssertions(test.code.trim().replace(/\$\.clearRootNodesRegistry\(\);?/g, 'if ($.clearRootNodesRegistry) $.clearRootNodesRegistry();'));
-        return '                // Test: ' + test.name + '\n' +
-            '                try {\n' +
-            '                    setupTest();\n' +
+        return '        // Test: ' + test.name + '\n' +
+            '        try {\n' +
+            '            setupTest();\n' +
             testCode + '\n' +
-            '                    // Clean up sandbox after test execution\n' +
-            '                    try {\n' +
-            '                        if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
-            '                            root._cleanupSandbox();\n' +
-            '                        }\n' +
-            '                    } catch (cleanupError) {\n' +
-            '                        console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
-            '                    }\n' +
-            '                    this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', true);\n' +
-            '                } catch (error) {\n' +
-            '                    // Clean up sandbox even on test failure\n' +
-            '                    try {\n' +
-            '                        if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
-            '                            root._cleanupSandbox();\n' +
-            '                        }\n' +
-            '                    } catch (cleanupError) {\n' +
-            '                        console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
-            '                    }\n' +
-            '                    this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', false, error.message);\n' +
-            '                }';
+            '            // Clean up sandbox after test execution\n' +
+            '            try {\n' +
+            '                if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
+            '                    root._cleanupSandbox();\n' +
+            '                }\n' +
+            '            } catch (cleanupError) {\n' +
+            '                console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
+            '            }\n' +
+            '            this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', true);\n' +
+            '        } catch (error) {\n' +
+            '            // Clean up sandbox even on test failure\n' +
+            '            try {\n' +
+            '                if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
+            '                    root._cleanupSandbox();\n' +
+            '                }\n' +
+            '            } catch (cleanupError) {\n' +
+            '                console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
+            '            }\n' +
+            '            this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', false, error.message);\n' +
+            '        }';
     }).join('\n\n')}
-            }`;
+    });
+})();`;
 }
 
 
-/**
- * Applies compatibility fixes to generated code to ensure it works with both jqnode and jQuery.
- * Currently fixes .nodes.length references to use .length for cross-library compatibility.
- * @param {string} content - The generated code content to fix
- * @returns {string} The fixed content
- */
-function applyCompatibilityFixes(content) {
-    return content.replace(/\.nodes\.length/g, '.length');
-}
+
 
 /**
  * Main execution function that orchestrates the entire test conversion process.
@@ -2018,7 +2061,7 @@ async function main() {
             console.log(`✅ Processing specific test file: ${path.relative(TEST_DIR, normalizedPath)}`);
         } catch (error) {
             console.error(`❌ Invalid test file specified: ${specificFile}`);
-            console.error(`Error: ${error.message}`);
+            console.error(`Error: ${getErrorMessage(error)}`);
             console.error(`Expected format: node convert-tests-to-browser.js [relative/path/to/test-file.test.js]`);
             process.exit(1);
         }
@@ -2042,8 +2085,8 @@ async function main() {
             parsedFiles.push(parsed);
             parsingProgress.update(i + 1, path.basename(testFile));
         } catch (error) {
-            console.error(`❌ Failed to parse ${testFile}: ${error.message}`);
-            parseErrors.push({ file: testFile, error: error.message });
+            console.error(`❌ Failed to parse ${testFile}: ${getErrorMessage(error)}`);
+            parseErrors.push({ file: testFile, error: getErrorMessage(error) });
             parsingProgress.update(i + 1, path.basename(testFile) + ' (failed)');
         }
     }
@@ -2070,6 +2113,7 @@ async function main() {
     const totalTests = parsedFiles.reduce((sum, f) => sum + f.testCount, 0);
 
     // Generate separate files
+    // Generate separate files
     const html = generateBrowserTestHTML(parsedFiles, totalTests);
     const css = generateCSS();
     const mainJs = generateMainJavaScript(parsedFiles);
@@ -2085,45 +2129,85 @@ async function main() {
             console.log(`📁 Created test files directory: ${OUTPUT_TEST_FILES_DIR}`);
         }
     } catch (error) {
-        throw new Error(`Failed to create output directories: ${error.message}`);
+        throw new Error(`Failed to create output directories: ${getErrorMessage(error)}`);
     }
 
-    // Format JavaScript with prettier
-    let formattedMainJs;
+    // Generate and write individual test files
+    console.log('📦 Generating individual test files...');
+    const generationProgress = new ProgressIndicator();
+    generationProgress.start('Generating files', parsedFiles.length);
+
+    let generatedFilesCount = 0;
+    for (let i = 0; i < parsedFiles.length; i++) {
+        const file = parsedFiles[i];
+        try {
+            const fileContent = generateIndividualTestFile(file);
+
+            // Generate filename: attributes-methods_addClass.test.js
+            const fileName = file.filePath
+                .replace(/\.test\.(js|ts)$/, '.test.js')
+                .replace(/[/\\]/g, '_')
+                .replace(/[^a-zA-Z0-9._-]/g, '_');
+
+            const outputPath = path.join(OUTPUT_TEST_FILES_DIR, fileName);
+
+            // Format with prettier for clean, readable output
+            const formattedContent = await prettier.format(fileContent, { parser: 'babel' });
+            fs.writeFileSync(outputPath, formattedContent);
+
+            generatedFilesCount++;
+            generationProgress.update(i + 1, fileName);
+        } catch (error) {
+            console.error(`❌ Failed to generate test file for ${file.filePath}: ${getErrorMessage(error)}`);
+        }
+    }
+    generationProgress.complete(`Generated ${generatedFilesCount} test files`);
+
+    // Format all files with prettier
+    let formattedHtml, formattedCss, formattedMainJs;
     try {
-        console.log('🎨 Formatting JavaScript code...');
+        console.log('🎨 Formatting output files...');
         const formattingProgress = new ProgressIndicator();
-        const totalFormatTasks = 1; // mainJs only
+        const totalFormatTasks = 3; // HTML, CSS, and JS
 
         formattingProgress.start('Formatting code', totalFormatTasks);
 
+        // Format HTML
+        formattedHtml = await prettier.format(html, { parser: 'html' });
+        formattingProgress.update(1, 'HTML file');
+
+        // Format CSS
+        formattedCss = await prettier.format(css, { parser: 'css' });
+        formattingProgress.update(2, 'CSS file');
+
         // Format main JS
         formattedMainJs = await prettier.format(mainJs, { parser: 'babel' });
-        formattingProgress.update(1, 'Main UI script');
+        formattingProgress.update(3, 'Main UI script');
 
-        formattingProgress.complete('Formatted 1 file');
+        formattingProgress.complete('Formatted 3 files');
     } catch (error) {
-        throw new Error(`Failed to format JavaScript code: ${error.message}`);
+        throw new Error(`Failed to format output files: ${getErrorMessage(error)}`);
     }
 
     // Write all files
     try {
         console.log('💾 Writing output files...');
-        fs.writeFileSync(OUTPUT_HTML, html);
-        fs.writeFileSync(OUTPUT_CSS, css);
+        fs.writeFileSync(OUTPUT_HTML, formattedHtml);
+        fs.writeFileSync(OUTPUT_CSS, formattedCss);
         fs.writeFileSync(OUTPUT_JS, formattedMainJs);
         console.log('✅ Core files written successfully');
     } catch (error) {
-        throw new Error(`Failed to write core output files: ${error.message}`);
+        throw new Error(`Failed to write core output files: ${getErrorMessage(error)}`);
     }
 
     const isSingleFile = parsedFiles.length === 1;
     const fileDescription = isSingleFile ? `tests for ${parsedFiles[0].filePath}` : 'all tests';
 
     console.log(`✅ Generated files in ${OUTPUT_DIR} for ${fileDescription}:`);
-    console.log(`   - index.html (${(html.length / 1024).toFixed(2)} KB)`);
-    console.log(`   - styles.css (${(css.length / 1024).toFixed(2)} KB)`);
+    console.log(`   - index.html (${(formattedHtml.length / 1024).toFixed(2)} KB)`);
+    console.log(`   - styles.css (${(formattedCss.length / 1024).toFixed(2)} KB)`);
     console.log(`   - tests.js (${(formattedMainJs.length / 1024).toFixed(2)} KB)`);
+    console.log(`   - test-files/ (${generatedFilesCount} files)`);
     console.log(`📊 Total tests converted: ${totalTests}`);
     console.log('\n🌐 Open browser-test/all-tests/index.html in your browser to run tests!');
 }
@@ -2145,15 +2229,15 @@ async function run() {
         console.log('🌐 Open browser-test/all-tests/index.html in your browser to run tests');
     } catch (error) {
         console.error('\n❌ Fatal error during test conversion:');
-        console.error(`   ${error.message}`);
+        console.error(`   ${getErrorMessage(error)}`);
 
-        if (error.stack) {
+        if ((error as any).stack) {
             console.error('\nStack trace:');
-            console.error(error.stack);
+            console.error((error as any).stack);
         }
 
         console.error('\n💡 Troubleshooting tips:');
-        console.error('   - Check that test files exist and are valid .test.js files');
+        console.error('   - Check that test files exist and are valid .test.js or .test.ts files');
         console.error('   - Ensure the test directory is readable');
         console.error('   - Verify that output directories can be created');
         console.error('   - Check that all required npm dependencies are installed');
