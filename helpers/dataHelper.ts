@@ -16,7 +16,7 @@ export const toCamelCase = (str: string): string => {
     return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 };
 
-const parseDataValue = (val: string): unknown => {
+export const parseDataValue = (val: string): unknown => {
     if (typeof val !== 'string') return val;
     try {
         if (val === "true") return true;
@@ -65,4 +65,25 @@ export const initDataAttributes = (node: NodeWithData): void => {
     }
 
     node._jqDataParsed = true;
+};
+
+export const getDataFromAttribute = (node: NodeWithData, camelKey: string): unknown | undefined => {
+    const kebabKey = 'data-' + camelKey.replace(/([A-Z])/g, '-$1').toLowerCase();
+    const attrs = node.attributes;
+    if (!attrs) return undefined;
+
+    let value: string | undefined;
+
+    if ((attrs as any).item && typeof (attrs as any).length === 'number') {
+        const domAttrs = attrs as unknown as NamedNodeMap;
+        const attr = domAttrs.getNamedItem(kebabKey);
+        if (attr) value = attr.value;
+    } else {
+        value = (attrs as any)[kebabKey];
+    }
+
+    if (value !== undefined) {
+        return parseDataValue(value);
+    }
+    return undefined;
 };

@@ -1,5 +1,5 @@
 import type { JQ } from '../../types';
-import { initDataAttributes, getData, toCamelCase, NodeWithData } from '../../helpers/dataHelper';
+import { initDataAttributes, getData, toCamelCase, NodeWithData, getDataFromAttribute } from '../../helpers/dataHelper';
 
 /**
  * Store arbitrary data associated with the matched elements or return the value at the named data store for the first element in the set of matched elements.
@@ -40,6 +40,14 @@ function data(this: JQ, key?: string | Record<string, unknown>, value?: unknown)
 
     const d = getData(node);
     const camelKey = toCamelCase(key as string);
+
+    if (d[camelKey] === undefined) {
+        const attrValue = getDataFromAttribute(node, camelKey);
+        if (attrValue !== undefined) {
+            d[camelKey] = attrValue;
+            return attrValue;
+        }
+    }
 
     return d[camelKey];
 }
