@@ -248,13 +248,13 @@ export interface JQ {
  * Static interface for the JQ factory function
  */
 export interface JQStatic {
-    (htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
+    (htmlOrSelectorOrNodes?: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
     fn: any;
     clearRootNodesRegistry(): void;
 
     // Utility methods
-    each(collection: any[] | Record<string, any>, callback: (indexOrKey: any, value: any) => any): any;
-    map(collection: any[] | Record<string, any>, callback: (value: any, indexOrKey: any) => any): any[];
+    each(collection: any[] | Record<string, any> | null | undefined, callback: (indexOrKey: any, value: any) => any): any;
+    map(collection: any[] | Record<string, any> | null | undefined, callback: (value: any, indexOrKey: any) => any): any[];
     load(html: string, options?: { normalize?: boolean }): any;
 
     // Static utility methods
