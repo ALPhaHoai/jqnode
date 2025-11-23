@@ -134,10 +134,12 @@ export interface JQ {
     // Attribute methods
     attr(name: string): GetterSetterReturn<string>;
     attr(name: string, value: AttributeValue): JQ;
+    attr(name: string, value: ((index: number, attr: string) => string | number | void | undefined)): JQ;
     attr(attributes: Record<string, AttributeValue>): JQ;
 
     prop(name: string): GetterSetterReturn<AttributeValue>;
     prop(name: string, value: AttributeValue): JQ;
+    prop(name: string, value: ((index: number, oldVal: any) => AttributeValue)): JQ;
     prop(properties: Record<string, AttributeValue>): JQ;
 
     removeAttr(attributeName: string): JQ;

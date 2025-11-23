@@ -4,93 +4,104 @@ import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../typ
  * Gets or sets an attribute on the first element in the collection.
  * @see https://api.jquery.com/attr/
  */
-function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterReturn<string> {
+function attr(
+    this: JQ,
+    name: string | Record<string, AttributeValue>,
+    value?: AttributeValue | ((index: number, attr: string) => string | number | void | undefined)
+): GetterSetterReturn<string> {
     const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
 
+    // Handle object map: attr({ key: value, ... })
+    if (typeof name === 'object' && name !== null) {
+        for (const key in name) {
+            if (Object.prototype.hasOwnProperty.call(name, key)) {
+                this.attr(key, name[key]);
+            }
+        }
+        return this;
+    }
+
+    // Getter: attr(name)
     if (value === undefined) {
         const element = this.nodes[0];
+        if (!element) return undefined;
 
-        if (!element) {
-            return undefined;
-        }
-
+        // Check DOM element first
         if (element._originalElement) {
+            if (booleanAttributes.includes(name)) {
+                return element._originalElement.hasAttribute(name) ? name : undefined;
+            }
             const attrValue = element._originalElement.getAttribute(name);
-            if (attrValue !== null) {
-                if (booleanAttributes.includes(name)) {
-                    return name;
-                }
-                return attrValue;
-            }
-            // Fallback to internal attributes if not found in DOM
-            if (element.attributes && element.attributes[name] !== undefined) {
-                const fallbackValue = element.attributes[name];
-                if (booleanAttributes.includes(name)) {
-                    return fallbackValue as string;
-                }
-                return fallbackValue as string;
-            }
-            return undefined;
+            return attrValue !== null ? attrValue : undefined;
         }
 
-        if (element.nodeType === 1 && element.getAttribute) {
-            const attrValue = element.getAttribute(name);
-            if (attrValue === null) return undefined;
-
+        // Fallback to internal attributes
+        if (element.attributes && element.attributes[name] !== undefined) {
+            const attrValue = element.attributes[name];
             if (booleanAttributes.includes(name)) {
                 return name;
             }
-
-            return attrValue;
+            return String(attrValue);
         }
 
-        const attrValue = element.attributes ? element.attributes[name] : undefined;
-
-        if (booleanAttributes.includes(name)) {
-            return attrValue as string | undefined;
+        // Check boolean properties if not found in attributes (for consistency)
+        if (booleanAttributes.includes(name) && element.properties && element.properties[name]) {
+            return name;
         }
 
-        return attrValue as string | undefined;
+        return undefined;
     }
 
-    this.nodes.forEach((element: HtmlNode) => {
+    // Setter: attr(name, value) or attr(name, function)
+    this.nodes.forEach((element: HtmlNode, index: number) => {
         if (!element) return;
 
-        if (element.nodeType === 1 && element.setAttribute && element.removeAttribute) {
-            if (booleanAttributes.includes(name)) {
-                if (value === true) {
-                    element.setAttribute(name, name);
-                } else if (value === false || value === null || value === undefined) {
-                    element.removeAttribute(name);
-                } else {
-                    element.setAttribute(name, String(value));
-                }
-            } else {
-                if (value === null || value === undefined) {
-                    element.removeAttribute(name);
-                } else {
-                    element.setAttribute(name, String(value));
-                }
-            }
-            return;
+        let valToSet: AttributeValue | undefined;
+
+        if (typeof value === 'function') {
+            const currentAttr = element.attributes && element.attributes[name] !== undefined ? String(element.attributes[name]) : '';
+            const result = value.call(element, index, currentAttr);
+            if (result === undefined) return; // Don't change if undefined returned
+            valToSet = result as AttributeValue;
+        } else {
+            valToSet = value;
         }
 
-        if (element.attributes) {
-            if (booleanAttributes.includes(name)) {
-                element.attributes[name] = value === true ? name : String(value || '');
+        // Handle boolean attributes
+        if (booleanAttributes.includes(name)) {
+            if (valToSet === false || valToSet === null || valToSet === undefined) {
+                // Remove attribute
+                if (element.attributes) {
+                    delete element.attributes[name];
+                }
                 if (element._originalElement) {
-                    if (value === true) {
-                        element._originalElement.setAttribute(name, name);
-                    } else if (value === false || value === null || value === undefined) {
-                        element._originalElement.removeAttribute(name);
-                    } else {
-                        element._originalElement.setAttribute(name, String(value));
-                    }
+                    element._originalElement.removeAttribute(name);
                 }
             } else {
-                element.attributes[name] = String(value || '');
+                // Set attribute to name (standard HTML5 boolean attribute behavior)
+                if (!element.attributes) element.attributes = {};
+                element.attributes[name] = name;
                 if (element._originalElement) {
-                    element._originalElement.setAttribute(name, String(value));
+                    element._originalElement.setAttribute(name, name);
+                }
+            }
+        } else {
+            // Handle normal attributes
+            if (valToSet === null || valToSet === undefined) {
+                // Remove attribute
+                if (element.attributes) {
+                    delete element.attributes[name];
+                }
+                if (element._originalElement) {
+                    element._originalElement.removeAttribute(name);
+                }
+            } else {
+                // Set attribute
+                const stringValue = String(valToSet);
+                if (!element.attributes) element.attributes = {};
+                element.attributes[name] = stringValue;
+                if (element._originalElement) {
+                    element._originalElement.setAttribute(name, stringValue);
                 }
             }
         }
@@ -100,4 +111,3 @@ function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterRetur
 }
 
 export = attr;
-

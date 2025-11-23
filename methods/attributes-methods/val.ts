@@ -22,28 +22,62 @@ function val(
                 return String(element.properties.value);
             } else if (element.attributes && element.attributes.value !== undefined) {
                 return String(element.attributes.value);
+            } else if (element.children && element.children.length > 0) {
+                // Get text content from children
+                return element.children
+                    .filter((child: HtmlNode) => child.type === 'text')
+                    .map((child: HtmlNode) => child.data || '')
+                    .join('');
             }
-            return '';
         } else if (element.tagName && element.tagName.toLowerCase() === 'select') {
             // For select elements, find the selected option(s)
             if (element.children) {
                 const selectedValues: string[] = [];
+                let prioritySelectedValue: string | null = null;
+                let foundPropSelected = false;
+                let firstOptionValue: string | null = null;
+
                 for (const child of element.children) {
-                    if (child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'option' &&
-                        child.attributes && child.attributes.selected) {
-                        const optionValue = child.attributes.value ? String(child.attributes.value) : (child.children?.[0]?.data || '');
-                        selectedValues.push(optionValue);
+                    if (child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'option') {
+                        const optionValue = child.attributes && child.attributes.value !== undefined ?
+                            String(child.attributes.value) :
+                            (child.children?.[0]?.data || '');
+
+                        if (firstOptionValue === null) {
+                            firstOptionValue = optionValue;
+                        }
+
+                        const hasProp = child.properties && child.properties.selected !== undefined;
+                        const isPropSelected = hasProp && child.properties.selected === true;
+                        const isAttrSelected = child.attributes && child.attributes.selected !== undefined;
+
+                        const isSelected = hasProp ? isPropSelected : isAttrSelected;
+
+                        if (isSelected) {
+                            selectedValues.push(optionValue);
+
+                            if (isPropSelected) {
+                                prioritySelectedValue = optionValue;
+                                foundPropSelected = true;
+                            } else if (isAttrSelected && !foundPropSelected) {
+                                prioritySelectedValue = optionValue;
+                            }
+                        }
                     }
                 }
+
                 const isMultiple = element.attributes && element.attributes.multiple;
                 if (isMultiple) {
                     return selectedValues;
                 } else {
-                    // For single select, return properties.value if set, else selected value
+                    // For single select, return properties.value if set, else priority value, else first option
                     if (element.properties && element.properties.value !== undefined) {
                         return String(element.properties.value);
                     }
-                    return selectedValues.length > 0 ? selectedValues[0] : '';
+                    if (prioritySelectedValue !== null) {
+                        return prioritySelectedValue;
+                    }
+                    return firstOptionValue !== null ? firstOptionValue : '';
                 }
             }
         } else if (element.tagName && element.tagName.toLowerCase() === 'textarea') {
@@ -124,12 +158,17 @@ function val(
                     if (element.children) {
                         element.children.forEach((child: HtmlNode) => {
                             if (child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'option') {
-                                const optionValue = child.attributes && child.attributes.value ? String(child.attributes.value) : '';
+                                const optionValue = child.attributes && child.attributes.value ? String(child.attributes.value) : (child.children?.[0]?.data || '');
                                 const shouldBeSelected = value.includes(optionValue);
-                                if (!child.attributes) {
-                                    child.attributes = {};
+
+                                if (!child.properties) {
+                                    child.properties = {};
                                 }
-                                child.attributes.selected = shouldBeSelected;
+                                child.properties.selected = shouldBeSelected;
+
+                                if (child._originalElement) {
+                                    (child._originalElement as unknown as HTMLOptionElement).selected = shouldBeSelected;
+                                }
                             }
                         });
                     }
@@ -146,16 +185,21 @@ function val(
                         (element._originalElement as unknown as HTMLSelectElement).value = stringValue;
                     }
 
-                    // Also set selected attribute on the matching option
+                    // Also set selected property on the matching option
                     if (element.children) {
                         element.children.forEach((child: HtmlNode) => {
                             if (child.type === 'element' && child.tagName && child.tagName.toLowerCase() === 'option') {
-                                const optionValue = child.attributes && child.attributes.value;
+                                const optionValue = child.attributes && child.attributes.value ? String(child.attributes.value) : (child.children?.[0]?.data || '');
                                 const shouldBeSelected = optionValue === stringValue;
-                                if (!child.attributes) {
-                                    child.attributes = {};
+
+                                if (!child.properties) {
+                                    child.properties = {};
                                 }
-                                child.attributes.selected = shouldBeSelected;
+                                child.properties.selected = shouldBeSelected;
+
+                                if (child._originalElement) {
+                                    (child._originalElement as unknown as HTMLOptionElement).selected = shouldBeSelected;
+                                }
                             }
                         });
                     }
@@ -182,4 +226,3 @@ function val(
 }
 
 export = val;
-

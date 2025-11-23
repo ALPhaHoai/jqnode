@@ -82,4 +82,43 @@ describe('toggleClass() method - jQuery Comparison', () => {
         expect(nqDiv2.hasClass('first')).toBe(jqDiv2.hasClass('first'));
         expect(nqDiv2.hasClass('second')).toBe(jqDiv2.hasClass('second'));
     });
+
+    test('toggleClass() should handle multiple classes - jquery-comparison', () => {
+        const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
+
+        const nqDiv2 = nqRoot.find('#div2');
+        const jqDiv2 = jqRoot.find('#div2');
+
+        nqDiv2.toggleClass('first second');
+        jqDiv2.toggleClass('first second');
+
+        expect(nqDiv2.hasClass('first')).toBe(jqDiv2.hasClass('first'));
+        expect(nqDiv2.hasClass('second')).toBe(jqDiv2.hasClass('second'));
+        expect(nqDiv2.hasClass('first')).toBe(true);
+        expect(nqDiv2.hasClass('second')).toBe(true);
+
+        // Toggle again to remove
+        nqDiv2.toggleClass('first second');
+        jqDiv2.toggleClass('first second');
+
+        expect(nqDiv2.hasClass('first')).toBe(false);
+        expect(nqDiv2.hasClass('second')).toBe(false);
+    });
+
+    test('toggleClass() should handle function parameter - jquery-comparison', () => {
+        const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
+
+        const nqDiv1 = nqRoot.find('#div1');
+        const jqDiv1 = jqRoot.find('#div1');
+
+        nqDiv1.toggleClass(function (index: number, className: string, state: boolean) {
+            return 'dynamic-class';
+        });
+        jqDiv1.toggleClass(function (index: number, className: string, state: boolean) {
+            return 'dynamic-class';
+        });
+
+        expect(nqDiv1.hasClass('dynamic-class')).toBe(jqDiv1.hasClass('dynamic-class'));
+        expect(nqDiv1.hasClass('dynamic-class')).toBe(true);
+    });
 });

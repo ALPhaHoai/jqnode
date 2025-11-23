@@ -25,7 +25,11 @@ function cssCamel(
         if (Array.isArray(prop)) {
             const result: Record<string, string | undefined> = {};
             prop.forEach(function (property: string) {
-                result[property] = getComputedStyleValue(element, property) as string;
+                // Always use camelCase for keys in result
+                const camelProp = property.replace(/-([a-z])/g, function (_match, letter) {
+                    return letter.toUpperCase();
+                });
+                result[camelProp] = getComputedStyleValue(element, property) as string;
             });
             return result as unknown as JQ;
         }

@@ -8,6 +8,9 @@ describe('attr() method - jQuery Comparison', () => {
         <h1 style="color:red">Hello</h1>
         <p data-info='some info'>World</p>
         <img src="image.jpg" alt='pic'/>
+        <input type="checkbox" id="chk1" checked="checked" />
+        <input type="text" id="txt1" readonly />
+        <button disabled>Click me</button>
       </div>
     `;
 
@@ -57,5 +60,66 @@ describe('attr() method - jQuery Comparison', () => {
 
     expect(nqAttr).toBe(jqAttr);
     expect(nqAttr).toBe('new-value');
+  });
+
+  test('attr() should set multiple attributes via object - jquery-comparison', () => {
+    const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
+
+    const nqH1 = nqRoot.find('h1');
+    const jqH1 = jqRoot.find('h1');
+
+    const attrs = {
+      'title': 'Greeting',
+      'data-test': '123',
+      'aria-label': 'Header'
+    };
+
+    nqH1.attr(attrs);
+    jqH1.attr(attrs);
+
+    expect(nqH1.attr('title')).toBe(jqH1.attr('title'));
+    expect(nqH1.attr('data-test')).toBe(jqH1.attr('data-test'));
+    expect(nqH1.attr('aria-label')).toBe(jqH1.attr('aria-label'));
+  });
+
+  test('attr() should handle function argument - jquery-comparison', () => {
+    const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
+
+    const nqImg = nqRoot.find('img');
+    const jqImg = jqRoot.find('img');
+
+    nqImg.attr('alt', function (index: number, attr: string) {
+      return attr + ' - modified';
+    });
+    jqImg.attr('alt', function (index: number, attr: string) {
+      return attr + ' - modified';
+    });
+
+    expect(nqImg.attr('alt')).toBe(jqImg.attr('alt'));
+    expect(nqImg.attr('alt')).toBe('pic - modified');
+  });
+
+  test('attr() should handle boolean attributes - jquery-comparison', () => {
+    const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
+
+    const nqChk = nqRoot.find('#chk1');
+    const jqChk = jqRoot.find('#chk1');
+
+    // Get boolean attribute
+    expect(nqChk.attr('checked')).toBe(jqChk.attr('checked'));
+
+    // Set boolean attribute to false (remove it)
+    nqChk.attr('checked', false as any); // Type cast if necessary until types are updated
+    jqChk.attr('checked', false as any);
+
+    expect(nqChk.attr('checked')).toBe(jqChk.attr('checked'));
+    expect(nqChk.attr('checked')).toBeUndefined();
+
+    // Set boolean attribute to true
+    nqChk.attr('disabled', true as any);
+    jqChk.attr('disabled', true as any);
+
+    expect(nqChk.attr('disabled')).toBe(jqChk.attr('disabled'));
+    expect(nqChk.attr('disabled')).toBe('disabled');
   });
 });
