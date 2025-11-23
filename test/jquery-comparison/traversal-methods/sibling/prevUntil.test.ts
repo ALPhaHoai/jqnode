@@ -1,6 +1,5 @@
-import $ from '../../../../index';
 import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 import type { HtmlNode, JQ } from '../../../../types';
 
 describe('prevUntil() method - Node-Query vs jQuery Comparison', () => {

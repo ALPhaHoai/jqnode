@@ -1,10 +1,6 @@
 import $ from '../../index';
 import jQuery from 'jquery';
-import {
-    createTestDom,
-    compareResults,
-    extractTextContent,
-} from '../utils/jquery-comparison-helpers';
+import { extractTextContent } from '../utils/jquery-comparison-helpers';
 
 describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
     test('should create JQ instance from HTML string - identical behavior', () => {

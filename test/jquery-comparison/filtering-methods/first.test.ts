@@ -118,9 +118,6 @@ describe('first() method - Node-Query vs jQuery Comparison', () => {
 
         const { jquery: $jq, nodeQuery: $nq } = createTestDom(html);
 
-        const nqElements = $nq.find('.item');
-        const jqElements = $jq.find('.item');
-
         // Note: node-query may not have filter() method, so we'll use find() with more specific selector
         const nqActiveElements = $nq.find('.item.active');
         const jqActiveElements = $jq.find('.item.active');

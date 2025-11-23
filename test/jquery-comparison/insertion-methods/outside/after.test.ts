@@ -1,6 +1,4 @@
-import $ from '../../../../index';
-import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 
 describe('after() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;
@@ -75,9 +73,6 @@ describe('after() method - Node-Query vs jQuery Comparison', () => {
         // Source (Original)
 
         // Let's check siblings specifically
-        const nqTarget1 = nqTargets.eq(0);
-        const jqTarget1 = jqTargets.eq(0);
-
         // Next sibling of Target 1 should be Source
         // In jqnode, nextSibling might need to be accessed via parent children index
         // But we can check text content of container which should be correct

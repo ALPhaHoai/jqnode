@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 
@@ -84,10 +82,10 @@ describe('addClass() method - jQuery Comparison', () => {
         const nqDivs = nqRoot.find('.item');
         const jqDivs = jqRoot.find('.item');
 
-        nqDivs.addClass(function (index: number, currentClass: string) {
+        nqDivs.addClass(function (index: number, _currentClass: string) {
             return 'dynamic-' + index;
         });
-        jqDivs.addClass(function (index: number, currentClass: string | undefined) {
+        jqDivs.addClass(function (index: number, _currentClass: string | undefined) {
             return 'dynamic-' + index;
         });
 

@@ -1,8 +1,7 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('data() advanced behavior', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let nqRoot: any, jqRoot: any;
 
     beforeEach(() => {
@@ -37,6 +36,7 @@ describe('data() advanced behavior', () => {
         if (nqDiv[0].setAttribute) {
             nqDiv[0].setAttribute('data-foo', 'baz');
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (nqDiv[0].attributes as any)['data-foo'] = 'baz';
         }
 

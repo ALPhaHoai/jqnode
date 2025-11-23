@@ -1,6 +1,6 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 
 import JQ from '../../../jq';
@@ -63,10 +63,10 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('not() should exclude elements using function that returns true/false - jquery-comparison', () => {
-        const nqResult = elements.not(function (index: number, element: HtmlNode) {
+        const nqResult = elements.not(function (index: number, _element: HtmlNode) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
-        const jqResult = jqElements.not(function (index: number, element: HTMLElement) {
+        const jqResult = jqElements.not(function (index: number, _element: HTMLElement) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
 
@@ -173,7 +173,9 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('not() should handle invalid function gracefully - jquery-comparison', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const nqResult = elements.not(null as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const jqResult = jqElements.not(null as any);
 
         expect(nqResult.nodes).toHaveLength(5);

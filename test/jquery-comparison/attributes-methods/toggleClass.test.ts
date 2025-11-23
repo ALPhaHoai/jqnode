@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('toggleClass() method - jQuery Comparison', () => {
@@ -111,10 +109,10 @@ describe('toggleClass() method - jQuery Comparison', () => {
         const nqDiv1 = nqRoot.find('#div1');
         const jqDiv1 = jqRoot.find('#div1');
 
-        nqDiv1.toggleClass(function (index: number, className: string, state: boolean) {
+        nqDiv1.toggleClass(function (_index: number, _className: string, _state: boolean) {
             return 'dynamic-class';
         });
-        jqDiv1.toggleClass(function (index: number, className: string, state: boolean) {
+        jqDiv1.toggleClass(function (_index: number, _className: string, _state: boolean) {
             return 'dynamic-class';
         });
 

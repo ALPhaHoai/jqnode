@@ -3,6 +3,7 @@ import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('eq() method - Node-Query vs jQuery Comparison', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let elements: any, jqElements: any, root: any;
 
     beforeEach(() => {

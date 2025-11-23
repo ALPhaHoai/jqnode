@@ -1,5 +1,5 @@
 import $ from '../../../index';
-import jQuery from 'jquery';
+
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 
@@ -84,9 +84,11 @@ describe('prop() method - Query Comparison', () => {
         const nqInput = nqRoot.find('#input1');
         const jqInput = jqRoot.find('#input1');
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         nqInput.prop('value', function (index: number, oldVal: any) {
             return oldVal + ' - modified';
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         jqInput.prop('value', function (index: number, oldVal: any) {
             return oldVal + ' - modified';
         });

@@ -70,6 +70,7 @@ function normalizeHtml(html: string): string {
  * @param {string} context - Context description for error messages
  * @returns {boolean} - True if results match
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function compareResults(nqResult: any, jqResult: any, context: string = ''): boolean {
     // Handle null/undefined
     if (nqResult === jqResult) return true;
@@ -148,6 +149,7 @@ function compareResults(nqResult: any, jqResult: any, context: string = ''): boo
  * @param {*} element - DOM element, jQuery object, or node-query node
  * @returns {string} - Text content
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractTextContent(element: any): string {
     if (!element) return '';
 
@@ -165,7 +167,7 @@ function extractTextContent(element: any): string {
     if (element.nodes && Array.isArray(element.nodes)) {
         return element.nodes
             .filter((node: HtmlNode) => node.type === 'text')
-            .map((node: HtmlNode) => (node as any).value || '')
+            .map((node: HtmlNode) => node.data || '')
             .join('');
     }
 
@@ -182,6 +184,7 @@ function extractTextContent(element: any): string {
  * @param {*} element - DOM element, jQuery object, or node-query node
  * @returns {string} - HTML content
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractHtmlContent(element: any): string {
     if (!element) return '';
 

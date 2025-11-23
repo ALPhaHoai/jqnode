@@ -1,6 +1,4 @@
-import $ from '../../../../index';
-import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 import JQ from '../../../../jq';
 
 describe('Ancestor traversal chaining - Node-Query vs jQuery Comparison', () => {

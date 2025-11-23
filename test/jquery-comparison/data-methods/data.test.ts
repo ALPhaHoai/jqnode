@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('data() method - Node-Query vs jQuery Comparison', () => {
@@ -66,9 +64,6 @@ describe('data() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('data() should handle camelCase conversion from dash-case - jquery-comparison', () => {
-        const nqSpan = nqRoot.find('span');
-        const jqSpan = jqRoot.find('span');
-
         // data-custom-value should be accessible as customValue
         const html = `<div data-custom-value="test">Test</div>`;
         const { jquery, nodeQuery } = createTestDom(html);

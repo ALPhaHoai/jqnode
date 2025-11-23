@@ -19,9 +19,12 @@ function removeData(this: JQ, name?: string | string[]): JQ {
         }
 
         const keys = Array.isArray(name) ? name : typeof name === 'string' ? name.split(/\s+/) : [];
+
         keys.forEach((k) => {
+            const camelKey = toCamelCase(k);
+
             if (this._jqData) {
-                delete this._jqData[toCamelCase(k)];
+                delete this._jqData[camelKey];
             }
         });
     });

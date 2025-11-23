@@ -3,7 +3,7 @@
 // This conversion includes key test cases to ensure jQuery compatibility
 
 import $ from '../../../index';
-import jQuery from 'jquery';
+
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 

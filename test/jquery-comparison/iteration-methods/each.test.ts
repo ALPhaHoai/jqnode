@@ -134,8 +134,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const jqElements = jqRoot.find('h1, p');
 
         nqElements.each(function (index: number, element: HtmlNode) {
-            element.attributes = element.attributes || {};
-            element.attributes['data-index'] = index.toString();
+            $(element).attr('data-index', index.toString());
         });
 
         jqElements.each(function (index: number, element: HTMLElement) {

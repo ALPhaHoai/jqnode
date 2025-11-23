@@ -1,4 +1,3 @@
-import $ from '../../../index';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('val() select behavior', () => {

@@ -1,6 +1,4 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('Advanced selectors (now supported) - Node-Query vs jQuery Comparison', () => {
     let nqRoot, jqRoot;

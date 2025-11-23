@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('removeData() method - Node-Query vs jQuery Comparison', () => {
@@ -148,8 +146,6 @@ describe('removeData() method - Node-Query vs jQuery Comparison', () => {
         const jqElem = jqRoot.find('#elem1');
 
         // Data attributes are still in the HTML
-        const initialRole = nqElem.data('role');
-
         // Remove data
         nqElem.removeData('role');
         jqElem.removeData('role');

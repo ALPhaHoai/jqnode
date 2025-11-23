@@ -159,9 +159,13 @@ describe('$.load()', () => {
         test('should handle non-string input gracefully', () => {
             const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result1 = $.load(123 as any);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result2 = $.load(null as any);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result3 = $.load(undefined as any);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result4 = $.load({} as any);
 
             expect(result1.length).toBe(0);

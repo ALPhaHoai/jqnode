@@ -1,6 +1,6 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 
 import JQ from '../../../jq';
@@ -56,10 +56,10 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should filter elements using function that returns true/false - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
+        const nqResult = elements.filter(function (index: number, _element: HtmlNode) {
             return index % 2 === 0; // Keep even indices (0, 2, 4)
         });
-        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
+        const jqResult = jqElements.filter(function (index: number, _element: HTMLElement) {
             return index % 2 === 0; // Keep even indices (0, 2, 4)
         });
 
@@ -157,11 +157,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('filter() should handle function with different contexts - jquery-comparison', () => {
-        const nqResult = elements.filter(function (index: number, element: HtmlNode) {
+        const nqResult = elements.filter(function (index: number, _element: HtmlNode) {
             return index < 3; // keep 0,1,2
         });
 
-        const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
+        const jqResult = jqElements.filter(function (index: number, _element: HTMLElement) {
             return index < 3;
         });
 
@@ -193,14 +193,12 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
     test('filter() should handle complex function logic - jquery-comparison', () => {
         const nqResult = elements.filter(function (index: number, element: HtmlNode) {
-            const text = $(element).text();
             const hasActive = $(element).hasClass('active');
             const hasSpecial = $(element).hasClass('special');
             return hasActive && (index < 3 || hasSpecial);
         });
 
         const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
-            const text = jQuery(element).text();
             const hasActive = jQuery(element).hasClass('active');
             const hasSpecial = jQuery(element).hasClass('special');
             return hasActive && (index < 3 || hasSpecial);

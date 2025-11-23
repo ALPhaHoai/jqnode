@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('clone() method - Node-Query vs jQuery Comparison', () => {

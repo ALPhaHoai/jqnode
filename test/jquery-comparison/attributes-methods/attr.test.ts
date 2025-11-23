@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('attr() method - jQuery Comparison', () => {
@@ -109,14 +107,18 @@ describe('attr() method - jQuery Comparison', () => {
         expect(nqChk.attr('checked')).toBe(jqChk.attr('checked'));
 
         // Set boolean attribute to false (remove it)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         nqChk.attr('checked', false as any); // Type cast if necessary until types are updated
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         jqChk.attr('checked', false as any);
 
         expect(nqChk.attr('checked')).toBe(jqChk.attr('checked'));
         expect(nqChk.attr('checked')).toBeUndefined();
 
         // Set boolean attribute to true
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         nqChk.attr('disabled', true as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         jqChk.attr('disabled', true as any);
 
         expect(nqChk.attr('disabled')).toBe(jqChk.attr('disabled'));

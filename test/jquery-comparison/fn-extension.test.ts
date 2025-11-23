@@ -22,8 +22,7 @@ describe('$.fn Extension Pattern - jQuery Comparison', () => {
     `;
 
     test('$.fn should be defined and point to JQ prototype - jquery-comparison', () => {
-        const { jquery: jqRoot, nodeQuery: nqRoot } = createTestDom(html);
-
+        createTestDom(html);
         expect($.fn).toBeDefined();
         expect($.fn).toBe(JQ.prototype);
         expect(jQuery.fn).toBeDefined();

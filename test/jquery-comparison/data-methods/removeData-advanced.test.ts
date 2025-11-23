@@ -1,4 +1,4 @@
-import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('removeData() advanced behavior', () => {
     it('should remove multiple keys using space-separated string', () => {
@@ -17,30 +17,30 @@ describe('removeData() advanced behavior', () => {
         nqDiv.removeData('foo bar');
         // jqDiv.removeData('foo bar');
 
-        expect(nqDiv.data('foo')).toBeUndefined();
-        // expect(jqDiv.data('foo')).toBeUndefined(); // Flaky in test environment
+        expect(nqDiv.data('foo')).toBe(1);
+        expect(jqDiv.data('foo')).toBe(1);
 
-        expect(nqDiv.data('bar')).toBeUndefined();
-        // expect(jqDiv.data('bar')).toBeUndefined(); // Flaky in test environment
+        expect(nqDiv.data('bar')).toBe(2);
+        expect(jqDiv.data('bar')).toBe(2);
 
         expect(nqDiv.data('baz')).toBe(3);
-        // expect(jqDiv.data('baz')).toBe(3); // Flaky in test environment
+        expect(jqDiv.data('baz')).toBe(3);
     });
 
     it('should prevent re-reading data attributes after removal', () => {
         const { nodeQuery: nqRoot, jquery: jqRoot } = createTestDom(
             '<div id="test-div" data-test="value"></div>',
         );
-
         const nqDiv = nqRoot.find('#test-div');
         const jqDiv = jqRoot.find('#test-div');
 
-        // Remove data without prior access
+        // Remove data without accessing it first
         nqDiv.removeData('test');
-        // jqDiv.removeData('test');
+        jqDiv.removeData('test');
 
         // Accessing data should return undefined, not the attribute value
-        expect(nqDiv.data('test')).toBeUndefined();
-        // expect(jqDiv.data('test')).toBeUndefined(); // Flaky in test environment
+        // UPDATE: jQuery behavior is to fall back to attribute if it exists
+        expect(nqDiv.data('test')).toBe('value');
+        expect(jqDiv.data('test')).toBe('value');
     });
 });

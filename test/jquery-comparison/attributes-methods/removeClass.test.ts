@@ -1,5 +1,3 @@
-import $ from '../../../index';
-import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { HtmlNode } from '../../../types';
 
@@ -133,7 +131,6 @@ describe('removeClass() method - jQuery Comparison', () => {
         const jqDiv1 = jqRoot.find('#div1');
 
         const nqOriginal = nqDiv1.attr('class');
-        const jqOriginal = jqDiv1.attr('class');
 
         nqDiv1.removeClass('   ');
         jqDiv1.removeClass('   ');
