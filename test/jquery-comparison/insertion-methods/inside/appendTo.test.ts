@@ -1,7 +1,9 @@
 import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 
+import { JQ } from '../../../../index';
+
 describe('appendTo() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot;
+    let nqRoot: JQ, jqRoot: any;
 
     beforeEach(() => {
         const html = `
