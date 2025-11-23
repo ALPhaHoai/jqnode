@@ -24,11 +24,11 @@ function normalizedText(this: JQ, value?: string): string | JQ {
         }
 
         const result = elementNodes.map((node: HtmlNode) => {
-            // Handle DOM elements
-            if (node.nodeType === 1) {
+            // Use HTML5 textContent property as single source of truth
+            if ('textContent' in node) {
                 return node.textContent || '';
             }
-            // Handle internal nodes
+            // Fallback to internal node traversal for parsed nodes
             return getTextContent(node);
         }).join('');
 
@@ -40,11 +40,11 @@ function normalizedText(this: JQ, value?: string): string | JQ {
 
     // Set text content on all elements
     this.nodes.forEach((node: HtmlNode) => {
-        // Handle DOM elements
-        if (node.nodeType === 1) {
+        // Use HTML5 textContent property as single source of truth
+        if ('textContent' in node) {
             node.textContent = value;
         } else {
-            // Handle internal nodes
+            // Fallback for internal nodes - replace children with text node
             node.children = [{ type: 'text', data: value }];
         }
     });
