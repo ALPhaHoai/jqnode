@@ -51,13 +51,14 @@ function domElementToNode(element: any): HtmlNode {
         attribs: attrs,
         attributes: attrs, // Point to the same object
         children: [],
-        parent: undefined
+        parent: undefined,
+        _originalElement: element
     };
 
     // Copy attributes
     if (element.attributes) {
         // List of boolean attributes that jQuery handles specially
-        const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple'];
+        const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
         for (let i = 0; i < element.attributes.length; i++) {
             const attr = element.attributes[i];
             let value: string;
@@ -74,7 +75,7 @@ function domElementToNode(element: any): HtmlNode {
 
     // Copy properties for form elements
     if (element.nodeType === 1) {
-        const propNames = ['value', 'checked', 'selected', 'name', 'disabled', 'readonly'];
+        const propNames = ['value', 'checked', 'selected', 'disabled', 'readonly'];
         for (const prop of propNames) {
             if (element[prop] !== undefined) {
                 (node as any)[prop] = element[prop];

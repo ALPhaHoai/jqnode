@@ -4,7 +4,7 @@ import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../typ
  * Gets or sets an attribute on the first element in the collection.
  */
 function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterReturn<string> {
-    const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple'];
+    const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
 
     if (value === undefined) {
         const element = this.nodes[0];

@@ -8,7 +8,7 @@ function remove(this: JQ, selector?: string): JQ {
 
     // If selector is provided, filter nodes
     if (selector) {
-        const JQ = require('../../jq');
+        const JQ = require('../../jq').default;
         const filtered = new JQ(this.nodes).filter(selector);
         nodesToRemove = filtered.nodes;
     }

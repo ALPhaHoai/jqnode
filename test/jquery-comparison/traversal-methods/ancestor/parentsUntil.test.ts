@@ -44,12 +44,12 @@ describe('parentsUntil() method - Node-Query vs jQuery Comparison', () => {
     expect(jqParents.length).toBe(3);
 
     const nqTags = nqParents.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
-    const jqTags: string[] = [];
+    const jqTagsResult: string[] = [];
     jqParents.each((index: number, element: HTMLElement) => {
-      jqTags.push(element.tagName.toLowerCase());
+      jqTagsResult.push(element.tagName.toLowerCase());
     });
 
-    expect(nqTags).toEqual(jqTags);
+    expect(nqTags).toEqual(jqTagsResult);
     expect(nqTags).toEqual(['div', 'article', 'section']);
   });
 

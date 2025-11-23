@@ -416,7 +416,7 @@ function parsePseudoSelector(pseudo: string): PseudoSelector {
  * Checks if a node matches a simple selector (without combinators).
  */
 function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: SelectorContext = {}): boolean {
-    const isElement = node.type === 'element';
+    // const isElement = node.type === 'element';
 
     if ('type' in selector && selector.type === 'complex') {
         return false;

@@ -22,7 +22,12 @@ function map<R = HtmlNode>(this: JQ, callback: MapCallback<HtmlNode, R>): R[] {
             // Continue to next element without adding this result
         }
     }
-    return results;
+
+
+    // Return a new JQ object containing the results
+    // We use this.constructor to avoid circular dependency and ensure we use the correct class
+    const JQClass = this.constructor as any;
+    return new JQClass(results);
 }
 
 export = map;

@@ -28,7 +28,7 @@ describe('$.load()', () => {
                     <p>Paragraph 2</p>
                 </div>
             `;
-            const $ = require('../index');
+
             const root = $.load(html);
 
             expect(root.find('h1').text()).toBe('Title');

@@ -12,9 +12,8 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
         .filter(h => h.length > 0); // Filter out empty strings
 
     if (targetHeaders.length === 0) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        result.length = 0;
+        const JQClass = this.constructor as any;
+        const result = new JQClass([]);
         return result;
     }
 

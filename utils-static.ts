@@ -204,14 +204,18 @@ function type(obj: any): string {
  * Remove duplicate elements from an array.
  */
 function unique<T>(array: T[]): T[] {
-    return [...new Set(array)];
+    // jQuery's unique is an alias for uniqueSort and modifies in-place
+    return uniqueSort(array);
 }
 
 /**
  * Sort an array of DOM elements or nodes, removing duplicates.
  */
 function uniqueSort(array: any[]): any[] {
-    return unique(array);
+    const uniqueItems = [...new Set(array)];
+    array.length = 0;
+    array.push(...uniqueItems);
+    return array;
 }
 
 /**
@@ -390,7 +394,7 @@ function escapeSelector(selector: string): string {
  */
 function title(): string {
     // Lazy load JQFactory to avoid circular dependency
-    const JQFactory = require('./index');
+    const JQFactory = require('./index').default;
 
     // Use jqnode selector to find title element
     return JQFactory("head > title").text().trim();
