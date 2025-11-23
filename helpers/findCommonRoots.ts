@@ -6,6 +6,9 @@ import type { HtmlNode } from '../types';
  * @returns Array of root nodes
  */
 function _findCommonRoots(this: { nodes: HtmlNode[] }): HtmlNode[] {
+    if (!this.nodes || this.nodes.length === 0) {
+        return [];
+    }
     const roots = new Set<HtmlNode>();
 
     // Walk up from each node to find roots

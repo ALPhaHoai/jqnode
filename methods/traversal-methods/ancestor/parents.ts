@@ -40,8 +40,10 @@ function parents(this: JQ, selector?: CssSelector): JQ {
                     // Convert DOM element to node format
                     const domNode = {
                         type: 'element' as const,
+                        name: domCurrent.tagName.toLowerCase(),
                         tagName: domCurrent.tagName.toLowerCase(),
                         attributes: attributes,
+                        attribs: attributes,
                         properties: {},
                         children: [],
                         parent: undefined,

@@ -38,21 +38,21 @@ function index(this: JQ, arg?: IndexTarget): number {
         try {
             let allMatches: HtmlNode[] = [];
 
-            // Check if we are in browser environment with document
-            if (typeof document !== 'undefined') {
+            // Try to use internal selector engine first
+            const roots = (this.constructor as { allRootNodes?: HtmlNode[] }).allRootNodes || [];
+
+            if (roots.length > 0) {
+                const { selectNodes } = require('../../selector');
+                roots.forEach((root: HtmlNode) => {
+                    const matches = selectNodes([root], arg);
+                    allMatches = allMatches.concat(matches);
+                });
+            }
+
+            // If no matches found and we're in browser, try document.querySelectorAll
+            if (allMatches.length === 0 && typeof document !== 'undefined') {
                 const matches = document.querySelectorAll(arg);
                 allMatches = Array.from(matches) as unknown as HtmlNode[];
-            } else {
-                // Node environment - try to use internal selector engine
-                const roots = (this.constructor as { allRootNodes?: HtmlNode[] }).allRootNodes || [];
-
-                if (roots.length > 0) {
-                    const { selectNodes } = require('../../selector');
-                    roots.forEach((root: HtmlNode) => {
-                        const matches = selectNodes([root], arg);
-                        allMatches = allMatches.concat(matches);
-                    });
-                }
             }
 
             const target = first._originalElement || first;

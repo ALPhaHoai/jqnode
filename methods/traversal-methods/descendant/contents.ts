@@ -16,15 +16,8 @@ function contents(this: JQ): JQ {
                 (typeof domNode.tagName === 'string' ? domNode.tagName.toLowerCase() : String(domNode.tagName).toLowerCase()) :
                 '';
 
-            const node: HtmlNode = {
-                type: 'element',
-                tagName: tagName,
-                attributes: {},
-                properties: {},
-                children: [],
-                parent: undefined,
-                _originalElement: ('nodeType' in domNode && domNode.nodeType === 1 ? (domNode as Element) : undefined) as Element | undefined
-            };
+            // Create attributes object
+            const attributes: Record<string, string> = {};
 
             // Handle attributes - check if it's a NamedNodeMap (DOM) or plain object (HtmlNode)
             if ('attributes' in domNode && domNode.attributes) {
@@ -34,18 +27,28 @@ function contents(this: JQ): JQ {
                     const attrs = domNode.attributes as unknown as NamedNodeMap;
                     for (let i = 0; i < attrs.length; i++) {
                         const attr = attrs[i];
-                        if (node.attributes && attr) {
-                            node.attributes[attr.name] = attr.value;
+                        if (attr) {
+                            attributes[attr.name] = attr.value;
                         }
                     }
                 } else {
                     // HtmlNode attribs object
                     const attrs = domNode.attributes as Record<string, unknown>;
-                    if (node.attributes) {
-                        Object.assign(node.attributes, attrs);
-                    }
+                    Object.assign(attributes, attrs);
                 }
             }
+
+            const node: HtmlNode = {
+                type: 'element',
+                name: tagName,
+                tagName: tagName,
+                attributes: attributes,
+                attribs: attributes,
+                properties: {},
+                children: [],
+                parent: undefined,
+                _originalElement: ('nodeType' in domNode && domNode.nodeType === 1 ? (domNode as Element) : undefined) as Element | undefined
+            };
 
             // Copy properties from DOM element
             if ('nodeType' in domNode && domNode.nodeType === 1) {
@@ -65,6 +68,7 @@ function contents(this: JQ): JQ {
             const textContent = 'textContent' in domNode ? domNode.textContent : ('data' in domNode ? (domNode as HtmlNode).data : null);
             return {
                 type: 'text',
+                value: textContent || undefined,
                 data: textContent || undefined,
                 _originalElement: 'nodeType' in domNode ? (domNode as Element) : null
             };
@@ -73,6 +77,7 @@ function contents(this: JQ): JQ {
             const textContent = 'textContent' in domNode ? domNode.textContent : ('data' in domNode ? (domNode as HtmlNode).data : null);
             return {
                 type: 'comment',
+                value: textContent || undefined,
                 data: textContent || undefined,
                 _originalElement: 'nodeType' in domNode ? (domNode as Element) : null
             };

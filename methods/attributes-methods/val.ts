@@ -70,8 +70,8 @@ function val(
                 if ((element.tagName && element.tagName.toLowerCase() === 'input') || (element.tagName && element.tagName.toLowerCase() === 'select')) {
                     currentValue = element.properties && element.properties.value !== undefined ?
                         String(element.properties.value) :
-                        (element.attribs && element.attribs.value !== undefined ?
-                            String(element.attribs.value) : '');
+                        (element.attributes && element.attributes.value !== undefined ?
+                            String(element.attributes.value) : '');
                 } else if (element.tagName && element.tagName.toLowerCase() === 'textarea') {
                     currentValue = element.properties && element.properties.value !== undefined ?
                         String(element.properties.value) :
@@ -118,7 +118,7 @@ function val(
                 }
             } else if (element.tagName && element.tagName.toLowerCase() === 'select') {
                 // For select elements, handle arrays for multiple select
-                const isMultiple = element.attribs && element.attribs.multiple;
+                const isMultiple = element.attributes && element.attributes.multiple;
                 if (isMultiple && Array.isArray(value)) {
                     // For multiple select with array value, set selected state on options
                     if (element.children) {

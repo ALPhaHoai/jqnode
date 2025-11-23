@@ -40,18 +40,19 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 let shouldStop = false;
                 if (parsedStopSelector) {
                     const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                    const attributes: Record<string, string> = {};
+                    for (let i = 0; i < sibling.attributes.length; i++) {
+                        const attr = sibling.attributes[i];
+                        attributes[attr.name] = attr.value;
+                    }
                     const tempNode: HtmlNode = {
                         type: 'element',
+                        name: sibling.tagName.toLowerCase(),
                         tagName: sibling.tagName.toLowerCase(),
-                        attributes: {},
+                        attributes: attributes,
+                        attribs: attributes,
                         _originalElement: sibling
                     };
-                    if (tempNode.attributes) {
-                        for (let i = 0; i < sibling.attributes.length; i++) {
-                            const attr = sibling.attributes[i];
-                            tempNode.attributes[attr.name] = attr.value;
-                        }
-                    }
                     if (selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldStop = true;
                     }
@@ -68,41 +69,41 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 let shouldInclude = true;
                 if (parsedFilterSelector) {
                     const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
-                    const tempNode: HtmlNode = {
-                        type: 'element',
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: {},
-                        _originalElement: sibling
-                    };
+                    const attributes: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
-                        if (tempNode.attributes) {
-                            tempNode.attributes[attr.name] = attr.value;
-                        }
+                        attributes[attr.name] = attr.value;
                     }
+                    const tempNode: HtmlNode = {
+                        type: 'element',
+                        name: sibling.tagName.toLowerCase(),
+                        tagName: sibling.tagName.toLowerCase(),
+                        attributes: attributes,
+                        attribs: attributes,
+                        _originalElement: sibling
+                    };
                     if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldInclude = false;
                     }
                 }
 
                 if (shouldInclude) {
+                    const attributes: Record<string, string> = {};
+                    for (let i = 0; i < sibling.attributes.length; i++) {
+                        const attr = sibling.attributes[i];
+                        attributes[attr.name] = attr.value;
+                    }
                     const internalNode: HtmlNode = {
                         type: 'element',
+                        name: sibling.tagName.toLowerCase(),
                         tagName: sibling.tagName.toLowerCase(),
-                        attributes: {},
+                        attributes: attributes,
+                        attribs: attributes,
                         properties: {},
                         children: [],
                         parent: undefined,
                         _originalElement: sibling
                     };
-
-                    if (internalNode.attributes) {
-                        for (let i = 0; i < sibling.attributes.length; i++) {
-                            const attr = sibling.attributes[i];
-                            internalNode.attributes[attr.name] = attr.value;
-                        }
-                    }
-
                     precedingSiblings.push(internalNode);
                 }
 

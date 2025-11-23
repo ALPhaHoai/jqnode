@@ -15,13 +15,21 @@ function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterRetur
 
         if (element._originalElement) {
             const attrValue = element._originalElement.getAttribute(name);
-            if (attrValue === null) return undefined;
-
-            if (booleanAttributes.includes(name)) {
-                return name;
+            if (attrValue !== null) {
+                if (booleanAttributes.includes(name)) {
+                    return name;
+                }
+                return attrValue;
             }
-
-            return attrValue;
+            // Fallback to internal attributes if not found in DOM
+            if (element.attributes && element.attributes[name] !== undefined) {
+                const fallbackValue = element.attributes[name];
+                if (booleanAttributes.includes(name)) {
+                    return fallbackValue as string;
+                }
+                return fallbackValue as string;
+            }
+            return undefined;
         }
 
         if (element.nodeType === 1 && element.getAttribute) {
@@ -35,13 +43,13 @@ function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterRetur
             return attrValue;
         }
 
-        const attrValue = element.attribs ? element.attribs[name] : undefined;
+        const attrValue = element.attributes ? element.attributes[name] : undefined;
 
         if (booleanAttributes.includes(name)) {
-            return attrValue;
+            return attrValue as string | undefined;
         }
 
-        return attrValue;
+        return attrValue as string | undefined;
     }
 
     this.nodes.forEach((element: HtmlNode) => {
@@ -66,9 +74,9 @@ function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterRetur
             return;
         }
 
-        if (element.attribs) {
+        if (element.attributes) {
             if (booleanAttributes.includes(name)) {
-                element.attribs[name] = value === true ? name : String(value || '');
+                element.attributes[name] = value === true ? name : String(value || '');
                 if (element._originalElement) {
                     if (value === true) {
                         element._originalElement.setAttribute(name, name);
@@ -79,7 +87,7 @@ function attr(this: JQ, name: string, value?: AttributeValue): GetterSetterRetur
                     }
                 }
             } else {
-                element.attribs[name] = String(value || '');
+                element.attributes[name] = String(value || '');
                 if (element._originalElement) {
                     element._originalElement.setAttribute(name, String(value));
                 }

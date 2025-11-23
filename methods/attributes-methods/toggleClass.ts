@@ -9,15 +9,15 @@ function toggleClass(
     state?: boolean
 ): JQ {
     this.nodes.forEach((element: HtmlNode) => {
-        if (!element || !element.attribs) return;
+        if (!element || !element.attributes) return;
 
-        const originalClass = element.attribs.class || '';
+        const originalClass = (element.attributes.class as string) || '';
 
-        if (!element.attribs.class) {
-            element.attribs.class = '';
+        if (!element.attributes.class) {
+            element.attributes.class = '';
         }
 
-        let currentClasses = element.attribs.class.split(/\s+/).filter((cls: string) => cls.length > 0);
+        let currentClasses = ((element.attributes.class as string) || '').split(/\s+/).filter((cls: string) => cls.length > 0);
         let classNameStr = className;
 
         if (typeof className === 'function') {
@@ -52,10 +52,10 @@ function toggleClass(
             }
         });
 
-        element.attribs.class = currentClasses.join(' ');
+        element.attributes.class = currentClasses.join(' ');
 
         if (element._originalElement) {
-            element._originalElement.className = element.attribs.class;
+            element._originalElement.className = element.attributes.class as string;
         }
     });
 
@@ -63,4 +63,3 @@ function toggleClass(
 }
 
 export = toggleClass;
-

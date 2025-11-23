@@ -422,6 +422,10 @@ function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: 
         return false;
     }
 
+    if ('type' in selector && selector.type === 'compound') {
+        return selector.selectors.some(sel => nodeMatchesSelector(node, sel, context));
+    }
+
     const simpleSelector = selector as SimpleSelector;
 
     const nodeTag = (node.name && node.name.toLowerCase()) || '';

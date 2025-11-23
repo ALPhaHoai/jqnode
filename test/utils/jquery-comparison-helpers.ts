@@ -18,8 +18,8 @@ function createTestDom(html: string = '<div></div>') {
     // Create jQuery instance using the global document
     const jquery = jQuery(document);
 
-    // Create node-query instance from the document body
-    const nodeQuery = $(document.body);
+    // Create node-query instance from the document root (clone to avoid interference)
+    const nodeQuery = $(document.documentElement.cloneNode(true));
 
     return {
         nodeQuery,

@@ -106,8 +106,8 @@ describe('end() method - Node-Query vs jQuery Comparison', () => {
     expect(nqEndResult.nodes).toHaveLength(jqEndResult.length);
     expect(nqEndResult.nodes).toHaveLength(1);
     expect(jqEndResult.length).toBe(1);
-    // nqRoot is body, jqRoot is document - they have different structures
-    expect(nqEndResult.nodes[0].tagName).toBe('BODY');
+    // nqRoot is now HTML (documentElement), jqRoot is document - they have different structures
+    expect(nqEndResult.nodes[0].tagName).toBe('HTML');
     // Document objects don't have tagName (they have nodeName '#document')
     expect(jqEndResult[0].tagName).toBeUndefined();
   });
@@ -190,7 +190,7 @@ describe('end() method - Node-Query vs jQuery Comparison', () => {
     expect(nqEndResult.nodes).toHaveLength(jqEndResult.length);
     expect(nqEndResult.nodes).toHaveLength(1);
     expect(jqEndResult.length).toBe(1);
-    expect(nqEndResult.nodes[0].tagName).toBe('BODY');
+    expect(nqEndResult.nodes[0].tagName).toBe('HTML');
     // Document objects don't have tagName (they have nodeName '#document')
     expect(jqEndResult[0].tagName).toBeUndefined();
   });

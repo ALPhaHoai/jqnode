@@ -9,13 +9,13 @@ function removeClass(
 ): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {
-            if (!element || !element.attribs) return;
+            if (!element || !element.attributes) return;
 
             if (element._originalElement) {
-                element.attribs.class = element._originalElement.className || '';
+                element.attributes.class = element._originalElement.className || '';
             }
 
-            const currentClass = element.attribs.class || '';
+            const currentClass = (element.attributes.class as string) || '';
             const result = className.call(element, index, currentClass);
             if (typeof result === 'string') {
                 applyRemoveClassToElement(element, result, true);
@@ -26,17 +26,22 @@ function removeClass(
     }
 
     this.nodes.forEach((element: HtmlNode) => {
+        // CRITICAL: Read from _originalElement.className if it exists (source of truth for DOM)
+        // This ensures we see changes made by jQuery or other libraries
+        if (element && element.attributes && element._originalElement) {
+            element.attributes.class = element._originalElement.className || '';
+        }
         applyRemoveClassToElement(element, className, true);
     });
 
     function applyRemoveClassToElement(element: HtmlNode, className?: string, syncToDOM: boolean = true) {
-        if (!element || !element.attribs) return;
+        if (!element || !element.attributes) return;
 
-        if (!element.attribs.class) {
-            element.attribs.class = '';
+        if (!element.attributes.class) {
+            element.attributes.class = '';
         }
 
-        let currentClasses = element.attribs.class.split(/\s+/).filter((cls: string) => cls.length > 0);
+        let currentClasses = ((element.attributes.class as string) || '').split(/\s+/).filter((cls: string) => cls.length > 0);
 
         if (className === undefined || className === null) {
             currentClasses = [];
@@ -51,10 +56,10 @@ function removeClass(
             });
         }
 
-        element.attribs.class = currentClasses.join(' ');
+        element.attributes.class = currentClasses.join(' ');
 
         if (syncToDOM && element._originalElement) {
-            element._originalElement.className = element.attribs.class;
+            element._originalElement.className = element.attributes.class as string;
         }
     }
 
