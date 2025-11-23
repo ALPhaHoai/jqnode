@@ -65,7 +65,7 @@ function index(this: JQ, arg?: IndexTarget): number {
     }
 
     // Case 3: Argument is a DOM element or JQ object
-    let target: HtmlNode | JQ = arg;
+    let target: HtmlNode | JQ = arg as any;
     if (target instanceof this.constructor) {
         target = (target as JQ).nodes[0];
     }

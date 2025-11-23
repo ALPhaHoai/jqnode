@@ -16,7 +16,7 @@ function prependTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | 
     } else if (typeof target === 'string') {
         if (target.trim().startsWith('<')) {
             // HTML string - parse it and mark as dynamic
-            const nodes = this._normalizeContent(target);
+            const nodes = this._normalizeContent(target as any);
             targetJQ = Object.create(Object.getPrototypeOf(this));
             targetJQ.nodes = nodes;
             isDynamicTarget = true;
@@ -28,7 +28,7 @@ function prependTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | 
         }
     } else {
         // Other content - normalize it
-        const nodes = this._normalizeContent(target);
+        const nodes = this._normalizeContent(target as any);
         targetJQ = Object.create(Object.getPrototypeOf(this));
         targetJQ.nodes = nodes;
         isDynamicTarget = true;

@@ -10,7 +10,7 @@ function removeAttr(this: JQ, name: string): JQ {
     this.nodes.forEach((element: HtmlNode) => {
         if (element && element.attributes) {
             attrNames.forEach(attrName => {
-                delete element.attributes[attrName];
+                delete element.attributes?.[attrName];
                 if (element._originalElement) {
                     element._originalElement.removeAttribute(attrName);
                 }

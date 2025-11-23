@@ -1,9 +1,9 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
-import { createTestDom, compareResults } from '../../utils/jquery-comparison-helpers';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('eq() method - Node-Query vs jQuery Comparison', () => {
-    let elements, jqElements, root;
+    let elements: any, jqElements: any, root: any;
 
     beforeEach(() => {
         const html = `
@@ -380,10 +380,10 @@ describe('eq() method - Node-Query vs jQuery Comparison', () => {
         let nqTag;
         if (nqResult.nodes) {
             // node-query object
-            nqTag = nqResult.nodes[0].tagName && nqResult.nodes[0].tagName.toLowerCase();
+            nqTag = nqResult.nodes[0]?.tagName?.toLowerCase();
         } else {
             // jQuery object
-            nqTag = nqResult[0].tagName.toLowerCase();
+            nqTag = nqResult[0]?.tagName?.toLowerCase();
         }
         const jqTag = jqResult[0].tagName.toLowerCase();
         expect(nqTag).toBe(jqTag);

@@ -21,14 +21,14 @@ function insertAfter(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] 
             targetJQ.nodes = nodes;
         } else {
             // HTML string - parse it and mark as dynamic
-            const nodes = this._normalizeContent(target);
+            const nodes = this._normalizeContent(target as any);
             targetJQ = Object.create(Object.getPrototypeOf(this));
             targetJQ.nodes = nodes;
             isDynamicTarget = true;
         }
     } else {
         // Other content types (nodes, arrays, etc.)
-        const nodes = this._normalizeContent(target);
+        const nodes = this._normalizeContent(target as any);
         targetJQ = Object.create(Object.getPrototypeOf(this));
         targetJQ.nodes = nodes;
         isDynamicTarget = true;
