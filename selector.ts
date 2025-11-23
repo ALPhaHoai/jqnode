@@ -417,13 +417,6 @@ function parsePseudoSelector(pseudo: string): PseudoSelector {
  */
 function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: SelectorContext = {}): boolean {
     const isElement = node.type === 'element';
-    if (!isElement) {
-        return false;
-    }
-
-    if ('type' in selector && selector.type === 'compound') {
-        return selector.selectors.some(sel => nodeMatchesSelector(node, sel, context));
-    }
 
     if ('type' in selector && selector.type === 'complex') {
         return false;
@@ -442,32 +435,25 @@ function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: 
             return false;
         }
         const nodeId = node.attribs?.id;
-        if (!nodeId || nodeId !== simpleSelector.id) {
+        if (nodeId !== simpleSelector.id) {
             return false;
         }
     }
 
     if (simpleSelector.classes && simpleSelector.classes.length > 0) {
-        if (simpleSelector.classes.some(cls => cls === '')) {
-            return false;
-        }
-
         const nodeClass = node.attribs?.class;
         if (!nodeClass) {
             return false;
         }
-
-        const nodeClassStr = typeof nodeClass === 'string' ? nodeClass : String(nodeClass);
-        const nodeClasses = nodeClassStr.toLowerCase().split(/\s+/);
-
-        for (const requiredClass of simpleSelector.classes) {
-            if (!nodeClasses.includes(requiredClass.toLowerCase())) {
+        const nodeClasses = nodeClass.split(/\s+/);
+        for (const cls of simpleSelector.classes) {
+            if (!nodeClasses.includes(cls)) {
                 return false;
             }
         }
     }
 
-    if (simpleSelector.attributes) {
+    if (simpleSelector.attributes && simpleSelector.attributes.length > 0) {
         for (const attr of simpleSelector.attributes) {
             if (!matchesAttribute(node, attr)) {
                 return false;
@@ -475,7 +461,7 @@ function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: 
         }
     }
 
-    if (simpleSelector.pseudos) {
+    if (simpleSelector.pseudos && simpleSelector.pseudos.length > 0) {
         for (const pseudo of simpleSelector.pseudos) {
             if (!matchesPseudo(node, pseudo, context)) {
                 return false;
@@ -529,9 +515,22 @@ function isValidPseudoSelector(pseudoName: string): boolean {
         'first-child', 'first', 'last-child', 'last', 'only-child',
         'nth-child', 'nth-of-type', 'first-of-type', 'last-of-type',
         'only-of-type', 'nth-last-child', 'nth-last-of-type',
-        'not', 'empty', 'root'
+        'not', 'empty', 'root', 'contains'
     ];
     return validPseudos.includes(pseudoName);
+}
+
+/**
+ * Helper to get text content of a node
+ */
+function getTextContent(node: HtmlNode): string {
+    if (node.type === 'text') {
+        return node.data || '';
+    }
+    if (node.children) {
+        return node.children.map(getTextContent).join('');
+    }
+    return '';
 }
 
 /**
@@ -546,13 +545,13 @@ function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: Selector
             return nodeIndex === 0;
 
         case 'first':
-            return false;
+            return false; // jQuery :first is not CSS :first-child
 
         case 'last-child':
             return nodeIndex === siblings.length - 1;
 
         case 'last':
-            return false;
+            return false; // jQuery :last is not CSS :last-child
 
         case 'only-child':
             return siblings.length === 1;
@@ -603,6 +602,12 @@ function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: Selector
 
         case 'root':
             return context.isRoot || false;
+
+        case 'contains':
+            if (!pseudo.args) return false;
+            // Remove quotes if present
+            const text = pseudo.args.replace(/^['"]|['"]$/g, '');
+            return getTextContent(node).includes(text);
 
         default:
             return false;

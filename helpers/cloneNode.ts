@@ -9,11 +9,16 @@ import type { HtmlNode } from '../types';
 function _cloneNode(node: HtmlNode | null | undefined, deep: boolean = true): HtmlNode | null | undefined {
     if (!node) return node;
 
+    const clonedAttribs = node.attribs ? { ...node.attribs } : undefined;
+    const clonedAttributes = node.attributes ? { ...node.attributes } : clonedAttribs;
+
     const cloned: HtmlNode = {
         type: node.type,
         name: node.name,
+        tagName: node.tagName || node.name, // Preserve tagName, fallback to name
         data: node.data,
-        attribs: node.attribs ? { ...node.attribs } : undefined,
+        attribs: clonedAttribs,
+        attributes: clonedAttributes, // Preserve attributes, fallback to attribs
         children: deep && node.children ? node.children.map(child => _cloneNode(child, deep) as HtmlNode) : undefined
     };
 

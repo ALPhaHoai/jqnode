@@ -42,10 +42,14 @@ function domElementToNode(element: any): HtmlNode {
         throw new Error('Invalid DOM element provided');
     }
 
+    const nodeName = element.nodeName ? element.nodeName.toUpperCase() : undefined;
+    const attrs: Record<string, string> = {}; // Single source of truth for attributes
     const node: HtmlNode = {
         type: element.nodeType === 1 ? 'element' : 'text',
-        name: element.nodeName ? element.nodeName.toUpperCase() : undefined,
-        attribs: {},
+        name: nodeName,
+        tagName: nodeName, // Expose tagName for compatibility
+        attribs: attrs,
+        attributes: attrs, // Point to the same object
         children: [],
         parent: undefined
     };
@@ -64,14 +68,13 @@ function domElementToNode(element: any): HtmlNode {
                 // Ensure we get the string value, not the Attr object
                 value = typeof attr.value === 'string' ? attr.value : String(attr.value);
             }
-            if (!node.attribs) node.attribs = {};
-            node.attribs[attr.name] = value;
+            attrs[attr.name] = value; // Populate the single attrs object
         }
     }
 
     // Copy properties for form elements
     if (element.nodeType === 1) {
-        const propNames = ['value', 'checked', 'selected', 'type', 'name', 'disabled', 'readonly'];
+        const propNames = ['value', 'checked', 'selected', 'name', 'disabled', 'readonly'];
         for (const prop of propNames) {
             if (element[prop] !== undefined) {
                 (node as any)[prop] = element[prop];
