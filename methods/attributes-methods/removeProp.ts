@@ -2,6 +2,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Removes a property set by the .prop() method.
+ * @see https://api.jquery.com/removeProp/
  */
 function removeProp(this: JQ, name: string): JQ {
     const standardProperties = ['checked', 'selected', 'disabled', 'readonly', 'required', 'type', 'name'];

@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the ancestors of each element in the current set of matched elements, optionally filtered by a selector.
+  * @see https://api.jquery.com/parents/
  */
 function parents(this: JQ, selector?: CssSelector): JQ {
     const ancestors: HtmlNode[] = [];

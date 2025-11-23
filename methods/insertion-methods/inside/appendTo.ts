@@ -6,6 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements to the end of the target.
  * @param target - Target to append to
  * @returns The JQ instance for chaining
+  * @see https://api.jquery.com/appendTo/
  */
 function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;
@@ -34,15 +35,42 @@ function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | s
         isDynamicTarget = true;
     }
 
-    for (const targetElement of targetJQ.nodes) {
-        if (targetElement.type === 'element' && targetElement.children) {
-            // Clone our nodes to avoid sharing references
-            const clonedNodes = this.nodes.map(node => this._cloneNode(node));
-            targetElement.children.push(...clonedNodes);
+    const newNodes: HtmlNode[] = [];
+    const lastIndex = targetJQ.nodes.length - 1;
 
-            // Set parent references for the cloned nodes
-            for (const clonedNode of clonedNodes) {
-                clonedNode.parent = targetElement;
+    for (let i = 0; i < targetJQ.nodes.length; i++) {
+        const targetElement = targetJQ.nodes[i];
+        if (targetElement.type === 'element' && targetElement.children) {
+            const isLast = i === lastIndex;
+
+            for (const node of this.nodes) {
+                let nodeToAdd: HtmlNode;
+
+                if (isLast) {
+                    // For the last target, we move the original node
+                    nodeToAdd = node;
+
+                    // Detach from current parent if exists
+                    if (nodeToAdd.parent && nodeToAdd.parent.children) {
+                        const index = nodeToAdd.parent.children.indexOf(nodeToAdd);
+                        if (index !== -1) {
+                            nodeToAdd.parent.children.splice(index, 1);
+                        }
+                    }
+
+                    // Remove from allRootNodes if present
+                    const rootIndex = JQClass.allRootNodes.indexOf(nodeToAdd);
+                    if (rootIndex !== -1) {
+                        JQClass.allRootNodes.splice(rootIndex, 1);
+                    }
+                } else {
+                    // For non-last targets, we clone the node
+                    nodeToAdd = this._cloneNode(node);
+                }
+
+                targetElement.children.push(nodeToAdd);
+                nodeToAdd.parent = targetElement;
+                newNodes.push(nodeToAdd);
             }
         }
     }
@@ -56,7 +84,10 @@ function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | s
         }
     }
 
-    return this;
+    // Return a new JQ object containing all appended nodes (originals + clones)
+    const newJQ = Object.create(Object.getPrototypeOf(this));
+    newJQ.nodes = newNodes;
+    return newJQ;
 }
 
 export = appendTo;

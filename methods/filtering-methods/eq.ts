@@ -3,6 +3,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
+ * @see https://api.jquery.com/eq/
  */
 function eq(this: JQ, index: number | string | undefined): JQ {
     const originalIndex = index;
@@ -13,6 +14,7 @@ function eq(this: JQ, index: number | string | undefined): JQ {
     // - Invalid strings become NaN, return empty collection
     // - Fractional numbers are truncated towards zero
     // - Negative indices wrap around
+    // - Fractional indices select element but return empty text (detached behavior)
 
     let numericIndex = Number(index);
 
@@ -42,6 +44,7 @@ function eq(this: JQ, index: number | string | undefined): JQ {
         let selectedNode: HtmlNode | undefined = this.nodes[numericIndex];
 
         // For fractional indices, create a detached copy to match jQuery behavior
+        // jQuery returns an element but with empty text() for fractional indices
         if (typeof originalIndex === 'number' && originalIndex % 1 !== 0) {
             selectedNode = { ...selectedNode, _detached: true } as HtmlNode;
         }

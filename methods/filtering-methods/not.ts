@@ -4,22 +4,24 @@ import JQClass from '../../jq';
 
 /**
  * Removes elements from the set of matched elements.
+ * @param selectorOrFunctionOrElementOrJQ - CSS selector, function, element, or JQ object to exclude
+ * @see https://api.jquery.com/not/
  */
-function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
-    if (typeof selectorOrFunction === 'string') {
+function not(this: JQ, selectorOrFunctionOrElementOrJQ: CssSelector | FilterCallback | HtmlNode | JQ): JQ {
+    if (typeof selectorOrFunctionOrElementOrJQ === 'string') {
         // CSS selector filter
         const rootNodes = this._findCommonRoots(this.nodes);
-        const allMatches = selectNodes(rootNodes, selectorOrFunction);
+        const allMatches = selectNodes(rootNodes, selectorOrFunctionOrElementOrJQ);
 
         const filtered = this.nodes.filter((node: HtmlNode) => !allMatches.includes(node));
         return new JQClass(filtered);
-    } else if (typeof selectorOrFunction === 'function') {
+    } else if (typeof selectorOrFunctionOrElementOrJQ === 'function') {
         // Function filter
         const filtered: HtmlNode[] = [];
         for (let i = 0; i < this.nodes.length; i++) {
             const node: HtmlNode = this.nodes[i];
             try {
-                const result = selectorOrFunction.call(node, i, node);
+                const result = selectorOrFunctionOrElementOrJQ.call(node, i, node);
                 if (!result) {
                     filtered.push(node);
                 }
@@ -29,6 +31,16 @@ function not(this: JQ, selectorOrFunction: CssSelector | FilterCallback): JQ {
             }
         }
         return new JQClass(filtered);
+    } else if (selectorOrFunctionOrElementOrJQ && typeof selectorOrFunctionOrElementOrJQ === 'object') {
+        if ('type' in selectorOrFunctionOrElementOrJQ && selectorOrFunctionOrElementOrJQ.type === 'element') {
+            // Direct element reference - exclude this specific element
+            const filtered = this.nodes.filter((node: HtmlNode) => node !== selectorOrFunctionOrElementOrJQ);
+            return new JQClass(filtered);
+        } else if ('nodes' in selectorOrFunctionOrElementOrJQ && Array.isArray(selectorOrFunctionOrElementOrJQ.nodes)) {
+            // JQ object - exclude all nodes in the other JQ object
+            const filtered = this.nodes.filter((node: HtmlNode) => !selectorOrFunctionOrElementOrJQ.nodes.includes(node));
+            return new JQClass(filtered);
+        }
     }
     const result = Object.create(Object.getPrototypeOf(this));
     result.nodes = this.nodes;

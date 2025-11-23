@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all preceding siblings up to but not including the element matched by the selector.
+  * @see https://api.jquery.com/prevUntil/
  */
 function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const precedingSiblings: HtmlNode[] = [];

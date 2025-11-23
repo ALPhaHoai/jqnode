@@ -2,6 +2,7 @@ import type { HtmlNode, JQ, IndexTarget } from '../../types';
 
 /**
  * Search for a given element from among the matched elements.
+ * @see https://api.jquery.com/index/
  */
 function index(this: JQ, arg?: IndexTarget): number {
     // Case 1: No argument - return index of first element among its siblings

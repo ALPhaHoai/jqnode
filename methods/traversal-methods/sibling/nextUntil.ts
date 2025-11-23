@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all following siblings up to but not including the element matched by the selector.
+  * @see https://api.jquery.com/nextUntil/
  */
 function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const followingSiblings: HtmlNode[] = [];

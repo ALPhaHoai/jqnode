@@ -3,6 +3,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the children of each element in the set, including text and comment nodes.
+  * @see https://api.jquery.com/contents/
  */
 function contents(this: JQ): JQ {
     const contents: HtmlNode[] = [];

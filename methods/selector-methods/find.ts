@@ -4,6 +4,7 @@ import JQClass from '../../jq';
 
 /**
  * Finds descendant elements by CSS selector or tag name.
+ * @see https://api.jquery.com/find/
  */
 function find(this: JQ, selector: CssSelector): JQ {
     const selectedNodes = selectNodes(this.nodes, selector);

@@ -2,6 +2,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds or removes one or more classes from each element, depending on the class's presence or the state argument.
+ * @see https://api.jquery.com/toggleClass/
  */
 function toggleClass(
     this: JQ,

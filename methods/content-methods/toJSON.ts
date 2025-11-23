@@ -11,6 +11,8 @@ interface ToJSONOptions {
 /**
  * Converts HTML table elements to JSON data (array of objects).
  * Each object represents a row with properties from table headers.
+ * 
+ * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, string>> {
     const { ignoreColumns = [], onlyColumns = null, normalizeKeys = false } = options;

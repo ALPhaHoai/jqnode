@@ -5,53 +5,56 @@ import JQClass from '../../../jq';
  * Insert content to the end of each element in the set of matched elements.
  * @param content - Content to insert
  * @returns The JQ instance for chaining
+ * @see https://api.jquery.com/append/
  */
 function append(this: JQ, ...content: ContentInput[]): JQ {
-    // Flatten all content arguments into a single array of nodes
-    const allContent: HtmlNode[] = [];
-    const contentToClone: JQ[] = [];
-
+    // 1. Collect all nodes to be appended
+    const nodesToAppend: HtmlNode[] = [];
     for (const item of content) {
         // Check if this is a JQ object containing existing elements
         if (item && typeof item === 'object' && ((item as any).constructor && (item as any).constructor.name === 'JQ' || (item as any).nodes && Array.isArray((item as any).nodes))) {
-            // This is a JQ object - we move its elements (jQuery behavior)
-            contentToClone.push(item as JQ);
+            nodesToAppend.push(...(item as any).nodes);
         } else {
-            // Other content types - normalize and clone as before
-            allContent.push(...this._normalizeContent(item));
+            nodesToAppend.push(...this._normalizeContent(item));
         }
     }
 
-    for (const element of this.nodes) {
-        if (element.type === 'element' && element.children) {
-            // Handle cloned content (HTML strings, etc.)
-            if (allContent.length > 0) {
-                const clonedContent = allContent.map(node => this._cloneNode(node));
-                element.children.push(...clonedContent);
-            }
+    // 2. Append to each target
+    const lastIndex = this.nodes.length - 1;
+    for (let i = 0; i < this.nodes.length; i++) {
+        const target = this.nodes[i];
+        if (target.type !== 'element' || !target.children) continue;
 
-            // Handle JQ objects - move them (jQuery behavior)
-            for (const jqObject of contentToClone) {
-                for (const nodeToMove of jqObject.nodes) {
-                    // Remove from current parent
-                    if (nodeToMove.parent && nodeToMove.parent.children) {
-                        const index = nodeToMove.parent.children.indexOf(nodeToMove);
-                        if (index !== -1) {
-                            nodeToMove.parent.children.splice(index, 1);
-                        }
+        const isLast = i === lastIndex;
+
+        for (const node of nodesToAppend) {
+            let nodeToAdd: HtmlNode;
+
+            if (isLast) {
+                // For the last target, we move the original node
+                nodeToAdd = node;
+
+                // Detach from current parent if exists
+                if (nodeToAdd.parent && nodeToAdd.parent.children) {
+                    const index = nodeToAdd.parent.children.indexOf(nodeToAdd);
+                    if (index !== -1) {
+                        nodeToAdd.parent.children.splice(index, 1);
                     }
-
-                    // Remove from allRootNodes if present
-                    const rootIndex = JQClass.allRootNodes.indexOf(nodeToMove);
-                    if (rootIndex !== -1) {
-                        JQClass.allRootNodes.splice(rootIndex, 1);
-                    }
-
-                    // Add to new parent
-                    element.children.push(nodeToMove);
-                    nodeToMove.parent = element;
                 }
+
+                // Remove from allRootNodes if present
+                const rootIndex = JQClass.allRootNodes.indexOf(nodeToAdd);
+                if (rootIndex !== -1) {
+                    JQClass.allRootNodes.splice(rootIndex, 1);
+                }
+            } else {
+                // For non-last targets, we clone the node
+                nodeToAdd = this._cloneNode(node);
             }
+
+            // Add to new parent
+            target.children.push(nodeToAdd);
+            nodeToAdd.parent = target;
         }
     }
 

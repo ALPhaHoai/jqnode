@@ -2,6 +2,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Get the current coordinates of the first element in the set of matched elements, relative to the offset parent.
+ * @see https://api.jquery.com/position/
  */
 function position(this: JQ): { top: number; left: number } | undefined {
     if (this.nodes.length === 0) {

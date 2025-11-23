@@ -6,6 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements before the target.
  * @param target - Target elements to insert before
  * @returns The JQ instance for chaining
+  * @see https://api.jquery.com/insertBefore/
  */
 function insertBefore(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;
@@ -34,85 +35,91 @@ function insertBefore(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[]
         isDynamicTarget = true;
     }
 
-    for (const targetElement of targetJQ.nodes) {
-        if (targetElement.parent && targetElement.parent.children) {
-            const siblings = targetElement.parent.children;
-            const targetIndex = siblings.indexOf(targetElement);
+    // If this is a dynamically created target, add it to the root first
+    if (isDynamicTarget) {
+        for (const targetElement of targetJQ.nodes) {
+            if (!JQClass.allRootNodes.includes(targetElement)) {
+                JQClass.allRootNodes.push(targetElement);
+            }
+        }
+    }
 
-            if (targetIndex !== -1) {
-                // Clone our nodes (jQuery clones existing elements)
-                // First remove originals from node tree
-                for (const nodeToClone of this.nodes) {
-                    if (nodeToClone.parent && nodeToClone.parent.children) {
-                        const index = nodeToClone.parent.children.indexOf(nodeToClone);
+    const newNodes: HtmlNode[] = [];
+    const lastIndex = targetJQ.nodes.length - 1;
+
+    for (let i = 0; i < targetJQ.nodes.length; i++) {
+        const targetElement = targetJQ.nodes[i];
+
+        // Find parent and index
+        let parentChildren: HtmlNode[] | undefined;
+        let targetIndex = -1;
+
+        if (targetElement.parent && targetElement.parent.children) {
+            parentChildren = targetElement.parent.children;
+            targetIndex = parentChildren.indexOf(targetElement);
+        } else if (JQClass.allRootNodes.includes(targetElement)) {
+            parentChildren = JQClass.allRootNodes;
+            targetIndex = parentChildren.indexOf(targetElement);
+        }
+
+        if (parentChildren && targetIndex !== -1) {
+            const isLast = i === lastIndex;
+            const nodesToAddForTarget: HtmlNode[] = [];
+
+            for (const node of this.nodes) {
+                let nodeToAdd: HtmlNode;
+
+                if (isLast) {
+                    // For the last target, we move the original node
+                    nodeToAdd = node;
+
+                    // Detach from current parent if exists
+                    if (nodeToAdd.parent && nodeToAdd.parent.children) {
+                        const index = nodeToAdd.parent.children.indexOf(nodeToAdd);
                         if (index !== -1) {
-                            nodeToClone.parent.children.splice(index, 1);
+                            nodeToAdd.parent.children.splice(index, 1);
                         }
                     }
-                    // Remove original from allRootNodes if present
-                    const rootIndex = JQClass.allRootNodes.indexOf(nodeToClone);
+
+                    // Remove from allRootNodes if present
+                    const rootIndex = JQClass.allRootNodes.indexOf(nodeToAdd);
                     if (rootIndex !== -1) {
                         JQClass.allRootNodes.splice(rootIndex, 1);
                     }
+                } else {
+                    // For non-last targets, we clone the node
+                    nodeToAdd = this._cloneNode(node);
                 }
 
-                // Clone nodes to insert
-                const clonedNodes = this.nodes.map(node => this._cloneNode(node));
-
-                // Insert clones before target
-                siblings.splice(targetIndex, 0, ...clonedNodes);
-
-                // Set parent references for the cloned nodes
-                for (const clonedNode of clonedNodes) {
-                    clonedNode.parent = targetElement.parent;
+                // Set parent reference
+                if (targetElement.parent) {
+                    nodeToAdd.parent = targetElement.parent;
+                } else {
+                    nodeToAdd.parent = undefined; // Root node
                 }
+
+                nodesToAddForTarget.push(nodeToAdd);
+                newNodes.push(nodeToAdd);
             }
-        }
-    }
 
-    // If this is a dynamically created target, insert source elements before target at root level
-    if (isDynamicTarget) {
-        // Clone our nodes (jQuery clones existing elements)
-        // First remove originals from node tree
-        for (const nodeToClone of this.nodes) {
-            if (nodeToClone.parent && nodeToClone.parent.children) {
-                const index = nodeToClone.parent.children.indexOf(nodeToClone);
-                if (index !== -1) {
-                    nodeToClone.parent.children.splice(index, 1);
-                }
+            // Insert all nodes at once before the target
+            // We need to re-calculate targetIndex because detaching nodes might have shifted it
+            if (targetElement.parent && targetElement.parent.children) {
+                targetIndex = targetElement.parent.children.indexOf(targetElement);
+            } else if (JQClass.allRootNodes.includes(targetElement)) {
+                targetIndex = JQClass.allRootNodes.indexOf(targetElement);
             }
-        }
 
-        const allRootNodes = JQClass.allRootNodes;
-
-        // Remove originals from allRootNodes
-        for (const nodeToClone of this.nodes) {
-            const rootIndex = allRootNodes.indexOf(nodeToClone);
-            if (rootIndex !== -1) {
-                allRootNodes.splice(rootIndex, 1);
-            }
-        }
-
-        // Clone nodes to insert
-        const clonedNodes = this.nodes.map(node => this._cloneNode(node));
-
-        // Find the position of the target nodes in allRootNodes and insert cloned nodes before them
-        for (const targetElement of targetJQ.nodes) {
-            const targetIndex = allRootNodes.indexOf(targetElement);
             if (targetIndex !== -1) {
-                // Insert cloned nodes before this target
-                allRootNodes.splice(targetIndex, 0, ...clonedNodes);
-                break; // Only insert before the first target
+                parentChildren.splice(targetIndex, 0, ...nodesToAddForTarget);
             }
-        }
-
-        // Set parent references for the cloned nodes (no parent since they're at root)
-        for (const clonedNode of clonedNodes) {
-            clonedNode.parent = undefined;
         }
     }
 
-    return this;
+    // Return a new JQ object containing all inserted nodes (originals + clones)
+    const newJQ = Object.create(Object.getPrototypeOf(this));
+    newJQ.nodes = newNodes;
+    return newJQ;
 }
 
 export = insertBefore;

@@ -2,6 +2,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Removes one or more classes from each element.
+ * @see https://api.jquery.com/removeClass/
  */
 function removeClass(
     this: JQ,

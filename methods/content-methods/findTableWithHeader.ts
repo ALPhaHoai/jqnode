@@ -5,6 +5,8 @@ import JQClass from '../../jq';
 /**
  * Finds table elements that contain specific headers.
  * Checks both the current nodes (if they are tables) and descendant tables.
+ * 
+ * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
     const targetHeaders = (Array.isArray(headers) ? headers : [headers])

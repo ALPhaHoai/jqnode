@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="item">First</div>
+    <div class="item">Second</div>
+    <div class="item">Third</div>
+    <div class="item">Fourth</div>
+    <div class="item">Fifth</div>
+    
+    <script>
+        // Test fractional indices in jQuery
+        const elements = $('.item');
+        
+        console.log('Testing eq(2.7):');
+        const result1 = elements.eq(2.7);
+        console.log('Length:', result1.length);
+        console.log('Text:', result1.text());
+        console.log('HTML:', result1.html());
+        
+        console.log('\nTesting eq(-1.5):');
+        const result2 = elements.eq(-1.5);
+        console.log('Length:', result2.length);
+        console.log('Text:', result2.text());
+        console.log('HTML:', result2.html());
+        
+        console.log('\nTesting eq(2):');
+        const result3 = elements.eq(2);
+        console.log('Length:', result3.length);
+        console.log('Text:', result3.text());
+    </script>
+</body>
+</html>

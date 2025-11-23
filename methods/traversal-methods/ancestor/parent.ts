@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the parent of each element in the current set of matched elements, optionally filtered by a selector.
+  * @see https://api.jquery.com/parent/
  */
 function parent(this: JQ, selector?: CssSelector): JQ {
     const parents: HtmlNode[] = [];

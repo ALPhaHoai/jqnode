@@ -2,6 +2,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds one or more classes to each element.
+ * @see https://api.jquery.com/addClass/
  */
 function addClass(
     this: JQ,

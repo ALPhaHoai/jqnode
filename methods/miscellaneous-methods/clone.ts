@@ -26,6 +26,7 @@ function copyDataRecursive(sourceNode: HtmlNode, clonedNode: HtmlNode): void {
 
 /**
  * Create a deep copy of the set of matched elements.
+ * @see https://api.jquery.com/clone/
  */
 function clone(this: JQ, withDataAndEvents: boolean = false, deepWithDataAndEvents: boolean = withDataAndEvents): JQ {
     // Use the helper to perform deep clone

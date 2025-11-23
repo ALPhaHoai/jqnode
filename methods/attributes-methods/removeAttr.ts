@@ -2,6 +2,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Removes an attribute from each element in the set of matched elements.
+ * @see https://api.jquery.com/removeAttr/
  */
 function removeAttr(this: JQ, name: string): JQ {
     // Split space-separated attribute names (jQuery compatibility)

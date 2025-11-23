@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all following siblings of each element, optionally filtered by a selector.
+  * @see https://api.jquery.com/nextAll/
  */
 function nextAll(this: JQ, selector?: CssSelector): JQ {
     const followingSiblings: HtmlNode[] = [];

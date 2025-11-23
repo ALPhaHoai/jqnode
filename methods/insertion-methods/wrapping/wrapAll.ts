@@ -1,90 +1,88 @@
 import type { HtmlNode, JQ } from '../../../types';
+import JQClass from '../../../jq';
 
 /**
  * Wrap an HTML structure around all elements in the set of matched elements.
  * @param wrappingElement - HTML string or element to wrap around all elements
  * @returns The JQ instance for chaining
+  * @see https://api.jquery.com/wrapAll/
  */
-function wrapAll(this: JQ, wrappingElement: string | HtmlNode): JQ {
+function wrapAll(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
     if (this.nodes.length === 0) {
         return this;
     }
 
-    const wrapperNodes = this._normalizeContent(wrappingElement);
-    if (wrapperNodes.length === 0) {
+    // 1. Create a deep clone of the wrapping structure
+    let wrapperStructure: HtmlNode[];
+
+    if (typeof wrappingElement === 'string') {
+        wrapperStructure = this._normalizeContent(wrappingElement).map(n => this._cloneNode(n));
+    } else if ((wrappingElement as any).nodes && Array.isArray((wrappingElement as any).nodes)) {
+        wrapperStructure = (wrappingElement as JQ).nodes.map(n => this._cloneNode(n));
+    } else {
+        wrapperStructure = this._normalizeContent(wrappingElement as HtmlNode).map(n => this._cloneNode(n));
+    }
+
+    if (wrapperStructure.length === 0) {
         return this;
     }
 
-    // Get the first element
-    const firstElement = this.nodes[0];
-    if (!firstElement.parent || !firstElement.parent.children) {
-        return this;
-    }
+    const wrapper = wrapperStructure[0];
 
-    const parent = firstElement.parent;
-    if (!parent || !parent.children) {
-        return this;
-    }
-    const siblings = parent.children;
-
-    // Find the first element's position
-    const firstIndex = siblings.indexOf(firstElement);
-    if (firstIndex === -1) {
-        return this;
-    }
-
-    // Clone the wrapper
-    const wrapper = this._cloneNode(wrapperNodes[0]);
-
-    // Find the deepest element in the wrapper to place our elements
+    // 2. Find the deepest element in the wrapper to place our elements
     let targetContainer = wrapper;
-    while (targetContainer.type === 'element' && targetContainer.children && targetContainer.children.length > 0) {
-        // Look for the last element child
-        let foundElementChild = false;
-        for (let i = targetContainer.children.length - 1; i >= 0; i--) {
-            if (targetContainer.children[i].type === 'element') {
-                targetContainer = targetContainer.children[i];
-                foundElementChild = true;
-                break;
+    while (targetContainer.children && targetContainer.children.length > 0) {
+        let foundElement = false;
+        for (const child of targetContainer.children) {
+            if (child.type === 'element') {
+                targetContainer = child;
+                foundElement = true;
+                break; // Go down the first element branch
             }
         }
-        if (!foundElementChild) {
-            break;
+        if (!foundElement) break;
+    }
+
+    // 3. Insert the wrapper before the first matched element
+    const firstElement = this.nodes[0];
+    if (firstElement.parent && firstElement.parent.children) {
+        const siblings = firstElement.parent.children;
+        const index = siblings.indexOf(firstElement);
+        if (index !== -1) {
+            siblings.splice(index, 0, wrapper);
+            wrapper.parent = firstElement.parent;
+        }
+    } else if (JQClass.allRootNodes.includes(firstElement)) {
+        const index = JQClass.allRootNodes.indexOf(firstElement);
+        if (index !== -1) {
+            JQClass.allRootNodes.splice(index, 0, wrapper);
+            wrapper.parent = undefined;
         }
     }
 
-    // Clone all our elements and add them to the wrapper
-    const clonedElements: HtmlNode[] = [];
-    for (const element of this.nodes) {
-        const clonedElement = this._cloneNode(element);
-        clonedElements.push(clonedElement);
-        clonedElement.parent = targetContainer;
-    }
-
-    // Ensure target container has a children array
+    // 4. Move all matched elements into the target container
     if (!targetContainer.children) {
         targetContainer.children = [];
     }
-    targetContainer.children.push(...clonedElements);
 
-    // Remove the original elements from their parent, keeping track of indices to remove
-    const indicesToRemove: number[] = [];
     for (const element of this.nodes) {
-        const index = siblings.indexOf(element);
-        if (index !== -1) {
-            indicesToRemove.push(index);
+        // Detach from current parent
+        if (element.parent && element.parent.children) {
+            const index = element.parent.children.indexOf(element);
+            if (index !== -1) {
+                element.parent.children.splice(index, 1);
+            }
+        } else if (JQClass.allRootNodes.includes(element)) {
+            const index = JQClass.allRootNodes.indexOf(element);
+            if (index !== -1) {
+                JQClass.allRootNodes.splice(index, 1);
+            }
         }
-    }
 
-    // Sort indices in descending order to avoid index shifting during removal
-    indicesToRemove.sort((a, b) => b - a);
-    for (const index of indicesToRemove) {
-        siblings.splice(index, 1);
+        // Add to target container
+        targetContainer.children.push(element);
+        element.parent = targetContainer;
     }
-
-    // Insert the wrapper at the position of the first element
-    siblings.splice(firstIndex, 0, wrapper);
-    wrapper.parent = parent;
 
     return this;
 }

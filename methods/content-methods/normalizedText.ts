@@ -6,6 +6,8 @@ import type { HtmlNode, JQ } from '../../types';
  * Gets or sets the text content of elements with HTML normalization.
  * Similar to text() but applies normalizeHTML to remove tabs, newlines, carriage returns,
  * and collapse multiple spaces into single spaces.
+ * 
+ * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function normalizedText(this: JQ, value?: string): string | JQ {
     if (value === undefined) {

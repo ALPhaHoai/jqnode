@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the ancestors of each element, up to but not including the element matched by the selector.
+  * @see https://api.jquery.com/parentsUntil/
  */
 function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const ancestors: HtmlNode[] = [];

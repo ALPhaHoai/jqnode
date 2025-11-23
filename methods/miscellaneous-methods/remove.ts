@@ -2,6 +2,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Remove the set of matched elements from the DOM.
+ * @see https://api.jquery.com/remove/
  */
 function remove(this: JQ, selector?: string): JQ {
     let nodesToRemove: HtmlNode[] = this.nodes;

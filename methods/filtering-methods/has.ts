@@ -4,6 +4,7 @@ import JQClass from '../../jq';
 
 /**
  * Reduces the set of matched elements to those that have a descendant that matches the selector or element.
+ * @see https://api.jquery.com/has/
  */
 function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
     const matchingElements: HtmlNode[] = [];

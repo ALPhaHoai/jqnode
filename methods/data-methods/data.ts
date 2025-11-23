@@ -3,6 +3,7 @@ import { initDataAttributes, getData, toCamelCase, NodeWithData } from '../../he
 
 /**
  * Store arbitrary data associated with the matched elements or return the value at the named data store for the first element in the set of matched elements.
+ * @see https://api.jquery.com/data/
  */
 function data(this: JQ, key?: string | Record<string, unknown>, value?: unknown): JQ | Record<string, unknown> | unknown | undefined {
     // Case 1: No arguments - return all data for first element

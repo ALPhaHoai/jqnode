@@ -2,6 +2,7 @@ import type { JQ } from '../../types';
 
 /**
  * Checks if the first element has the specified class.
+ * @see https://api.jquery.com/hasClass/
  */
 function hasClass(this: JQ, className: string): boolean {
     if (this.nodes.length === 0) {

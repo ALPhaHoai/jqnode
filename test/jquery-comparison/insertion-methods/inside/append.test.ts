@@ -67,4 +67,37 @@ describe('append() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTargetText).toBe(jqTargetText);
         expect(nqTargetText).toBe('TargetAppended');
     });
+
+    test('append() should clone content for multiple targets except the last one - jquery-comparison', () => {
+        const html = `
+            <div class="container">
+                <div class="target1">Target 1</div>
+                <div class="target2">Target 2</div>
+            </div>
+            <div class="source">Source</div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqTargets = nodeQuery.find('.container').children();
+        const jqTargets = jquery.find('.container').children();
+
+        const nqSource = nodeQuery.find('.source');
+        const jqSource = jquery.find('.source');
+
+        // Append source to targets
+        nqTargets.append(nqSource);
+        jqTargets.append(jqSource);
+
+        // Check Target 1
+        const nqTarget1 = nqTargets.eq(0);
+        const jqTarget1 = jqTargets.eq(0);
+        expect(nqTarget1.children()).toHaveLength(jqTarget1.children().length);
+        expect(nqTarget1.text()).toBe(jqTarget1.text());
+
+        // Check Target 2
+        const nqTarget2 = nqTargets.eq(1);
+        const jqTarget2 = jqTargets.eq(1);
+        expect(nqTarget2.children()).toHaveLength(jqTarget2.children().length);
+        expect(nqTarget2.text()).toBe(jqTarget2.text());
+    });
 });

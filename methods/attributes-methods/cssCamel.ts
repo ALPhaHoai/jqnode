@@ -2,7 +2,9 @@ import type { HtmlNode, JQ } from '../../types';
 import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
- * Gets or sets CSS properties on elements.
+ * Internal CSS helper method with camelCase property support.
+ * 
+ * Note: This is not a jQuery method. For jQuery CSS manipulation, use the .css() method.
  */
 function cssCamel(
     this: JQ,

@@ -2,6 +2,7 @@ import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../typ
 
 /**
  * Gets or sets a property on the first element in the collection.
+ * @see https://api.jquery.com/prop/
  */
 function prop(this: JQ, name: string, value?: AttributeValue): GetterSetterReturn<AttributeValue> {
     if (value === undefined) {

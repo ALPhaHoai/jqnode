@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the siblings of each element in the set of matched elements, optionally filtered by a selector.
+  * @see https://api.jquery.com/siblings/
  */
 function siblings(this: JQ, selector?: CssSelector): JQ {
     const allSiblings: HtmlNode[] = [];

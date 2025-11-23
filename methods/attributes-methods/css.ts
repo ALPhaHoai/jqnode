@@ -3,6 +3,7 @@ import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
  * Gets or sets CSS properties on elements.
+ * @see https://api.jquery.com/css/
  */
 function css(
     this: JQ,

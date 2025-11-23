@@ -4,6 +4,7 @@ import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the inner HTML of elements in the collection.
+ * @see https://api.jquery.com/html/
  */
 function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
     if (htmlString === undefined) {

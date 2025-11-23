@@ -2,6 +2,7 @@ import type { HtmlNode, JQ } from '../../types';
 
 /**
  * Retrieve the DOM elements matched by the jQuery object.
+ * @see https://api.jquery.com/get/
  */
 function get(this: JQ, index?: number): (HtmlNode | Element)[] | HtmlNode | Element | undefined {
     if (index === undefined) {

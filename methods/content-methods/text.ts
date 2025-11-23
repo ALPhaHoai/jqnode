@@ -3,6 +3,7 @@ import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the text content of elements.
+ * @see https://api.jquery.com/text/
  */
 function text(this: JQ, value?: string): GetterSetterReturn<string> {
     if (value === undefined) {

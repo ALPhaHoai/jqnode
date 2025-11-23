@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the immediately preceding sibling of each element, optionally filtered by a selector.
+  * @see https://api.jquery.com/prev/
  */
 function prev(this: JQ, selector?: CssSelector): JQ {
     const prevSiblings: HtmlNode[] = [];

@@ -2,6 +2,8 @@ import type { JQ } from '../../types';
 
 /**
  * Gets the document title by finding the <title> element within <head>.
+ * 
+ * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function title(this: JQ): string {
     // Use the find method to search for "head > title" within current nodes

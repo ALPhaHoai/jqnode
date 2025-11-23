@@ -4,6 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.
+  * @see https://api.jquery.com/closest/
  */
 function closest(this: JQ, selector?: CssSelector): JQ {
     if (!selector) {

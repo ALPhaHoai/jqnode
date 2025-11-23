@@ -3,6 +3,7 @@ import { initDataAttributes, toCamelCase, NodeWithData } from '../../helpers/dat
 
 /**
  * Remove a previously-stored piece of data.
+ * @see https://api.jquery.com/removeData/
  */
 function removeData(this: JQ, name?: string | string[]): JQ {
     return this.each(function (this: NodeWithData) {
