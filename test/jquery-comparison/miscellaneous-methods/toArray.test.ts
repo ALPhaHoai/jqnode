@@ -1,8 +1,8 @@
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { HtmlNode, JQ } from '../../../types';
 
 describe('toArray() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot, jqRoot;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
     beforeEach(() => {
         const html = `

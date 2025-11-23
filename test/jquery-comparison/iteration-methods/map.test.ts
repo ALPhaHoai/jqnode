@@ -1,10 +1,10 @@
 import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { HtmlNode, JQ } from '../../../types';
 
 describe('map() method - Node-Query vs jQuery Comparison', () => {
-    let elements, jqElements;
+    let elements: JQ, jqElements: JQuery<HTMLElement>;
 
     beforeEach(() => {
         const html = `
