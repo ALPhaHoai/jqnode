@@ -60,10 +60,10 @@ describe('$.load()', () => {
                 data: `
                     <div class="product">Product A</div>
                     <div class="product">Product B</div>
-                `
+                `,
             };
 
-            const root = $.load(result?.data || "");
+            const root = $.load(result?.data || '');
             const products = root('.product');
 
             expect(products.length).toBe(2);
@@ -75,9 +75,9 @@ describe('$.load()', () => {
             const result2 = { data: undefined };
             const result3: { data?: string } = {};
 
-            const root1 = $.load(result1?.data || "");
-            const root2 = $.load(result2?.data || "");
-            const root3 = $.load(result3?.data || "");
+            const root1 = $.load(result1?.data || '');
+            const root2 = $.load(result2?.data || '');
+            const root3 = $.load(result3?.data || '');
 
             expect(root1.length).toBe(0);
             expect(root2.length).toBe(0);
@@ -85,7 +85,7 @@ describe('$.load()', () => {
         });
 
         test('should handle empty string', () => {
-            const root = $.load("");
+            const root = $.load('');
             expect(root.length).toBe(0);
         });
     });
@@ -195,12 +195,15 @@ describe('$.load()', () => {
                             </table>
                         </body>
                     </html>
-                `
+                `,
             };
 
-            const root = $.load(apiResponse?.data || "");
+            const root = $.load(apiResponse?.data || '');
             const table = root('.data-table');
-            const headers = table.find('th').map((i: number, th: HtmlNode) => $(th).text()).get();
+            const headers = table
+                .find('th')
+                .map((i: number, th: HtmlNode) => $(th).text())
+                .get();
             const rows = table.find('tr:not(:first-child)');
 
             expect(headers).toEqual(['ID', 'Name']);
@@ -220,18 +223,20 @@ describe('$.load()', () => {
             `;
 
             const root = $.load(html);
-            const products = root('.product').map(function (i: number, el: HtmlNode) {
-                const $el = $(el);
-                return {
-                    id: $el.attr('data-id'),
-                    price: $el.attr('data-price'),
-                    name: $el.find('h3').text()
-                };
-            }).get();
+            const products = root('.product')
+                .map(function (i: number, el: HtmlNode) {
+                    const $el = $(el);
+                    return {
+                        id: $el.attr('data-id'),
+                        price: $el.attr('data-price'),
+                        name: $el.find('h3').text(),
+                    };
+                })
+                .get();
 
             expect(products).toEqual([
                 { id: '1', price: '99.99', name: 'Product A' },
-                { id: '2', price: '149.99', name: 'Product B' }
+                { id: '2', price: '149.99', name: 'Product B' },
             ]);
         });
     });

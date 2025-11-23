@@ -116,14 +116,14 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
             return {
                 index: index,
                 text: $(element).text(),
-                id: $(element).attr('data-id')
+                id: $(element).attr('data-id'),
             };
         });
         const jqResult = jqElements.map((index: number, element: HTMLElement) => {
             return {
                 index: index,
                 text: jQuery(element).text(),
-                id: jQuery(element).attr('data-id')
+                id: jQuery(element).attr('data-id'),
             };
         });
 
@@ -185,8 +185,12 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqFiltered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
         const jqFiltered = jqElements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
 
-        const nqResult = nqFiltered.map((index: number, element: HtmlNode) => $(element).text().toUpperCase());
-        const jqResult = jqFiltered.map((index: number, element: HTMLElement) => jQuery(element).text().toUpperCase());
+        const nqResult = nqFiltered.map((index: number, element: HtmlNode) =>
+            $(element).text().toUpperCase(),
+        );
+        const jqResult = jqFiltered.map((index: number, element: HTMLElement) =>
+            jQuery(element).text().toUpperCase(),
+        );
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -199,8 +203,12 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqSliced = elements.slice(1, 4); // Second, Third, Fourth
         const jqSliced = jqElements.slice(1, 4); // Second, Third, Fourth
 
-        const nqResult = nqSliced.map((index: number, element: HtmlNode) => $(element).attr('data-id'));
-        const jqResult = jqSliced.map((index: number, element: HTMLElement) => jQuery(element).attr('data-id'));
+        const nqResult = nqSliced.map((index: number, element: HtmlNode) =>
+            $(element).attr('data-id'),
+        );
+        const jqResult = jqSliced.map((index: number, element: HTMLElement) =>
+            jQuery(element).attr('data-id'),
+        );
 
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
@@ -213,7 +221,9 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         // Note: This test is tricky because jQuery's map() returns a regular array, not a jQuery object
         // So we'll test the mapping behavior directly
         const nqMapped = elements.map((index: number, element: HtmlNode) => $(element).text());
-        const jqMapped = jqElements.map((index: number, element: HTMLElement) => jQuery(element).text()).get();
+        const jqMapped = jqElements
+            .map((index: number, element: HTMLElement) => jQuery(element).text())
+            .get();
 
         // Filter the node-query results (JQ object)
         const nqFiltered = nqMapped.filter((index: number, value: string) => value.length > 5);
@@ -229,8 +239,8 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle zero values (not filter them out) - jquery-comparison', () => {
-        const nqResult = elements.map((index: number) => index % 2 === 0 ? index : null);
-        const jqResult = jqElements.map((index: number) => index % 2 === 0 ? index : null);
+        const nqResult = elements.map((index: number) => (index % 2 === 0 ? index : null));
+        const jqResult = jqElements.map((index: number) => (index % 2 === 0 ? index : null));
 
         expect(nqResult.nodes).toHaveLength(3); // indices 0, 2, 4
         expect(jqResult.length).toBe(3);
@@ -240,8 +250,12 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle empty string values (not filter them out) - jquery-comparison', () => {
-        const nqResult = elements.map((index: number) => index % 2 === 0 ? $(elements.nodes[index]).text() : '');
-        const jqResult = jqElements.map((index: number) => index % 2 === 0 ? jQuery(jqElements[index]).text() : '');
+        const nqResult = elements.map((index: number) =>
+            index % 2 === 0 ? $(elements.nodes[index]).text() : '',
+        );
+        const jqResult = jqElements.map((index: number) =>
+            index % 2 === 0 ? jQuery(jqElements[index]).text() : '',
+        );
 
         expect(nqResult.nodes).toHaveLength(5); // Empty strings are not null/undefined
         expect(jqResult.length).toBe(5);

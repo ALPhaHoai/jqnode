@@ -12,9 +12,11 @@ const html1 = `
     </ul>
 `;
 const $1 = jq(html1);
-const fruits = $1('#fruits li').map(function () {
-    return jq(this).text();
-}).get();
+const fruits = $1('#fruits li')
+    .map(function () {
+        return jq(this).text();
+    })
+    .get();
 console.log('Fruits array:', fruits);
 
 console.log('\nExample 2: Map with Transformation');
@@ -26,11 +28,16 @@ const html2 = `
     </div>
 `;
 const $2 = jq(html2);
-const values = $2('span').map(function () {
-    return parseInt(jq(this).attr('data-value'));
-}).get();
+const values = $2('span')
+    .map(function () {
+        return parseInt(jq(this).attr('data-value'));
+    })
+    .get();
 console.log('Values:', values);
-console.log('Sum:', values.reduce((a, b) => a + b, 0));
+console.log(
+    'Sum:',
+    values.reduce((a, b) => a + b, 0),
+);
 
 console.log('\nExample 3: Map with Index');
 const html3 = `
@@ -41,11 +48,13 @@ const html3 = `
     </ul>
 `;
 const $3 = jq(html3);
-const indexed = $3('li').map(function (index) {
-    return `${index + 1}. ${jq(this).text()}`;
-}).get();
+const indexed = $3('li')
+    .map(function (index) {
+        return `${index + 1}. ${jq(this).text()}`;
+    })
+    .get();
 console.log('Indexed items:');
-indexed.forEach(item => console.log('  ', item));
+indexed.forEach((item) => console.log('  ', item));
 
 console.log('\nExample 4: Extract Attributes');
 const html4 = `
@@ -56,9 +65,11 @@ const html4 = `
     </div>
 `;
 const $4 = jq(html4);
-const urls = $4('a').map(function () {
-    return jq(this).attr('href');
-}).get();
+const urls = $4('a')
+    .map(function () {
+        return jq(this).attr('href');
+    })
+    .get();
 console.log('URLs:', urls);
 
 console.log('\nExample 5: Complex Data Extraction');
@@ -82,20 +93,23 @@ const html5 = `
     </table>
 `;
 const $5 = jq(html5);
-const products = $5('#products tr').map(function () {
-    const $row = jq(this);
-    const cells = $row.find('td');
-    if (cells.length === 0) return null;
+const products = $5('#products tr')
+    .map(function () {
+        const $row = jq(this);
+        const cells = $row.find('td');
+        if (cells.length === 0) return null;
 
-    return {
-        name: cells.eq(0).text(),
-        price: parseFloat(cells.eq(1).text().replace('$', '')),
-        quantity: parseInt(cells.eq(2).text())
-    };
-}).get().filter(item => item !== null);
+        return {
+            name: cells.eq(0).text(),
+            price: parseFloat(cells.eq(1).text().replace('$', '')),
+            quantity: parseInt(cells.eq(2).text()),
+        };
+    })
+    .get()
+    .filter((item) => item !== null);
 
 console.log('Products:');
-products.forEach(p => {
+products.forEach((p) => {
     console.log(`  ${p.name}: $${p.price} x ${p.quantity} = $${p.price * p.quantity}`);
 });
 
@@ -108,14 +122,16 @@ const html6 = `
     </form>
 `;
 const $6 = jq(html6);
-const formData = $6('input').map(function () {
-    const $input = jq(this);
-    return {
-        name: $input.attr('name'),
-        value: $input.attr('value'),
-        type: $input.attr('type')
-    };
-}).get();
+const formData = $6('input')
+    .map(function () {
+        const $input = jq(this);
+        return {
+            name: $input.attr('name'),
+            value: $input.attr('value'),
+            type: $input.attr('type'),
+        };
+    })
+    .get();
 
 console.log('Form data:', JSON.stringify(formData, null, 2));
 

@@ -8,11 +8,11 @@ const result = {
     data: `
         <table id="table1"><tr><td>Data 1</td></tr></table>
         <table id="table2"><tr><td>Data 2</td></tr></table>
-    `
+    `,
 };
 
 const $ = jq.load(result?.data);
-const tables = $("table");  // THIS IS THE NEW SYNTAX!
+const tables = $('table'); // THIS IS THE NEW SYNTAX!
 
 console.log('✅ Number of tables:', tables.length);
 console.log('✅ Table 1 ID:', tables.eq(0).attr('id'));
@@ -23,8 +23,8 @@ console.log('\nTest 2: Both syntaxes work');
 const html = '<div><p class="text">Hello</p><p class="text">World</p></div>';
 const $2 = jq.load(html);
 
-const paras1 = $2('p');           // Callable syntax
-const paras2 = $2.find('p');      // Traditional syntax
+const paras1 = $2('p'); // Callable syntax
+const paras2 = $2.find('p'); // Traditional syntax
 
 console.log('✅ Callable syntax found:', paras1.length, 'paragraphs');
 console.log('✅ Traditional syntax found:', paras2.length, 'paragraphs');

@@ -14,9 +14,11 @@ const html1 = `
     </ul>
 `;
 const $1 = jq(html1);
-const fruits = $1('li').map(function () {
-    return jq(this).text();
-}).get();
+const fruits = $1('li')
+    .map(function () {
+        return jq(this).text();
+    })
+    .get();
 console.log('Fruits:', fruits);
 
 console.log('\nExample 2: Map with Transformation');
@@ -28,11 +30,16 @@ const html2 = `
     </div>
 `;
 const $2 = jq(html2);
-const prices = $2('span').map(function () {
-    return parseFloat(jq(this).attr('data-price'));
-}).get();
+const prices = $2('span')
+    .map(function () {
+        return parseFloat(jq(this).attr('data-price'));
+    })
+    .get();
 console.log('Prices:', prices);
-console.log('Total:', prices.reduce((a, b) => a + b, 0));
+console.log(
+    'Total:',
+    prices.reduce((a, b) => a + b, 0),
+);
 
 console.log('\nExample 3: Map with Index');
 const html3 = `
@@ -43,11 +50,13 @@ const html3 = `
     </ul>
 `;
 const $3 = jq(html3);
-const indexed = $3('li').map(function (index) {
-    return `${index + 1}. ${jq(this).text()}`;
-}).get();
+const indexed = $3('li')
+    .map(function (index) {
+        return `${index + 1}. ${jq(this).text()}`;
+    })
+    .get();
 console.log('Indexed items:');
-indexed.forEach(item => console.log('  ', item));
+indexed.forEach((item) => console.log('  ', item));
 
 // closest() Examples
 console.log('\n--- closest() ---\n');
@@ -133,15 +142,17 @@ const html7 = `
     </table>
 `;
 const $7 = jq(html7);
-const products = $7('#products tbody tr').map(function () {
-    const $row = jq(this);
-    const cells = $row.find('td');
-    return {
-        name: cells.eq(0).text(),
-        price: parseFloat(cells.eq(1).text().replace('$', '')),
-        qty: parseInt(cells.eq(2).text())
-    };
-}).get();
+const products = $7('#products tbody tr')
+    .map(function () {
+        const $row = jq(this);
+        const cells = $row.find('td');
+        return {
+            name: cells.eq(0).text(),
+            price: parseFloat(cells.eq(1).text().replace('$', '')),
+            qty: parseInt(cells.eq(2).text()),
+        };
+    })
+    .get();
 console.log('Products:', JSON.stringify(products, null, 2));
 
 console.log('\nExample 8: Menu Navigation with closest()');
@@ -182,13 +193,16 @@ const html9 = `
     </form>
 `;
 const $9 = jq(html9);
-const formData = $9('#registration').find('input, select').map(function () {
-    const $field = jq(this);
-    return {
-        name: $field.attr('name'),
-        value: $field.val()
-    };
-}).get();
+const formData = $9('#registration')
+    .find('input, select')
+    .map(function () {
+        const $field = jq(this);
+        return {
+            name: $field.attr('name'),
+            value: $field.val(),
+        };
+    })
+    .get();
 console.log('Form data:', formData);
 
 console.log('\nExample 10: Build Options List');
@@ -201,10 +215,13 @@ const html10 = `
     <select id="target-select"></select>
 `;
 const $10 = jq(html10);
-const options = $10('.option').map(function () {
-    const $opt = jq(this);
-    return `<option value="${$opt.attr('data-value')}">${$opt.text()}</option>`;
-}).get().join('');
+const options = $10('.option')
+    .map(function () {
+        const $opt = jq(this);
+        return `<option value="${$opt.attr('data-value')}">${$opt.text()}</option>`;
+    })
+    .get()
+    .join('');
 $10('#target-select').html(options);
 console.log('Select now has options:', $10('#target-select option').length);
 

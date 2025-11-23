@@ -19,12 +19,12 @@ export const toCamelCase = (str: string): string => {
 export const parseDataValue = (val: string): unknown => {
     if (typeof val !== 'string') return val;
     try {
-        if (val === "true") return true;
-        if (val === "false") return false;
-        if (val === "null") return null;
-        if (val === +val + "") return +val;
+        if (val === 'true') return true;
+        if (val === 'false') return false;
+        if (val === 'null') return null;
+        if (val === +val + '') return +val;
         if (/^[\[\{]/.test(val)) return JSON.parse(val);
-    } catch (e) { }
+    } catch (e) {}
     return val;
 };
 
@@ -54,7 +54,7 @@ export const initDataAttributes = (node: NodeWithData): void => {
         }
     } else {
         // Plain object (Cheerio/jqnode internal)
-        Object.keys(attrs).forEach(attrName => {
+        Object.keys(attrs).forEach((attrName) => {
             if (attrName.startsWith('data-')) {
                 const dataKey = toCamelCase(attrName.slice(5));
                 if (d[dataKey] === undefined) {

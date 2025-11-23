@@ -50,8 +50,13 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqHasComment).toBe(true);
 
         // Check for element nodes
-        const nqHasH1 = nqContents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
-        const jqHasH1 = jqContents.toArray().some((node: Node) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
+        const nqHasH1 = nqContents.nodes.some(
+            (node: HtmlNode) =>
+                node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1',
+        );
+        const jqHasH1 = jqContents
+            .toArray()
+            .some((node: Node) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
 
         expect(nqHasH1).toBe(jqHasH1);
         expect(nqHasH1).toBe(true);
@@ -146,12 +151,20 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('contents() should work with chaining - jquery-comparison', () => {
-        const nqResult = nqRoot.find('#main').contents().filter((index: number, node: HtmlNode) => {
-            return node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div';
-        });
-        const jqResult = jqRoot.find('#main').contents().filter((index: number, node: Node) => {
-            return node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'div';
-        });
+        const nqResult = nqRoot
+            .find('#main')
+            .contents()
+            .filter((index: number, node: HtmlNode) => {
+                return (
+                    node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div'
+                );
+            });
+        const jqResult = jqRoot
+            .find('#main')
+            .contents()
+            .filter((index: number, node: Node) => {
+                return node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'div';
+            });
 
         expect(nqResult.nodes).toHaveLength(1);
         expect(jqResult.length).toBe(1);
@@ -185,10 +198,14 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         const nqTypes = nqContents.nodes.map((node: HtmlNode) => node.type);
         const jqTypes = jqContents.toArray().map((node: Node) => {
             switch (node.nodeType) {
-                case 1: return 'element';
-                case 3: return 'text';
-                case 8: return 'comment';
-                default: return 'other';
+                case 1:
+                    return 'element';
+                case 3:
+                    return 'text';
+                case 8:
+                    return 'comment';
+                default:
+                    return 'other';
             }
         });
 

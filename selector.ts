@@ -264,7 +264,8 @@ function parseSelector(selector: CssSelector): ParsedSelector | null {
         return null;
     }
 
-    const finalSelector = selectors.length === 1 ? selectors[0] : { type: 'compound' as const, selectors };
+    const finalSelector =
+        selectors.length === 1 ? selectors[0] : { type: 'compound' as const, selectors };
 
     const hasMeaningfulParts = (sel: ParsedSelector): boolean => {
         if ('type' in sel && sel.type === 'compound') {
@@ -274,12 +275,14 @@ function parseSelector(selector: CssSelector): ParsedSelector | null {
             return true;
         }
         const simpleSel = sel as SimpleSelector;
-        return (simpleSel.tagName !== null && simpleSel.tagName !== undefined) ||
+        return (
+            (simpleSel.tagName !== null && simpleSel.tagName !== undefined) ||
             (simpleSel.id !== null && simpleSel.id !== '') ||
             (simpleSel.classes && simpleSel.classes.length > 0) ||
             (simpleSel.attributes && simpleSel.attributes.length > 0) ||
             (simpleSel.pseudos && simpleSel.pseudos.length > 0) ||
-            simpleSel.universal === true;
+            simpleSel.universal === true
+        );
     };
 
     if (!hasMeaningfulParts(finalSelector)) {
@@ -311,20 +314,23 @@ function parseComplexSelector(tokens: SelectorToken[]): ParsedSelector {
         }
     }
 
-    return parts.length === 1 ? parts[0] as SimpleSelector : { type: 'complex', parts };
+    return parts.length === 1 ? (parts[0] as SimpleSelector) : { type: 'complex', parts };
 }
 
 /**
  * Parses a simple selector (without combinators).
  */
-function parseSimpleSelector(tokens: SelectorToken[], startIndex: number): { part: SimpleSelector; nextIndex: number } {
+function parseSimpleSelector(
+    tokens: SelectorToken[],
+    startIndex: number,
+): { part: SimpleSelector; nextIndex: number } {
     let i = startIndex;
     const part: SimpleSelector = {
         tagName: null,
         id: null,
         classes: [],
         attributes: [],
-        pseudos: []
+        pseudos: [],
     };
 
     while (i < tokens.length) {
@@ -392,7 +398,7 @@ function parseAttributeSelector(attr: string): AttributeSelector {
     return {
         name: name.trim(),
         operator: operator || null,
-        value: value ? value.replace(/^["']|["']$/g, '') : null
+        value: value ? value.replace(/^["']|["']$/g, '') : null,
     };
 }
 
@@ -408,14 +414,18 @@ function parsePseudoSelector(pseudo: string): PseudoSelector {
     const [, name, args] = match;
     return {
         name,
-        args: args ? args.trim() : null
+        args: args ? args.trim() : null,
     };
 }
 
 /**
  * Checks if a node matches a simple selector (without combinators).
  */
-function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: SelectorContext = {}): boolean {
+function nodeMatchesSelector(
+    node: HtmlNode,
+    selector: ParsedSelector,
+    context: SelectorContext = {},
+): boolean {
     // const isElement = node.type === 'element';
 
     if ('type' in selector && selector.type === 'complex') {
@@ -423,7 +433,7 @@ function nodeMatchesSelector(node: HtmlNode, selector: ParsedSelector, context: 
     }
 
     if ('type' in selector && selector.type === 'compound') {
-        return selector.selectors.some(sel => nodeMatchesSelector(node, sel, context));
+        return selector.selectors.some((sel) => nodeMatchesSelector(node, sel, context));
     }
 
     const simpleSelector = selector as SimpleSelector;
@@ -516,10 +526,22 @@ function matchesAttribute(node: HtmlNode, attr: AttributeSelector): boolean {
  */
 function isValidPseudoSelector(pseudoName: string): boolean {
     const validPseudos = [
-        'first-child', 'first', 'last-child', 'last', 'only-child',
-        'nth-child', 'nth-of-type', 'first-of-type', 'last-of-type',
-        'only-of-type', 'nth-last-child', 'nth-last-of-type',
-        'not', 'empty', 'root', 'contains'
+        'first-child',
+        'first',
+        'last-child',
+        'last',
+        'only-child',
+        'nth-child',
+        'nth-of-type',
+        'first-of-type',
+        'last-of-type',
+        'only-of-type',
+        'nth-last-child',
+        'nth-last-of-type',
+        'not',
+        'empty',
+        'root',
+        'contains',
     ];
     return validPseudos.includes(pseudoName);
 }
@@ -566,33 +588,29 @@ function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: Selector
         case 'nth-of-type':
             const typeIndex = siblings
                 .slice(0, nodeIndex + 1)
-                .filter(sibling => sibling.name === node.name)
-                .length;
+                .filter((sibling) => sibling.name === node.name).length;
             return matchesNth(pseudo.args!, typeIndex);
 
         case 'first-of-type':
-            const firstOfTypeIndex = siblings
-                .findIndex(sibling => sibling.name === node.name);
+            const firstOfTypeIndex = siblings.findIndex((sibling) => sibling.name === node.name);
             return nodeIndex === firstOfTypeIndex;
 
         case 'last-of-type':
             const lastOfTypeIndex = siblings
                 .slice()
                 .reverse()
-                .findIndex(sibling => sibling.name === node.name);
+                .findIndex((sibling) => sibling.name === node.name);
             return nodeIndex === siblings.length - 1 - lastOfTypeIndex;
 
         case 'only-of-type':
-            const sameTypeCount = siblings
-                .filter(sibling => sibling.name === node.name)
-                .length;
+            const sameTypeCount = siblings.filter((sibling) => sibling.name === node.name).length;
             return sameTypeCount === 1;
 
         case 'nth-last-child':
             return matchesNth(pseudo.args!, siblings.length - nodeIndex);
 
         case 'nth-last-of-type':
-            const typeSiblings = siblings.filter(sibling => sibling.name === node.name);
+            const typeSiblings = siblings.filter((sibling) => sibling.name === node.name);
             const typeIndexFromEnd = typeSiblings.length - typeSiblings.indexOf(node);
             return matchesNth(pseudo.args!, typeIndexFromEnd);
 
@@ -601,8 +619,11 @@ function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: Selector
             return notSelector ? !nodeMatchesSelector(node, notSelector, context) : true;
 
         case 'empty':
-            return !node.children || node.children.length === 0 ||
-                node.children.every(child => child.type === 'text' && !child.data?.trim());
+            return (
+                !node.children ||
+                node.children.length === 0 ||
+                node.children.every((child) => child.type === 'text' && !child.data?.trim())
+            );
 
         case 'root':
             return context.isRoot || false;
@@ -664,7 +685,7 @@ function selectNodesInternal(nodes: HtmlNode[], selector: CssSelector): HtmlNode
         const results = new Set<HtmlNode>();
         for (const sel of parsedSelector.selectors) {
             const matches = selectWithSelector(nodes, sel);
-            matches.forEach(node => results.add(node));
+            matches.forEach((node) => results.add(node));
         }
         return Array.from(results);
     } else {
@@ -686,7 +707,10 @@ function selectWithSelector(nodes: HtmlNode[], selector: ParsedSelector): HtmlNo
 /**
  * Selects nodes matching a complex selector with combinators.
  */
-function selectWithComplexSelector(nodes: HtmlNode[], parts: (SimpleSelector | { type: 'combinator'; combinator: string })[]): HtmlNode[] {
+function selectWithComplexSelector(
+    nodes: HtmlNode[],
+    parts: (SimpleSelector | { type: 'combinator'; combinator: string })[],
+): HtmlNode[] {
     let candidates: HtmlNode[] = [];
 
     const firstPart = parts[0];
@@ -708,7 +732,13 @@ function selectWithComplexSelector(nodes: HtmlNode[], parts: (SimpleSelector | {
             return [];
         }
 
-        candidates = applyCombinatorLeftToRight(candidates, combinatorPart.combinator, firstPart as SimpleSelector, nextSelector as SimpleSelector, nodes);
+        candidates = applyCombinatorLeftToRight(
+            candidates,
+            combinatorPart.combinator,
+            firstPart as SimpleSelector,
+            nextSelector as SimpleSelector,
+            nodes,
+        );
     }
 
     return candidates;
@@ -722,7 +752,7 @@ function applyCombinatorLeftToRight(
     combinator: string,
     _firstSelector: SimpleSelector,
     secondSelector: SimpleSelector,
-    rootNodes: HtmlNode[]
+    rootNodes: HtmlNode[],
 ): HtmlNode[] {
     const results: HtmlNode[] = [];
 
@@ -738,7 +768,10 @@ function applyCombinatorLeftToRight(
             for (const candidate of candidates) {
                 if (candidate.children) {
                     for (const child of candidate.children) {
-                        if (child.type === 'element' && nodeMatchesSelectorWithContext(child, secondSelector, rootNodes)) {
+                        if (
+                            child.type === 'element' &&
+                            nodeMatchesSelectorWithContext(child, secondSelector, rootNodes)
+                        ) {
                             results.push(child);
                         }
                     }
@@ -752,7 +785,10 @@ function applyCombinatorLeftToRight(
                 const index = siblings.indexOf(candidate);
                 if (index >= 0 && index < siblings.length - 1) {
                     const nextSibling = siblings[index + 1];
-                    if (nextSibling.type === 'element' && nodeMatchesSelectorWithContext(nextSibling, secondSelector, rootNodes)) {
+                    if (
+                        nextSibling.type === 'element' &&
+                        nodeMatchesSelectorWithContext(nextSibling, secondSelector, rootNodes)
+                    ) {
                         results.push(nextSibling);
                     }
                 }
@@ -766,7 +802,10 @@ function applyCombinatorLeftToRight(
                 if (startIndex >= 0) {
                     for (let i = startIndex + 1; i < siblings.length; i++) {
                         const sibling = siblings[i];
-                        if (sibling.type === 'element' && nodeMatchesSelectorWithContext(sibling, secondSelector, rootNodes)) {
+                        if (
+                            sibling.type === 'element' &&
+                            nodeMatchesSelectorWithContext(sibling, secondSelector, rootNodes)
+                        ) {
                             results.push(sibling);
                         }
                     }
@@ -786,7 +825,7 @@ function getSiblings(node: HtmlNode): HtmlNode[] {
         return [node];
     }
 
-    return node.parent.children.filter(child => child.type === 'element');
+    return node.parent.children.filter((child) => child.type === 'element');
 }
 
 /**
@@ -816,7 +855,11 @@ function selectAllDescendants(nodes: HtmlNode[], selector: SimpleSelector): Html
 /**
  * Checks if a node matches a selector with proper context for pseudo-selectors.
  */
-function nodeMatchesSelectorWithContext(node: HtmlNode, selector: ParsedSelector, rootNodes: HtmlNode[]): boolean {
+function nodeMatchesSelectorWithContext(
+    node: HtmlNode,
+    selector: ParsedSelector,
+    rootNodes: HtmlNode[],
+): boolean {
     const context: SelectorContext = {};
 
     context.isRoot = rootNodes.includes(node);
@@ -824,7 +867,7 @@ function nodeMatchesSelectorWithContext(node: HtmlNode, selector: ParsedSelector
     const parentNode = node.parent;
     if (parentNode) {
         if (parentNode.children) {
-            context.siblings = parentNode.children.filter(child => child.type === 'element');
+            context.siblings = parentNode.children.filter((child) => child.type === 'element');
         } else {
             context.siblings = [];
         }
@@ -869,10 +912,4 @@ function selectNodes(nodes: HtmlNode[], selector: CssSelector): HtmlNode[] {
     return selectNodesInternal(nodes, selector);
 }
 
-export {
-    parseSelector,
-    nodeMatchesSelector,
-    selectNodes,
-    isCSSSelector,
-    setupParentReferences
-};
+export { parseSelector, nodeMatchesSelector, selectNodes, isCSSSelector, setupParentReferences };

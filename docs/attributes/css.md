@@ -1,36 +1,43 @@
 # css() Method
 
 ## Overview
+
 The `css()` method gets or sets CSS style properties on elements. It provides full jQuery compatibility for working with inline styles and computed styles, supporting both hyphenated and camelCase property names.
 
 ## Syntax
 
 ### Getting a single CSS property:
+
 ```javascript
-jq(selector).css(propertyName)
+jq(selector).css(propertyName);
 ```
 
 ### Getting multiple CSS properties:
+
 ```javascript
 jq(selector).css([propertyName1, propertyName2, ...])
 ```
 
 ### Setting a single CSS property:
+
 ```javascript
-jq(selector).css(propertyName, value)
+jq(selector).css(propertyName, value);
 ```
 
 ### Setting with callback function:
+
 ```javascript
 jq(selector).css(propertyName, function(index, currentValue))
 ```
 
 ### Setting multiple CSS properties:
+
 ```javascript
 jq(selector).css({property1: value1, property2: value2, ...})
 ```
 
 ### Parameters
+
 - **propertyName** (String): The CSS property name (hyphenated or camelCase)
 - **propertyNames** (Array): Array of CSS property names to get
 - **value** (String|Number): The value to set. Numbers automatically get 'px' for applicable properties
@@ -38,6 +45,7 @@ jq(selector).css({property1: value1, property2: value2, ...})
 - **properties** (Object): Object of property-value pairs to set
 
 ### Return Value
+
 - **Getting single property**: Returns the computed style value as a string, or `undefined` if element doesn't exist
 - **Getting multiple properties**: Returns an object with property-value pairs
 - **Setting**: Returns the JQ instance for chaining
@@ -45,22 +53,26 @@ jq(selector).css({property1: value1, property2: value2, ...})
 ## Features
 
 ### ✅ jQuery-Compatible Behavior
+
 - Gets computed styles from first element
 - Sets styles on all elements in collection
 - Returns `undefined` for missing elements
 - Supports method chaining when setting
 
 ### ✅ Property Name Normalization
+
 - Accepts hyphenated names: `'background-color'`, `'font-size'`
 - Accepts camelCase names: `'backgroundColor'`, `'fontSize'`
 - Automatically converts between formats
 
 ### ✅ Automatic Unit Conversion
+
 - Numbers automatically get 'px' unit for dimensional properties
 - Example: `.css('width', 100)` becomes `'100px'`
 - Applies to: width, height, margins, padding, borders, fontSize, etc.
 
 ### ✅ Cross-Environment Support
+
 - Works in Node.js (jsdom)
 - Works in browsers
 - Uses `getComputedStyle` for accurate computed values
@@ -81,12 +93,12 @@ const html = `
 const $ = jq(html);
 
 // Get single property
-console.log($('div').css('color'));      // "red"
-console.log($('div').css('width'));      // "100px"
-console.log($('div').css('font-size'));  // "16px"
+console.log($('div').css('color')); // "red"
+console.log($('div').css('width')); // "100px"
+console.log($('div').css('font-size')); // "16px"
 
 // Works with camelCase too
-console.log($('div').css('fontSize'));   // "16px"
+console.log($('div').css('fontSize')); // "16px"
 console.log($('p').css('backgroundColor')); // "blue"
 ```
 
@@ -102,8 +114,8 @@ console.log(styles);
 // { color: "red", width: "100px", height: "50px" }
 
 // Access individual values
-console.log(styles.color);  // "red"
-console.log(styles.width);  // "100px"
+console.log(styles.color); // "red"
+console.log(styles.width); // "100px"
 ```
 
 ### Basic Usage - Setting Styles
@@ -125,10 +137,7 @@ $('#box').css('margin', '10px 20px');
 console.log($('#box').css('margin')); // "10px 20px"
 
 // Chaining
-$('#box')
-    .css('background-color', 'yellow')
-    .css('padding', '15px')
-    .css('border', '1px solid black');
+$('#box').css('background-color', 'yellow').css('padding', '15px').css('border', '1px solid black');
 ```
 
 ### Setting Multiple Properties
@@ -143,17 +152,17 @@ $('#styled').css({
     backgroundColor: '#333',
     fontSize: '18px',
     padding: '10px',
-    borderRadius: '5px'
+    borderRadius: '5px',
 });
 
 // Or with hyphenated names
 $('#styled').css({
     'font-weight': 'bold',
     'text-align': 'center',
-    'line-height': '1.5'
+    'line-height': '1.5',
 });
 
-console.log($('#styled').css('color'));           // "white"
+console.log($('#styled').css('color')); // "white"
 console.log($('#styled').css('background-color')); // "#333" or "rgb(51, 51, 51)"
 ```
 
@@ -168,9 +177,9 @@ const html = `
 const $ = jq(html);
 
 // Increase all widths by 50px
-$('div').css('width', function(index, currentValue) {
+$('div').css('width', function (index, currentValue) {
     const current = parseInt(currentValue);
-    return (current + 50) + 'px';
+    return current + 50 + 'px';
 });
 
 console.log($('div').eq(0).css('width')); // "150px"
@@ -178,8 +187,8 @@ console.log($('div').eq(1).css('width')); // "200px"
 console.log($('div').eq(2).css('width')); // "250px"
 
 // Set based on index
-$('div').css('opacity', function(index) {
-    return 1 - (index * 0.2); // Fade out effect
+$('div').css('opacity', function (index) {
+    return 1 - index * 0.2; // Fade out effect
 });
 ```
 
@@ -190,19 +199,19 @@ const html = '<div id="element">Resize me</div>';
 const $ = jq(html);
 
 // These automatically get 'px' appended
-$('#element').css('width', 300);         // "300px"
-$('#element').css('height', 200);        // "200px"
-$('#element').css('margin-top', 15);     // "15px"
-$('#element').css('padding-left', 20);   // "20px"
-$('#element').css('font-size', 16);      // "16px"
-$('#element').css('border-width', 2);    // "2px"
+$('#element').css('width', 300); // "300px"
+$('#element').css('height', 200); // "200px"
+$('#element').css('margin-top', 15); // "15px"
+$('#element').css('padding-left', 20); // "20px"
+$('#element').css('font-size', 16); // "16px"
+$('#element').css('border-width', 2); // "2px"
 
 // These don't get 'px' (use string if needed)
-$('#element').css('opacity', 0.5);       // "0.5" (no px)
-$('#element').css('z-index', 10);        // "10" (no px)
+$('#element').css('opacity', 0.5); // "0.5" (no px)
+$('#element').css('z-index', 10); // "10" (no px)
 
 // Use strings for non-px units
-$('#element').css('width', '50%');       // "50%"
+$('#element').css('width', '50%'); // "50%"
 $('#element').css('font-size', '1.2em'); // "1.2em"
 ```
 
@@ -222,11 +231,11 @@ const $ = jq(html);
 $('li').css({
     color: '#333',
     padding: '5px',
-    borderBottom: '1px solid #ddd'
+    borderBottom: '1px solid #ddd',
 });
 
 // Each item now has the styles
-$('li').each(function() {
+$('li').each(function () {
     console.log(jq(this).css('color')); // "#333" on each
 });
 ```
@@ -244,12 +253,12 @@ $('#popup').css({
     left: 200,
     width: 300,
     height: 150,
-    zIndex: 1000
+    zIndex: 1000,
 });
 
 console.log($('#popup').css('position')); // "absolute"
-console.log($('#popup').css('top'));      // "100px"
-console.log($('#popup').css('z-index'));  // "1000"
+console.log($('#popup').css('top')); // "100px"
+console.log($('#popup').css('z-index')); // "1000"
 ```
 
 ### Colors
@@ -259,8 +268,8 @@ const html = '<div id="colorful">Colorful Box</div>';
 const $ = jq(html);
 
 // Different color formats all work
-$('#colorful').css('color', '#ff0000');           // Hex
-$('#colorful').css('background-color', 'blue');   // Named
+$('#colorful').css('color', '#ff0000'); // Hex
+$('#colorful').css('background-color', 'blue'); // Named
 $('#colorful').css('border-color', 'rgb(0, 255, 0)'); // RGB
 
 // Getting colors returns computed value (often rgb format)
@@ -298,7 +307,7 @@ $('.responsive').css({
     width: '100%',
     maxWidth: '600px',
     margin: '0 auto',
-    padding: '15px'
+    padding: '15px',
 });
 
 // Flexible box layout
@@ -306,7 +315,7 @@ $('.responsive').css({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
 });
 ```
 
@@ -325,7 +334,7 @@ $('#btn').css({
     borderRadius: '4px',
     fontSize: '16px',
     cursor: 'pointer',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
 });
 
 // Hover effect (conceptual - would need event handling)
@@ -365,8 +374,8 @@ const html = '<div style="background-color: blue">Test</div>';
 const $ = jq(html);
 
 // Both work
-console.log($('div').css('background-color'));  // "blue"
-console.log($('div').css('backgroundColor'));   // "blue"
+console.log($('div').css('background-color')); // "blue"
+console.log($('div').css('backgroundColor')); // "blue"
 
 // Setting works with both too
 $('div').css('font-size', '16px');
@@ -395,6 +404,7 @@ $('div').css('fontSize', '16px'); // Same effect
 ## Implementation Details
 
 The method:
+
 1. **Property name conversion**: Automatically converts between hyphenated and camelCase
 2. **Unit detection**: Adds 'px' to numeric values for dimensional properties
 3. **Computed styles**: Uses `getComputedStyle` in browsers and jsdom
@@ -410,13 +420,13 @@ The method:
 
 ## Differences from attr()
 
-| Feature | css() | attr() |
-|---------|-------|--------|
-| Purpose | CSS styles | HTML attributes |
-| Property names | Hyphenated or camelCase | As written in HTML |
-| Reads | Computed styles | Attribute values |
-| Units | Auto-appends 'px' | No unit handling |
-| Example | `css('fontSize', 16)` | `attr('data-size', 16)` |
+| Feature        | css()                   | attr()                  |
+| -------------- | ----------------------- | ----------------------- |
+| Purpose        | CSS styles              | HTML attributes         |
+| Property names | Hyphenated or camelCase | As written in HTML      |
+| Reads          | Computed styles         | Attribute values        |
+| Units          | Auto-appends 'px'       | No unit handling        |
+| Example        | `css('fontSize', 16)`   | `attr('data-size', 16)` |
 
 ## Files
 
@@ -427,6 +437,7 @@ The method:
 ## Browser Compatibility
 
 Works in all environments:
+
 - ✅ Node.js (via jsdom)
 - ✅ Modern browsers
 - ✅ Legacy browsers (with getComputedStyle support)

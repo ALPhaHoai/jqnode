@@ -5,14 +5,19 @@ import JQClass from '../../../jq';
  * Insert content before each element in the set of matched elements.
  * @param content - Content to insert
  * @returns The JQ instance for chaining
-  * @see https://api.jquery.com/before/
+ * @see https://api.jquery.com/before/
  */
 function before(this: JQ, ...content: ContentInput[]): JQ {
     // 1. Collect all nodes to be inserted
     const nodesToInsert: HtmlNode[] = [];
     for (const item of content) {
         // Check if this is a JQ object containing existing elements
-        if (item && typeof item === 'object' && ((item as any).constructor && (item as any).constructor.name === 'JQ' || (item as any).nodes && Array.isArray((item as any).nodes))) {
+        if (
+            item &&
+            typeof item === 'object' &&
+            (((item as any).constructor && (item as any).constructor.name === 'JQ') ||
+                ((item as any).nodes && Array.isArray((item as any).nodes)))
+        ) {
             nodesToInsert.push(...(item as any).nodes);
         } else {
             nodesToInsert.push(...this._normalizeContent(item));

@@ -53,7 +53,9 @@ $3('li').attr('data-type', 'task');
 // Verify each item has the attributes
 $3('li').each(function (index) {
     const $item = jq(this);
-    console.log(`Item ${index + 1} - class: ${$item.attr('class')}, type: ${$item.attr('data-type')}`);
+    console.log(
+        `Item ${index + 1} - class: ${$item.attr('class')}, type: ${$item.attr('data-type')}`,
+    );
 });
 
 // Example 4: Boolean attributes
@@ -119,9 +121,7 @@ $6('#menu-toggle')
     .attr('aria-expanded', 'false')
     .attr('aria-controls', 'menu');
 
-$6('#menu')
-    .attr('role', 'navigation')
-    .attr('aria-hidden', 'true');
+$6('#menu').attr('role', 'navigation').attr('aria-hidden', 'true');
 
 console.log('Button aria-label:', $6('#menu-toggle').attr('aria-label'));
 console.log('Button aria-expanded:', $6('#menu-toggle').attr('aria-expanded'));
@@ -139,9 +139,7 @@ const html7 = `
 const $7 = jq(html7);
 
 // Make external links open in new tab
-$7('a.external-link')
-    .attr('target', '_blank')
-    .attr('rel', 'noopener noreferrer');
+$7('a.external-link').attr('target', '_blank').attr('rel', 'noopener noreferrer');
 
 // Add title to internal links
 $7('a.internal-link').each(function () {
@@ -232,14 +230,15 @@ function updateWidgetStatus(status: string) {
     const $widget = $10('#widget');
 
     if (status === 'loading') {
-        $widget.attr('data-status', 'loading')
-            .attr('aria-busy', 'true');
+        $widget.attr('data-status', 'loading').attr('aria-busy', 'true');
     } else if (status === 'error') {
-        $widget.attr('data-status', 'error')
+        $widget
+            .attr('data-status', 'error')
             .attr('aria-invalid', 'true')
             .attr('data-error-message', 'Something went wrong');
     } else if (status === 'success') {
-        $widget.attr('data-status', 'success')
+        $widget
+            .attr('data-status', 'success')
             .attr('aria-busy', 'false')
             .attr('data-completed', 'true');
     }

@@ -119,7 +119,8 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
     test('filter() should work with jQuery object parameter - jquery-comparison', () => {
         // Create another collection to filter against
-        const html2 = '<div class="filter-item">Filter 1</div><div class="filter-item">Filter 2</div>';
+        const html2 =
+            '<div class="filter-item">Filter 1</div><div class="filter-item">Filter 2</div>';
         const { jquery: jqFilter, nodeQuery: nqFilter } = createTestDom(html2);
         const nqFilterItems = nqFilter.find('.filter-item');
         const jqFilterItems = jqFilter.find('.filter-item');
@@ -268,7 +269,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqTags = nqResult.nodes.map(node => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqResult.nodes.map((node) => node.tagName && node.tagName.toLowerCase());
         const jqTags: string[] = [];
         jqResult.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());

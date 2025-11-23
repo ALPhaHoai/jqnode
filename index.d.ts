@@ -6,7 +6,10 @@
 import JQ from './jq';
 import type { HtmlNode } from './types';
 
-declare function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
+declare function JQFactory(
+    htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any,
+    context?: HtmlNode[] | null,
+): JQ;
 
 declare namespace JQFactory {
     // Static properties and methods
@@ -14,8 +17,14 @@ declare namespace JQFactory {
     const clearRootNodesRegistry: typeof JQ.clearRootNodesRegistry;
 
     // Utility methods
-    function each(collection: any[] | Record<string, any>, callback: (indexOrKey: any, value: any) => any): any;
-    function map(collection: any[] | Record<string, any>, callback: (value: any, indexOrKey: any) => any): any[];
+    function each(
+        collection: any[] | Record<string, any>,
+        callback: (indexOrKey: any, value: any) => any,
+    ): any;
+    function map(
+        collection: any[] | Record<string, any>,
+        callback: (value: any, indexOrKey: any) => any,
+    ): any[];
     function load(html: string, options?: { normalize?: boolean }): any;
 
     // Static utility methods from utils-static

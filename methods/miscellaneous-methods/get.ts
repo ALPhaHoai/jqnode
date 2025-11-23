@@ -14,7 +14,7 @@ function get(this: JQ, index?: number): (HtmlNode | Element)[] | HtmlNode | Elem
     } else {
         node = this.nodes[index];
     }
-    return node ? (node._originalElement || node) : undefined;
+    return node ? node._originalElement || node : undefined;
 }
 
 export = get;

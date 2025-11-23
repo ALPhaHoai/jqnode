@@ -4,11 +4,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
  * Adds or removes one or more classes from each element, depending on the class's presence or the state argument.
  * @see https://api.jquery.com/toggleClass/
  */
-function toggleClass(
-    this: JQ,
-    className: ClassNameInput,
-    state?: boolean
-): JQ {
+function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
     this.nodes.forEach((element: HtmlNode) => {
         if (!element || !element.attributes) return;
 
@@ -18,7 +14,9 @@ function toggleClass(
             element.attributes.class = '';
         }
 
-        let currentClasses = ((element.attributes.class as string) || '').split(/\s+/).filter((cls: string) => cls.length > 0);
+        const currentClasses = ((element.attributes.class as string) || '')
+            .split(/\s+/)
+            .filter((cls: string) => cls.length > 0);
         let classNameStr = className;
 
         if (typeof className === 'function') {
@@ -31,7 +29,9 @@ function toggleClass(
             }
         }
 
-        const classesToToggle = (classNameStr as string).split(/\s+/).filter((cls: string) => cls.length > 0);
+        const classesToToggle = (classNameStr as string)
+            .split(/\s+/)
+            .filter((cls: string) => cls.length > 0);
 
         classesToToggle.forEach((cls: string) => {
             const classIndex = currentClasses.indexOf(cls);

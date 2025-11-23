@@ -3,20 +3,24 @@
 Get all preceding siblings of each element.
 
 ## Syntax
+
 ```javascript
-jq(selector).prevAll()
-jq(selector).prevAll(selector)
+jq(selector).prevAll();
+jq(selector).prevAll(selector);
 ```
 
 ## Parameters
+
 - **selector** (String, optional): Filter siblings by selector
 
 ## Returns
+
 JQ instance containing previous siblings
 
 ## Examples
 
 ### Get All Previous
+
 ```javascript
 const $ = jq(`
     <ul>
@@ -32,6 +36,7 @@ console.log(previous.length); // 3
 ```
 
 ### Filter Previous
+
 ```javascript
 const $ = jq(`
     <div>
@@ -48,12 +53,14 @@ console.log(prevSpans.length); // 2
 ```
 
 ## Use Cases
+
 - Process previous items
 - Breadcrumb navigation
 - Backward iteration
 - Previous selections
 
 ## Related
+
 - **prev()** - Get immediate previous sibling
 - **prevUntil()** - Get siblings until selector
 - **nextAll()** - Get all following siblings

@@ -60,7 +60,8 @@ describe('cssCamel() method - jqnode specific', () => {
     });
 
     test('should return camelCase keys when getting multiple properties', () => {
-        const html = '<div style="background-color: red; font-size: 14px; margin-top: 10px">Test</div>';
+        const html =
+            '<div style="background-color: red; font-size: 14px; margin-top: 10px">Test</div>';
         const { nodeQuery: nqRoot } = createTestDom(html);
 
         const nqDiv = nqRoot.find('div');

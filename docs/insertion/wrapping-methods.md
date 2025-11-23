@@ -3,6 +3,7 @@
 Wrap elements with HTML structure.
 
 ## wrap(wrappingElement)
+
 Wrap each element individually.
 
 ```javascript
@@ -11,6 +12,7 @@ $('span').wrap('<div class="wrapper"></div>');
 ```
 
 ## wrapAll(wrappingElement)
+
 Wrap all elements together as one group.
 
 ```javascript
@@ -19,6 +21,7 @@ $('span').wrapAll('<div class="container"></div>');
 ```
 
 ## wrapInner(wrappingElement)
+
 Wrap the content inside each element.
 
 ```javascript
@@ -29,6 +32,7 @@ $('p').wrapInner('<strong></strong>');
 ## Examples
 
 ### wrap() - Individual Wrapping
+
 ```javascript
 const $ = jq('<div><span>A</span><span>B</span></div>');
 $('span').wrap('<div class="box"></div>');
@@ -36,6 +40,7 @@ $('span').wrap('<div class="box"></div>');
 ```
 
 ### wrapAll() - Group Wrapping
+
 ```javascript
 const $ = jq('<div><span>A</span><span>B</span></div>');
 $('span').wrapAll('<div class="container"></div>');
@@ -43,6 +48,7 @@ $('span').wrapAll('<div class="container"></div>');
 ```
 
 ### wrapInner() - Content Wrapping
+
 ```javascript
 const $ = jq('<p>Hello World</p>');
 $('p').wrapInner('<em></em>');
@@ -50,11 +56,13 @@ $('p').wrapInner('<em></em>');
 ```
 
 ## Use Cases
+
 - Add containers to elements
 - Apply styling wrappers
 - Group elements
 - Emphasize content
 
 ## Related
+
 - **unwrap()** - Remove wrapper (if implemented)
 - **append()/prepend()** - Add content inside

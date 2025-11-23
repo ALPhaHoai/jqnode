@@ -31,7 +31,7 @@ import {
     extend,
     escapeSelector,
     title as titleUtil,
-    normalizeHTML as normalizeHTMLUtil
+    normalizeHTML as normalizeHTMLUtil,
 } from './utils-static';
 
 /**
@@ -52,13 +52,32 @@ function domElementToNode(element: any): HtmlNode {
         attributes: attrs, // Point to the same object
         children: [],
         parent: undefined,
-        _originalElement: element
+        _originalElement: element,
     };
 
     // Copy attributes
     if (element.attributes) {
         // List of boolean attributes that jQuery handles specially
-        const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+        const booleanAttributes = [
+            'checked',
+            'selected',
+            'disabled',
+            'readonly',
+            'required',
+            'multiple',
+            'autofocus',
+            'autoplay',
+            'hidden',
+            'controls',
+            'loop',
+            'muted',
+            'default',
+            'open',
+            'reversed',
+            'scoped',
+            'async',
+            'defer',
+        ];
         for (let i = 0; i < element.attributes.length; i++) {
             const attr = element.attributes[i];
             let value: string;
@@ -98,7 +117,7 @@ function domElementToNode(element: any): HtmlNode {
                 const textNode: HtmlNode = {
                     type: 'text',
                     data: child.textContent || '',
-                    parent: node
+                    parent: node,
                 };
                 if (!node.children) node.children = [];
                 node.children.push(textNode);
@@ -120,22 +139,31 @@ function domElementToNode(element: any): HtmlNode {
  * Factory function that creates JQ instances from HTML strings, CSS selectors, or node arrays.
  * Similar to jQuery's $ function.
  */
-function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ {
+function JQFactory(
+    htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any,
+    context?: HtmlNode[] | null,
+): JQ {
     if (typeof htmlOrSelectorOrNodes === 'string') {
         const trimmed = htmlOrSelectorOrNodes.trim();
         if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
             // HTML string - parse it
             let nodes = parseHTML(htmlOrSelectorOrNodes);
             // Filter out pure whitespace text nodes at the top level
-            nodes = nodes.filter(node => {
+            nodes = nodes.filter((node) => {
                 return !(node.type === 'text' && node.data && node.data.trim() === '');
             });
             return new JQ(nodes);
-        } else if (htmlOrSelectorOrNodes.startsWith('.') || htmlOrSelectorOrNodes.startsWith('#') ||
-            htmlOrSelectorOrNodes.includes(' ') || htmlOrSelectorOrNodes.includes('>') ||
-            htmlOrSelectorOrNodes.includes('+') || htmlOrSelectorOrNodes.includes('~') ||
-            htmlOrSelectorOrNodes.includes('[') || htmlOrSelectorOrNodes.includes(']') ||
-            htmlOrSelectorOrNodes.includes(':')) {
+        } else if (
+            htmlOrSelectorOrNodes.startsWith('.') ||
+            htmlOrSelectorOrNodes.startsWith('#') ||
+            htmlOrSelectorOrNodes.includes(' ') ||
+            htmlOrSelectorOrNodes.includes('>') ||
+            htmlOrSelectorOrNodes.includes('+') ||
+            htmlOrSelectorOrNodes.includes('~') ||
+            htmlOrSelectorOrNodes.includes('[') ||
+            htmlOrSelectorOrNodes.includes(']') ||
+            htmlOrSelectorOrNodes.includes(':')
+        ) {
             // CSS selector - search within context or global root nodes
             let searchContext = context;
             if (context === undefined) {
@@ -169,10 +197,18 @@ function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, 
         }
     } else if (Array.isArray(htmlOrSelectorOrNodes)) {
         return new JQ(htmlOrSelectorOrNodes);
-    } else if (htmlOrSelectorOrNodes && typeof htmlOrSelectorOrNodes === 'object' && htmlOrSelectorOrNodes.type) {
+    } else if (
+        htmlOrSelectorOrNodes &&
+        typeof htmlOrSelectorOrNodes === 'object' &&
+        htmlOrSelectorOrNodes.type
+    ) {
         // Single node object
         return new JQ([htmlOrSelectorOrNodes]);
-    } else if (htmlOrSelectorOrNodes && typeof htmlOrSelectorOrNodes === 'object' && htmlOrSelectorOrNodes.nodeType) {
+    } else if (
+        htmlOrSelectorOrNodes &&
+        typeof htmlOrSelectorOrNodes === 'object' &&
+        htmlOrSelectorOrNodes.nodeType
+    ) {
         // DOM element - convert to internal node format
         const node = domElementToNode(htmlOrSelectorOrNodes);
         return new JQ([node]);
@@ -190,7 +226,10 @@ function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, 
 /**
  * Iterates over arrays and objects, similar to jQuery's $.each().
  */
-(JQFactory as any).each = function (collection: any[] | Record<string, any>, callback: (indexOrKey: any, value: any) => any): any {
+(JQFactory as any).each = function (
+    collection: any[] | Record<string, any>,
+    callback: (indexOrKey: any, value: any) => any,
+): any {
     if (Array.isArray(collection)) {
         for (let i = 0; i < collection.length; i++) {
             if (callback.call(collection[i], i, collection[i]) === false) {
@@ -213,8 +252,8 @@ function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, 
  * Example custom method using $.fn pattern
  */
 (JQFactory as any).fn.yourFunctionName = function (this: JQ): JQ {
-    console.log("Called yourFunctionName on " + this.nodes.length + " elements.");
-    this.nodes.forEach(element => {
+    console.log('Called yourFunctionName on ' + this.nodes.length + ' elements.');
+    this.nodes.forEach((element) => {
         if (element.attribs) {
             element.attribs['data-custom-method-called'] = 'true';
         }
@@ -225,7 +264,10 @@ function JQFactory(htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any, 
 /**
  * Maps over arrays and objects, similar to jQuery's $.map().
  */
-(JQFactory as any).map = function (collection: any[] | Record<string, any>, callback: (value: any, indexOrKey: any) => any): any[] {
+(JQFactory as any).map = function (
+    collection: any[] | Record<string, any>,
+    callback: (value: any, indexOrKey: any) => any,
+): any[] {
     const results: any[] = [];
 
     if (Array.isArray(collection)) {
@@ -278,10 +320,14 @@ function makeCallable(jqInstance: JQ): any {
             (callable as any)[key] = (jqInstance as any)[key].bind(jqInstance);
         } else if (key !== 'constructor') {
             Object.defineProperty(callable, key, {
-                get: function () { return (jqInstance as any)[key]; },
-                set: function (value) { (jqInstance as any)[key] = value; },
+                get: function () {
+                    return (jqInstance as any)[key];
+                },
+                set: function (value) {
+                    (jqInstance as any)[key] = value;
+                },
                 enumerable: true,
-                configurable: true
+                configurable: true,
             });
         }
     }
@@ -290,7 +336,7 @@ function makeCallable(jqInstance: JQ): any {
     Object.defineProperty(callable, 'length', {
         value: jqInstance.length,
         writable: true,
-        configurable: true
+        configurable: true,
     });
 
     (callable as any)[Symbol.iterator] = function () {
@@ -326,7 +372,7 @@ function makeCallable(jqInstance: JQ): any {
             }
 
             return JQFactory([]);
-        }
+        },
     });
 }
 
@@ -370,7 +416,6 @@ function makeCallable(jqInstance: JQ): any {
 (JQFactory as any).escapeSelector = escapeSelector;
 (JQFactory as any).title = titleUtil;
 (JQFactory as any).normalizeHTML = normalizeHTMLUtil;
-
 
 const JQExport = JQFactory as unknown as JQStatic;
 export default JQExport;

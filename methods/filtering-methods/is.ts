@@ -6,7 +6,10 @@ import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
  * @param selectorOrFunctionOrElement - CSS selector, function, element, or JQ object to test against
  * @see https://api.jquery.com/is/
  */
-function is(this: JQ, selectorOrFunctionOrElement: CssSelector | FilterCallback | HtmlNode | JQ): boolean {
+function is(
+    this: JQ,
+    selectorOrFunctionOrElement: CssSelector | FilterCallback | HtmlNode | JQ,
+): boolean {
     if (typeof selectorOrFunctionOrElement === 'string') {
         // CSS selector
         const rootNodes = this._findCommonRoots(this.nodes);
@@ -29,13 +32,21 @@ function is(this: JQ, selectorOrFunctionOrElement: CssSelector | FilterCallback 
         }
         return false;
     } else if (selectorOrFunctionOrElement && typeof selectorOrFunctionOrElement === 'object') {
-        if ('type' in selectorOrFunctionOrElement && selectorOrFunctionOrElement.type === 'element') {
+        if (
+            'type' in selectorOrFunctionOrElement &&
+            selectorOrFunctionOrElement.type === 'element'
+        ) {
             // Direct element reference
             const result = this.nodes.includes(selectorOrFunctionOrElement);
             return result;
-        } else if ('nodes' in selectorOrFunctionOrElement && Array.isArray(selectorOrFunctionOrElement.nodes)) {
+        } else if (
+            'nodes' in selectorOrFunctionOrElement &&
+            Array.isArray(selectorOrFunctionOrElement.nodes)
+        ) {
             // JQ object - check if any of our nodes are in the other JQ object
-            const result = this.nodes.some((node: HtmlNode) => selectorOrFunctionOrElement.nodes.includes(node));
+            const result = this.nodes.some((node: HtmlNode) =>
+                selectorOrFunctionOrElement.nodes.includes(node),
+            );
             return result;
         }
     }

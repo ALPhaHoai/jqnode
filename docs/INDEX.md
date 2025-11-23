@@ -67,6 +67,7 @@ docs/
 ## 🎯 Quick Navigation
 
 ### By Category
+
 - [Content Methods](./content/) - HTML, text, tables
 - [Attribute Methods](./attributes/) - Classes, attributes, properties
 - [Data Methods](./data/) - Data storage
@@ -76,6 +77,7 @@ docs/
 - [Iteration Methods](./iteration/) - Loop through elements
 
 ### Common Tasks
+
 - **Modify content**: → `content/html.md`, `content/text.md`
 - **Add/remove classes**: → `attributes/addClass.md`, `attributes/removeClass.md`
 - **Navigate DOM**: → `traversal/parent.md`, `traversal/find.md`, `traversal/closest.md`
@@ -87,7 +89,9 @@ docs/
 ## 📖 Documentation Levels
 
 ### ⭐ Comprehensive (Full Docs + Examples)
+
 These have detailed documentation AND runnable example files:
+
 - content/toJSON.md
 - content/findTableWithHeader.md
 - content/title-method.md
@@ -99,30 +103,39 @@ These have detailed documentation AND runnable example files:
 - iteration/each.md
 
 ### 📄 Documented (Concise Docs)
+
 These have concise documentation files:
+
 - All other .md files in category folders
 
 ### 📚 Quick Reference Only
+
 Methods not yet documented individually but covered in:
+
 - `guides/QUICK_REFERENCE.md`
 
 ## 🚀 Getting Started
 
 ### 1. Quick Syntax Lookup
+
 → See **[guides/QUICK_REFERENCE.md](./guides/QUICK_REFERENCE.md)**
 
 ### 2. Learn a Specific Method
+
 → Navigate to category folder → Open method file
 
 ### 3. See Examples
+
 → Go to `/examples/` directory → Run example files
 
 ### 4. Understand the Project
+
 → See **[guides/DOCUMENTATION_SUMMARY.md](./guides/DOCUMENTATION_SUMMARY.md)**
 
 ## 🔄 Updates
 
 This structure was reorganized on 2025-11-20 to improve:
+
 - ✅ Navigation and discoverability
 - ✅ Logical grouping of related methods
 - ✅ Scalability for future documentation

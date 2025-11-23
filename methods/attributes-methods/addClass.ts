@@ -4,10 +4,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
  * Adds one or more classes to each element.
  * @see https://api.jquery.com/addClass/
  */
-function addClass(
-    this: JQ,
-    className: ClassNameInput
-): JQ {
+function addClass(this: JQ, className: ClassNameInput): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {
             if (!element || !element.attributes) return;
@@ -32,7 +29,9 @@ function addClass(
             element.attributes.class = '';
         }
 
-        let currentClasses = ((element.attributes.class as string) || '').split(/\s+/).filter((cls: string) => cls.length > 0);
+        const currentClasses = ((element.attributes.class as string) || '')
+            .split(/\s+/)
+            .filter((cls: string) => cls.length > 0);
         const classesToAdd = className.split(/\s+/).filter((cls: string) => cls.length > 0);
 
         classesToAdd.forEach((cls: string) => {
@@ -52,4 +51,3 @@ function addClass(
 }
 
 export = addClass;
-

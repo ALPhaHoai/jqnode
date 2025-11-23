@@ -18,8 +18,8 @@ function removeData(this: JQ, name?: string | string[]): JQ {
             return;
         }
 
-        const keys = Array.isArray(name) ? name : (typeof name === 'string' ? name.split(/\s+/) : []);
-        keys.forEach(k => {
+        const keys = Array.isArray(name) ? name : typeof name === 'string' ? name.split(/\s+/) : [];
+        keys.forEach((k) => {
             if (this._jqData) {
                 delete this._jqData[toCamelCase(k)];
             }

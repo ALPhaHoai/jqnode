@@ -48,7 +48,7 @@ paragraph.css({
     color: '#333',
     fontSize: '16px',
     padding: '10px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
 });
 
 const pStyles = paragraph.css(['color', 'font-size', 'padding', 'border']);
@@ -65,7 +65,7 @@ boxes.each(function (i, box) {
 // Increase each box width by 50px
 boxes.css('width', function (index, currentValue) {
     const current = parseInt(currentValue);
-    return (current + 50) + 'px';
+    return current + 50 + 'px';
 });
 
 console.log('New box widths (after +50px):');
@@ -75,16 +75,15 @@ boxes.each(function (i, box) {
 
 // EXAMPLE 7: Chaining css() with other methods
 console.log('\n=== Example 7: Method Chaining ===');
-root.find('.box')
-    .first()
-    .css('border', '3px solid black')
-    .css('border-radius', '10px')
-    .css({
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        transform: 'scale(1.1)'
-    });
+root.find('.box').first().css('border', '3px solid black').css('border-radius', '10px').css({
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    transform: 'scale(1.1)',
+});
 
-console.log('First box after chaining:', root.find('.box').first().css(['border', 'border-radius']));
+console.log(
+    'First box after chaining:',
+    root.find('.box').first().css(['border', 'border-radius']),
+);
 
 // EXAMPLE 8: Working with colors
 console.log('\n=== Example 8: Working with Colors ===');
@@ -102,7 +101,7 @@ container.css({
     top: 20,
     left: 30,
     width: 500,
-    maxWidth: '100%'
+    maxWidth: '100%',
 });
 
 console.log('Container position:', container.css('position'));
@@ -131,7 +130,7 @@ title.css({
     fontSize: 32,
     textAlign: 'center',
     textTransform: 'uppercase',
-    letterSpacing: '2px'
+    letterSpacing: '2px',
 });
 
 const titleTypography = title.css(['font-family', 'font-weight', 'font-size']);
@@ -150,7 +149,7 @@ container.css({
     maxWidth: '1200px',
     margin: '0 auto',
     padding: '20px',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
 });
 
 console.log('Container responsive styles:', container.css(['max-width', 'margin', 'box-sizing']));
@@ -162,15 +161,18 @@ container.css({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '10px'
+    gap: '10px',
 });
 
-console.log('Container flex styles:', container.css(['display', 'flex-direction', 'justify-content']));
+console.log(
+    'Container flex styles:',
+    container.css(['display', 'flex-direction', 'justify-content']),
+);
 
 // EXAMPLE 15: Advanced - Dynamic styling based on index
 console.log('\n=== Example 15: Dynamic Styling Based on Index ===');
 boxes.css('opacity', function (index) {
-    return 1 - (index * 0.2); // Gradually fade boxes
+    return 1 - index * 0.2; // Gradually fade boxes
 });
 
 boxes.each(function (i, box) {

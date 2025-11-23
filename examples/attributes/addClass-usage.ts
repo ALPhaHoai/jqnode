@@ -82,9 +82,9 @@ const $6 = jq(html6);
 $6('span').addClass(function () {
     const priority = jq(this).attr('data-priority');
     const classMap: Record<string, string> = {
-        'high': 'text-danger font-bold',
-        'medium': 'text-warning',
-        'low': 'text-muted'
+        high: 'text-danger font-bold',
+        medium: 'text-warning',
+        low: 'text-muted',
     };
     return classMap[priority] || '';
 });
@@ -157,10 +157,12 @@ const html9 = `
 const $9 = jq(html9);
 const currentPath = '/products';
 
-$9('a').addClass('nav-link').addClass(function () {
-    const href = jq(this).attr('href');
-    return href === currentPath ? 'active' : '';
-});
+$9('a')
+    .addClass('nav-link')
+    .addClass(function () {
+        const href = jq(this).attr('href');
+        return href === currentPath ? 'active' : '';
+    });
 
 console.log('Navigation links:');
 $9('a').each(function () {
@@ -228,9 +230,9 @@ const $12 = jq(html12);
 $12('.widget').addClass(function (index, currentClass) {
     const status = jq(this).attr('data-status');
     const statusClasses: Record<string, string> = {
-        'online': 'status-success',
-        'offline': 'status-error',
-        'maintenance': 'status-warning'
+        online: 'status-success',
+        offline: 'status-error',
+        maintenance: 'status-warning',
     };
     return statusClasses[status] || 'status-unknown';
 });

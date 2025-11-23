@@ -73,7 +73,9 @@ describe('removeClass() method - jQuery Comparison', () => {
             return classes[0];
         });
         jqDivs.removeClass(function (index: number, currentClass: string | undefined) {
-            const classes = (currentClass || '').split(/\s+/).filter((cls: string) => cls.length > 0);
+            const classes = (currentClass || '')
+                .split(/\s+/)
+                .filter((cls: string) => cls.length > 0);
             return classes[0];
         });
 

@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all following siblings of each element, optionally filtered by a selector.
-  * @see https://api.jquery.com/nextAll/
+ * @see https://api.jquery.com/nextAll/
  */
 function nextAll(this: JQ, selector?: CssSelector): JQ {
     const followingSiblings: HtmlNode[] = [];
@@ -33,7 +33,7 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
                             children.push({
                                 type: 'text',
                                 value: child.textContent || undefined,
-                                data: child.textContent || undefined
+                                data: child.textContent || undefined,
                             });
                         } else if (child.nodeType === 1) {
                             // Element node - add placeholder, will be processed if needed
@@ -44,7 +44,7 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
                                 attributes: {},
                                 attribs: {},
                                 children: [],
-                                _originalElement: child as Element
+                                _originalElement: child as Element,
                             });
                         }
                     }
@@ -58,14 +58,16 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
                         properties: {},
                         children: children,
                         parent: undefined,
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
                     followingSiblings.push(internalNode);
                 }
                 sibling = sibling.nextElementSibling;
             }
         } else if (node.parent && node.parent.children) {
-            const siblings = node.parent.children.filter((child: HtmlNode) => child.type === 'element');
+            const siblings = node.parent.children.filter(
+                (child: HtmlNode) => child.type === 'element',
+            );
             const currentIndex = siblings.indexOf(node);
 
             if (currentIndex !== -1) {
@@ -86,7 +88,10 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
         const parsedSelector = parseSelector(selector);
         if (parsedSelector) {
             resultNodes = followingSiblings.filter((sibling: HtmlNode) => {
-                const selectorList = ('type' in parsedSelector && parsedSelector.type === 'compound') ? parsedSelector.selectors : [parsedSelector];
+                const selectorList =
+                    'type' in parsedSelector && parsedSelector.type === 'compound'
+                        ? parsedSelector.selectors
+                        : [parsedSelector];
                 return selectorList.some((sel) => nodeMatchesSelector(sibling, sel));
             });
         }

@@ -48,7 +48,7 @@ function _convertDomToNode(domElement: Element): HtmlNode {
         properties: {},
         children: [],
         parent: undefined,
-        _originalElement: domElement
+        _originalElement: domElement,
     };
 }
 
@@ -63,13 +63,13 @@ function _traverseDomParents(
     node: HtmlNode,
     parsedSelector: ParsedSelector | null,
     ancestors: HtmlNode[],
-    seen: Set<string>
+    seen: Set<string>,
 ): void {
     let domCurrent = node._originalElement?.parentElement;
 
     while (domCurrent && domCurrent.nodeType === 1) {
         const domNode = _convertDomToNode(domCurrent);
-        const key = _createUniqueKey(domNode.tagName || '', domNode.attributes!);  // attributes is always set by _convertDomToNode
+        const key = _createUniqueKey(domNode.tagName || '', domNode.attributes!); // attributes is always set by _convertDomToNode
 
         if (!seen.has(key)) {
             seen.add(key);
@@ -95,7 +95,7 @@ function _traverseInternalParents(
     node: HtmlNode,
     parsedSelector: ParsedSelector | null,
     ancestors: HtmlNode[],
-    seen: Set<string>
+    seen: Set<string>,
 ): void {
     let current: HtmlNode | undefined = node.parent;
 
@@ -141,7 +141,7 @@ function _collectParents(nodes: HtmlNode[], parsedSelector: ParsedSelector | nul
 
 /**
  * Gets the ancestors of each element in the current set of matched elements, optionally filtered by a selector.
-  * @see https://api.jquery.com/parents/
+ * @see https://api.jquery.com/parents/
  */
 function parents(this: JQ, selector?: CssSelector): JQ {
     const parsedSelector = _parseAndValidateSelector(selector);

@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all preceding siblings of each element, optionally filtered by a selector.
-  * @see https://api.jquery.com/prevAll/
+ * @see https://api.jquery.com/prevAll/
  */
 function prevAll(this: JQ, selector?: CssSelector): JQ {
     const allPrecedingSiblings: HtmlNode[] = [];
@@ -23,12 +23,15 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
             while (sibling) {
                 let shouldInclude = true;
                 if (parsedSelector) {
-                    const selectorList = ('type' in parsedSelector && parsedSelector.type === 'compound') ? parsedSelector.selectors : [parsedSelector];
+                    const selectorList =
+                        'type' in parsedSelector && parsedSelector.type === 'compound'
+                            ? parsedSelector.selectors
+                            : [parsedSelector];
                     const tempNode: HtmlNode = {
                         type: 'element',
                         tagName: sibling.tagName.toLowerCase(),
                         attributes: {},
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
@@ -49,7 +52,7 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
                         properties: {},
                         children: [],
                         parent: undefined,
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
 
                     for (let i = 0; i < sibling.attributes.length; i++) {

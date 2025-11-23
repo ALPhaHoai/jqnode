@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all preceding siblings up to but not including the element matched by the selector.
-  * @see https://api.jquery.com/prevUntil/
+ * @see https://api.jquery.com/prevUntil/
  */
 function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const precedingSiblings: HtmlNode[] = [];
@@ -17,7 +17,11 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
         } else {
             // Selector is HtmlNode or JQ - use type guard to check structure
             const selectorObj = selector as HtmlNode | JQ;
-            if ('nodes' in selectorObj && Array.isArray(selectorObj.nodes) && selectorObj.nodes.length > 0) {
+            if (
+                'nodes' in selectorObj &&
+                Array.isArray(selectorObj.nodes) &&
+                selectorObj.nodes.length > 0
+            ) {
                 // It's a JQ object
                 stopElement = selectorObj.nodes[0]._originalElement || selectorObj.nodes[0];
             } else if ('_originalElement' in selectorObj && selectorObj._originalElement) {
@@ -40,7 +44,10 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             while (sibling) {
                 let shouldStop = false;
                 if (parsedStopSelector) {
-                    const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                    const selectorList =
+                        'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                            ? parsedStopSelector.selectors
+                            : [parsedStopSelector];
                     const attributes: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
@@ -52,7 +59,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         tagName: sibling.tagName.toLowerCase(),
                         attributes: attributes,
                         attribs: attributes,
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
                     if (selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldStop = true;
@@ -69,7 +76,10 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                 let shouldInclude = true;
                 if (parsedFilterSelector) {
-                    const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                    const selectorList =
+                        'type' in parsedFilterSelector && parsedFilterSelector.type === 'compound'
+                            ? parsedFilterSelector.selectors
+                            : [parsedFilterSelector];
                     const attributes: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
@@ -81,7 +91,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         tagName: sibling.tagName.toLowerCase(),
                         attributes: attributes,
                         attribs: attributes,
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
                     if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldInclude = false;
@@ -103,7 +113,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         properties: {},
                         children: [],
                         parent: undefined,
-                        _originalElement: sibling
+                        _originalElement: sibling,
                     };
                     precedingSiblings.push(internalNode);
                 }
@@ -111,7 +121,9 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 sibling = sibling.previousElementSibling;
             }
         } else if (node.parent && node.parent.children) {
-            const siblings = node.parent.children.filter((child: HtmlNode) => child.type === 'element');
+            const siblings = node.parent.children.filter(
+                (child: HtmlNode) => child.type === 'element',
+            );
             const currentIndex = siblings.indexOf(node);
 
             if (currentIndex > 0) {
@@ -120,15 +132,18 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                     let shouldStop = false;
                     if (parsedStopSelector) {
-                        const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                        const selectorList =
+                            'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                                ? parsedStopSelector.selectors
+                                : [parsedStopSelector];
                         if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             shouldStop = true;
                         }
                     } else if (stopElement) {
                         // Type-safe comparison - check both _originalElement and direct reference
                         const stopAsElement = stopElement as HtmlNode | Element;
-                        const isSameElement = sibling._originalElement === stopAsElement ||
-                            sibling === stopAsElement;
+                        const isSameElement =
+                            sibling._originalElement === stopAsElement || sibling === stopAsElement;
                         if (isSameElement) {
                             shouldStop = true;
                         }
@@ -137,7 +152,11 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (shouldStop) break;
 
                     if (parsedFilterSelector) {
-                        const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                        const selectorList =
+                            'type' in parsedFilterSelector &&
+                            parsedFilterSelector.type === 'compound'
+                                ? parsedFilterSelector.selectors
+                                : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             continue;
                         }

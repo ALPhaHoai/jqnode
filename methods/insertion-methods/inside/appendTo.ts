@@ -6,7 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements to the end of the target.
  * @param target - Target to append to
  * @returns The JQ instance for chaining
-  * @see https://api.jquery.com/appendTo/
+ * @see https://api.jquery.com/appendTo/
  */
 function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;

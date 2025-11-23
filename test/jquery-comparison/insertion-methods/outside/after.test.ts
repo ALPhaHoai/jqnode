@@ -36,7 +36,9 @@ describe('after() method - Node-Query vs jQuery Comparison', () => {
         const jqContainerText = jqContainer.text();
 
         expect(nqContainerText).toBe(jqContainerText);
-        expect(nqContainerText).toBe('\n                TargetInserted\n                Existing\n            ');
+        expect(nqContainerText).toBe(
+            '\n                TargetInserted\n                Existing\n            ',
+        );
     });
 
     test('after() should clone content for multiple targets except the last one - jquery-comparison', () => {
@@ -66,7 +68,7 @@ describe('after() method - Node-Query vs jQuery Comparison', () => {
         expect(nqContainer.text()).toBe(jqContainer.text());
         // Expected: Target 1SourceTarget 2Source
         // Note: text() concatenates all descendants.
-        // Structure: 
+        // Structure:
         // Target 1
         // Source (Clone)
         // Target 2

@@ -40,12 +40,12 @@ const result = {
             </table>
         </body>
     </html>
-    `
+    `,
 };
 
 // Your requested syntax!
 const $2 = jq.load(result?.data);
-const tables = $2.find("table");
+const tables = $2.find('table');
 
 console.log('Number of tables:', tables.length);
 
@@ -54,7 +54,14 @@ tables.each(function (index, table) {
     console.log(`\nTable ${index + 1}:`);
     console.log('  ID:', $table.attr('id'));
     console.log('  Rows:', $table.find('tr').length);
-    console.log('  Headers:', $table.find('th').map((i, th) => jq(th).text()).get().join(', '));
+    console.log(
+        '  Headers:',
+        $table
+            .find('th')
+            .map((i, th) => jq(th).text())
+            .get()
+            .join(', '),
+    );
 });
 
 // Example 3: Chaining with .load()
@@ -77,7 +84,7 @@ products.each(function (index, product) {
 // Example 4: Working with empty or undefined data
 console.log('\nExample 4: Safe handling of empty data');
 const emptyResult = { data: null };
-const $empty = jq.load(emptyResult?.data || "");
+const $empty = jq.load(emptyResult?.data || '');
 console.log('Empty load result:', $empty.length);
 
 // Example 5: Comparison of different loading methods
@@ -109,13 +116,23 @@ const tableHtml = `
 `;
 
 const $table = jq.load(tableHtml);
-const headers = $table.find('th').map((i, th) => jq(th).text()).get();
-const rows = $table.find('tbody tr, tr:not(:first-child)').map(function (i, tr) {
-    const $tr = jq(tr);
-    const cells = $tr.find('td').map((j, td) => jq(td).text()).get();
-    if (cells.length === 0) return null;
-    return { [headers[0]]: cells[0], [headers[1]]: cells[1] };
-}).get().filter(row => row !== null);
+const headers = $table
+    .find('th')
+    .map((i, th) => jq(th).text())
+    .get();
+const rows = $table
+    .find('tbody tr, tr:not(:first-child)')
+    .map(function (i, tr) {
+        const $tr = jq(tr);
+        const cells = $tr
+            .find('td')
+            .map((j, td) => jq(td).text())
+            .get();
+        if (cells.length === 0) return null;
+        return { [headers[0]]: cells[0], [headers[1]]: cells[1] };
+    })
+    .get()
+    .filter((row) => row !== null);
 
 console.log('Extracted table data:', JSON.stringify(rows, null, 2));
 

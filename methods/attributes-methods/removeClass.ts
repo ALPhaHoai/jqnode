@@ -4,10 +4,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
  * Removes one or more classes from each element.
  * @see https://api.jquery.com/removeClass/
  */
-function removeClass(
-    this: JQ,
-    className?: ClassNameInput
-): JQ {
+function removeClass(this: JQ, className?: ClassNameInput): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {
             if (!element || !element.attributes) return;
@@ -35,14 +32,20 @@ function removeClass(
         applyRemoveClassToElement(element, className, true);
     });
 
-    function applyRemoveClassToElement(element: HtmlNode, className?: string, syncToDOM: boolean = true) {
+    function applyRemoveClassToElement(
+        element: HtmlNode,
+        className?: string,
+        syncToDOM: boolean = true,
+    ) {
         if (!element || !element.attributes) return;
 
         if (!element.attributes.class) {
             element.attributes.class = '';
         }
 
-        let currentClasses = ((element.attributes.class as string) || '').split(/\s+/).filter((cls: string) => cls.length > 0);
+        let currentClasses = ((element.attributes.class as string) || '')
+            .split(/\s+/)
+            .filter((cls: string) => cls.length > 0);
 
         if (className === undefined || className === null) {
             currentClasses = [];
@@ -68,4 +71,3 @@ function removeClass(
 }
 
 export = removeClass;
-

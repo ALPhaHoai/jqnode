@@ -42,7 +42,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
@@ -72,7 +74,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());
@@ -129,7 +133,9 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(3);
         expect(jqChildren.length).toBe(3);
 
-        const nqTags = nqChildren.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
+        const nqTags = nqChildren.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqTags.push(element.tagName.toLowerCase());

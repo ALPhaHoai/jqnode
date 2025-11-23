@@ -6,7 +6,11 @@ import JQClass from '../../jq';
  * Reduces the set of matched elements to those that match the selector or pass the function's test.
  * @see https://api.jquery.com/filter/
  */
-function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, context?: HtmlNode): JQ {
+function filter(
+    this: JQ,
+    selectorOrFunction: CssSelector | FilterCallback,
+    context?: HtmlNode,
+): JQ {
     if (typeof selectorOrFunction === 'string') {
         // CSS selector filter
         const parsedSelector = parseSelector(selectorOrFunction);
@@ -21,7 +25,9 @@ function filter(this: JQ, selectorOrFunction: CssSelector | FilterCallback, cont
             // Build context for pseudo-selectors
             const selectorContext: { siblings?: HtmlNode[] } = {};
             if (node.parent && node.parent.children) {
-                selectorContext.siblings = node.parent.children.filter((child: HtmlNode) => child.type === 'element');
+                selectorContext.siblings = node.parent.children.filter(
+                    (child: HtmlNode) => child.type === 'element',
+                );
             } else {
                 selectorContext.siblings = [];
             }

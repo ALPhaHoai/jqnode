@@ -19,7 +19,9 @@ export function camelCase(str: string): string {
  * e.g., 'backgroundColor' -> 'background-color'
  */
 export function hyphenate(str: string): string {
-    return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
+    return String(str)
+        .replace(/([A-Z])/g, '-$1')
+        .toLowerCase();
 }
 
 /**
@@ -27,13 +29,37 @@ export function hyphenate(str: string): string {
  */
 export function needsPxUnit(prop: string): boolean {
     const pxProperties = [
-        'width', 'height', 'top', 'right', 'bottom', 'left',
-        'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
-        'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-        'borderWidth', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
-        'fontSize', 'lineHeight', 'letterSpacing', 'wordSpacing',
-        'maxWidth', 'maxHeight', 'minWidth', 'minHeight',
-        'outlineWidth', 'textIndent'
+        'width',
+        'height',
+        'top',
+        'right',
+        'bottom',
+        'left',
+        'margin',
+        'marginTop',
+        'marginRight',
+        'marginBottom',
+        'marginLeft',
+        'padding',
+        'paddingTop',
+        'paddingRight',
+        'paddingBottom',
+        'paddingLeft',
+        'borderWidth',
+        'borderTopWidth',
+        'borderRightWidth',
+        'borderBottomWidth',
+        'borderLeftWidth',
+        'fontSize',
+        'lineHeight',
+        'letterSpacing',
+        'wordSpacing',
+        'maxWidth',
+        'maxHeight',
+        'minWidth',
+        'minHeight',
+        'outlineWidth',
+        'textIndent',
     ];
     return pxProperties.includes(camelCase(prop));
 }
@@ -56,7 +82,10 @@ export function getComputedStyleValue(element: HtmlNode, property: string): stri
         // Make sure we have a real DOM element
         if (domElement.nodeType === 1) {
             const computed = window.getComputedStyle(domElement as Element);
-            return (computed as unknown as Record<string, string>)[camelProp] || computed.getPropertyValue(hyphenProp);
+            return (
+                (computed as unknown as Record<string, string>)[camelProp] ||
+                computed.getPropertyValue(hyphenProp)
+            );
         }
     }
 
@@ -67,7 +96,10 @@ export function getComputedStyleValue(element: HtmlNode, property: string): stri
             try {
                 if (domElement.nodeType === 1) {
                     const computed = ownerDoc.defaultView.getComputedStyle(domElement as Element);
-                    return (computed as unknown as Record<string, string>)[camelProp] || computed.getPropertyValue(hyphenProp);
+                    return (
+                        (computed as unknown as Record<string, string>)[camelProp] ||
+                        computed.getPropertyValue(hyphenProp)
+                    );
                 }
             } catch (e) {
                 // Fall through to inline style fallback
@@ -131,7 +163,7 @@ export function setStyleValue(element: HtmlNode, property: string, val: string |
 
     // Also update the internal node's style attribute string
     if (element.attribs) {
-        let styleStr = element.attribs.style || '';
+        const styleStr = element.attribs.style || '';
         const hyphenProp = hyphenate(property);
 
         // Parse existing styles

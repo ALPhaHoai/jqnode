@@ -58,9 +58,7 @@ console.log();
 
 // Example 4: Combine with toJSON
 console.log('Example 4: Find table and extract data with toJSON()');
-const userData = jq(html1)
-    .findTableWithHeader('Name')
-    .toJSON();
+const userData = jq(html1).findTableWithHeader('Name').toJSON();
 console.log('User data:', JSON.stringify(userData, null, 2));
 console.log();
 
@@ -143,9 +141,7 @@ const html3 = `
 `;
 
 // Find only sales tables (with Revenue column)
-const salesData = jq(html3)
-    .findTableWithHeader(['Product Name', 'Revenue'])
-    .toJSON();
+const salesData = jq(html3).findTableWithHeader(['Product Name', 'Revenue']).toJSON();
 
 console.log('Sales data:', JSON.stringify(salesData, null, 2));
 console.log();

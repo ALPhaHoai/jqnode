@@ -24,7 +24,6 @@ function map<R = HtmlNode>(this: JQ, callback: MapCallback<HtmlNode, R>): R[] {
         }
     }
 
-
     // Return a new JQ object containing the results
     // We use this.constructor to avoid circular dependency and ensure we use the correct class
     const JQClass = this.constructor as any;

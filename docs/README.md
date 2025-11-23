@@ -20,6 +20,7 @@ docs/
 ## 📚 Quick Access
 
 ### Getting Started
+
 - **[Quick Reference](./guides/QUICK_REFERENCE.md)** - Syntax for all 51+ methods
 - **[Documentation Summary](./guides/DOCUMENTATION_SUMMARY.md)** - Complete overview
 - **[Overview](./guides/README.md)** - Documentation index
@@ -31,11 +32,15 @@ docs/
 - **[hasClass()](./attributes/hasClass.md)** - Check for CSS class
 
 ### Data Storage (`/data`)
+
 Store and retrieve custom data:
+
 - **[data()](./data/data.md)** - Store/retrieve arbitrary data
 
 ### Traversal (`/traversal`)
+
 Navigate the DOM tree:
+
 - **[find()](./traversal/find.md)** - Find descendants
 - **[children()](./traversal/children.md)** - Get immediate children
 - **[parent()](./traversal/parent.md)** - Get immediate parent
@@ -44,18 +49,24 @@ Navigate the DOM tree:
 - **[next(), prev()](./traversal/next-prev.md)** - Get adjacent siblings
 
 ### Filtering (`/filtering`)
+
 Filter and reduce element sets:
+
 - **[filter()](./filtering/filter.md)** - Filter by selector/function
 - **[eq()](./filtering/eq.md)** - Get element at index
 - **[first(), last()](./filtering/first-last.md)** - Get first/last elements
 
 ### DOM Insertion (`/insertion`)
+
 Add or remove elements:
+
 - **[append()](./insertion/append.md)** - Insert content at end
 - **[remove()](./insertion/remove.md)** - Remove elements from DOM
 
 ### Iteration (`/iteration`)
+
 Loop through elements:
+
 - **[each()](./iteration/each.md)** - Iterate over elements
 - **[map()](./iteration/map.md)** - Map elements to array
 
@@ -64,6 +75,7 @@ Loop through elements:
 ### By Task
 
 **I want to...**
+
 - **Modify content**: See [/content](./content/)
 - **Work with classes**: See [/attributes](./attributes/)
 - **Navigate elements**: See [/traversal](./traversal/)
@@ -112,6 +124,7 @@ node scripts/check-docs.js
 ```
 
 Current coverage:
+
 - ✅ **100%** - All methods in Quick Reference
 - 📄 **51%** - Individual documentation files (26/51)
 - 💡 **16** - Complete example files
@@ -119,10 +132,12 @@ Current coverage:
 ## 🔍 Search Tips
 
 ### In VS Code
+
 - Press `Ctrl+P` (or `Cmd+P` on Mac)
 - Type: `docs/method-name.md`
 
 ### From Command Line
+
 ```bash
 # Find documentation
 find docs -name "*method-name*"
@@ -134,6 +149,7 @@ grep -r "search term" docs/
 ## 📱 Mobile-Friendly
 
 All documentation is written in clean Markdown and renders well on:
+
 - GitHub
 - GitLab
 - npm package pages

@@ -6,7 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements to the beginning of the target.
  * @param target - Target to prepend to
  * @returns The JQ instance for chaining
-  * @see https://api.jquery.com/prependTo/
+ * @see https://api.jquery.com/prependTo/
  */
 function prependTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;

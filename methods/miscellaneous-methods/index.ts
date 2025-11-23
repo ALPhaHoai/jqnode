@@ -22,8 +22,9 @@ function index(this: JQ, arg?: IndexTarget): number {
             siblings = siblings.filter((n: HtmlNode) => n.nodeType === 1 || n.type === 'element');
         } else if (parent.childNodes) {
             // DOM nodes fallback
-            siblings = (Array.from(parent.childNodes) as Node[]).filter((n: Node) => n.nodeType === 1) as unknown as HtmlNode[];
-
+            siblings = (Array.from(parent.childNodes) as Node[]).filter(
+                (n: Node) => n.nodeType === 1,
+            ) as unknown as HtmlNode[];
         } else {
             return -1;
         }
@@ -43,6 +44,7 @@ function index(this: JQ, arg?: IndexTarget): number {
             const roots = (this.constructor as { allRootNodes?: HtmlNode[] }).allRootNodes || [];
 
             if (roots.length > 0) {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 const { selectNodes } = require('../../selector');
                 roots.forEach((root: HtmlNode) => {
                     const matches = selectNodes([root], arg);
@@ -57,8 +59,12 @@ function index(this: JQ, arg?: IndexTarget): number {
             }
 
             const target = first._originalElement || first;
-            return allMatches.findIndex(match => {
-                return match === target || match === first || (match._originalElement && match._originalElement === target);
+            return allMatches.findIndex((match) => {
+                return (
+                    match === target ||
+                    match === first ||
+                    (match._originalElement && match._originalElement === target)
+                );
             });
         } catch (e) {
             return -1;
@@ -75,7 +81,11 @@ function index(this: JQ, arg?: IndexTarget): number {
     const targetElem = (target as HtmlNode)._originalElement || target;
 
     return this.nodes.findIndex((node: HtmlNode) => {
-        return node === target || node === targetElem || (node._originalElement && node._originalElement === targetElem);
+        return (
+            node === target ||
+            node === targetElem ||
+            (node._originalElement && node._originalElement === targetElem)
+        );
     });
 }
 

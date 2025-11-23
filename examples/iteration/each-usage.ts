@@ -59,9 +59,12 @@ console.log('Modified elements:');
 $3('.box').each(function () {
     const $box = jq(this);
     console.log(
-        'ID:', $box.attr('id'),
-        '| Class:', $box.attr('class'),
-        '| Data-index:', $box.attr('data-index')
+        'ID:',
+        $box.attr('id'),
+        '| Class:',
+        $box.attr('class'),
+        '| Data-index:',
+        $box.attr('data-index'),
     );
 });
 
@@ -116,7 +119,7 @@ $5('tbody tr').each(function () {
     employees.push({
         name: cells.eq(0).text(),
         age: parseInt(cells.eq(1).text()),
-        department: cells.eq(2).text()
+        department: cells.eq(2).text(),
     });
 });
 
@@ -139,9 +142,12 @@ console.log('After chaining:');
 $6('span').each(function () {
     const $span = jq(this);
     console.log(
-        'Text:', $span.text(),
-        '| data-letter:', $span.attr('data-letter'),
-        '| class:', $span.attr('class')
+        'Text:',
+        $span.text(),
+        '| data-letter:',
+        $span.attr('data-letter'),
+        '| class:',
+        $span.attr('class'),
     );
 });
 
@@ -282,7 +288,7 @@ $11('.users li').each(function () {
     if (userId === targetUserId) {
         foundUser = {
             id: userId,
-            name: $user.text()
+            name: $user.text(),
         };
         console.log(`  ✓ Found!`);
         return false; // Stop searching

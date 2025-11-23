@@ -1,6 +1,5 @@
 import type { HtmlNode, JQ } from '../../types';
 
-
 /**
  * Selects the element at a specific index from the matched set (0-based).
  * @see https://api.jquery.com/eq/

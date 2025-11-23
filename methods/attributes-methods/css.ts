@@ -5,12 +5,7 @@ import { getComputedStyleValue, setStyleValue } from '../../css-utils';
  * Gets or sets CSS properties on elements.
  * @see https://api.jquery.com/css/
  */
-function css(
-    this: JQ,
-    prop: string | string[] | CssProperties,
-    value?: CssValueInput
-): JQ {
-
+function css(this: JQ, prop: string | string[] | CssProperties, value?: CssValueInput): JQ {
     // GETTER CASES
     // Arrays and non-objects (strings) go through getter logic
     if (value === undefined && (typeof prop !== 'object' || Array.isArray(prop))) {
@@ -52,7 +47,6 @@ function css(
 
     // Case 2: Set single property with function
     if (typeof value === 'function') {
-
         this.nodes.forEach(function (element: HtmlNode, index: number) {
             if (!element) return;
 
@@ -73,5 +67,3 @@ function css(
 }
 
 export = css;
-
-

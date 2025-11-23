@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     window.scrollTo({
                         top: elementPosition,
-                        behavior: 'smooth'
+                        behavior: 'smooth',
                     });
 
                     // Add a brief highlight effect to the target section
@@ -108,7 +108,10 @@ window.addEventListener('load', function () {
 
     console.log('jqnode library loaded successfully!');
     console.log('Available globally as: $');
-    console.log('Version info:', $.fn ? 'jQuery-compatible interface available' : 'Basic interface only');
+    console.log(
+        'Version info:',
+        $.fn ? 'jQuery-compatible interface available' : 'Basic interface only',
+    );
 });
 
 // Method navigation click handlers are already set up above

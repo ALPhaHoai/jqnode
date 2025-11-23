@@ -368,9 +368,7 @@ describe('.findTableWithHeader()', () => {
                     </table>
                 </div>
             `;
-            const hasClass = jq(html)
-                .findTableWithHeader('Name')
-                .hasClass('table');
+            const hasClass = jq(html).findTableWithHeader('Name').hasClass('table');
             expect(hasClass).toBe(true);
         });
 
@@ -393,13 +391,13 @@ describe('.findTableWithHeader()', () => {
                     </table>
                 </div>
             `;
-            const data = jq(html)
-                .findTableWithHeader('Name')
-                .toJSON();
-            expect(data).toEqual([{
-                Name: 'John',
-                Email: 'john@example.com'
-            }]);
+            const data = jq(html).findTableWithHeader('Name').toJSON();
+            expect(data).toEqual([
+                {
+                    Name: 'John',
+                    Email: 'john@example.com',
+                },
+            ]);
         });
     });
 });

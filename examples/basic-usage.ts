@@ -39,9 +39,11 @@ features.each(function (index, elem) {
 });
 
 // Map elements
-const featureTexts = features.map(function (index, elem) {
-    return $(elem).text().toUpperCase();
-}).get();
+const featureTexts = features
+    .map(function (index, elem) {
+        return $(elem).text().toUpperCase();
+    })
+    .get();
 console.log('Uppercase features:', featureTexts);
 
 // Attribute manipulation
@@ -97,13 +99,7 @@ console.log('Third div class:', thirdDiv.attr('class'));
 
 // Complex chaining example
 console.log('\n=== Complex Chaining Example ===');
-const result = root
-    .find('.features')
-    .children()
-    .filter('.feature')
-    .addClass('item')
-    .first()
-    .text();
+const result = root.find('.features').children().filter('.feature').addClass('item').first().text();
 console.log('Chained result:', result);
 
 // Array conversion

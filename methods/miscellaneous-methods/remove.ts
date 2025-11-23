@@ -9,6 +9,7 @@ function remove(this: JQ, selector?: string): JQ {
 
     // If selector is provided, filter nodes
     if (selector) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const JQ = require('../../jq').default;
         const filtered = new JQ(this.nodes).filter(selector);
         nodesToRemove = filtered.nodes;

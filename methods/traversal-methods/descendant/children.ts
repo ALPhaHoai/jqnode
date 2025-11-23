@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the children of each element in the set of matched elements, optionally filtered by a selector.
-  * @see https://api.jquery.com/children/
+ * @see https://api.jquery.com/children/
  */
 function children(this: JQ, selector?: CssSelector): JQ {
     const children: HtmlNode[] = [];
@@ -12,10 +12,16 @@ function children(this: JQ, selector?: CssSelector): JQ {
 
     for (const node of this.nodes) {
         // Handle both internal nodes and DOM elements
-        const nodeChildren = node.children || (node.childNodes ? Array.from(node.childNodes).filter((child: Node) => child.nodeType === 1) : []);
+        const nodeChildren =
+            node.children ||
+            (node.childNodes
+                ? Array.from(node.childNodes).filter((child: Node) => child.nodeType === 1)
+                : []);
 
         for (const child of nodeChildren) {
-            const isElement = ('type' in child && child.type === 'element') || ('nodeType' in child && child.nodeType === 1);
+            const isElement =
+                ('type' in child && child.type === 'element') ||
+                ('nodeType' in child && child.nodeType === 1);
             if (isElement && !seen.has(child as HtmlNode)) {
                 seen.add(child as HtmlNode);
                 children.push(child as HtmlNode);

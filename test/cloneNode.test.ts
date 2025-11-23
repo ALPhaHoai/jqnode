@@ -7,7 +7,7 @@ describe('_cloneNode Helper', () => {
             type: 'element',
             name: 'div',
             attribs: { id: 'original' },
-            attributes: { id: 'original' }
+            attributes: { id: 'original' },
         };
 
         const clone = _cloneNode(original);
@@ -29,7 +29,7 @@ describe('_cloneNode Helper', () => {
             type: 'element',
             name: 'div',
             attribs: { id: 'original' },
-            attributes: { id: 'original' }
+            attributes: { id: 'original' },
         };
 
         const clone = _cloneNode(original);
@@ -50,12 +50,12 @@ describe('_cloneNode Helper', () => {
         const child: HtmlNode = {
             type: 'element',
             name: 'span',
-            attribs: { class: 'child' }
+            attribs: { class: 'child' },
         };
         const original: HtmlNode = {
             type: 'element',
             name: 'div',
-            children: [child]
+            children: [child],
         };
         child.parent = original;
 
@@ -71,12 +71,12 @@ describe('_cloneNode Helper', () => {
     test('should shallow clone when deep is false', () => {
         const child: HtmlNode = {
             type: 'element',
-            name: 'span'
+            name: 'span',
         };
         const original: HtmlNode = {
             type: 'element',
             name: 'div',
-            children: [child]
+            children: [child],
         };
 
         const clone = _cloneNode(original, false);
@@ -88,7 +88,7 @@ describe('_cloneNode Helper', () => {
     test('should clone text nodes', () => {
         const original: HtmlNode = {
             type: 'text',
-            data: 'Hello World'
+            data: 'Hello World',
         };
 
         const clone = _cloneNode(original);
@@ -101,7 +101,7 @@ describe('_cloneNode Helper', () => {
     test('should clone comment nodes', () => {
         const original: HtmlNode = {
             type: 'comment',
-            data: ' This is a comment '
+            data: ' This is a comment ',
         };
 
         const clone = _cloneNode(original);

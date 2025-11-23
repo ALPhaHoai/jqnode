@@ -132,9 +132,11 @@ const html10 = `
 const $10 = jq(html10);
 console.log('Current page:', $10('#current').text());
 console.log('All previous links:');
-$10('#current').prevAll('a').each(function () {
-    console.log('  ', jq(this).text());
-});
+$10('#current')
+    .prevAll('a')
+    .each(function () {
+        console.log('  ', jq(this).text());
+    });
 
 console.log('\nExample 11: Table Row Selection');
 const html11 = `

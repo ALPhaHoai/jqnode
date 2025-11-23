@@ -83,7 +83,7 @@ const $7 = jq(html7);
 const userData = {
     name: 'Jane Doe',
     email: 'jane@example.com',
-    role: 'Administrator'
+    role: 'Administrator',
 };
 const template = `
     <div class="profile">

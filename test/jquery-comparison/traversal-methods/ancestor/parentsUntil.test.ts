@@ -4,10 +4,10 @@ import { createTestDom, compareResults } from '../../../utils/jquery-comparison-
 import type { HtmlNode, JQ } from '../../../../types';
 
 describe('parentsUntil() method - Node-Query vs jQuery Comparison', () => {
-  let nqRoot: JQ, jqRoot: JQuery<Document>;
+    let nqRoot: JQ, jqRoot: JQuery<Document>;
 
-  beforeEach(() => {
-    const html = `
+    beforeEach(() => {
+        const html = `
       <html>
         <body class="main-body">
           <div id="content" class="content">
@@ -28,89 +28,91 @@ describe('parentsUntil() method - Node-Query vs jQuery Comparison', () => {
         </body>
       </html>
     `;
-    const { jquery, nodeQuery } = createTestDom(html);
-    jqRoot = jquery;
-    nqRoot = nodeQuery;
-  });
-
-  test('parentsUntil() should get ancestors until specified selector - jquery-comparison', () => {
-    const nqInnerSpan = nqRoot.find('.inner-span');
-    const jqInnerSpan = jqRoot.find('.inner-span');
-
-    const nqParents = nqInnerSpan.parentsUntil('.content');
-    const jqParents = jqInnerSpan.parentsUntil('.content');
-
-    expect(nqParents.nodes).toHaveLength(3); // span -> nested -> article -> section (stops before content)
-    expect(jqParents.length).toBe(3);
-
-    const nqTags = nqParents.nodes.map((node: HtmlNode) => node.tagName && node.tagName.toLowerCase());
-    const jqTagsResult: string[] = [];
-    jqParents.each((index: number, element: HTMLElement) => {
-      jqTagsResult.push(element.tagName.toLowerCase());
+        const { jquery, nodeQuery } = createTestDom(html);
+        jqRoot = jquery;
+        nqRoot = nodeQuery;
     });
 
-    expect(nqTags).toEqual(jqTagsResult);
-    expect(nqTags).toEqual(['div', 'article', 'section']);
-  });
+    test('parentsUntil() should get ancestors until specified selector - jquery-comparison', () => {
+        const nqInnerSpan = nqRoot.find('.inner-span');
+        const jqInnerSpan = jqRoot.find('.inner-span');
 
-  test('parentsUntil() should include all ancestors if filter never matches - jquery-comparison', () => {
-    const nqInnerSpan = nqRoot.find('.inner-span');
-    const jqInnerSpan = jqRoot.find('.inner-span');
+        const nqParents = nqInnerSpan.parentsUntil('.content');
+        const jqParents = jqInnerSpan.parentsUntil('.content');
 
-    const nqParents = nqInnerSpan.parentsUntil('.nonexistent');
-    const jqParents = jqInnerSpan.parentsUntil('.nonexistent');
+        expect(nqParents.nodes).toHaveLength(3); // span -> nested -> article -> section (stops before content)
+        expect(jqParents.length).toBe(3);
 
-    expect(nqParents.nodes).toHaveLength(6); // All ancestors up to html
-    expect(jqParents.length).toBe(6);
-  });
+        const nqTags = nqParents.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
+        const jqTagsResult: string[] = [];
+        jqParents.each((index: number, element: HTMLElement) => {
+            jqTagsResult.push(element.tagName.toLowerCase());
+        });
 
-  test('parentsUntil() should stop at first matching ancestor - jquery-comparison', () => {
-    const nqWidgetSpan = nqRoot.find('.widget-span');
-    const jqWidgetSpan = jqRoot.find('.widget-span');
+        expect(nqTags).toEqual(jqTagsResult);
+        expect(nqTags).toEqual(['div', 'article', 'section']);
+    });
 
-    const nqParents = nqWidgetSpan.parentsUntil('aside');
-    const jqParents = jqWidgetSpan.parentsUntil('aside');
+    test('parentsUntil() should include all ancestors if filter never matches - jquery-comparison', () => {
+        const nqInnerSpan = nqRoot.find('.inner-span');
+        const jqInnerSpan = jqRoot.find('.inner-span');
 
-    expect(nqParents.nodes).toHaveLength(1); // Only the widget div
-    expect(jqParents.length).toBe(1);
+        const nqParents = nqInnerSpan.parentsUntil('.nonexistent');
+        const jqParents = jqInnerSpan.parentsUntil('.nonexistent');
 
-    const nqClass = nqParents.attr('class');
-    const jqClass = jqParents.attr('class');
+        expect(nqParents.nodes).toHaveLength(6); // All ancestors up to html
+        expect(jqParents.length).toBe(6);
+    });
 
-    expect(nqClass).toBe(jqClass);
-    expect(nqClass).toBe('widget');
-  });
+    test('parentsUntil() should stop at first matching ancestor - jquery-comparison', () => {
+        const nqWidgetSpan = nqRoot.find('.widget-span');
+        const jqWidgetSpan = jqRoot.find('.widget-span');
 
-  test('parentsUntil() should work with multiple elements - jquery-comparison', () => {
-    const nqSpans = nqRoot.find('span');
-    const jqSpans = jqRoot.find('span');
+        const nqParents = nqWidgetSpan.parentsUntil('aside');
+        const jqParents = jqWidgetSpan.parentsUntil('aside');
 
-    const nqParents = nqSpans.parentsUntil('.content');
-    const jqParents = jqSpans.parentsUntil('.content');
+        expect(nqParents.nodes).toHaveLength(1); // Only the widget div
+        expect(jqParents.length).toBe(1);
 
-    expect(nqParents.nodes).toHaveLength(5); // Parents from both spans
-    expect(jqParents.length).toBe(5);
-  });
+        const nqClass = nqParents.attr('class');
+        const jqClass = jqParents.attr('class');
 
-  test('parentsUntil() should handle empty collections - jquery-comparison', () => {
-    const nqEmpty = nqRoot.find('.nonexistent');
-    const jqEmpty = jqRoot.find('.nonexistent');
+        expect(nqClass).toBe(jqClass);
+        expect(nqClass).toBe('widget');
+    });
 
-    const nqParents = nqEmpty.parentsUntil('div');
-    const jqParents = jqEmpty.parentsUntil('div');
+    test('parentsUntil() should work with multiple elements - jquery-comparison', () => {
+        const nqSpans = nqRoot.find('span');
+        const jqSpans = jqRoot.find('span');
 
-    expect(nqParents.nodes).toHaveLength(0);
-    expect(jqParents.length).toBe(0);
-  });
+        const nqParents = nqSpans.parentsUntil('.content');
+        const jqParents = jqSpans.parentsUntil('.content');
 
-  test('parentsUntil() should work with ID selectors - jquery-comparison', () => {
-    const nqInnerSpan = nqRoot.find('.inner-span');
-    const jqInnerSpan = jqRoot.find('.inner-span');
+        expect(nqParents.nodes).toHaveLength(5); // Parents from both spans
+        expect(jqParents.length).toBe(5);
+    });
 
-    const nqParents = nqInnerSpan.parentsUntil('#content');
-    const jqParents = jqInnerSpan.parentsUntil('#content');
+    test('parentsUntil() should handle empty collections - jquery-comparison', () => {
+        const nqEmpty = nqRoot.find('.nonexistent');
+        const jqEmpty = jqRoot.find('.nonexistent');
 
-    expect(nqParents.nodes).toHaveLength(3); // span -> nested -> article -> section
-    expect(jqParents.length).toBe(3);
-  });
+        const nqParents = nqEmpty.parentsUntil('div');
+        const jqParents = jqEmpty.parentsUntil('div');
+
+        expect(nqParents.nodes).toHaveLength(0);
+        expect(jqParents.length).toBe(0);
+    });
+
+    test('parentsUntil() should work with ID selectors - jquery-comparison', () => {
+        const nqInnerSpan = nqRoot.find('.inner-span');
+        const jqInnerSpan = jqRoot.find('.inner-span');
+
+        const nqParents = nqInnerSpan.parentsUntil('#content');
+        const jqParents = jqInnerSpan.parentsUntil('#content');
+
+        expect(nqParents.nodes).toHaveLength(3); // span -> nested -> article -> section
+        expect(jqParents.length).toBe(3);
+    });
 });

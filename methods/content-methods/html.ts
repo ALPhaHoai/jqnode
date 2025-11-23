@@ -16,9 +16,11 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
         const firstNode: HtmlNode = this.nodes[0];
         if (firstNode.type === 'element') {
             // Return the inner HTML (contents of the element)
-            const result = (firstNode.children || []).map(child => {
-                return nodeToHTML(child);
-            }).join('');
+            const result = (firstNode.children || [])
+                .map((child) => {
+                    return nodeToHTML(child);
+                })
+                .join('');
             return result;
         } else {
             // For text nodes or other types, return their HTML representation

@@ -6,7 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements before the target.
  * @param target - Target elements to insert before
  * @returns The JQ instance for chaining
-  * @see https://api.jquery.com/insertBefore/
+ * @see https://api.jquery.com/insertBefore/
  */
 function insertBefore(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;

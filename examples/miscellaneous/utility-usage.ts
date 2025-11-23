@@ -42,7 +42,7 @@ console.log('Size:', $3('p').size());
 console.log('Length:', $3('p').length);
 console.log('Are equal?', $3('p').size() === $3('p').length);
 
-// index() Examples  
+// index() Examples
 console.log('\n--- index() ---\n');
 
 console.log('Example 4: Get Element Index');
@@ -119,9 +119,7 @@ const $students = $7('#scores li');
 
 console.log('Total students:', $students.size());
 
-const scores = $students.toArray().map(el =>
-    parseInt(jq(el).attr('data-score'))
-);
+const scores = $students.toArray().map((el) => parseInt(jq(el).attr('data-score')));
 
 const average = scores.reduce((a, b) => a + b, 0) / scores.length;
 console.log('Average score:', average.toFixed(2));
@@ -148,15 +146,17 @@ console.log('Active index:', $activeLink.index());
 console.log('Total menu items:', $8('a').size());
 
 // Get all menu item details
-const menuItems = $8('a').toArray().map((el, i) => ({
-    index: i,
-    text: jq(el).text(),
-    href: jq(el).attr('href'),
-    active: jq(el).hasClass('active')
-}));
+const menuItems = $8('a')
+    .toArray()
+    .map((el, i) => ({
+        index: i,
+        text: jq(el).text(),
+        href: jq(el).attr('href'),
+        active: jq(el).hasClass('active'),
+    }));
 
 console.log('Menu structure:');
-menuItems.forEach(item => {
+menuItems.forEach((item) => {
     console.log(`  [${item.index}] ${item.text} ${item.active ? '(active)' : ''}`);
 });
 

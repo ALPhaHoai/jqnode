@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.
-  * @see https://api.jquery.com/closest/
+ * @see https://api.jquery.com/closest/
  */
 function closest(this: JQ, selector?: CssSelector): JQ {
     if (!selector) {
@@ -32,7 +32,7 @@ function closest(this: JQ, selector?: CssSelector): JQ {
         // Walk up the tree including the current node
         while (current) {
             // Handle both internal nodes and DOM elements
-            const isElement = current.type === 'element' || (current.nodeType === 1);
+            const isElement = current.type === 'element' || current.nodeType === 1;
             if (isElement) {
                 // Check if this node matches the selector
                 if (nodeMatchesSelector(current, parsedSelector)) {

@@ -28,7 +28,7 @@ $2('#product').data({
     price: 29.99,
     inStock: true,
     quantity: 150,
-    category: 'Electronics'
+    category: 'Electronics',
 });
 
 console.log('Product SKU:', $2('#product').data('sku'));
@@ -60,9 +60,21 @@ const html4 = `
 `;
 const $4 = jq(html4);
 
-console.log('Enabled (boolean):', $4('#config').data('enabled'), typeof $4('#config').data('enabled'));
-console.log('Max Items (number):', $4('#config').data('maxItems'), typeof $4('#config').data('maxItems'));
-console.log('Timeout (number):', $4('#config').data('timeout'), typeof $4('#config').data('timeout'));
+console.log(
+    'Enabled (boolean):',
+    $4('#config').data('enabled'),
+    typeof $4('#config').data('enabled'),
+);
+console.log(
+    'Max Items (number):',
+    $4('#config').data('maxItems'),
+    typeof $4('#config').data('maxItems'),
+);
+console.log(
+    'Timeout (number):',
+    $4('#config').data('timeout'),
+    typeof $4('#config').data('timeout'),
+);
 console.log('Mode (string):', $4('#config').data('mode'), typeof $4('#config').data('mode'));
 console.log('Options (object):', $4('#config').data('options'));
 
@@ -81,9 +93,9 @@ $5('#app').data('user', {
         language: 'en',
         notifications: {
             email: true,
-            push: false
-        }
-    }
+            push: false,
+        },
+    },
 });
 
 $5('#app').data('permissions', ['create', 'read', 'update', 'delete']);
@@ -125,7 +137,7 @@ $6('.card').each(function (index) {
         id: $card.data('cardId'),
         type: $card.data('type'),
         position: $card.data('position'),
-        clickable: $card.data('clickable')
+        clickable: $card.data('clickable'),
     });
 });
 
@@ -210,7 +222,7 @@ $10('#dropdown').data('state', {
     isOpen: false,
     selectedIndex: -1,
     items: ['Option 1', 'Option 2', 'Option 3'],
-    lastAction: null
+    lastAction: null,
 });
 
 function toggleDropdown() {
@@ -252,7 +264,7 @@ function validateEmail($field) {
     $field.data({
         isValid: isValid,
         validationMessage: isValid ? 'Valid email' : 'Invalid email format',
-        lastValidated: new Date()
+        lastValidated: new Date(),
     });
 }
 
@@ -263,7 +275,7 @@ function validatePassword($field) {
     $field.data({
         isValid: isValid,
         validationMessage: isValid ? 'Strong password' : 'Password must be at least 8 characters',
-        lastValidated: new Date()
+        lastValidated: new Date(),
     });
 }
 
@@ -274,7 +286,7 @@ function validateUsername($field) {
     $field.data({
         isValid: isValid,
         validationMessage: isValid ? 'Valid username' : 'Invalid username',
-        lastValidated: new Date()
+        lastValidated: new Date(),
     });
 }
 
@@ -316,7 +328,7 @@ function fetchUserData(useCache = true) {
         email: 'john.doe@example.com',
         avatar: 'avatar.jpg',
         fetchedAt: new Date(),
-        roles: ['user', 'premium']
+        roles: ['user', 'premium'],
     };
 
     // Cache the result

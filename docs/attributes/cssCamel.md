@@ -1,41 +1,49 @@
 # cssCamel() Method
 
 ## Overview
+
 The `cssCamel()` method gets or sets CSS style properties on elements with **camelCase property names**, making it ideal for React inline style objects. Similar to `.css()`, but transforms all property names to camelCase format (React/JavaScript convention) instead of kebab-case (CSS convention).
 
 ## Key Difference from css()
+
 - **css()**: Returns property names as provided (can be kebab-case or camelCase)
 - **cssCamel()**: Always returns camelCase property names, perfect for React's `style` prop
 
 ## Syntax
 
 ### Getting a single CSS property:
+
 ```javascript
-jq(selector).cssCamel(propertyName)
+jq(selector).cssCamel(propertyName);
 ```
 
 ### Getting multiple CSS properties:
+
 ```javascript
 jq(selector).cssCamel([propertyName1, propertyName2, ...])
 // Returns: { camelCaseKey1: value1, camelCaseKey2: value2, ... }
 ```
 
 ### Setting a single CSS property:
+
 ```javascript
-jq(selector).cssCamel(propertyName, value)
+jq(selector).cssCamel(propertyName, value);
 ```
 
 ### Setting with callback function:
+
 ```javascript
 jq(selector).cssCamel(propertyName, function(index, currentValue))
 ```
 
 ### Setting multiple CSS properties:
+
 ```javascript
 jq(selector).cssCamel({property1: value1, property2: value2, ...})
 ```
 
 ### Parameters
+
 - **propertyName** (String): CSS property name (hyphenated or camelCase, both accepted)
 - **propertyNames** (Array): Array of CSS property names to get (returns object with camelCase keys)
 - **value** (String|Number): The value to set. Numbers automatically get 'px' for applicable properties
@@ -43,6 +51,7 @@ jq(selector).cssCamel({property1: value1, property2: value2, ...})
 - **properties** (Object): Object of property-value pairs to set (accepts both camelCase and kebab-case keys)
 
 ### Return Value
+
 - **Getting single property**: Returns the computed style value as a string
 - **Getting multiple properties**: Returns an object with **camelCase keys** and style values
 - **Setting**: Returns the JQ instance for chaining
@@ -50,16 +59,19 @@ jq(selector).cssCamel({property1: value1, property2: value2, ...})
 ## Features
 
 ### ✅ React Inline Style Compatibility
+
 - Returns objects with camelCase keys suitable for React's `style` prop
 - Example: `backgroundColor` instead of `background-color`
 - No conversion needed to use in JSX
 
 ### ✅ Flexible Input
+
 - Accepts both kebab-case and camelCase property names when setting
 - Automatically converts all to proper format
 - Works seamlessly with existing CSS code
 
 ### ✅ Same Features as css()
+
 - Automatic 'px' unit conversion for numbers
 - Callback functions for dynamic values
 - Method chaining support
@@ -83,8 +95,8 @@ const $ = jq(html);
 
 // Get single property (input can be kebab-case or camelCase)
 console.log($('div').cssCamel('background-color')); // "red"
-console.log($('div').cssCamel('backgroundColor'));  // "red"
-console.log($('div').cssCamel('font-size'));        // "16px"
+console.log($('div').cssCamel('backgroundColor')); // "red"
+console.log($('div').cssCamel('font-size')); // "16px"
 ```
 
 ### Getting Multiple Properties - Perfect for React
@@ -133,14 +145,14 @@ $('div').cssCamel({
     'background-color': 'purple',
     fontSize: '20px',
     'border-width': '2px',
-    paddingLeft: '15px'
+    paddingLeft: '15px',
 });
 
 // All properties are set correctly
 console.log($('div').cssCamel('backgroundColor')); // "purple"
-console.log($('div').cssCamel('fontSize'));        // "20px"
-console.log($('div').cssCamel('borderWidth'));     // "2px"
-console.log($('div').cssCamel('paddingLeft'));     // "15px"
+console.log($('div').cssCamel('fontSize')); // "20px"
+console.log($('div').cssCamel('borderWidth')); // "2px"
+console.log($('div').cssCamel('paddingLeft')); // "15px"
 ```
 
 ### React Component Integration
@@ -149,7 +161,8 @@ console.log($('div').cssCamel('paddingLeft'));     // "15px"
 const jq = require('@alphahoai/jqnode');
 
 // Parse HTML from server/API
-const html = '<div class="card" style="background-color: white; padding: 20px; border-radius: 8px">Card</div>';
+const html =
+    '<div class="card" style="background-color: white; padding: 20px; border-radius: 8px">Card</div>';
 const $ = jq(html);
 
 // Extract styles for React component
@@ -180,7 +193,7 @@ $('div').cssCamel({
     height: 200,
     marginTop: 15,
     paddingLeft: 20,
-    fontSize: 16
+    fontSize: 16,
 });
 
 // Get the React-friendly object
@@ -198,7 +211,7 @@ console.log(styles);
 $('div').cssCamel('opacity', 0.8);
 $('div').cssCamel('zIndex', 100);
 console.log($('div').cssCamel('opacity')); // "0.8"
-console.log($('div').cssCamel('zIndex'));  // "100"
+console.log($('div').cssCamel('zIndex')); // "100"
 ```
 
 ### Callback Function
@@ -212,9 +225,9 @@ const html = `
 const $ = jq(html);
 
 // Increase all widths by 50px using callback
-$('div').cssCamel('width', function(index, currentValue) {
+$('div').cssCamel('width', function (index, currentValue) {
     const current = parseInt(currentValue);
-    return (current + 50) + 'px';
+    return current + 50 + 'px';
 });
 
 console.log($('div').eq(0).cssCamel('width')); // "150px"
@@ -234,7 +247,7 @@ $('div')
     .cssCamel('color', '#333')
     .cssCamel({
         padding: '10px',
-        borderRadius: '4px'
+        borderRadius: '4px',
     })
     .attr('data-styled', 'true');
 
@@ -260,7 +273,7 @@ $('div').cssCamel({
     'border-top-left-radius': '10px',
     borderTopRightRadius: '10px',
     'border-bottom-left-radius': '5px',
-    borderBottomRightRadius: '5px'
+    borderBottomRightRadius: '5px',
 });
 
 // Get all border radius values with camelCase keys
@@ -268,7 +281,7 @@ const radii = $('div').cssCamel([
     'border-top-left-radius',
     'border-top-right-radius',
     'border-bottom-left-radius',
-    'border-bottom-right-radius'
+    'border-bottom-right-radius',
 ]);
 
 console.log(radii);
@@ -291,14 +304,14 @@ console.log(radii);
 
 ## Comparison with css()
 
-| Feature | cssCamel() | css() |
-|---------|--------------|-------|
-| Property name format (get) | Always camelCase | As provided |
-| Property name format (set) | Accepts both | Accepts both |
-| React compatibility | ✅ Direct use | ❌ Needs conversion |
-| Return object keys | camelCase | As requested |
-| Example return | `{backgroundColor: "red"}` | `{"background-color": "red"}` |
-| Best for | React/JSX | General CSS work |
+| Feature                    | cssCamel()                 | css()                         |
+| -------------------------- | -------------------------- | ----------------------------- |
+| Property name format (get) | Always camelCase           | As provided                   |
+| Property name format (set) | Accepts both               | Accepts both                  |
+| React compatibility        | ✅ Direct use              | ❌ Needs conversion           |
+| Return object keys         | camelCase                  | As requested                  |
+| Example return             | `{backgroundColor: "red"}` | `{"background-color": "red"}` |
+| Best for                   | React/JSX                  | General CSS work              |
 
 ### Example Comparison
 
@@ -331,6 +344,7 @@ console.log(reactResult);
 ## Implementation Details
 
 The method:
+
 1. **Accepts flexible input**: Both kebab-case and camelCase property names
 2. **Returns camelCase keys**: All returned object keys are in camelCase
 3. **Property conversion**: Uses regex to convert between formats
@@ -351,6 +365,7 @@ The method:
 ## Browser Compatibility
 
 Works in all environments:
+
 - ✅ Node.js (via jsdom)
 - ✅ Modern browsers
 - ✅ Legacy browsers (with getComputedStyle support)

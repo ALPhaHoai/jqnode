@@ -60,7 +60,9 @@ console.log($container2('.container').html());
 console.log('\n📝 Example 3: Cloning Preserves Structure and Attributes');
 console.log('-'.repeat(60));
 
-const $complex = jq('<div id="main" class="wrapper"><h1>Title</h1><p class="text">Content</p></div>');
+const $complex = jq(
+    '<div id="main" class="wrapper"><h1>Title</h1><p class="text">Content</p></div>',
+);
 const $copy = $complex.clone();
 
 console.log('Original element:');

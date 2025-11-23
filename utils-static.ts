@@ -39,7 +39,7 @@ function param(obj: any, traditional: boolean = false): string {
                 } else {
                     buildParams(
                         prefix + '[' + (typeof v === 'object' && v != null ? i : '') + ']',
-                        v
+                        v,
                     );
                 }
             });
@@ -110,16 +110,14 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
 
         // Filter out script tags if keepScripts is false
         if (keepScripts === false) {
-            return nodes.filter(node =>
-                !(node.type === 'element' && node.name === 'SCRIPT')
-            );
+            return nodes.filter((node) => !(node.type === 'element' && node.name === 'SCRIPT'));
         }
 
         return nodes;
     }
 
     // Browser environment
-    const doc = context as Document || document;
+    const doc = (context as Document) || document;
     const parsed = doc.createElement('div');
     parsed.innerHTML = data;
 
@@ -127,7 +125,7 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
 
     // Filter out script elements if keepScripts is false
     if (keepScripts === false) {
-        return nodes.filter(node => node.nodeName !== 'SCRIPT');
+        return nodes.filter((node) => node.nodeName !== 'SCRIPT');
     }
 
     return nodes;
@@ -193,7 +191,7 @@ function type(obj: any): string {
         '[object RegExp]': 'regexp',
         '[object Object]': 'object',
         '[object Error]': 'error',
-        '[object Symbol]': 'symbol'
+        '[object Symbol]': 'symbol',
     };
 
     const typeStr = Object.prototype.toString.call(obj);
@@ -251,8 +249,10 @@ function isPlainObject(obj: any): boolean {
     }
 
     // Not own constructor (e.g., Array, Date, RegExp)
-    if (obj.constructor &&
-        !Object.prototype.hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')) {
+    if (
+        obj.constructor &&
+        !Object.prototype.hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')
+    ) {
         return false;
     }
 
@@ -397,7 +397,7 @@ function title(): string {
     const JQFactory = require('./index').default;
 
     // Use jqnode selector to find title element
-    return JQFactory("head > title").text().trim();
+    return JQFactory('head > title').text().trim();
 }
 
 /**
@@ -408,9 +408,9 @@ function normalizeHTML(html: string): string {
         return '';
     }
     return html
-        .replace(/[\t\n\r]/gi, ' ')  // Replace tabs, newlines, carriage returns with space
-        .replace(/\s+/g, ' ')        // Collapse multiple spaces into single space
-        .trim();                      // Remove leading and trailing whitespace
+        .replace(/[\t\n\r]/gi, ' ') // Replace tabs, newlines, carriage returns with space
+        .replace(/\s+/g, ' ') // Collapse multiple spaces into single space
+        .trim(); // Remove leading and trailing whitespace
 }
 
 export {
@@ -435,5 +435,5 @@ export {
     extend,
     escapeSelector,
     title,
-    normalizeHTML
+    normalizeHTML,
 };

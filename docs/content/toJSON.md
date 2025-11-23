@@ -1,37 +1,44 @@
 # toJSON() Method
 
 ## Overview
+
 The `toJSON()` method converts HTML table elements into a JSON array of objects. Each object represents a table row with properties named after the table headers, making it easy to work with tabular data programmatically.
 
 ## Syntax
+
 ```javascript
-jq(selector).toJSON(options)
+jq(selector).toJSON(options);
 ```
 
 ### Parameters
+
 - **options** (Object, optional): Configuration object
-  - **ignoreColumns** (Array): Column indices to exclude from results (0-based)
-  - **onlyColumns** (Array): Column indices to include exclusively (0-based)
-  - **headings** (String): Custom selector for heading elements (reserved for future use)
-  - **normalizeKeys** (Boolean): Replace non-alphanumeric characters in keys with underscores (default: false)
+    - **ignoreColumns** (Array): Column indices to exclude from results (0-based)
+    - **onlyColumns** (Array): Column indices to include exclusively (0-based)
+    - **headings** (String): Custom selector for heading elements (reserved for future use)
+    - **normalizeKeys** (Boolean): Replace non-alphanumeric characters in keys with underscores (default: false)
 
 ### Return Value
+
 Returns an array of objects where each object represents a table row. Property names are derived from table headers.
 
 ## Features
 
 ### ✅ Flexible Table Structure Support
+
 - Tables with `<thead>` elements
 - Tables without `<thead>` (uses first row as headers)
 - Tables with or without `<tbody>`
 - Handles both `<th>` and `<td>` header cells
 
 ### ✅ Column Filtering
+
 - Ignore specific columns by index
 - Include only specific columns
 - Automatic column naming for missing headers
 
 ### ✅ Data Cleaning
+
 - Automatically trims whitespace from cell values
 - Skips empty rows
 - Generates default column names (`column_0`, `column_1`, etc.) for missing headers
@@ -40,6 +47,7 @@ Returns an array of objects where each object represents a table row. Property n
 ## Examples
 
 ### Basic Usage
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -76,6 +84,7 @@ console.log(data);
 ```
 
 ### Table Without `<thead>`
+
 ```javascript
 const html = `
     <table>
@@ -106,6 +115,7 @@ console.log(data);
 ```
 
 ### Ignoring Columns
+
 ```javascript
 const html = `
     <table>
@@ -132,9 +142,11 @@ const html = `
 `;
 
 // Ignore first column (ID)
-const data = jq(html).find('table').toJSON({
-    ignoreColumns: [0]
-});
+const data = jq(html)
+    .find('table')
+    .toJSON({
+        ignoreColumns: [0],
+    });
 console.log(data);
 // [
 //   { Name: 'Alice', Email: 'alice@example.com' },
@@ -143,11 +155,14 @@ console.log(data);
 ```
 
 ### Including Only Specific Columns
+
 ```javascript
 // Include only columns 0 and 2 (ID and Email)
-const data = jq(html).find('table').toJSON({
-    onlyColumns: [0, 2]
-});
+const data = jq(html)
+    .find('table')
+    .toJSON({
+        onlyColumns: [0, 2],
+    });
 console.log(data);
 // [
 //   { ID: '001', Email: 'alice@example.com' },
@@ -156,6 +171,7 @@ console.log(data);
 ```
 
 ### Multiple Tables
+
 ```javascript
 const html = `
     <div>
@@ -180,6 +196,7 @@ console.log(allData);
 ```
 
 ### Chaining with findTableWithHeader()
+
 ```javascript
 const html = `
     <div>
@@ -195,15 +212,14 @@ const html = `
 `;
 
 // Find table with "Email" header and convert to JSON
-const contacts = jq(html)
-    .findTableWithHeader('Email')
-    .toJSON();
-    
+const contacts = jq(html).findTableWithHeader('Email').toJSON();
+
 console.log(contacts);
 // [{ Name: 'John', Email: 'john@example.com' }]
 ```
 
 ### Handling Missing Headers
+
 ```javascript
 const html = `
     <table>
@@ -226,6 +242,7 @@ console.log(data);
 ```
 
 ### Complex Table Structure
+
 ```javascript
 const html = `
     <table>
@@ -263,6 +280,7 @@ console.log(financialData);
 ```
 
 ### Normalizing Keys
+
 ```javascript
 const html = `
     <table>
@@ -287,6 +305,7 @@ console.log(data);
 ## Edge Cases
 
 ### Empty Table
+
 ```javascript
 const html = `<table><thead><tr><th>Name</th></tr></thead></table>`;
 const data = jq(html).find('table').toJSON();
@@ -294,6 +313,7 @@ console.log(data); // []
 ```
 
 ### Table with Only Headers
+
 ```javascript
 const html = `
     <table>
@@ -306,6 +326,7 @@ console.log(data); // []
 ```
 
 ### Non-Table Elements
+
 ```javascript
 const html = `<div>Not a table</div>`;
 const data = jq(html).find('div').toJSON();
@@ -331,6 +352,7 @@ console.log(data); // []
 ## Implementation Details
 
 The method:
+
 1. Iterates through all selected nodes
 2. Validates each node is a `<table>` element
 3. Locates headers in `<thead>` or first row
@@ -355,6 +377,7 @@ The method:
 ## Browser Compatibility
 
 Works in all environments:
+
 - ✅ Node.js (via jsdom)
 - ✅ Modern browsers
 - ✅ Legacy browsers (IE11+)

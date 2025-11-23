@@ -41,7 +41,9 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
 
         // Both libraries find the h1 element (jQuery finds it as a descendant of the container)
         expect(nqH1Elements.nodes).toHaveLength(1);
-        expect(nqH1Elements.nodes[0].tagName && nqH1Elements.nodes[0].tagName.toLowerCase()).toBe('h1');
+        expect(nqH1Elements.nodes[0].tagName && nqH1Elements.nodes[0].tagName.toLowerCase()).toBe(
+            'h1',
+        );
         expect(jqH1Elements.length).toBe(1);
         expect(jqH1Elements[0].tagName.toLowerCase()).toBe('h1');
         expect(nqH1Elements.text()).toBe(jqH1Elements.text());
@@ -50,17 +52,31 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqPElements = jqRoot.find('p');
 
         expect(nqPElements.nodes).toHaveLength(2);
-        expect(nqPElements.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p')).toBe(true);
+        expect(
+            nqPElements.nodes.every(
+                (node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p',
+            ),
+        ).toBe(true);
         expect(jqPElements.length).toBe(2);
-        expect(Array.from(jqPElements).every((el: HTMLElement) => el.tagName.toLowerCase() === 'p')).toBe(true);
+        expect(
+            Array.from(jqPElements).every((el: HTMLElement) => el.tagName.toLowerCase() === 'p'),
+        ).toBe(true);
 
         const nqSpanElements = nqRoot.find('span');
         const jqSpanElements = jqRoot.find('span');
 
         expect(nqSpanElements.nodes).toHaveLength(2);
-        expect(nqSpanElements.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span')).toBe(true);
+        expect(
+            nqSpanElements.nodes.every(
+                (node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span',
+            ),
+        ).toBe(true);
         expect(jqSpanElements.length).toBe(2);
-        expect(Array.from(jqSpanElements).every((el: HTMLElement) => el.tagName.toLowerCase() === 'span')).toBe(true);
+        expect(
+            Array.from(jqSpanElements).every(
+                (el: HTMLElement) => el.tagName.toLowerCase() === 'span',
+            ),
+        ).toBe(true);
     });
 
     test('find() should locate nested elements by class - jquery-comparison', () => {
@@ -93,7 +109,9 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqSpecialItems = jqRoot.find('li.special');
 
         expect(nqSpecialItems.nodes).toHaveLength(1);
-        expect(nqSpecialItems.nodes[0].tagName && nqSpecialItems.nodes[0].tagName.toLowerCase()).toBe('li');
+        expect(
+            nqSpecialItems.nodes[0].tagName && nqSpecialItems.nodes[0].tagName.toLowerCase(),
+        ).toBe('li');
         expect(nqSpecialItems.nodes[0].attributes?.class).toBe('item special');
 
         expect(jqSpecialItems.length).toBe(1);
@@ -107,7 +125,9 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqAllItems = jqRoot.find('.item');
 
         expect(nqAllItems.nodes).toHaveLength(3);
-        expect(nqAllItems.nodes.every((node: HtmlNode) => node.attributes.class.includes('item'))).toBe(true);
+        expect(
+            nqAllItems.nodes.every((node: HtmlNode) => node.attributes.class.includes('item')),
+        ).toBe(true);
 
         expect(jqAllItems.length).toBe(3);
         jqAllItems.each(function () {

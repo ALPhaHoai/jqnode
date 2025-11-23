@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the parent of each element in the current set of matched elements, optionally filtered by a selector.
-  * @see https://api.jquery.com/parent/
+ * @see https://api.jquery.com/parent/
  */
 function parent(this: JQ, selector?: CssSelector): JQ {
     const parents: HtmlNode[] = [];
@@ -12,7 +12,7 @@ function parent(this: JQ, selector?: CssSelector): JQ {
 
     for (const node of this.nodes) {
         // Handle both internal nodes and DOM elements
-        let parentNode = node.parent || node.parentNode;
+        const parentNode = node.parent || node.parentNode;
         if (parentNode && !seen.has(parentNode)) {
             // Check if it's an element and not HTML
             let isElement = false;
@@ -23,7 +23,9 @@ function parent(this: JQ, selector?: CssSelector): JQ {
                 isHtml = Boolean(node.tagName && node.tagName.toLowerCase() === 'html');
             } else if (node.parentNode && node.parentNode.nodeType === 1) {
                 isElement = true;
-                isHtml = ('tagName' in node.parentNode && (node.parentNode as Element).tagName.toLowerCase() === 'html');
+                isHtml =
+                    'tagName' in node.parentNode &&
+                    (node.parentNode as Element).tagName.toLowerCase() === 'html';
             }
 
             if (isElement && !isHtml) {

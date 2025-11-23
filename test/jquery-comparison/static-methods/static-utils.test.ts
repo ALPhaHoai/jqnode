@@ -50,13 +50,13 @@ describe('jQuery static utility methods', () => {
         });
 
         it('should detect function', () => {
-            expect($.type(function () { })).toBe('function');
-            expect($.type(() => { })).toBe('function');
+            expect($.type(function () {})).toBe('function');
+            expect($.type(() => {})).toBe('function');
         });
 
         it('should detect array', () => {
             expect($.type([])).toBe('array');
-            expect($.type(new Array())).toBe('array');
+            expect($.type([])).toBe('array');
         });
 
         it('should detect date', () => {
@@ -91,8 +91,8 @@ describe('jQuery static utility methods', () => {
 
     describe('$.isFunction()', () => {
         it('should detect functions', () => {
-            expect($.isFunction(function () { })).toBe(true);
-            expect($.isFunction(() => { })).toBe(true);
+            expect($.isFunction(function () {})).toBe(true);
+            expect($.isFunction(() => {})).toBe(true);
         });
 
         it('should return false for non-functions', () => {
@@ -208,7 +208,10 @@ describe('jQuery static utility methods', () => {
         });
 
         it('should serialize arrays', () => {
-            const arr = [{ name: 'a', value: 1 }, { name: 'b', value: 2 }];
+            const arr = [
+                { name: 'a', value: 1 },
+                { name: 'b', value: 2 },
+            ];
             const result = $.param(arr);
             expect(result).toBe('a=1&b=2');
         });

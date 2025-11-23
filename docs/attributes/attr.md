@@ -1,45 +1,54 @@
 # attr() Method
 
 ## Overview
+
 The `attr()` method gets or sets HTML attributes on elements. It provides full jQuery compatibility for attribute manipulation, including special handling for boolean attributes.
 
 ## Syntax
 
 ### Getting an attribute:
+
 ```javascript
-jq(selector).attr(name)
+jq(selector).attr(name);
 ```
 
 ### Setting an attribute:
+
 ```javascript
-jq(selector).attr(name, value)
+jq(selector).attr(name, value);
 ```
 
 ### Parameters
+
 - **name** (String): The attribute name to get or set
 - **value** (String|Boolean, optional): The attribute value to set
-  - If provided, sets the attribute
-  - If omitted, gets the attribute value
+    - If provided, sets the attribute
+    - If omitted, gets the attribute value
 
 ### Return Value
+
 - **Getting**: Returns the attribute value as a string, or `undefined` if not found
 - **Setting**: Returns the JQ instance for chaining
 
 ## Features
 
 ### ✅ jQuery-Compatible Behavior
+
 - Gets attribute from first element
 - Sets attribute on all elements
 - Returns `undefined` for missing attributes
 - Supports method chaining when setting
 
 ### ✅ Boolean Attributes
+
 Special handling for: `checked`, `selected`, `disabled`, `readonly`, `required`, `multiple`
+
 - Returns attribute name when present
 - Accepts `true`/`false` values
 - Properly syncs with DOM
 
 ### ✅ Cross-Environment Support
+
 - Works in Node.js (jsdom)
 - Works in browsers
 - Automatic DOM synchronization
@@ -47,6 +56,7 @@ Special handling for: `checked`, `selected`, `disabled`, `readonly`, `required`,
 ## Examples
 
 ### Basic Usage - Getting Attributes
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -74,6 +84,7 @@ console.log($('img').attr('width')); // "200"
 ```
 
 ### Basic Usage - Setting Attributes
+
 ```javascript
 const html = `<div id="box">Content</div>`;
 const $ = jq(html);
@@ -87,15 +98,13 @@ $('#box').attr('data-info', 'important');
 console.log($('#box').attr('data-info')); // "important"
 
 // Chaining
-$('#box')
-    .attr('title', 'Box Title')
-    .attr('role', 'region')
-    .attr('aria-label', 'Main Box');
-    
+$('#box').attr('title', 'Box Title').attr('role', 'region').attr('aria-label', 'Main Box');
+
 console.log($('#box').attr('title')); // "Box Title"
 ```
 
 ### Setting on Multiple Elements
+
 ```javascript
 const html = `
     <ul>
@@ -111,12 +120,13 @@ const $ = jq(html);
 $('li').attr('class', 'list-item');
 
 // Each item now has the class
-$('li').each(function() {
+$('li').each(function () {
     console.log(jq(this).attr('class')); // "list-item"
 });
 ```
 
 ### Boolean Attributes
+
 ```javascript
 const html = `
     <form>
@@ -151,6 +161,7 @@ console.log($('#agree').attr('checked')); // "checked"
 ```
 
 ### Data Attributes
+
 ```javascript
 const html = `<div id="user"></div>`;
 const $ = jq(html);
@@ -169,13 +180,14 @@ console.log($('#user').attr('data-active')); // "true"
 ```
 
 ### ARIA Attributes
+
 ```javascript
 const html = `<button id="menu-btn">Menu</button>`;
 const $ = jq(html);
 
 $('#menu-btn')
     .attr('aria-label', 'Open menu')
-.attr('aria-expanded', 'false')
+    .attr('aria-expanded', 'false')
     .attr('aria-haspopup', 'true')
     .attr('role', 'button');
 
@@ -184,6 +196,7 @@ console.log($('#menu-btn').attr('aria-expanded')); // "false"
 ```
 
 ### Getting Non-Existent Attributes
+
 ```javascript
 const html = `<div id="test">Content</div>`;
 const $ = jq(html);
@@ -194,6 +207,7 @@ console.log($('#test').attr('href')); // undefined
 ```
 
 ### Modifying Links
+
 ```javascript
 const html = `
     <div>
@@ -211,13 +225,14 @@ $('a.nav-link').attr('target', '_blank');
 // Add rel attribute
 $('a.nav-link').attr('rel', 'noopener noreferrer');
 
-$('a').each(function() {
+$('a').each(function () {
     const $link = jq(this);
     console.log($link.attr('href'), '->', $link.attr('target'));
 });
 ```
 
 ### Form Elements
+
 ```javascript
 const html = `
     <form>
@@ -247,6 +262,7 @@ $('button[type="submit"]').attr('disabled', true);
 ```
 
 ### Image Manipulation
+
 ```javascript
 const html = `
     <div class="gallery">
@@ -259,20 +275,21 @@ const html = `
 const $ = jq(html);
 
 // Add alt text to all images
-$('img').each(function(index) {
+$('img').each(function (index) {
     const $img = jq(this);
     $img.attr('alt', `Gallery image ${index + 1}`);
     $img.attr('loading', 'lazy');
 });
 
 // Get data-full attribute
-$('img').each(function() {
+$('img').each(function () {
     console.log('Thumbnail:', jq(this).attr('src'));
     console.log('Full size:', jq(this).attr('data-full'));
 });
 ```
 
 ### Conditional Attributes
+
 ```javascript
 const html = `<div id="status">Loading...</div>`;
 const $ = jq(html);
@@ -298,6 +315,7 @@ console.log($('#status').attr('aria-busy')); // "true"
 ## Edge Cases
 
 ### Empty Selection
+
 ```javascript
 const $ = jq('<div></div>');
 
@@ -309,6 +327,7 @@ $('#missing').attr('class', 'test'); // No effect, no error
 ```
 
 ### Null and Undefined Values
+
 ```javascript
 const html = `<div id="test" class="old">Content</div>`;
 const $ = jq(html);
@@ -323,6 +342,7 @@ console.log($('#test').attr('data-test')); // undefined
 ```
 
 ### Special Characters
+
 ```javascript
 const html = `<div id="data"></div>`;
 const $ = jq(html);
@@ -337,7 +357,7 @@ console.log($('#data').attr('data-info')); // Properly escaped
 2. **Accessibility**: Add ARIA attributes
 3. **Image Optimization**: Set lazy loading, srcset
 4. **Link Management**: Modify href, target, rel attributes
-5. **Data Storage**: Use data-* attributes
+5. **Data Storage**: Use data-\* attributes
 6. **State Management**: Toggle disabled, checked, selected
 7. **SEO**: Add meta information, alt tags
 8. **Testing**: Verify element attributes
@@ -352,6 +372,7 @@ console.log($('#data').attr('data-info')); // Properly escaped
 ## Implementation Details
 
 The method:
+
 1. **Getting**: Returns attribute from first element, `undefined` if not found
 2. **Setting**: Applies to all elements in collection
 3. **Boolean attributes**: Special handling for checked, disabled, etc.
@@ -369,13 +390,13 @@ The method:
 
 ## Differences from prop()
 
-| Feature | attr() | prop() |
-|---------|--------|--------|
-| Purpose | HTML attributes | DOM properties |
-| Boolean attrs | Returns attr name | Returns true/false |
-| Changes reflect | In HTML | In DOM state |
-| `checked` on checkbox | "checked" or undefined | true or false |
-| Performance | Slower (DOM access) | Faster (property access) |
+| Feature               | attr()                 | prop()                   |
+| --------------------- | ---------------------- | ------------------------ |
+| Purpose               | HTML attributes        | DOM properties           |
+| Boolean attrs         | Returns attr name      | Returns true/false       |
+| Changes reflect       | In HTML                | In DOM state             |
+| `checked` on checkbox | "checked" or undefined | true or false            |
+| Performance           | Slower (DOM access)    | Faster (property access) |
 
 ## Files
 
@@ -386,6 +407,7 @@ The method:
 ## Browser Compatibility
 
 Works in all environments:
+
 - ✅ Node.js (via jsdom)
 - ✅ Modern browsers
 - ✅ Legacy browsers (IE11+)
@@ -395,6 +417,6 @@ Works in all environments:
 1. **Use prop() for boolean state**: For checkboxes, use `prop('checked')` to get true/false
 2. **Chain for multiple attributes**: `$el.attr('a', '1').attr('b', '2')`
 3. **Check for undefined**: Always check if result is undefined before using
-4. **Data attributes**: Consider using `data()` method for data-* attributes
+4. **Data attributes**: Consider using `data()` method for data-\* attributes
 5. **ARIA attributes**: Essential for accessibility
 6. **Remove with null**: Set to `null` or `undefined` to remove

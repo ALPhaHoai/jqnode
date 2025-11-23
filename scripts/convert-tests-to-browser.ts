@@ -40,7 +40,6 @@ import * as estraverse from 'estraverse';
 import * as prettier from 'prettier';
 import * as ts from 'typescript';
 
-
 // TypeScript interfaces
 interface ProgressOptions {
     width?: number;
@@ -238,7 +237,8 @@ class ProgressIndicator {
             const remaining = this.total - current;
             const eta = remaining / rate;
 
-            if (eta > 0 && eta < 3600) { // Only show ETA if reasonable (< 1 hour)
+            if (eta > 0 && eta < 3600) {
+                // Only show ETA if reasonable (< 1 hour)
                 const etaStr = eta < 60 ? `${Math.round(eta)}s` : `${Math.round(eta / 60)}m`;
                 status += ` ETA: ${etaStr}`;
             }
@@ -253,7 +253,9 @@ class ProgressIndicator {
      * @param {string} [message] - Optional completion message
      */
     complete(message: string): void {
-        const duration = this.startTime ? ((Date.now() - this.startTime) / 1000).toFixed(2) : '0.00';
+        const duration = this.startTime
+            ? ((Date.now() - this.startTime) / 1000).toFixed(2)
+            : '0.00';
         console.log(` ✅ ${message} (${duration}s)`);
     }
 
@@ -275,7 +277,11 @@ class ProgressIndicator {
  * @returns {string[]} Array of paths to valid .test.js files
  * @throws {Error} If directory doesn't exist, isn't readable, or is not a directory
  */
-function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback: ((filePath: string, count: number) => void) | null = null): string[] {
+function getAllTestFiles(
+    dir: string,
+    fileList: string[] = [],
+    progressCallback: ((filePath: string, count: number) => void) | null = null,
+): string[] {
     // Validate input directory
     if (!dir || typeof dir !== 'string') {
         throw new Error('Directory path must be a non-empty string');
@@ -299,7 +305,7 @@ function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback:
         throw new Error(`Failed to read directory ${dir}: ${getErrorMessage(error)}`);
     }
 
-    files.forEach(file => {
+    files.forEach((file) => {
         const filePath = path.join(dir, file);
 
         let stat;
@@ -315,7 +321,9 @@ function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback:
             try {
                 getAllTestFiles(filePath, fileList);
             } catch (error) {
-                console.warn(`⚠️  Could not process subdirectory ${filePath}: ${getErrorMessage(error)}`);
+                console.warn(
+                    `⚠️  Could not process subdirectory ${filePath}: ${getErrorMessage(error)}`,
+                );
             }
         } else if (file.endsWith('.test.js') || file.endsWith('.test.ts')) {
             // Validate the test file before adding it to the list
@@ -327,14 +335,15 @@ function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback:
                     progressCallback(filePath, fileList.length);
                 }
             } catch (error) {
-                console.warn(`⚠️  Skipping invalid test file ${filePath}: ${getErrorMessage(error)}`);
+                console.warn(
+                    `⚠️  Skipping invalid test file ${filePath}: ${getErrorMessage(error)}`,
+                );
             }
         }
     });
 
     return fileList;
 }
-
 
 /**
  * Converts Jest assertion statements to browser-compatible JavaScript code.
@@ -345,7 +354,7 @@ function getAllTestFiles(dir: string, fileList: string[] = [], progressCallback:
  */
 function convertAssertions(code: string): string {
     // Preprocess: remove require() calls that are common in Node.js tests
-    let processedCode = code
+    const processedCode = code
         // Remove require assignments at the top level (like const $ = require('...'))
         .replace(/^[\s]*const\s+\$\s*=\s*require\(['"][^'"]*['"]\);\s*$/gm, '')
         // Replace require() calls in expressions with appropriate browser equivalents
@@ -356,18 +365,36 @@ function convertAssertions(code: string): string {
         .replace(/import\(['"]\.\.\/jq['"]\)/g, '$')
         .replace(/new\s*\(\s*import\(['"][^'"]*['"]\)\s*\)/g, '$')
         // Handle Jest spy methods - replace with browser-compatible alternatives
-        .replace(/const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\)\.mockImplementation\([\s\S]*?\);/g, 'const $1 = { called: false, calls: [], mockRestore: () => {} };')
-        .replace(/const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\);/g, 'const $1 = { called: false, calls: [], mockRestore: () => {} };')
+        .replace(
+            /const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\)\.mockImplementation\([\s\S]*?\);/g,
+            'const $1 = { called: false, calls: [], mockRestore: () => {} };',
+        )
+        .replace(
+            /const\s+(\w+)\s*=\s*jest\.spyOn\(([^,]+),\s*([^)]+)\);/g,
+            'const $1 = { called: false, calls: [], mockRestore: () => {} };',
+        )
         // Handle utility function imports - remove them since they're available globally in browser
         .replace(/const\s*\{\s*getTextContent\s*\}\s*=\s*require\(['"][^'"]*utils['"]\);\s*/g, '')
         // Handle jquery-comparison-helpers imports
-        .replace(/const\s*\{\s*([^}]+)\s*\}\s*=\s*require\(['"][^'"]*jquery-comparison-helpers['"]\);\s*/g, '')
+        .replace(
+            /const\s*\{\s*([^}]+)\s*\}\s*=\s*require\(['"][^'"]*jquery-comparison-helpers['"]\);\s*/g,
+            '',
+        )
         // Handle spy method calls
         .replace(/(\w+)\.mockRestore\(\)/g, '$1.mockRestore()')
-        .replace(/expect\((\w+)\)\.toHaveBeenCalledWith\(([^)]*)\)/g, '/* Browser mock check: $1 called with $2 */ true')
-        .replace(/expect\((\w+)\)\.toHaveBeenCalled\(\)/g, '/* Browser mock check: $1 called */ true')
+        .replace(
+            /expect\((\w+)\)\.toHaveBeenCalledWith\(([^)]*)\)/g,
+            '/* Browser mock check: $1 called with $2 */ true',
+        )
+        .replace(
+            /expect\((\w+)\)\.toHaveBeenCalled\(\)/g,
+            '/* Browser mock check: $1 called */ true',
+        )
         // Add dummy method for placeholder tests
-        .replace(/items\.yourFunctionName\(\)/g, '(function() { $.fn.yourFunctionName = function() { console.log("Called yourFunctionName on " + this.nodes.length + " elements."); this.nodes.forEach(function(node) { if (node.attributes) node.attributes["data-custom-method-called"] = "true"; }); return this; }; return items.yourFunctionName(); })()');
+        .replace(
+            /items\.yourFunctionName\(\)/g,
+            '(function() { $.fn.yourFunctionName = function() { console.log("Called yourFunctionName on " + this.nodes.length + " elements."); this.nodes.forEach(function(node) { if (node.attributes) node.attributes["data-custom-method-called"] = "true"; }); return this; }; return items.yourFunctionName(); })()',
+        );
 
     // Parse the processed code into an AST
     let ast;
@@ -376,10 +403,12 @@ function convertAssertions(code: string): string {
             ecmaVersion: 2020,
             allowImportExportEverywhere: true,
             allowAwaitOutsideFunction: true,
-            ranges: true // Enable range tracking
+            ranges: true, // Enable range tracking
         });
     } catch (error) {
-        console.warn(`⚠️  AST parsing failed, falling back to basic string replacement: ${getErrorMessage(error)}`);
+        console.warn(
+            `⚠️  AST parsing failed, falling back to basic string replacement: ${getErrorMessage(error)}`,
+        );
         // Fallback: return processed code without AST transformations
         return processedCode;
     }
@@ -394,21 +423,25 @@ function convertAssertions(code: string): string {
     estraverse.traverse(ast as any, {
         enter: function (node) {
             // Look for CallExpression where callee is 'expect'
-            if (node.type === 'CallExpression' &&
+            if (
+                node.type === 'CallExpression' &&
                 (node as any).callee.type === 'Identifier' &&
                 ((node as any).callee as Identifier).name === 'expect' &&
-                (node as any).arguments.length > 0) {
-
+                (node as any).arguments.length > 0
+            ) {
                 // Find the complete expect statement by walking up the AST
-                const expectStatement = findCompleteExpectStatement(node as unknown as ASTNode, processedCode);
+                const expectStatement = findCompleteExpectStatement(
+                    node as unknown as ASTNode,
+                    processedCode,
+                );
                 if (expectStatement) {
                     expectCalls.push({
                         node: node as unknown as CallExpression,
-                        statement: expectStatement
+                        statement: expectStatement,
                     });
                 }
             }
-        }
+        },
     });
 
     // Process each expect call
@@ -420,7 +453,7 @@ function convertAssertions(code: string): string {
             replacements.push({
                 start: statement.start,
                 end: statement.end,
-                replacement: replacement
+                replacement: replacement,
             });
         }
     }
@@ -428,7 +461,8 @@ function convertAssertions(code: string): string {
     // Apply replacements in reverse order to maintain positions
     replacements.sort((a, b) => b.start - a.start);
     for (const replacement of replacements) {
-        convertedCode = convertedCode.substring(0, replacement.start) +
+        convertedCode =
+            convertedCode.substring(0, replacement.start) +
             replacement.replacement +
             convertedCode.substring(replacement.end);
     }
@@ -443,11 +477,20 @@ function convertAssertions(code: string): string {
         .replace(/new\s*\(\s*import\(['"][^'"]*['"]\)\s*\)/g, '$')
         .replace(/\.nodes\.length/g, '.length')
         // Handle .nodes[index] access to work with both jqnode and jQuery
-        .replace(/(\w+)\.nodes\[(\d+)\]/g, '($1.nodes ? $1.nodes[$2] : ($1.get ? $1.get($2) : $1.eq($2)[0]))')
+        .replace(
+            /(\w+)\.nodes\[(\d+)\]/g,
+            '($1.nodes ? $1.nodes[$2] : ($1.get ? $1.get($2) : $1.eq($2)[0]))',
+        )
         // Handle .nodes method calls to work with both jqnode and jQuery
-        .replace(/(\w+)\.nodes\.(\w+)\(/g, '($1.nodes ? $1.nodes : ($1.toArray ? $1.toArray() : Array.from($1))).$2(')
+        .replace(
+            /(\w+)\.nodes\.(\w+)\(/g,
+            '($1.nodes ? $1.nodes : ($1.toArray ? $1.toArray() : Array.from($1))).$2(',
+        )
         // Handle specific closestNodeTags pattern
-        .replace(/closestNodeTags = closest\.nodes\.map\(/g, 'closestNodeTags = (closest.nodes ? closest.nodes : (closest.toArray ? closest.toArray() : Array.from(closest))).map(')
+        .replace(
+            /closestNodeTags = closest\.nodes\.map\(/g,
+            'closestNodeTags = (closest.nodes ? closest.nodes : (closest.toArray ? closest.toArray() : Array.from(closest))).map(',
+        )
         // Handle .tag property access for DOM elements (final pass) - only when not in quotes
         .replace(/([^'".])\.tag([^'"])/g, '$1.tagName$2');
 
@@ -503,7 +546,7 @@ function findCompleteExpectStatement(expectNode: ASTNode, sourceCode: string): E
     return {
         start: start,
         end: end,
-        text: sourceCode.substring(start, end)
+        text: sourceCode.substring(start, end),
     };
 }
 
@@ -573,7 +616,12 @@ function convertExpectStatement(statement: ExpectStatement): string | null {
  * @param {boolean} isNegated - Whether the assertion is negated (.not)
  * @returns {string|null} The browser-compatible assertion code, or null if unsupported
  */
-function generateAssertionCode(expectArg: string, methodName: string, methodArgs: string, isNegated: boolean): string | null {
+function generateAssertionCode(
+    expectArg: string,
+    methodName: string,
+    methodArgs: string,
+    isNegated: boolean,
+): string | null {
     switch (methodName) {
         case 'toBeTruthy':
             const conditionTruthy = isNegated ? `!!(${expectArg})` : `!(${expectArg})`;
@@ -586,12 +634,16 @@ function generateAssertionCode(expectArg: string, methodName: string, methodArgs
             return `if (${conditionFalsy}) throw new Error('Expected ${escapeString(expectArg)} ${msgFalsy}')`;
 
         case 'toBeDefined':
-            const conditionDefined = isNegated ? `${expectArg} !== undefined` : `${expectArg} === undefined`;
+            const conditionDefined = isNegated
+                ? `${expectArg} !== undefined`
+                : `${expectArg} === undefined`;
             const msgDefined = isNegated ? 'not to be defined' : 'to be defined';
             return `if (${conditionDefined}) throw new Error('Expected ${escapeString(expectArg)} ${msgDefined}')`;
 
         case 'toBeUndefined':
-            const conditionUndefined = isNegated ? `${expectArg} === undefined` : `${expectArg} !== undefined`;
+            const conditionUndefined = isNegated
+                ? `${expectArg} === undefined`
+                : `${expectArg} !== undefined`;
             const msgUndefined = isNegated ? 'not to be undefined' : 'to be undefined';
             return `if (${conditionUndefined}) throw new Error('Expected ${escapeString(expectArg)} ${msgUndefined}')`;
 
@@ -601,61 +653,81 @@ function generateAssertionCode(expectArg: string, methodName: string, methodArgs
             return `if (${conditionNull}) throw new Error('Expected ${escapeString(expectArg)} ${msgNull}')`;
 
         case 'toBe':
-            const conditionBe = isNegated ? `(${expectArg}) === ${methodArgs} ` : `(${expectArg}) !== ${methodArgs} `;
+            const conditionBe = isNegated
+                ? `(${expectArg}) === ${methodArgs} `
+                : `(${expectArg}) !== ${methodArgs} `;
             const msgBe = isNegated ? 'not to be' : 'to be';
             return `if (${conditionBe}) throw new Error('Expected ' + (${expectArg}) + ' ${msgBe} ' + ${methodArgs})`;
 
         case 'toEqual':
-            const conditionEqual = isNegated ?
-                `JSON.stringify(${expectArg}) === JSON.stringify(${methodArgs})` :
-                `JSON.stringify(${expectArg}) !== JSON.stringify(${methodArgs})`;
+            const conditionEqual = isNegated
+                ? `JSON.stringify(${expectArg}) === JSON.stringify(${methodArgs})`
+                : `JSON.stringify(${expectArg}) !== JSON.stringify(${methodArgs})`;
             const msgEqual = isNegated ? 'not to equal' : 'to equal';
             return `if (${conditionEqual}) throw new Error('Expected ' + JSON.stringify(${expectArg}) + ' ${msgEqual} ' + JSON.stringify(${methodArgs}))`;
 
         case 'toHaveLength':
             // Handle jqnode objects which have .nodes.length instead of .length
             const lengthExpr = `${expectArg}.nodes ? ${expectArg}.nodes.length : ${expectArg}.length`;
-            const conditionLength = isNegated ? `${lengthExpr} === ${methodArgs} ` : `${lengthExpr} !== ${methodArgs} `;
+            const conditionLength = isNegated
+                ? `${lengthExpr} === ${methodArgs} `
+                : `${lengthExpr} !== ${methodArgs} `;
             const msgLength = isNegated ? 'not to have length' : 'to have length';
             return `if (${conditionLength}) throw new Error('Expected length ' + (${lengthExpr}) + ' ${msgLength} ' + ${methodArgs})`;
 
         case 'toBeInstanceOf':
-            const conditionInstance = isNegated ? `${expectArg} instanceof ${methodArgs} ` : `!(${expectArg} instanceof ${methodArgs})`;
+            const conditionInstance = isNegated
+                ? `${expectArg} instanceof ${methodArgs} `
+                : `!(${expectArg} instanceof ${methodArgs})`;
             const msgInstance = isNegated ? 'not to be instance of' : 'to be instance of';
             return `if (${conditionInstance}) throw new Error('Expected ${msgInstance} ${escapeString(methodArgs)}')`;
 
         case 'toContain':
-            const conditionContain = isNegated ? `${expectArg}.includes(${methodArgs})` : `!(${expectArg}.includes(${methodArgs}))`;
+            const conditionContain = isNegated
+                ? `${expectArg}.includes(${methodArgs})`
+                : `!(${expectArg}.includes(${methodArgs}))`;
             const msgContain = isNegated ? 'not to contain' : 'to contain';
             return `if (${conditionContain}) throw new Error('Expected ' + ${expectArg} + ' ${msgContain} ' + ${methodArgs})`;
 
         case 'toBeGreaterThan':
-            const conditionGT = isNegated ? `${expectArg} > ${methodArgs} ` : `${expectArg} <= ${methodArgs} `;
+            const conditionGT = isNegated
+                ? `${expectArg} > ${methodArgs} `
+                : `${expectArg} <= ${methodArgs} `;
             const msgGT = isNegated ? 'not to be greater than' : 'to be greater than';
             return `if (${conditionGT}) throw new Error('Expected ' + ${expectArg} + ' ${msgGT} ' + ${methodArgs})`;
 
         case 'toBeLessThan':
-            const conditionLT = isNegated ? `${expectArg} <${methodArgs}` : `${expectArg} >= ${methodArgs} `;
+            const conditionLT = isNegated
+                ? `${expectArg} <${methodArgs}`
+                : `${expectArg} >= ${methodArgs} `;
             const msgLT = isNegated ? 'not to be less than' : 'to be less than';
             return `if (${conditionLT}) throw new Error('Expected ' + ${expectArg} + ' ${msgLT} ' + ${methodArgs})`;
 
         case 'toBeGreaterThanOrEqual':
-            const conditionGTE = isNegated ? `${expectArg} >= ${methodArgs} ` : `${expectArg} <${methodArgs}`;
+            const conditionGTE = isNegated
+                ? `${expectArg} >= ${methodArgs} `
+                : `${expectArg} <${methodArgs}`;
             const msgGTE = isNegated ? 'not to be >=' : 'to be >=';
             return `if (${conditionGTE}) throw new Error('Expected ' + ${expectArg} + ' ${msgGTE} ' + ${methodArgs})`;
 
         case 'toBeLessThanOrEqual':
-            const conditionLTE = isNegated ? `${expectArg} <= ${methodArgs} ` : `${expectArg} > ${methodArgs} `;
+            const conditionLTE = isNegated
+                ? `${expectArg} <= ${methodArgs} `
+                : `${expectArg} > ${methodArgs} `;
             const msgLTE = isNegated ? 'not to be <=' : 'to be <=';
             return `if (${conditionLTE}) throw new Error('Expected ' + ${expectArg} + ' ${msgLTE} ' + ${methodArgs})`;
 
         case 'toMatch':
-            const conditionMatch = isNegated ? `${methodArgs}.test(${expectArg})` : `!(${methodArgs}.test(${expectArg}))`;
+            const conditionMatch = isNegated
+                ? `${methodArgs}.test(${expectArg})`
+                : `!(${methodArgs}.test(${expectArg}))`;
             const msgMatch = isNegated ? 'not to match' : 'to match';
             return `if (${conditionMatch}) throw new Error('Expected ' + ${expectArg} + ' ${msgMatch} ' + ${methodArgs})`;
 
         case 'toHaveProperty':
-            const conditionHaveProperty = isNegated ? `${expectArg}.hasOwnProperty(${methodArgs})` : `!(${expectArg}.hasOwnProperty(${methodArgs}))`;
+            const conditionHaveProperty = isNegated
+                ? `${expectArg}.hasOwnProperty(${methodArgs})`
+                : `!(${expectArg}.hasOwnProperty(${methodArgs}))`;
             const msgHaveProperty = isNegated ? 'not to have property' : 'to have property';
             return `if (${conditionHaveProperty}) throw new Error('Expected ' + ${expectArg} + ' ${msgHaveProperty} ' + ${methodArgs})`;
 
@@ -671,11 +743,23 @@ function generateAssertionCode(expectArg: string, methodName: string, methodArgs
  */
 function isSupportedAssertion(methodName: string): boolean {
     const supportedMethods = [
-        'toBe', 'toEqual', 'toHaveLength', 'toBeInstanceOf',
-        'toBeTruthy', 'toBeFalsy', 'toContain', 'toBeDefined',
-        'toBeUndefined', 'toBeNull', 'toBeGreaterThan', 'toBeLessThan',
-        'toBeGreaterThanOrEqual', 'toBeLessThanOrEqual', 'toMatch',
-        'toThrow', 'toHaveProperty' // for .not.toThrow() assertions
+        'toBe',
+        'toEqual',
+        'toHaveLength',
+        'toBeInstanceOf',
+        'toBeTruthy',
+        'toBeFalsy',
+        'toContain',
+        'toBeDefined',
+        'toBeUndefined',
+        'toBeNull',
+        'toBeGreaterThan',
+        'toBeLessThan',
+        'toBeGreaterThanOrEqual',
+        'toBeLessThanOrEqual',
+        'toMatch',
+        'toThrow',
+        'toHaveProperty', // for .not.toThrow() assertions
     ];
     return supportedMethods.includes(methodName);
 }
@@ -690,7 +774,7 @@ function parseTestStructure(content: string): TestStructure {
         setupCode: '',
         variableDeclarations: [] as string[],
         describeBlocks: [],
-        testContexts: new Map() // Maps test names to their setup functions
+        testContexts: new Map(), // Maps test names to their setup functions
     };
 
     try {
@@ -698,39 +782,45 @@ function parseTestStructure(content: string): TestStructure {
             ecmaVersion: 2020,
             allowImportExportEverywhere: true,
             allowAwaitOutsideFunction: true,
-            ranges: true
+            ranges: true,
         });
 
         // Track the current describe context stack
         const describeStack: DescribeBlock[] = [];
-        let currentSetupFunction = null;
+        const currentSetupFunction = null;
 
         estraverse.traverse(ast as any, {
             enter: function (node) {
                 // Handle describe blocks
-                if (node.type === 'CallExpression' &&
+                if (
+                    node.type === 'CallExpression' &&
                     (node as any).callee.name === 'describe' &&
-                    (node as any).arguments.length >= 2) {
-
-                    const describeName = ((node as any).arguments[0] as Literal).value || ((node as any).arguments[0] as Literal).raw;
+                    (node as any).arguments.length >= 2
+                ) {
+                    const describeName =
+                        ((node as any).arguments[0] as Literal).value ||
+                        ((node as any).arguments[0] as Literal).raw;
                     describeStack.push({
                         name: String(describeName),
                         setupFunction: null,
-                        variableDeclarations: []
+                        variableDeclarations: [],
                     });
 
                     // Extract variable declarations from the describe block
-                    if ((node as any).arguments[1].type === 'FunctionExpression' ||
-                        (node as any).arguments[1].type === 'ArrowFunctionExpression') {
+                    if (
+                        (node as any).arguments[1].type === 'FunctionExpression' ||
+                        (node as any).arguments[1].type === 'ArrowFunctionExpression'
+                    ) {
                         const body = (node as any).arguments[1].body;
                         if (body.type === 'BlockStatement') {
                             // Look for variable declarations at the top level of the describe block
                             (body as any).body.forEach((stmt: any) => {
-                                if (stmt.type === 'VariableDeclaration' &&
-                                    stmt.kind === 'let') {
+                                if (stmt.type === 'VariableDeclaration' && stmt.kind === 'let') {
                                     stmt.declarations.forEach((decl: any) => {
                                         if (decl.id.type === 'Identifier') {
-                                            describeStack[describeStack.length - 1].variableDeclarations.push(decl.id.name);
+                                            describeStack[
+                                                describeStack.length - 1
+                                            ].variableDeclarations.push(decl.id.name);
                                         }
                                     });
                                 }
@@ -740,18 +830,23 @@ function parseTestStructure(content: string): TestStructure {
                 }
 
                 // Handle beforeEach blocks
-                if (node.type === 'CallExpression' &&
+                if (
+                    node.type === 'CallExpression' &&
                     (node as any).callee.name === 'beforeEach' &&
                     (node as any).arguments.length >= 1 &&
-                    describeStack.length > 0) {
-
+                    describeStack.length > 0
+                ) {
                     const beforeEachArg = (node as any).arguments[0];
-                    if ((beforeEachArg.type === 'FunctionExpression' ||
-                        beforeEachArg.type === 'ArrowFunctionExpression') &&
-                        beforeEachArg.body.type === 'BlockStatement') {
-
+                    if (
+                        (beforeEachArg.type === 'FunctionExpression' ||
+                            beforeEachArg.type === 'ArrowFunctionExpression') &&
+                        beforeEachArg.body.type === 'BlockStatement'
+                    ) {
                         // Extract the setup code
-                        const setupCode = content.substring((beforeEachArg.body as any).start, (beforeEachArg.body as any).end);
+                        const setupCode = content.substring(
+                            (beforeEachArg.body as any).start,
+                            (beforeEachArg.body as any).end,
+                        );
                         // Remove the braces
                         const cleanSetupCode = setupCode.substring(1, setupCode.length - 1).trim();
 
@@ -766,11 +861,14 @@ function parseTestStructure(content: string): TestStructure {
                 }
 
                 // Handle test blocks
-                if (node.type === 'CallExpression' &&
+                if (
+                    node.type === 'CallExpression' &&
                     (node as any).callee.name === 'test' &&
-                    (node as any).arguments.length >= 2) {
-
-                    const testName = ((node as any).arguments[0] as Literal).value || ((node as any).arguments[0] as Literal).raw;
+                    (node as any).arguments.length >= 2
+                ) {
+                    const testName =
+                        ((node as any).arguments[0] as Literal).value ||
+                        ((node as any).arguments[0] as Literal).raw;
 
                     // Find the appropriate setup function for this test
                     // Start from the innermost describe block and work outwards
@@ -786,7 +884,7 @@ function parseTestStructure(content: string): TestStructure {
 
                     // Collect variable declarations from all describe blocks in the hierarchy
                     const allVars = new Set<string>();
-                    describeStack.forEach(describeBlock => {
+                    describeStack.forEach((describeBlock) => {
                         describeBlock.variableDeclarations.forEach((v: string) => allVars.add(v));
                     });
                     result.variableDeclarations = Array.from(allVars) as string[];
@@ -795,13 +893,11 @@ function parseTestStructure(content: string): TestStructure {
 
             leave: function (node) {
                 // Pop describe blocks when we leave them
-                if (node.type === 'CallExpression' &&
-                    (node as any).callee.name === 'describe') {
+                if (node.type === 'CallExpression' && (node as any).callee.name === 'describe') {
                     describeStack.pop();
                 }
-            }
+            },
         });
-
     } catch (error) {
         console.warn(`⚠️  AST parsing failed for test structure: ${getErrorMessage(error)} `);
         throw error;
@@ -818,7 +914,6 @@ function parseTestStructure(content: string): TestStructure {
 function escapeString(str: string) {
     return str.replace(/'/g, "\\'");
 }
-
 
 /**
  * Validates a test file for correctness and compatibility.
@@ -851,7 +946,9 @@ function validateTestFile(filePath: string): void {
     // Check file size (prevent processing extremely large files)
     const maxFileSize = 10 * 1024 * 1024; // 10MB limit
     if (stat.size > maxFileSize) {
-        throw new Error(`Test file too large(${(stat.size / 1024 / 1024).toFixed(2)}MB): ${filePath} `);
+        throw new Error(
+            `Test file too large(${(stat.size / 1024 / 1024).toFixed(2)}MB): ${filePath} `,
+        );
     }
 
     // Validate file content structure
@@ -918,11 +1015,13 @@ function parseTestFile(filePath: string): ParsedTestFile {
                         module: ts.ModuleKind.ESNext,
                         target: ts.ScriptTarget.ES2020,
                         jsx: ts.JsxEmit.React,
-                    }
+                    },
                 });
                 content = result.outputText;
             } catch (tsError) {
-                console.warn(`⚠️  TypeScript transpilation failed for ${filePath}: ${getErrorMessage(tsError)}`);
+                console.warn(
+                    `⚠️  TypeScript transpilation failed for ${filePath}: ${getErrorMessage(tsError)}`,
+                );
                 // Continue with original content, might fail later but worth a try
             }
         }
@@ -934,7 +1033,9 @@ function parseTestFile(filePath: string): ParsedTestFile {
     try {
         relativePath = path.relative(TEST_DIR, filePath);
     } catch (error) {
-        console.warn(`⚠️  Could not determine relative path for ${filePath}: ${getErrorMessage(error)} `);
+        console.warn(
+            `⚠️  Could not determine relative path for ${filePath}: ${getErrorMessage(error)} `,
+        );
         relativePath = path.basename(filePath);
     }
 
@@ -943,13 +1044,15 @@ function parseTestFile(filePath: string): ParsedTestFile {
     try {
         testStructure = parseTestStructure(content);
     } catch (error) {
-        console.warn(`⚠️  Could not parse test structure from ${filePath}: ${getErrorMessage(error)} `);
+        console.warn(
+            `⚠️  Could not parse test structure from ${filePath}: ${getErrorMessage(error)} `,
+        );
         // Fallback to simple parsing
         testStructure = {
             setupCode: '',
             variableDeclarations: [] as string[],
             describeBlocks: [],
-            testContexts: new Map()
+            testContexts: new Map(),
         };
 
         // Simple fallback extraction
@@ -962,7 +1065,9 @@ function parseTestFile(filePath: string): ParsedTestFile {
         if (describeBlockMatch) {
             const beforeSetup = describeBlockMatch[1];
             const letMatches = beforeSetup.matchAll(/let\s+(\w+);/g);
-            testStructure.variableDeclarations = Array.from(letMatches).map((m: any) => m[1]) as string[];
+            testStructure.variableDeclarations = Array.from(letMatches).map(
+                (m: any) => m[1],
+            ) as string[];
         }
     }
 
@@ -975,16 +1080,20 @@ function parseTestFile(filePath: string): ParsedTestFile {
 
     try {
         const describeMatches = content.matchAll(/describe\(['"]([^'"]+)['"]/g);
-        describes = Array.from(describeMatches).map(m => m[1]);
+        describes = Array.from(describeMatches).map((m) => m[1]);
     } catch (error) {
-        console.warn(`⚠️  Could not extract describe blocks from ${filePath}: ${getErrorMessage(error)} `);
+        console.warn(
+            `⚠️  Could not extract describe blocks from ${filePath}: ${getErrorMessage(error)} `,
+        );
     }
 
     try {
         const testMatches = content.matchAll(/test\(['"]([^'"]+)['"]/g);
-        tests = Array.from(testMatches).map(m => m[1]);
+        tests = Array.from(testMatches).map((m) => m[1]);
     } catch (error) {
-        console.warn(`⚠️  Could not extract test blocks from ${filePath}: ${getErrorMessage(error)} `);
+        console.warn(
+            `⚠️  Could not extract test blocks from ${filePath}: ${getErrorMessage(error)} `,
+        );
     }
 
     // Validate that we found some tests
@@ -1001,7 +1110,7 @@ function parseTestFile(filePath: string): ParsedTestFile {
         variableDeclarations,
         describes,
         tests,
-        testCount: tests.length
+        testCount: tests.length,
     };
 }
 
@@ -1095,9 +1204,11 @@ class BrowserTestRunner {
             this.updateURLParameters();
         });
 
-        document.querySelectorAll('.filter-tab').forEach(tab => {
+        document.querySelectorAll('.filter-tab').forEach((tab) => {
             tab.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                document
+                    .querySelectorAll('.filter-tab')
+                    .forEach((t) => t.classList.remove('active'));
                 (e.target as HTMLElement).classList.add('active');
                 this.currentFilter = (e.target as HTMLElement).dataset.filter || 'all';
                 this.updateDisplay();
@@ -1130,8 +1241,11 @@ class BrowserTestRunner {
             // Normalize path separators for cross-platform compatibility
             const normalizedFileParam = fileParam.replace(/\//g, '\\');
             // Try to find the option with this file name
-            const option = Array.from(fileSelector.options).find(opt =>
-                opt.value === normalizedFileParam || opt.value === fileParam || opt.text.includes(fileParam)
+            const option = Array.from(fileSelector.options).find(
+                (opt) =>
+                    opt.value === normalizedFileParam ||
+                    opt.value === fileParam ||
+                    opt.text.includes(fileParam),
             );
 
             if (option) {
@@ -1403,7 +1517,10 @@ class BrowserTestRunner {
         if (passedNum) passedNum.textContent = this.passedTests.toString();
         if (failedNum) failedNum.textContent = this.failedTests.toString();
 
-        const progress = this.totalTests > 0 ? (this.passedTests + this.failedTests) / this.totalTests * 100 : 0;
+        const progress =
+            this.totalTests > 0
+                ? ((this.passedTests + this.failedTests) / this.totalTests) * 100
+                : 0;
         const progressFill = document.getElementById('progressFill');
         if (progressFill) {
             progressFill.style.width = progress + '%';
@@ -1466,14 +1583,14 @@ class BrowserTestRunner {
             this.results[fileName] = {
                 tests: [],
                 passed: 0,
-                failed: 0
+                failed: 0,
             };
         }
 
         this.results[fileName].tests.push({
             name: testName,
             passed,
-            error
+            error,
         });
 
         if (passed) {
@@ -1507,7 +1624,7 @@ class BrowserTestRunner {
             body.className = 'test-file-body';
 
             let visibleTestsCount = 0;
-            data.tests.forEach(test => {
+            data.tests.forEach((test) => {
                 if (this.currentFilter !== 'all') {
                     if (this.currentFilter === 'passed' && !test.passed) return;
                     if (this.currentFilter === 'failed' && test.passed) return;
@@ -1555,34 +1672,37 @@ Total Tests: ${this.totalTests}
 Passed: ${this.passedTests}
 Failed: ${this.failedTests}`;
 
-                        navigator.clipboard.writeText(copyText).then(() => {
-                            // Show visual feedback
-                            const originalText = copyBtn.textContent;
-                            copyBtn.textContent = '✅';
-                            (copyBtn as HTMLElement).style.background = '#28a745';
-                            setTimeout(() => {
-                                copyBtn.textContent = originalText;
-                                (copyBtn as HTMLElement).style.background = '';
-                            }, 1000);
-                        }).catch(err => {
-                            console.error('Failed to copy: ', err);
-                            // Fallback for older browsers
-                            const textArea = document.createElement('textarea');
-                            textArea.value = copyText;
-                            document.body.appendChild(textArea);
-                            textArea.select();
-                            document.execCommand('copy');
-                            document.body.removeChild(textArea);
+                        navigator.clipboard
+                            .writeText(copyText)
+                            .then(() => {
+                                // Show visual feedback
+                                const originalText = copyBtn.textContent;
+                                copyBtn.textContent = '✅';
+                                (copyBtn as HTMLElement).style.background = '#28a745';
+                                setTimeout(() => {
+                                    copyBtn.textContent = originalText;
+                                    (copyBtn as HTMLElement).style.background = '';
+                                }, 1000);
+                            })
+                            .catch((err) => {
+                                console.error('Failed to copy: ', err);
+                                // Fallback for older browsers
+                                const textArea = document.createElement('textarea');
+                                textArea.value = copyText;
+                                document.body.appendChild(textArea);
+                                textArea.select();
+                                document.execCommand('copy');
+                                document.body.removeChild(textArea);
 
-                            // Show feedback
-                            const originalText = copyBtn.textContent;
-                            copyBtn.textContent = '✅';
-                            (copyBtn as HTMLElement).style.background = '#28a745';
-                            setTimeout(() => {
-                                copyBtn.textContent = originalText;
-                                (copyBtn as HTMLElement).style.background = '';
-                            }, 1000);
-                        });
+                                // Show feedback
+                                const originalText = copyBtn.textContent;
+                                copyBtn.textContent = '✅';
+                                (copyBtn as HTMLElement).style.background = '#28a745';
+                                setTimeout(() => {
+                                    copyBtn.textContent = originalText;
+                                    (copyBtn as HTMLElement).style.background = '';
+                                }, 1000);
+                            });
                     });
                 }
 
@@ -1623,7 +1743,7 @@ Failed: ${this.failedTests}`;
  */
 function generateFileToMethodMap(parsedFiles: ParsedTestFile[]) {
     const map: { [key: string]: string } = {};
-    parsedFiles.forEach(file => {
+    parsedFiles.forEach((file) => {
         const functionName = file.filePath
             .replace(/\.test\.(js|ts)$/, '') // Remove .test.js or .test.ts extension
             .replace(/[/\\]/g, '_') // Replace path separators with underscores
@@ -1643,7 +1763,7 @@ function generateFileToMethodMap(parsedFiles: ParsedTestFile[]) {
  */
 function generateMainJavaScript(parsedFiles: ParsedTestFile[]) {
     // Get the source code of the BrowserTestRunner class
-    let classSource = BrowserTestRunner.toString();
+    const classSource = BrowserTestRunner.toString();
 
     // Generate file mapping
     const fileToMethodMap = generateFileToMethodMap(parsedFiles);
@@ -1707,7 +1827,6 @@ function createTestSandbox(html) {
 }`;
 }
 
-
 /**
  * Generates a sanitized file path that preserves directory structure for web compatibility.
  * Replaces special characters with underscores and ensures web-safe naming.
@@ -1717,12 +1836,12 @@ function createTestSandbox(html) {
 function generatePreservedPath(filePath: string) {
     // Keep directory structure but sanitize file/directory names
     const parts = filePath.split(/[\\\/]/);
-    const sanitizedParts = parts.map(part => {
+    const sanitizedParts = parts.map((part) => {
         // Sanitize each directory/file name
         return part
-            .replace(/[^a-zA-Z0-9._-]/g, '_')  // Replace special chars with underscores
-            .replace(/_{2,}/g, '_')  // Replace multiple underscores with single
-            .replace(/^_|_$/g, '');  // Remove leading/trailing underscores
+            .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace special chars with underscores
+            .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+            .replace(/^_|_$/g, ''); // Remove leading/trailing underscores
     });
 
     // Join back with forward slashes for web compatibility
@@ -1737,13 +1856,15 @@ function generatePreservedPath(filePath: string) {
  */
 function generateSafeFunctionName(filePath: string) {
     // Create a valid JavaScript identifier
-    return 'workerRunTestFile_' + filePath
-        .replace(/[\\\/]/g, '_')  // Replace path separators
-        .replace(/[^a-zA-Z0-9_]/g, '_')  // Replace special chars
-        .replace(/^[^a-zA-Z_]/, '_$&')  // Ensure starts with letter or underscore
-        .replace(/_{2,}/g, '_');  // Replace multiple underscores
+    return (
+        'workerRunTestFile_' +
+        filePath
+            .replace(/[\\\/]/g, '_') // Replace path separators
+            .replace(/[^a-zA-Z0-9_]/g, '_') // Replace special chars
+            .replace(/^[^a-zA-Z_]/, '_$&') // Ensure starts with letter or underscore
+            .replace(/_{2,}/g, '_')
+    ); // Replace multiple underscores
 }
-
 
 /**
  * Generates the complete HTML page for the browser test runner.
@@ -1754,8 +1875,12 @@ function generateSafeFunctionName(filePath: string) {
  */
 function generateBrowserTestHTML(parsedFiles: ParsedTestFile[], totalTests: number) {
     const isSingleFile = parsedFiles.length === 1;
-    const title = isSingleFile ? `jqnode - ${parsedFiles[0].filePath} Tests` : 'jqnode - All Browser Tests';
-    const heading = isSingleFile ? `🧪 jqnode - ${parsedFiles[0].filePath} Tests` : '🧪 jqnode - Browser Test Suite';
+    const title = isSingleFile
+        ? `jqnode - ${parsedFiles[0].filePath} Tests`
+        : 'jqnode - All Browser Tests';
+    const heading = isSingleFile
+        ? `🧪 jqnode - ${parsedFiles[0].filePath} Tests`
+        : '🧪 jqnode - Browser Test Suite';
     const infoText = isSingleFile
         ? `Automatically generated from 1 Jest test file (${totalTests} total tests)`
         : `Automatically generated from ${parsedFiles.length} Jest test files (${totalTests} total tests)`;
@@ -1786,7 +1911,7 @@ function generateBrowserTestHTML(parsedFiles: ParsedTestFile[], totalTests: numb
                 <option value="jquery">jQuery</option>
             </select>
             <select id="fileSelector" style="margin-left: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-${parsedFiles.map(file => `                <option value="${file.filePath.replace(/\\/g, '/')}">${file.filePath} (${file.testCount} tests)</option>`).join('\n')}
+${parsedFiles.map((file) => `                <option value="${file.filePath.replace(/\\/g, '/')}">${file.filePath} (${file.testCount} tests)</option>`).join('\n')}
             </select>
             <button id="clearBtn" class="btn-secondary">🗑 Clear Results</button>
         </div>
@@ -1927,16 +2052,21 @@ function generateIndividualTestFile(fileInfo: ParsedTestFile) {
         if (body) {
             tests.push({
                 name: testName,
-                code: body
+                code: body,
             });
         }
     }
 
     // Process setup code - remove Node.js specific code
-    let setupCodeProcessed = fileInfo.setupCode
+    const setupCodeProcessed = fileInfo.setupCode
         .replace(/const \$ = require\(['"]\.\.\/.*?['"]\);?/g, '')
-        .replace(/\$\.clearRootNodesRegistry\(\);?/g, 'if ($.clearRootNodesRegistry) $.clearRootNodesRegistry();')
-        .replace(/root = \$\(html\);/g, `
+        .replace(
+            /\$\.clearRootNodesRegistry\(\);?/g,
+            'if ($.clearRootNodesRegistry) $.clearRootNodesRegistry();',
+        )
+        .replace(
+            /root = \$\(html\);/g,
+            `
       // Create a sandbox container to prevent modifying the test page HTML
       const testSandbox = document.createElement('div');
       testSandbox.id = 'test-sandbox-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
@@ -1949,12 +2079,14 @@ function generateIndividualTestFile(fileInfo: ParsedTestFile) {
         if (testSandbox && testSandbox.parentNode) {
           testSandbox.parentNode.removeChild(testSandbox);
         }
-      };`);
+      };`,
+        );
 
     // Prepare variable declarations
-    const varDecls = fileInfo.variableDeclarations.length > 0
-        ? `let ${fileInfo.variableDeclarations.join(', ')};`
-        : '';
+    const varDecls =
+        fileInfo.variableDeclarations.length > 0
+            ? `let ${fileInfo.variableDeclarations.join(', ')};`
+            : '';
 
     const fileName = fileInfo.filePath.replace(/\\/g, '\\\\');
 
@@ -1974,39 +2106,54 @@ function generateIndividualTestFile(fileInfo: ParsedTestFile) {
 ${setupCodeProcessed}
         };
 
-${tests.map(test => {
-        const testCode = convertAssertions(test.code.trim().replace(/\$\.clearRootNodesRegistry\(\);?/g, 'if ($.clearRootNodesRegistry) $.clearRootNodesRegistry();'));
-        return '        // Test: ' + test.name + '\n' +
+${tests
+    .map((test) => {
+        const testCode = convertAssertions(
+            test.code
+                .trim()
+                .replace(
+                    /\$\.clearRootNodesRegistry\(\);?/g,
+                    'if ($.clearRootNodesRegistry) $.clearRootNodesRegistry();',
+                ),
+        );
+        return (
+            '        // Test: ' +
+            test.name +
+            '\n' +
             '        try {\n' +
             '            setupTest();\n' +
-            testCode + '\n' +
+            testCode +
+            '\n' +
             '            // Clean up sandbox after test execution\n' +
             '            try {\n' +
-            '                if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
+            "                if (typeof root !== 'undefined' && root && typeof root._cleanupSandbox === 'function') {\n" +
             '                    root._cleanupSandbox();\n' +
             '                }\n' +
             '            } catch (cleanupError) {\n' +
-            '                console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
+            "                console.warn('Sandbox cleanup failed:', cleanupError);\n" +
             '            }\n' +
-            '            this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', true);\n' +
+            "            this.addTestResult(fileName, '" +
+            test.name.replace(/'/g, "\\'") +
+            "', true);\n" +
             '        } catch (error) {\n' +
             '            // Clean up sandbox even on test failure\n' +
             '            try {\n' +
-            '                if (typeof root !== \'undefined\' && root && typeof root._cleanupSandbox === \'function\') {\n' +
+            "                if (typeof root !== 'undefined' && root && typeof root._cleanupSandbox === 'function') {\n" +
             '                    root._cleanupSandbox();\n' +
             '                }\n' +
             '            } catch (cleanupError) {\n' +
-            '                console.warn(\'Sandbox cleanup failed:\', cleanupError);\n' +
+            "                console.warn('Sandbox cleanup failed:', cleanupError);\n" +
             '            }\n' +
-            '            this.addTestResult(fileName, \'' + test.name.replace(/'/g, "\\'") + '\', false, error.message);\n' +
-            '        }';
-    }).join('\n\n')}
+            "            this.addTestResult(fileName, '" +
+            test.name.replace(/'/g, "\\'") +
+            "', false, error.message);\n" +
+            '        }'
+        );
+    })
+    .join('\n\n')}
     });
 })();`;
 }
-
-
-
 
 /**
  * Main execution function that orchestrates the entire test conversion process.
@@ -2058,11 +2205,15 @@ async function main() {
             validateTestFile(normalizedPath);
 
             testFiles = [normalizedPath];
-            console.log(`✅ Processing specific test file: ${path.relative(TEST_DIR, normalizedPath)}`);
+            console.log(
+                `✅ Processing specific test file: ${path.relative(TEST_DIR, normalizedPath)}`,
+            );
         } catch (error) {
             console.error(`❌ Invalid test file specified: ${specificFile}`);
             console.error(`Error: ${getErrorMessage(error)}`);
-            console.error(`Expected format: node convert-tests-to-browser.js [relative/path/to/test-file.test.js]`);
+            console.error(
+                `Expected format: node convert-tests-to-browser.js [relative/path/to/test-file.test.js]`,
+            );
             process.exit(1);
         }
     } else {
@@ -2073,7 +2224,7 @@ async function main() {
 
     // Parse all test files with error handling and progress tracking
     const parsedFiles = [];
-    let parseErrors = [];
+    const parseErrors = [];
     const parsingProgress = new ProgressIndicator();
 
     parsingProgress.start('Parsing test files', testFiles.length);
@@ -2107,7 +2258,9 @@ async function main() {
 
     // Warn about parse errors but continue with successfully parsed files
     if (parseErrors.length > 0) {
-        console.warn(`⚠️  ${parseErrors.length} test file(s) failed to parse but continuing with ${parsedFiles.length} successfully parsed files`);
+        console.warn(
+            `⚠️  ${parseErrors.length} test file(s) failed to parse but continuing with ${parsedFiles.length} successfully parsed files`,
+        );
     }
 
     const totalTests = parsedFiles.reduce((sum, f) => sum + f.testCount, 0);
@@ -2158,7 +2311,9 @@ async function main() {
             generatedFilesCount++;
             generationProgress.update(i + 1, fileName);
         } catch (error) {
-            console.error(`❌ Failed to generate test file for ${file.filePath}: ${getErrorMessage(error)}`);
+            console.error(
+                `❌ Failed to generate test file for ${file.filePath}: ${getErrorMessage(error)}`,
+            );
         }
     }
     generationProgress.complete(`Generated ${generatedFilesCount} test files`);
@@ -2212,7 +2367,6 @@ async function main() {
     console.log('\n🌐 Open browser-test/all-tests/index.html in your browser to run tests!');
 }
 
-
 /**
  * Application entry point with comprehensive error handling and logging.
  * Executes the main conversion process and validates the results.
@@ -2262,4 +2416,3 @@ process.on('uncaughtException', (error) => {
 
 // Run the application
 run();
-

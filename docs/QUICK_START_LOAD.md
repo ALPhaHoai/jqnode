@@ -14,10 +14,10 @@ npm install @alphahoai/jqnode
 const jq = require('@alphahoai/jqnode');
 
 // Load HTML from API response
-const $ = jq.load(result?.data || "");
+const $ = jq.load(result?.data || '');
 
 // ✨ NEW: Use jQuery-like callable syntax!
-const tables = $("table");  // This now works!
+const tables = $('table'); // This now works!
 ```
 
 ## ✅ Complete Working Example
@@ -37,22 +37,21 @@ const result = {
             <tr><th>Product</th><th>Price</th></tr>
             <tr><td>Laptop</td><td>$999</td></tr>
         </table>
-    `
+    `,
 };
 
-
 // Load and query
-const $ = jq.load(result?.data || "");
+const $ = jq.load(result?.data || '');
 
 // ✨ NEW: Use callable syntax (jQuery-like)!
-const tables = $("table");  // Works!
+const tables = $('table'); // Works!
 // OR use traditional syntax:
 // const tables = $.find("table");
 
 console.log('Found', tables.length, 'tables'); // Found 2 tables
 
 // Work with each table
-tables.each(function(index, table) {
+tables.each(function (index, table) {
     const $table = jq(table);
     console.log('Table', index + 1, 'ID:', $table.attr('id'));
 });
@@ -68,13 +67,13 @@ tables.each(function(index, table) {
 
 ## ✅ Method Reference
 
-| Method | Description | Example |
-|--------|-------------|---------|
-| `jq.load(html)` | Parse HTML string (returns callable) | `const $ = jq.load(html)` |
-| `$("selector")` | **NEW!** Find elements (callable) | `$("table")` |
-| `$.find(selector)` | Find elements (traditional) | `$.find("table")` |
-| `$.find(selector).each()` | Iterate elements | See example above |
-| `jq(element)` | Wrap single element | `const $el = jq(element)` |
+| Method                    | Description                          | Example                   |
+| ------------------------- | ------------------------------------ | ------------------------- |
+| `jq.load(html)`           | Parse HTML string (returns callable) | `const $ = jq.load(html)` |
+| `$("selector")`           | **NEW!** Find elements (callable)    | `$("table")`              |
+| `$.find(selector)`        | Find elements (traditional)          | `$.find("table")`         |
+| `$.find(selector).each()` | Iterate elements                     | See example above         |
+| `jq(element)`             | Wrap single element                  | `const $el = jq(element)` |
 
 **Note:** Both `$("selector")` and `$.find("selector")` work identically!
 

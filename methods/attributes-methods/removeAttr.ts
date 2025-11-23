@@ -6,12 +6,31 @@ import type { HtmlNode, JQ } from '../../types';
  */
 function removeAttr(this: JQ, name: string): JQ {
     // Split space-separated attribute names (jQuery compatibility)
-    const attrNames = name.split(/\s+/).filter(n => n.length > 0);
-    const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+    const attrNames = name.split(/\s+/).filter((n) => n.length > 0);
+    const booleanAttributes = [
+        'checked',
+        'selected',
+        'disabled',
+        'readonly',
+        'required',
+        'multiple',
+        'autofocus',
+        'autoplay',
+        'hidden',
+        'controls',
+        'loop',
+        'muted',
+        'default',
+        'open',
+        'reversed',
+        'scoped',
+        'async',
+        'defer',
+    ];
 
     this.nodes.forEach((element: HtmlNode) => {
         if (element) {
-            attrNames.forEach(attrName => {
+            attrNames.forEach((attrName) => {
                 // Remove from internal attributes
                 if (element.attributes) {
                     delete element.attributes[attrName];

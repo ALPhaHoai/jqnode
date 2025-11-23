@@ -127,9 +127,11 @@ console.log('Last:', $13('li').last().text());
 console.log('\n--- map() ---');
 const html14 = `<div><span>1</span><span>2</span><span>3</span></div>`;
 const $14 = jq(html14);
-const mapped = $14('span').map(function (i, el) {
-    return parseInt(jq(el).text()) * 2;
-}).get();
+const mapped = $14('span')
+    .map(function (i, el) {
+        return parseInt(jq(el).text()) * 2;
+    })
+    .get();
 console.log('Mapped values:', mapped);
 
 // VAL method

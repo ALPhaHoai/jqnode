@@ -1,32 +1,38 @@
 # each() Method
 
 ## Overview
+
 The `each()` method iterates over each element in a JQ collection, executing a callback function for each element. It provides jQuery-compatible iteration with the ability to break early by returning `false`.
 
 ## Syntax
+
 ```javascript
-jq(selector).each(callback)
+jq(selector).each(callback);
 ```
 
 ### Parameters
+
 - **callback** (Function): Function to execute for each element
-  - **index** (Number): The index of the current element (0-based)
-  - **element** (Node): The current DOM node
-  - **this**: The current element (same as the `element` parameter)
-  - **Return `false`**: Breaks the loop early
+    - **index** (Number): The index of the current element (0-based)
+    - **element** (Node): The current DOM node
+    - **this**: The current element (same as the `element` parameter)
+    - **Return `false`**: Breaks the loop early
 
 ### Return Value
+
 Returns the JQ instance for method chaining.
 
 ## Features
 
 ### ✅ jQuery-Compatible Iteration
+
 - Callback receives index and element
 - `this` context is set to current element
 - Return `false` to break loop early
 - Chainable (returns JQ instance)
 
 ### ✅ Flexible Usage
+
 - Iterate over any number of elements
 - Access both index and element
 - Use arrow functions or traditional functions
@@ -35,6 +41,7 @@ Returns the JQ instance for method chaining.
 ## Examples
 
 ### Basic Iteration
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -48,7 +55,7 @@ const html = `
 
 const $ = jq(html);
 
-$('li').each(function(index, element) {
+$('li').each(function (index, element) {
     console.log(`Item ${index}: ${jq(element).text()}`);
 });
 // Output:
@@ -58,8 +65,9 @@ $('li').each(function(index, element) {
 ```
 
 ### Using `this` Context
+
 ```javascript
-$('li').each(function(index) {
+$('li').each(function (index) {
     // 'this' refers to the current element
     const text = jq(this).text();
     console.log(`${index + 1}. ${text}`);
@@ -67,6 +75,7 @@ $('li').each(function(index) {
 ```
 
 ### Modifying Elements
+
 ```javascript
 const html = `
     <div>
@@ -78,21 +87,19 @@ const html = `
 
 const $ = jq(html);
 
-$('p').each(function(index) {
-    jq(this)
-        .addClass('paragraph')
-        .attr('data-index', index)
-        .attr('id', `para-${index}`);
+$('p').each(function (index) {
+    jq(this).addClass('paragraph').attr('data-index', index).attr('id', `para-${index}`);
 });
 
 // Verify modifications
-$('p').each(function() {
+$('p').each(function () {
     const $p = jq(this);
     console.log('ID:', $p.attr('id'), 'Index:', $p.attr('data-index'));
 });
 ```
 
 ### Breaking Early with `false`
+
 ```javascript
 const html = `
     <ul>
@@ -107,10 +114,10 @@ const html = `
 const $ = jq(html);
 
 // Stop at element with class "stop-here"
-$('li').each(function(index, element) {
+$('li').each(function (index, element) {
     const $el = jq(element);
     console.log(`Processing: ${$el.text()}`);
-    
+
     if ($el.hasClass('stop-here')) {
         console.log('Stopping here!');
         return false; // Break the loop
@@ -124,12 +131,13 @@ $('li').each(function(index, element) {
 ```
 
 ### Method Chaining
+
 ```javascript
 const html = `<div class="items"><span>A</span><span>B</span><span>C</span></div>`;
 const $ = jq(html);
 
 $('span')
-    .each(function(i) {
+    .each(function (i) {
         jq(this).attr('data-order', i);
     })
     .addClass('processed')
@@ -137,13 +145,14 @@ $('span')
     .addClass('first-item');
 
 // Verify
-$('span').each(function() {
+$('span').each(function () {
     const $span = jq(this);
     console.log('Order:', $span.attr('data-order'), 'Classes:', $span.attr('class'));
 });
 ```
 
 ### Collecting Data
+
 ```javascript
 const html = `
     <table>
@@ -156,14 +165,14 @@ const html = `
 const $ = jq(html);
 const people = [];
 
-$('tr').each(function() {
+$('tr').each(function () {
     const $row = jq(this);
     const cells = $row.find('td');
-    
+
     if (cells.length === 2) {
         people.push({
             name: cells.eq(0).text(),
-            age: parseInt(cells.eq(1).text())
+            age: parseInt(cells.eq(1).text()),
         });
     }
 });
@@ -177,6 +186,7 @@ console.log(people);
 ```
 
 ### Conditional Processing
+
 ```javascript
 const html = `
     <ul>
@@ -189,9 +199,9 @@ const html = `
 
 const $ = jq(html);
 
-$('li').each(function(index) {
+$('li').each(function (index) {
     const $item = jq(this);
-    
+
     if ($item.hasClass('active')) {
         $item.attr('data-status', 'active');
         console.log(`Item ${index} is active`);
@@ -203,6 +213,7 @@ $('li').each(function(index) {
 ```
 
 ### Building New HTML
+
 ```javascript
 const html = `
     <div id="source">
@@ -215,7 +226,7 @@ const html = `
 const $ = jq(html);
 let newHtml = '';
 
-$('span').each(function() {
+$('span').each(function () {
     const $span = jq(this);
     const value = $span.attr('data-value');
     newHtml += `<div class="item">${value}</div>`;
@@ -226,6 +237,7 @@ console.log(newHtml);
 ```
 
 ### Processing Form Fields
+
 ```javascript
 const html = `
     <form>
@@ -238,7 +250,7 @@ const html = `
 const $ = jq(html);
 const formData = {};
 
-$('input').each(function() {
+$('input').each(function () {
     const $input = jq(this);
     const name = $input.attr('name');
     const value = $input.attr('value');
@@ -250,6 +262,7 @@ console.log(formData);
 ```
 
 ### Adding Sequential Numbers
+
 ```javascript
 const html = `
     <ol>
@@ -261,14 +274,14 @@ const html = `
 
 const $ = jq(html);
 
-$('li').each(function(index) {
+$('li').each(function (index) {
     const $li = jq(this);
     const taskNumber = index + 1;
     $li.attr('data-task-id', `TASK-${String(taskNumber).padStart(3, '0')}`);
 });
 
 // Verify
-$('li').each(function() {
+$('li').each(function () {
     console.log(jq(this).attr('data-task-id'), '-', jq(this).text());
 });
 // TASK-001 - First task
@@ -277,6 +290,7 @@ $('li').each(function() {
 ```
 
 ### Nested Iteration
+
 ```javascript
 const html = `
     <div class="sections">
@@ -294,19 +308,20 @@ const html = `
 
 const $ = jq(html);
 
-$('section').each(function(sectionIndex) {
+$('section').each(function (sectionIndex) {
     const $section = jq(this);
     const title = $section.find('h2').text();
-    
+
     console.log(`\n${title}:`);
-    
-    $section.find('p').each(function(paraIndex) {
+
+    $section.find('p').each(function (paraIndex) {
         console.log(`  ${paraIndex + 1}. ${jq(this).text()}`);
     });
 });
 ```
 
 ### Finding Specific Element
+
 ```javascript
 const html = `
     <ul>
@@ -320,7 +335,7 @@ const html = `
 const $ = jq(html);
 let found = null;
 
-$('li').each(function() {
+$('li').each(function () {
     const $li = jq(this);
     if ($li.attr('data-id') === '300') {
         found = $li;
@@ -352,26 +367,28 @@ if (found) {
 
 ## Differences from Array Methods
 
-| Feature | .each() | Array.forEach() |
-|---------|---------|-----------------|
-| Return value | JQ instance (chainable) | undefined |
-| Break early | Return `false` | Not supported |
-| `this` context | Current element | undefined (or global) |
-| Callback params | (index, element) | (element, index) |
-| Use case | DOM manipulation | General iteration |
+| Feature         | .each()                 | Array.forEach()       |
+| --------------- | ----------------------- | --------------------- |
+| Return value    | JQ instance (chainable) | undefined             |
+| Break early     | Return `false`          | Not supported         |
+| `this` context  | Current element         | undefined (or global) |
+| Callback params | (index, element)        | (element, index)      |
+| Use case        | DOM manipulation        | General iteration     |
 
 ## Common Patterns
 
 ### Pattern 1: Setting sequential data
+
 ```javascript
-$('div').each(function(i) {
+$('div').each(function (i) {
     jq(this).attr('data-index', i);
 });
 ```
 
 ### Pattern 2: Conditional modification
+
 ```javascript
-$('li').each(function() {
+$('li').each(function () {
     const $li = jq(this);
     if ($li.text().includes('important')) {
         $li.addClass('highlight');
@@ -380,8 +397,9 @@ $('li').each(function() {
 ```
 
 ### Pattern 3: Early exit on condition
+
 ```javascript
-$('element').each(function() {
+$('element').each(function () {
     if (someCondition) {
         return false; // Exit loop
     }
@@ -390,9 +408,10 @@ $('element').each(function() {
 ```
 
 ### Pattern 4: Building data structures
+
 ```javascript
 const data = [];
-$('item').each(function() {
+$('item').each(function () {
     data.push(extractDataFrom(this));
 });
 ```

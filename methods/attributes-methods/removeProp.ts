@@ -5,7 +5,15 @@ import type { HtmlNode, JQ } from '../../types';
  * @see https://api.jquery.com/removeProp/
  */
 function removeProp(this: JQ, name: string): JQ {
-    const standardProperties = ['checked', 'selected', 'disabled', 'readonly', 'required', 'type', 'name'];
+    const standardProperties = [
+        'checked',
+        'selected',
+        'disabled',
+        'readonly',
+        'required',
+        'type',
+        'name',
+    ];
 
     if (standardProperties.includes(name)) {
         return this;
@@ -26,7 +34,10 @@ function removeProp(this: JQ, name: string): JQ {
         if (element && element.properties) {
             delete element.properties[name];
 
-            if (element._originalElement && (element._originalElement as unknown as Record<string, unknown>)[name] !== undefined) {
+            if (
+                element._originalElement &&
+                (element._originalElement as unknown as Record<string, unknown>)[name] !== undefined
+            ) {
                 // Properties object updated
             }
         }

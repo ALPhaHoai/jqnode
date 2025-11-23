@@ -104,11 +104,11 @@ const menuItems = [
     { text: 'Home', href: '/', active: true },
     { text: 'Products', href: '/products', active: false },
     { text: 'About', href: '/about', active: false },
-    { text: 'Contact', href: '/contact', active: false }
+    { text: 'Contact', href: '/contact', active: false },
 ];
 
 const $ul = jq('<ul class="nav"></ul>');
-menuItems.forEach(item => {
+menuItems.forEach((item) => {
     const $li = jq('<li></li>');
     const $a = jq(`<a href="${item.href}">${item.text}</a>`);
     if (item.active) {
@@ -138,7 +138,9 @@ $form.append('<div class="field"><label>Name:</label><input type="text" name="na
 $form.append('<div class="field"><label>Email:</label><input type="email" name="email"></div>');
 
 // Add message field
-$form.append('<div class="field"><label>Message:</label><textarea name="message"></textarea></div>');
+$form.append(
+    '<div class="field"><label>Message:</label><textarea name="message"></textarea></div>',
+);
 
 // Add submit button
 $form.append('<button type="submit">Send Message</button>');
@@ -158,7 +160,7 @@ const $10 = jq(html10);
 const data = [
     { name: 'Alice', role: 'Developer', dept: 'Engineering' },
     { name: 'Bob', role: 'Designer', dept: 'Design' },
-    { name: 'Charlie', role: 'Manager', dept: 'Operations' }
+    { name: 'Charlie', role: 'Manager', dept: 'Operations' },
 ];
 
 const $table = jq('<table></table>');
@@ -166,7 +168,7 @@ const $table = jq('<table></table>');
 // Add header
 const $thead = jq('<thead></thead>');
 const $headerRow = jq('<tr></tr>');
-['Name', 'Role', 'Department'].forEach(header => {
+['Name', 'Role', 'Department'].forEach((header) => {
     $headerRow.append(`<th>${header}</th>`);
 });
 $thead.append($headerRow.nodes[0]);
@@ -174,7 +176,7 @@ $table.append($thead.nodes[0]);
 
 // Add body
 const $tbody = jq('<tbody></tbody>');
-data.forEach(row => {
+data.forEach((row) => {
     const $tr = jq('<tr></tr>');
     $tr.append(`<td>${row.name}</td>`);
     $tr.append(`<td>${row.role}</td>`);

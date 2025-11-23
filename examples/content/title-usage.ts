@@ -1,6 +1,6 @@
 /**
  * Example demonstrating the $.title() static method and .title() instance method
- * 
+ *
  * This example shows how to get the document title using jqnode in two ways:
  * 1. Instance method (chained): jq(...).title()
  * 2. Static method: jq.title()
@@ -12,12 +12,16 @@ console.log('=== Instance Method Examples (Chained Syntax) ===\n');
 
 // Example 1: Get title from a simple HTML document using chained syntax
 console.log('Example 1: Simple HTML document (chained)');
-const title1 = jq('<html><head><title>My Website</title></head><body><h1>Welcome</h1></body></html>').title();
+const title1 = jq(
+    '<html><head><title>My Website</title></head><body><h1>Welcome</h1></body></html>',
+).title();
 console.log('Document title:', title1); // Output: "My Website"
 
 // Example 2: Get title with special characters (chained)
 console.log('\nExample 2: Title with special characters (chained)');
-const title2 = jq('<html><head><title>Welcome &amp; Hello &lt;World&gt;</title></head></html>').title();
+const title2 = jq(
+    '<html><head><title>Welcome &amp; Hello &lt;World&gt;</title></head></html>',
+).title();
 console.log('Document title:', title2); // Output: "Welcome & Hello <World>"
 
 // Example 3: Get title with extra whitespace (chained)

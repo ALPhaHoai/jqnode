@@ -41,7 +41,6 @@ export interface HtmlNode {
     offsetLeft?: number;
 }
 
-
 /**
  * CSS selector pattern
  * Can be undefined or null, which will be handled gracefully (returns empty results)
@@ -84,13 +83,20 @@ export type AttributeValue = string | number | boolean | null;
  * Input value for form elements
  * Can be a primitive value, array, or function that returns a value
  */
-export type FormValueInput = string | string[] | number | ((index: number, currentValue: string | string[]) => string | number);
+export type FormValueInput =
+    | string
+    | string[]
+    | number
+    | ((index: number, currentValue: string | string[]) => string | number);
 
 /**
  * CSS property value input
  * Can be a primitive value or a function that computes the value
  */
-export type CssValueInput = string | number | ((index: number, currentValue: string) => string | number);
+export type CssValueInput =
+    | string
+    | number
+    | ((index: number, currentValue: string) => string | number);
 
 /**
  * CSS properties object for setting multiple styles
@@ -134,12 +140,15 @@ export interface JQ {
     // Attribute methods
     attr(name: string): GetterSetterReturn<string>;
     attr(name: string, value: AttributeValue): JQ;
-    attr(name: string, value: ((index: number, attr: string) => string | number | void | undefined)): JQ;
+    attr(
+        name: string,
+        value: (index: number, attr: string) => string | number | void | undefined,
+    ): JQ;
     attr(attributes: Record<string, AttributeValue>): JQ;
 
     prop(name: string): GetterSetterReturn<AttributeValue>;
     prop(name: string, value: AttributeValue): JQ;
-    prop(name: string, value: ((index: number, oldVal: any) => AttributeValue)): JQ;
+    prop(name: string, value: (index: number, oldVal: any) => AttributeValue): JQ;
     prop(properties: Record<string, AttributeValue>): JQ;
 
     removeAttr(attributeName: string): JQ;
@@ -152,7 +161,6 @@ export interface JQ {
     css(propertyNames: string[]): Record<string, string>;
     css(propertyName: string, value: CssValueInput): JQ;
     css(properties: CssProperties): JQ;
-
 
     cssCamel(propertyName: string): GetterSetterReturn<string>;
     cssCamel(propertyNames: string[]): Record<string, string>;
@@ -255,8 +263,14 @@ export interface JQStatic {
     clearRootNodesRegistry(): void;
 
     // Utility methods
-    each(collection: any[] | Record<string, any> | null | undefined, callback: (indexOrKey: any, value: any) => any): any;
-    map(collection: any[] | Record<string, any> | null | undefined, callback: (value: any, indexOrKey: any) => any): any[];
+    each(
+        collection: any[] | Record<string, any> | null | undefined,
+        callback: (indexOrKey: any, value: any) => any,
+    ): any;
+    map(
+        collection: any[] | Record<string, any> | null | undefined,
+        callback: (value: any, indexOrKey: any) => any,
+    ): any[];
     load(html: string, options?: { normalize?: boolean }): any;
 
     // Static utility methods

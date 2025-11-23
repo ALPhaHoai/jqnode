@@ -13,7 +13,9 @@ function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
         for (const element of this.nodes) {
             if (element.type === 'element' && element.children) {
                 // Search only among element children, not including the element itself
-                const elementChildren = element.children.filter((child: HtmlNode) => child.type === 'element');
+                const elementChildren = element.children.filter(
+                    (child: HtmlNode) => child.type === 'element',
+                );
                 try {
                     const descendants = selectNodes(elementChildren, selectorOrElement);
                     if (descendants.length > 0) {
@@ -28,7 +30,11 @@ function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
                 }
             }
         }
-    } else if (selectorOrElement && typeof selectorOrElement === 'object' && selectorOrElement.type === 'element') {
+    } else if (
+        selectorOrElement &&
+        typeof selectorOrElement === 'object' &&
+        selectorOrElement.type === 'element'
+    ) {
         // Direct element reference
         for (const element of this.nodes) {
             if (element.type === 'element' && element.children) {

@@ -25,7 +25,7 @@ describe('toJSON method - jqnode specific', () => {
 
         expect(result).toEqual([
             { Name: 'Alice', Age: '25' },
-            { Name: 'Bob', Age: '30' }
+            { Name: 'Bob', Age: '30' },
         ]);
     });
 

@@ -41,7 +41,9 @@ describe('$.title() and .title()', () => {
         });
 
         it('should handle special characters in title', () => {
-            jq('<html><head><title>Test &amp; Title &lt;with&gt; "special" characters</title></head></html>');
+            jq(
+                '<html><head><title>Test &amp; Title &lt;with&gt; "special" characters</title></head></html>',
+            );
 
             const result = jq.title();
             expect(result).toBe('Test & Title <with> "special" characters');
@@ -55,7 +57,9 @@ describe('$.title() and .title()', () => {
         });
 
         it('should work with nested head structure', () => {
-            jq('<html><head><meta charset="utf-8"><title>Nested Title</title></head><body></body></html>');
+            jq(
+                '<html><head><meta charset="utf-8"><title>Nested Title</title></head><body></body></html>',
+            );
 
             const result = jq.title();
             expect(result).toBe('Nested Title');
@@ -77,7 +81,9 @@ describe('$.title() and .title()', () => {
         });
 
         it('should get the document title using chained syntax', () => {
-            const title = jq('<html><head><title>My Website</title></head><body></body></html>').title();
+            const title = jq(
+                '<html><head><title>My Website</title></head><body></body></html>',
+            ).title();
             expect(title).toBe('My Website');
         });
 
@@ -87,17 +93,23 @@ describe('$.title() and .title()', () => {
         });
 
         it('should handle special characters in title', () => {
-            const title = jq('<html><head><title>Test &amp; Title &lt;with&gt; "special" characters</title></head></html>').title();
+            const title = jq(
+                '<html><head><title>Test &amp; Title &lt;with&gt; "special" characters</title></head></html>',
+            ).title();
             expect(title).toBe('Test & Title <with> "special" characters');
         });
 
         it('should trim whitespace from title', () => {
-            const title = jq('<html><head><title>  Title with spaces  </title></head></html>').title();
+            const title = jq(
+                '<html><head><title>  Title with spaces  </title></head></html>',
+            ).title();
             expect(title).toBe('Title with spaces');
         });
 
         it('should work with nested head structure', () => {
-            const title = jq('<html><head><meta charset="utf-8"><title>Nested Title</title></head><body></body></html>').title();
+            const title = jq(
+                '<html><head><meta charset="utf-8"><title>Nested Title</title></head><body></body></html>',
+            ).title();
             expect(title).toBe('Nested Title');
         });
 
@@ -108,7 +120,9 @@ describe('$.title() and .title()', () => {
         });
 
         it('should return concatenated text if multiple titles exist', () => {
-            const title = jq('<html><head><title>First Title</title><title>Second Title</title></head></html>').title();
+            const title = jq(
+                '<html><head><title>First Title</title><title>Second Title</title></head></html>',
+            ).title();
             // jQuery's .text() concatenates text from all matched elements
             expect(title).toBe('First TitleSecond Title');
         });

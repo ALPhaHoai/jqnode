@@ -56,12 +56,12 @@ const result = {
                 </table>
             </body>
         </html>
-    `
+    `,
 };
 
 // YOUR EXACT SYNTAX (with .find() for querying)
-const $ = jq.load(result?.data || "");
-const tables = $.find("table");  // Use .find() to query
+const $ = jq.load(result?.data || '');
+const tables = $.find('table'); // Use .find() to query
 
 console.log('✅ Successfully loaded HTML!');
 console.log('📊 Number of tables found:', tables.length);
@@ -75,7 +75,13 @@ tables.each(function (index, table) {
     const rows = $table.find('tbody tr');
 
     console.log(`Table ${index + 1}: #${tableId}`);
-    console.log('  Headers:', headers.map((i, th) => jq(th).text()).get().join(', '));
+    console.log(
+        '  Headers:',
+        headers
+            .map((i, th) => jq(th).text())
+            .get()
+            .join(', '),
+    );
     console.log('  Data rows:', rows.length);
     console.log('');
 });
@@ -83,15 +89,18 @@ tables.each(function (index, table) {
 // Extract all data from users table
 console.log('=== Extract Users Table Data ===');
 const usersTable = $.find('#users');
-const userData = usersTable.find('tbody tr').map(function (i, tr) {
-    const $tr = jq(tr);
-    const cells = $tr.find('td');
-    return {
-        id: jq(cells.get(0)).text(),
-        name: jq(cells.get(1)).text(),
-        email: jq(cells.get(2)).text()
-    };
-}).get();
+const userData = usersTable
+    .find('tbody tr')
+    .map(function (i, tr) {
+        const $tr = jq(tr);
+        const cells = $tr.find('td');
+        return {
+            id: jq(cells.get(0)).text(),
+            name: jq(cells.get(1)).text(),
+            email: jq(cells.get(2)).text(),
+        };
+    })
+    .get();
 
 console.log(JSON.stringify(userData, null, 2));
 

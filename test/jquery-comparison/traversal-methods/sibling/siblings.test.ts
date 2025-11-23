@@ -45,7 +45,13 @@ describe('siblings() method - Node-Query vs jQuery Comparison', () => {
 
         expect(nqClasses).toEqual(jqClasses);
         // jQuery returns full class strings, sorted
-        expect(nqClasses).toEqual(['not-sibling', 'sibling fifth', 'sibling first', 'sibling fourth', 'sibling third active']);
+        expect(nqClasses).toEqual([
+            'not-sibling',
+            'sibling fifth',
+            'sibling first',
+            'sibling fourth',
+            'sibling third active',
+        ]);
     });
 
     test('siblings() should work with selector filter - jquery-comparison', () => {

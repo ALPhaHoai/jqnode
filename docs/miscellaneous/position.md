@@ -3,8 +3,9 @@
 See [Utility Methods](./utility-methods.md#position) for complete documentation.
 
 ## Quick Reference
+
 ```javascript
-jq(selector).position()
+jq(selector).position();
 ```
 
 Get position of element relative to its offset parent.

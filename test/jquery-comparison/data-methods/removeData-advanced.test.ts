@@ -2,7 +2,9 @@ import { createTestDom, compareResults } from '../../utils/jquery-comparison-hel
 
 describe('removeData() advanced behavior', () => {
     it('should remove multiple keys using space-separated string', () => {
-        const { nodeQuery: nqRoot, jquery: jqRoot } = createTestDom('<div id="test-div" data-foo="1" data-bar="2" data-baz="3"></div>');
+        const { nodeQuery: nqRoot, jquery: jqRoot } = createTestDom(
+            '<div id="test-div" data-foo="1" data-bar="2" data-baz="3"></div>',
+        );
 
         const nqDiv = nqRoot.find('#test-div');
         const jqDiv = jqRoot.find('#test-div');
@@ -26,7 +28,9 @@ describe('removeData() advanced behavior', () => {
     });
 
     it('should prevent re-reading data attributes after removal', () => {
-        const { nodeQuery: nqRoot, jquery: jqRoot } = createTestDom('<div id="test-div" data-test="value"></div>');
+        const { nodeQuery: nqRoot, jquery: jqRoot } = createTestDom(
+            '<div id="test-div" data-test="value"></div>',
+        );
 
         const nqDiv = nqRoot.find('#test-div');
         const jqDiv = jqRoot.find('#test-div');

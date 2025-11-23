@@ -29,8 +29,8 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
 
         let nqCount = 0;
         let jqCount = 0;
-        let nqIndices = [];
-        let jqIndices = [];
+        const nqIndices = [];
+        const jqIndices = [];
 
         nqElements.each(function (index: number, element: HtmlNode) {
             nqCount++;

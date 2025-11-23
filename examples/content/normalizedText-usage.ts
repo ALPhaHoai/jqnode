@@ -170,7 +170,7 @@ const $12 = jq.load(scrapedHtml);
 const product = {
     name: $12('.name').normalizedText(),
     price: $12('.price').normalizedText(),
-    specs: $12('.specs').normalizedText()
+    specs: $12('.specs').normalizedText(),
 };
 console.log('Extracted product data:', JSON.stringify(product, null, 2));
 

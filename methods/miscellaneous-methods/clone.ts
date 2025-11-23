@@ -6,9 +6,11 @@ import JQClass from '../../jq';
  */
 function copyDataRecursive(sourceNode: HtmlNode, clonedNode: HtmlNode): void {
     // Copy data from source children to cloned children
-    if (sourceNode.children && clonedNode.children &&
-        sourceNode.children.length === clonedNode.children.length) {
-
+    if (
+        sourceNode.children &&
+        clonedNode.children &&
+        sourceNode.children.length === clonedNode.children.length
+    ) {
         for (let i = 0; i < sourceNode.children.length; i++) {
             const sourceChild = sourceNode.children[i];
             const clonedChild = clonedNode.children[i];
@@ -28,7 +30,11 @@ function copyDataRecursive(sourceNode: HtmlNode, clonedNode: HtmlNode): void {
  * Create a deep copy of the set of matched elements.
  * @see https://api.jquery.com/clone/
  */
-function clone(this: JQ, withDataAndEvents: boolean = false, deepWithDataAndEvents: boolean = withDataAndEvents): JQ {
+function clone(
+    this: JQ,
+    withDataAndEvents: boolean = false,
+    deepWithDataAndEvents: boolean = withDataAndEvents,
+): JQ {
     // Use the helper to perform deep clone
     const _cloneNode = this._cloneNode;
 

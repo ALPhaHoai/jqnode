@@ -6,14 +6,14 @@ import type { HtmlNode, JQ } from '../../types';
  * Gets or sets the text content of elements with HTML normalization.
  * Similar to text() but applies normalizeHTML to remove tabs, newlines, carriage returns,
  * and collapse multiple spaces into single spaces.
- * 
+ *
  * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function normalizedText(this: JQ, value?: string): string | JQ {
     if (value === undefined) {
         // Get text content from element nodes only
-        const elementNodes = this.nodes.filter((node: HtmlNode) =>
-            node.type === 'element' || node.nodeType === 1
+        const elementNodes = this.nodes.filter(
+            (node: HtmlNode) => node.type === 'element' || node.nodeType === 1,
         );
 
         // Check if any element is detached (from fractional eq() indices)
@@ -25,14 +25,16 @@ function normalizedText(this: JQ, value?: string): string | JQ {
             return '';
         }
 
-        const result = elementNodes.map((node: HtmlNode) => {
-            // Use HTML5 textContent property as single source of truth
-            if ('textContent' in node) {
-                return node.textContent || '';
-            }
-            // Fallback to internal node traversal for parsed nodes
-            return getTextContent(node);
-        }).join('');
+        const result = elementNodes
+            .map((node: HtmlNode) => {
+                // Use HTML5 textContent property as single source of truth
+                if ('textContent' in node) {
+                    return node.textContent || '';
+                }
+                // Fallback to internal node traversal for parsed nodes
+                return getTextContent(node);
+            })
+            .join('');
 
         const unescapedResult = unescapeHtml(result);
 

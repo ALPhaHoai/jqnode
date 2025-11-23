@@ -71,7 +71,21 @@ function nodeToHTML(node: HtmlNode): string {
 
         if (!node.children || node.children.length === 0) {
             // Void elements (self-closing tags) in HTML5 don't get closing tags
-            const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'];
+            const voidElements = [
+                'area',
+                'base',
+                'br',
+                'col',
+                'embed',
+                'hr',
+                'img',
+                'input',
+                'link',
+                'meta',
+                'source',
+                'track',
+                'wbr',
+            ];
             if (voidElements.includes(tagNameLower)) {
                 return tagOpen;
             } else {

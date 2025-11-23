@@ -11,7 +11,7 @@ interface ToJSONOptions {
 /**
  * Converts HTML table elements to JSON data (array of objects).
  * Each object represents a row with properties from table headers.
- * 
+ *
  * Note: This is not a jQuery method. This is a custom jqnode method.
  */
 function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, string>> {
@@ -28,31 +28,37 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
         let headerCells: HtmlNode[] = [];
 
         // Try to find headers in <thead>
-        const thead = tableNode.children?.find(child =>
-            child.type === 'element' && child.name?.toLowerCase() === 'thead');
+        const thead = tableNode.children?.find(
+            (child) => child.type === 'element' && child.name?.toLowerCase() === 'thead',
+        );
         if (thead) {
-            const theadRow = thead.children?.find(child =>
-                child.type === 'element' && child.name?.toLowerCase() === 'tr');
+            const theadRow = thead.children?.find(
+                (child) => child.type === 'element' && child.name?.toLowerCase() === 'tr',
+            );
             if (theadRow) {
-                headerCells = theadRow.children?.filter(child => {
-                    const childTag = child.name?.toLowerCase();
-                    return child.type === 'element' && (childTag === 'th' || childTag === 'td');
-                }) || [];
+                headerCells =
+                    theadRow.children?.filter((child) => {
+                        const childTag = child.name?.toLowerCase();
+                        return child.type === 'element' && (childTag === 'th' || childTag === 'td');
+                    }) || [];
             }
         }
 
         // If no headers in thead, use first row
         if (headerCells.length === 0) {
-            const tbody = tableNode.children?.find(child =>
-                child.type === 'element' && child.name?.toLowerCase() === 'tbody');
+            const tbody = tableNode.children?.find(
+                (child) => child.type === 'element' && child.name?.toLowerCase() === 'tbody',
+            );
             const rowContainer = tbody || tableNode;
-            const firstRow = rowContainer.children?.find(child =>
-                child.type === 'element' && child.name?.toLowerCase() === 'tr');
+            const firstRow = rowContainer.children?.find(
+                (child) => child.type === 'element' && child.name?.toLowerCase() === 'tr',
+            );
             if (firstRow) {
-                headerCells = firstRow.children?.filter(child => {
-                    const childTag = child.name?.toLowerCase();
-                    return child.type === 'element' && (childTag === 'th' || childTag === 'td');
-                }) || [];
+                headerCells =
+                    firstRow.children?.filter((child) => {
+                        const childTag = child.name?.toLowerCase();
+                        return child.type === 'element' && (childTag === 'th' || childTag === 'td');
+                    }) || [];
             }
         }
 
@@ -65,32 +71,38 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
 
         // Find data rows
         let dataRows: HtmlNode[] = [];
-        const tbody = tableNode.children?.find(child =>
-            child.type === 'element' && child.name?.toLowerCase() === 'tbody');
+        const tbody = tableNode.children?.find(
+            (child) => child.type === 'element' && child.name?.toLowerCase() === 'tbody',
+        );
 
         if (tbody) {
             // If tbody exists, get all rows from it
-            dataRows = tbody.children?.filter(child =>
-                child.type === 'element' && child.name?.toLowerCase() === 'tr') || [];
+            dataRows =
+                tbody.children?.filter(
+                    (child) => child.type === 'element' && child.name?.toLowerCase() === 'tr',
+                ) || [];
         } else {
             // If no tbody, get all rows except the first one (which we used as headers)
-            const allRows = tableNode.children?.filter(child =>
-                child.type === 'element' && child.name?.toLowerCase() === 'tr') || [];
+            const allRows =
+                tableNode.children?.filter(
+                    (child) => child.type === 'element' && child.name?.toLowerCase() === 'tr',
+                ) || [];
             dataRows = allRows.slice(1); // Skip first row (headers)
         }
 
         // Convert rows to objects
-        dataRows.forEach(row => {
-            const cells = row.children?.filter(child => {
-                const childTag = child.name?.toLowerCase();
-                return child.type === 'element' && (childTag === 'td' || childTag === 'th');
-            }) || [];
+        dataRows.forEach((row) => {
+            const cells =
+                row.children?.filter((child) => {
+                    const childTag = child.name?.toLowerCase();
+                    return child.type === 'element' && (childTag === 'td' || childTag === 'th');
+                }) || [];
 
             const rowData: Record<string, string> = {};
             cells.forEach((cell, index) => {
                 const header = headers[index];
                 if (header !== null && header !== undefined) {
-                    const key = normalizeKeys ? header.replace(/[^a-zA-Z0-9]/g, "_") : header;
+                    const key = normalizeKeys ? header.replace(/[^a-zA-Z0-9]/g, '_') : header;
                     rowData[key] = getTextContent(cell).trim();
                 }
             });

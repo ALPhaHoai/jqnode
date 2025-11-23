@@ -22,8 +22,8 @@ const jq = require('@alphahoai/jqnode');
 
 // Example with axios or fetch
 const result = await axios.get('https://example.com/data');
-const $ = jq.load(result?.data || "");
-const tables = $.find("table");
+const $ = jq.load(result?.data || '');
+const tables = $.find('table');
 
 console.log('Found', tables.length, 'tables');
 ```
@@ -40,10 +40,10 @@ const apiResponse = {
             <tr><td>John</td><td>30</td></tr>
             <tr><td>Jane</td><td>25</td></tr>
         </table>
-    `
+    `,
 };
 
-const $ = jq.load(apiResponse?.data ||"");
+const $ = jq.load(apiResponse?.data || '');
 const table = $.find('#users');
 const rows = table.find('tr');
 
@@ -76,18 +76,18 @@ const result = {
             <div class="product" data-id="1">Product A</div>
             <div class="product" data-id="2">Product B</div>
         </div>
-    `
+    `,
 };
 
-const $ = jq.load(result?.data || "");
+const $ = jq.load(result?.data || '');
 const products = $.find('.product');
 
 const productData = [];
-products.each(function(index, element) {
+products.each(function (index, element) {
     const $el = jq(element);
     productData.push({
         id: $el.attr('data-id'),
-        name: $el.text()
+        name: $el.text(),
     });
 });
 
@@ -105,9 +105,9 @@ const result1 = { data: null };
 const result2 = { data: undefined };
 const result3 = {};
 
-const $1 = jq.load(result1?.data || "");
-const $2 = jq.load(result2?.data || "");
-const $3 = jq.load(result3?.data || "");
+const $1 = jq.load(result1?.data || '');
+const $2 = jq.load(result2?.data || '');
+const $3 = jq.load(result3?.data || '');
 
 console.log($1.length); // 0
 console.log($2.length); // 0
@@ -135,11 +135,13 @@ $1.find('div').text() === $2.find('div').text(); // true
 ### When to Use Each
 
 **Use `jq(html)`:**
+
 - For simple, straightforward HTML parsing
 - When the HTML source is always a string
 - For quick one-liners
 
 **Use `jq.load(html)`:**
+
 - When loading data from API responses
 - When working with optional/nullable data
 - When you want to make the "loading" action explicit in your code
@@ -155,16 +157,18 @@ const axios = require('axios');
 
 async function scrapeData(url) {
     const response = await axios.get(url);
-    const $ = jq.load(response?.data || "");
-    
+    const $ = jq.load(response?.data || '');
+
     const articles = $.find('article');
-    return articles.map((i, article) => {
-        const $article = jq(article);
-        return {
-            title: $article.find('h2').text(),
-            content: $article.find('p').text()
-        };
-    }).get();
+    return articles
+        .map((i, article) => {
+            const $article = jq(article);
+            return {
+                title: $article.find('h2').text(),
+                content: $article.find('p').text(),
+            };
+        })
+        .get();
 }
 ```
 
@@ -175,16 +179,20 @@ const jq = require('@alphahoai/jqnode');
 
 function tableToJSON(htmlTable) {
     const $ = jq.load(htmlTable);
-    const headers = $.find('th').map((i, th) => jq(th).text()).get();
-    
-    return $.find('tbody tr').map((i, tr) => {
-        const $tr = jq(tr);
-        const row = {};
-        $tr.find('td').each((j, td) => {
-            row[headers[j]] = jq(td).text();
-        });
-        return row;
-    }).get();
+    const headers = $.find('th')
+        .map((i, th) => jq(th).text())
+        .get();
+
+    return $.find('tbody tr')
+        .map((i, tr) => {
+            const $tr = jq(tr);
+            const row = {};
+            $tr.find('td').each((j, td) => {
+                row[headers[j]] = jq(td).text();
+            });
+            return row;
+        })
+        .get();
 }
 
 const html = `
@@ -208,13 +216,13 @@ const jq = require('@alphahoai/jqnode');
 
 function processResponse(response) {
     // Safely load even if response structure is uncertain
-    const $ = jq.load(response?.data?.html || response?.html || "");
-    
+    const $ = jq.load(response?.data?.html || response?.html || '');
+
     if ($.length === 0) {
         console.log('No HTML content to process');
         return null;
     }
-    
+
     return $.find('.content').text();
 }
 ```
@@ -227,13 +235,13 @@ The `.load()` method includes built-in error handling:
 const jq = require('@alphahoai/jqnode');
 
 // Non-string inputs return empty JQ instance with warning
-jq.load(123);        // Warning + empty instance
-jq.load(null);       // Warning + empty instance
-jq.load(undefined);  // Warning + empty instance
-jq.load({});         // Warning + empty instance
+jq.load(123); // Warning + empty instance
+jq.load(null); // Warning + empty instance
+jq.load(undefined); // Warning + empty instance
+jq.load({}); // Warning + empty instance
 
 // Empty string returns empty instance (no warning)
-jq.load("");         // Empty instance, no warning
+jq.load(''); // Empty instance, no warning
 ```
 
 ## API Reference
@@ -243,12 +251,15 @@ jq.load("");         // Empty instance, no warning
 Loads and parses an HTML string, returning a JQ instance.
 
 **Parameters:**
+
 - `html` (string): HTML string to parse
 
 **Returns:**
+
 - `JQ` instance containing the parsed HTML nodes
 
 **Example:**
+
 ```javascript
 const $ = jq.load('<div>Hello</div>');
 console.log($.find('div').text()); // "Hello"
@@ -257,31 +268,34 @@ console.log($.find('div').text()); // "Hello"
 ## Best Practices
 
 1. **Always use optional chaining for API data:**
-   ```javascript
-   const $ = jq.load(response?.data || "");
-   ```
+
+    ```javascript
+    const $ = jq.load(response?.data || '');
+    ```
 
 2. **Check length before processing:**
-   ```javascript
-   const $ = jq.load(html);
-   if ($.length > 0) {
-       // Process content
-   }
-   ```
+
+    ```javascript
+    const $ = jq.load(html);
+    if ($.length > 0) {
+        // Process content
+    }
+    ```
 
 3. **Use .find() for querying:**
-   ```javascript
-   const $ = jq.load(html);
-   const elements = $.find('selector'); // ✅ Correct
-   ```
+
+    ```javascript
+    const $ = jq.load(html);
+    const elements = $.find('selector'); // ✅ Correct
+    ```
 
 4. **Reuse the jq factory for nested elements:**
-   ```javascript
-   $.find('div').each((i, div) => {
-       const $div = jq(div); // Wrap individual elements
-       console.log($div.text());
-   });
-   ```
+    ```javascript
+    $.find('div').each((i, div) => {
+        const $div = jq(div); // Wrap individual elements
+        console.log($div.text());
+    });
+    ```
 
 ## See Also
 

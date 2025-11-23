@@ -3,19 +3,23 @@
 Filter elements to those that have a descendant matching the selector.
 
 ## Syntax
+
 ```javascript
-jq(selector).has(selector)
+jq(selector).has(selector);
 ```
 
 ## Parameters
+
 - **selector** (String): CSS selector to match descendants
 
 ## Returns
+
 JQ instance containing filtered elements
 
 ## Examples
 
 ### Filter by Descendant
+
 ```javascript
 const $ = jq(`
     <div>
@@ -30,6 +34,7 @@ console.log(boxesWithP.length); // 2
 ```
 
 ### Complex Nesting
+
 ```javascript
 const $ = jq(`
     <ul>
@@ -44,12 +49,14 @@ console.log(itemsWithNested.length); // 2 (items with nested lists)
 ```
 
 ## Use Cases
+
 - Find parents containing specific children
 - Filter containers by content
 - Locate elements with specific descendants
 - Navigation menu filtering
 
 ## Related
+
 - **filter()** - Filter by selector/function
 - **find()** - Get descendants
 - **children()** - Get immediate children

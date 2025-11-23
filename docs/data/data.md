@@ -1,54 +1,64 @@
 # data() Method
 
 ## Overview
+
 The `data()` method stores and retrieves arbitrary data associated with the matched elements. It provides a jQuery-compatible way to attach custom data to DOM elements without polluting the global namespace or using non-standard attributes.
 
 ## Syntax
 
 ### Get all data:
+
 ```javascript
-jq(selector).data()
+jq(selector).data();
 ```
 
 ### Get specific data:
+
 ```javascript
-jq(selector).data(key)
+jq(selector).data(key);
 ```
 
 ### Set single data value:
+
 ```javascript
-jq(selector).data(key, value)
+jq(selector).data(key, value);
 ```
 
 ### Set multiple data values:
+
 ```javascript
-jq(selector).data(object)
+jq(selector).data(object);
 ```
 
 ### Parameters
+
 - **key** (String): The data key name (camelCase)
 - **value** (Any): The value to store (any JavaScript type)
 - **object** (Object): Multiple key-value pairs to set
 
 ### Return Value
+
 - **Getting**: Returns the data value, all data as object, or `undefined`
 - **Setting**: Returns the JQ instance for chaining
 
 ## Features
 
 ### ✅ Flexible Data Storage
+
 - Store any JavaScript type (strings, numbers, booleans, objects, arrays)
 - Automatic type conversion for string values
-- Merge with HTML data-* attributes
+- Merge with HTML data-\* attributes
 - camelCase key conversion
 
 ### ✅ jQuery-Compatible
+
 - Gets data from first element
 - Sets data on all elements
-- Supports data-* attribute fallback
+- Supports data-\* attribute fallback
 - Automatic value parsing (true, false, null, numbers, JSON)
 
 ### ✅ Smart Type Conversion
+
 - `"true"` → `true` (boolean)
 - `"false"` → `false` (boolean)
 - `"null"` → `null`
@@ -59,6 +69,7 @@ jq(selector).data(object)
 ## Examples
 
 ### Basic Usage - Setting Data
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -76,6 +87,7 @@ console.log($('#user').data('active')); // true
 ```
 
 ### Setting Multiple Values
+
 ```javascript
 const html = `<div id="product"></div>`;
 const $ = jq(html);
@@ -86,7 +98,7 @@ $('#product').data({
     name: 'Widget Pro',
     price: 49.99,
     inStock: true,
-    tags: ['electronics', 'gadgets']
+    tags: ['electronics', 'gadgets'],
 });
 
 console.log($('#product').data('productId')); // "SKU-12345"
@@ -95,6 +107,7 @@ console.log($('#product').data('tags')); // ['electronics', 'gadgets']
 ```
 
 ### Getting All Data
+
 ```javascript
 const html = `<div id="element" data-status="active" data-priority="high"></div>`;
 const $ = jq(html);
@@ -115,6 +128,7 @@ console.log(allData);
 ```
 
 ### Data Attributes Integration
+
 ```javascript
 const html = `
     <div id="widget" 
@@ -132,6 +146,7 @@ console.log($('#widget').data('maxItems')); // 10 (number conversion)
 ```
 
 ### Storing Objects and Arrays
+
 ```javascript
 const html = `<div id="user"></div>`;
 const $ = jq(html);
@@ -142,8 +157,8 @@ $('#user').data('profile', {
     email: 'john@example.com',
     preferences: {
         theme: 'dark',
-        notifications: true
-    }
+        notifications: true,
+    },
 });
 
 // Store arrays
@@ -158,6 +173,7 @@ console.log(permissions.includes('write')); // true
 ```
 
 ### Setting Data on Multiple Elements
+
 ```javascript
 const html = `
     <div>
@@ -173,13 +189,14 @@ $('.action-btn').data('handler', 'clickHandler');
 $('.action-btn').data('enabled', true);
 
 // Verify each button has the data
-$('.action-btn').each(function(index) {
+$('.action-btn').each(function (index) {
     const $btn = jq(this);
     console.log(`Button ${index + 1}:`, $btn.data('handler'));
 });
 ```
 
 ### Setting Unique Data per Element
+
 ```javascript
 const html = `
     <ul>
@@ -190,19 +207,20 @@ const html = `
 `;
 const $ = jq(html);
 
-$('li').each(function(index) {
+$('li').each(function (index) {
     jq(this).data('itemId', `ITEM-${index + 1}`);
     jq(this).data('position', index);
 });
 
 // Retrieve
-$('li').each(function() {
+$('li').each(function () {
     const $item = jq(this);
     console.log($item.data('itemId'), 'at position', $item.data('position'));
 });
 ```
 
 ### Method Chaining
+
 ```javascript
 const html = `<div id="element"></div>`;
 const $ = jq(html);
@@ -218,6 +236,7 @@ console.log($('#element').data('status')); // "initialized"
 ```
 
 ### Caching DOM Queries
+
 ```javascript
 const html = `
     <div class="widget" data-api-url="/api/data"></div>
@@ -225,10 +244,13 @@ const html = `
 const $ = jq(html);
 
 // Cache expensive computation results
-$('.widget').data('processedData', function() {
-    // Expensive operation
-    return complexCalculation();
-}());
+$('.widget').data(
+    'processedData',
+    (function () {
+        // Expensive operation
+        return complexCalculation();
+    })(),
+);
 
 // Retrieve cached data
 const cached = $('.widget').data('processedData');
@@ -236,6 +258,7 @@ console.log(cached);
 ```
 
 ### Event Data Storage
+
 ```javascript
 const html = `<button id="submit">Submit</button>`;
 const $ = jq(html);
@@ -248,10 +271,10 @@ $('#submit').data('lastClicked', null);
 function handleClick() {
     const $btn = jq('#submit');
     const count = $btn.data('clickCount') + 1;
-    
+
     $btn.data('clickCount', count);
     $btn.data('lastClicked', new Date());
-    
+
     console.log(`Button clicked ${count} times`);
 }
 
@@ -262,6 +285,7 @@ handleClick();
 ```
 
 ### State Management
+
 ```javascript
 const html = `<div id="accordion"></div>`;
 const $ = jq(html);
@@ -270,56 +294,58 @@ const $ = jq(html);
 $('#accordion').data('state', {
     isExpanded: false,
     activePanel: null,
-    history: []
+    history: [],
 });
 
 // Update state
 function toggleAccordion() {
     const $accordion = jq('#accordion');
     const state = $accordion.data('state');
-    
+
     state.isExpanded = !state.isExpanded;
-    state.history.push({ 
-        action: 'toggle', 
-        timestamp: Date.now() 
+    state.history.push({
+        action: 'toggle',
+        timestamp: Date.now(),
     });
-    
+
     console.log('Accordion expanded:', state.isExpanded);
 }
 ```
 
 ### API Response Caching
+
 ```javascript
 const html = `<div id="user-profile" data-user-id="12345"></div>`;
 const $ = jq(html);
 
 async function loadUserProfile() {
     const $profile = jq('#user-profile');
-    
+
     // Check cache first
     let userData = $profile.data('userData');
-    
+
     if (!userData) {
         // Simulate API call
         userData = {
             id: $profile.data('userId'),
             name: 'John Doe',
             email: 'john@example.com',
-            fetchedAt: new Date()
+            fetchedAt: new Date(),
         };
-        
+
         // Cache the result
         $profile.data('userData', userData);
         console.log('Fetched from API');
     } else {
         console.log('Retrieved from cache');
     }
-    
+
     return userData;
 }
 ```
 
 ### Form Field Validation State
+
 ```javascript
 const html = `
     <form>
@@ -342,11 +368,11 @@ validateField($('#email'), true, 'Valid email address');
 validateField($('#password'), false, 'Password too short');
 
 // Check validation state
-$('input').each(function() {
+$('input').each(function () {
     const $input = jq(this);
     const isValid = $input.data('isValid');
     const message = $input.data('validationMessage');
-    
+
     console.log(`${$input.attr('name')}: ${isValid ? '✓' : '✗'} - ${message}`);
 });
 ```
@@ -377,6 +403,7 @@ console.log(typeof $('#test').data('string')); // string
 ## Edge Cases
 
 ### Non-Existent Data
+
 ```javascript
 const html = `<div id="test"></div>`;
 const $ = jq(html);
@@ -385,6 +412,7 @@ console.log($('#test').data('missing')); // undefined
 ```
 
 ### Empty Selection
+
 ```javascript
 const $ = jq('<div></div>');
 
@@ -393,6 +421,7 @@ console.log($('#missing').data('key')); // undefined
 ```
 
 ### Overriding Data Attributes
+
 ```javascript
 const html = `<div id="element" data-value="original"></div>`;
 const $ = jq(html);
@@ -425,29 +454,30 @@ console.log($('#element').data('value')); // "updated"
 ## Implementation Details
 
 The method:
+
 1. **Storage**: Uses internal `_jqData` property on nodes
-2. **Reading**: Checks programmatic data first, then data-* attributes
+2. **Reading**: Checks programmatic data first, then data-\* attributes
 3. **Setting**: Stores in `_jqData`, doesn't modify HTML attributes
-4. **Conversion**: Automatically converts data-* attribute strings to appropriate types
+4. **Conversion**: Automatically converts data-\* attribute strings to appropriate types
 5. **Naming**: Converts kebab-case (data-foo-bar) to camelCase (fooBar)
 
 ## Related Methods
 
-- **attr()**: Get/set HTML attributes (including data-*)
+- **attr()**: Get/set HTML attributes (including data-\*)
 - **removeAttr()**: Remove HTML attributes
 - **removeData()**: Remove data values
 - **prop()**: Get/set DOM properties
 
 ## Differences from attr()
 
-| Feature | data() | attr('data-*') |
-|---------|--------|----------------|
-| Storage | In-memory | HTML attribute |
-| Type | Any JavaScript type | String only |
-| Performance | Faster (memory) | Slower (DOM) |
-| Persistence | Session only | Persists in HTML |
-| Automatic parsing | Yes | No |
-| Naming | camelCase | kebab-case |
+| Feature           | data()              | attr('data-\*')  |
+| ----------------- | ------------------- | ---------------- |
+| Storage           | In-memory           | HTML attribute   |
+| Type              | Any JavaScript type | String only      |
+| Performance       | Faster (memory)     | Slower (DOM)     |
+| Persistence       | Session only        | Persists in HTML |
+| Automatic parsing | Yes                 | No               |
+| Naming            | camelCase           | kebab-case       |
 
 ## Files
 
@@ -458,6 +488,7 @@ The method:
 ## Browser Compatibility
 
 Works in all environments:
+
 - ✅ Node.js (via jsdom)
 - ✅ Modern browsers
 - ✅ Legacy browsers (IE11+)
@@ -470,4 +501,4 @@ Works in all environments:
 4. **Store objects freely**: No serialization needed
 5. **Check for undefined**: Always check if data exists before using
 6. **Clean up**: Use `removeData()` to free memory when done
-7. **Combine with data-***: Use HTML for static data, data() for dynamic
+7. **Combine with data-\***: Use HTML for static data, data() for dynamic

@@ -69,15 +69,15 @@ function getTestFiles() {
 
                 testFiles.push({
                     // Basic path information
-                    relativePath,           // 'content-methods/text.test.js'
-                    windowsPath,            // 'content-methods\text.test.js'
-                    fullPath,              // 'test/node-query/content-methods/text.test.js'
+                    relativePath, // 'content-methods/text.test.js'
+                    windowsPath, // 'content-methods\text.test.js'
+                    fullPath, // 'test/node-query/content-methods/text.test.js'
 
                     // Categorization
-                    category,              // 'content-methods'
-                    subcategory,           // 'text' or null
-                    methodName,            // 'text'
-                    filename,              // 'text.test.js'
+                    category, // 'content-methods'
+                    subcategory, // 'text' or null
+                    methodName, // 'text'
+                    filename, // 'text.test.js'
 
                     // File metadata
                     size: stat.size,
@@ -87,7 +87,7 @@ function getTestFiles() {
                     // Computed paths for different use cases
                     nodeTestPath: `test/node-query/${relativePath}`,
                     jqueryTestPath: `test/jquery-comparison/${relativePath}`,
-                    browserTestPath: `browser-test/all-tests/test-files/${relativePath}`
+                    browserTestPath: `browser-test/all-tests/test-files/${relativePath}`,
                 });
             }
         }

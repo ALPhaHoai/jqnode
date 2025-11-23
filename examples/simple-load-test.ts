@@ -7,11 +7,11 @@ const result = {
     data: `
     <table id="table1"><tr><td>Data 1</td></tr></table>
     <table id="table2"><tr><td>Data 2</td></tr></table>
-    `
+    `,
 };
 
-const $ = jq.load(result?.data || "");
-const tables = $("table");  // ✅ Now you can use callable syntax!
+const $ = jq.load(result?.data || '');
+const tables = $('table'); // ✅ Now you can use callable syntax!
 
 console.log('Number of tables:', tables.length);
 console.log('Table 1 ID:', tables.eq(0).attr('id'));

@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the ancestors of each element, up to but not including the element matched by the selector.
-  * @see https://api.jquery.com/parentsUntil/
+ * @see https://api.jquery.com/parentsUntil/
  */
 function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const ancestors: HtmlNode[] = [];
@@ -34,7 +34,9 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
                             const attr = domCurrent!.attributes[i];
                             domAttrs[attr.name] = attr.value;
                         }
-                        return Object.keys(stopAttrs).every(key => domAttrs[key] === stopAttrs[key]);
+                        return Object.keys(stopAttrs).every(
+                            (key) => domAttrs[key] === stopAttrs[key],
+                        );
                     }
                     return false;
                 });
@@ -57,7 +59,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
                         properties: {},
                         children: [],
                         parent: undefined,
-                        _originalElement: domCurrent
+                        _originalElement: domCurrent,
                     };
                     ancestors.push(domNode);
                 }
@@ -83,7 +85,9 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
     if (filter) {
         const rootNodes = this._findCommonRoots(this.nodes);
         const matchingAncestors = selectNodes(rootNodes, filter);
-        resultNodes = ancestors.filter((ancestor: HtmlNode) => matchingAncestors.includes(ancestor));
+        resultNodes = ancestors.filter((ancestor: HtmlNode) =>
+            matchingAncestors.includes(ancestor),
+        );
     }
 
     return new JQClass(resultNodes);

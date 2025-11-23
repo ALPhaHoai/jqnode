@@ -1,30 +1,36 @@
 # html() Method
 
 ## Overview
+
 Get or set the HTML content of elements. When getting, returns the innerHTML of the first element. When setting, sets the innerHTML of all matched elements.
 
 ## Syntax
 
 ### Get HTML:
+
 ```javascript
-jq(selector).html()
+jq(selector).html();
 ```
 
 ### Set HTML:
+
 ```javascript
-jq(selector).html(htmlString)
+jq(selector).html(htmlString);
 ```
 
 ## Parameters
+
 - **htmlString** (String, optional): HTML string to set as content
 
 ## Return Value
+
 - **Get**: String containing HTML content
 - **Set**: JQ instance for chaining
 
 ## Examples
 
 ### Getting HTML
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -36,6 +42,7 @@ console.log(content); // "<p>Hello <strong>World</strong></p>"
 ```
 
 ### Setting HTML
+
 ```javascript
 const html = `<div id="box"></div>`;
 const $ = jq(html);
@@ -45,6 +52,7 @@ console.log($('#box').html()); // "<p>New content</p>"
 ```
 
 ### Replacing Content
+
 ```javascript
 const html = `
     <ul id="list">
@@ -58,6 +66,7 @@ console.log($('#list').html());
 ```
 
 ### With Complex HTML
+
 ```javascript
 const html = `<div id="app"></div>`;
 const $ = jq(html);
@@ -75,6 +84,7 @@ $('#app').html(newContent);
 ```
 
 ## Use Cases
+
 - Load dynamic content
 - Replace element contents
 - Extract HTML for processing
@@ -82,11 +92,13 @@ $('#app').html(newContent);
 - Content updates
 
 ## Related Methods
+
 - **text()**: Get/set text content (no HTML)
 - **append()**: Add content at end
 - **prepend()**: Add content at beginning
 
 ##Tips
+
 - Setting html() replaces all existing content
 - Use text() if you don't need HTML parsing
 - Returns innerHTML, not outerHTML

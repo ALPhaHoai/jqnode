@@ -1,11 +1,21 @@
 import type { JQ } from '../../types';
-import { initDataAttributes, getData, toCamelCase, NodeWithData, getDataFromAttribute } from '../../helpers/dataHelper';
+import {
+    initDataAttributes,
+    getData,
+    toCamelCase,
+    NodeWithData,
+    getDataFromAttribute,
+} from '../../helpers/dataHelper';
 
 /**
  * Store arbitrary data associated with the matched elements or return the value at the named data store for the first element in the set of matched elements.
  * @see https://api.jquery.com/data/
  */
-function data(this: JQ, key?: string | Record<string, unknown>, value?: unknown): JQ | Record<string, unknown> | unknown | undefined {
+function data(
+    this: JQ,
+    key?: string | Record<string, unknown>,
+    value?: unknown,
+): JQ | Record<string, unknown> | unknown | undefined {
     // Case 1: No arguments - return all data for first element
     if (key === undefined) {
         if (this.nodes.length === 0) return undefined;
@@ -18,7 +28,7 @@ function data(this: JQ, key?: string | Record<string, unknown>, value?: unknown)
     if (typeof key === 'object') {
         return this.each(function (this: NodeWithData) {
             const d = getData(this);
-            Object.keys(key).forEach(k => {
+            Object.keys(key).forEach((k) => {
                 d[toCamelCase(k)] = key[k];
             });
         });

@@ -1,56 +1,66 @@
 # addClass() Method
 
 ## Overview
+
 The `addClass()` method adds one or more CSS classes to all elements in the matched set. This is one of the most commonly used jQuery methods for manipulating element classes.
 
 ## Syntax
 
 ### Add single class:
+
 ```javascript
-jq(selector).addClass(className)
+jq(selector).addClass(className);
 ```
 
 ### Add multiple classes:
+
 ```javascript
-jq(selector).addClass('class1 class2 class3')
+jq(selector).addClass('class1 class2 class3');
 ```
 
 ### Add classes using function:
+
 ```javascript
-jq(selector).addClass(function(index, currentClass) {
+jq(selector).addClass(function (index, currentClass) {
     return newClass;
-})
+});
 ```
 
 ### Parameters
+
 - **className** (String): One or more space-separated classes to add
 - **function(index, currentClass)**: Function returning class names to add
-  - **index**: Element's index in the set
-  - **currentClass**: Current class value
-  - **Returns**: String of class names to add
+    - **index**: Element's index in the set
+    - **currentClass**: Current class value
+    - **Returns**: String of class names to add
 
 ### Return Value
+
 Returns the JQ instance for method chaining.
 
 ## Features
 
 ### ✅ Multiple Classes
+
 - Add single or multiple space-separated classes
 - Duplicate classes are handled automatically
 - Preserves existing classes
 
 ### ✅ Function Support
+
 - Dynamically determine classes based on index
 - Access current classes for conditional logic
 - Apply different classes to different elements
 
 ### ✅ Chainable
+
 - Returns JQ instance for method chaining
 - Combine with other manipulation methods
 
 ## Examples
 
 ### Basic Usage
+
 ```javascript
 const jq = require('@alphahoai/jqnode');
 
@@ -74,6 +84,7 @@ console.log($('#main').attr('class')); // "container active"
 ```
 
 ### Multiple Classes
+
 ```javascript
 const html = `<div id="box">Content</div>`;
 const $ = jq(html);
@@ -83,6 +94,7 @@ console.log($('#box').attr('class')); // "highlighted bordered rounded"
 ```
 
 ### Using Function
+
 ```javascript
 const html = `
     <ul>
@@ -96,11 +108,11 @@ const html = `
 const $ = jq(html);
 
 // Add even/odd classes based on index
-$('li').addClass(function(index) {
+$('li').addClass(function (index) {
     return index % 2 === 0 ? 'even' : 'odd';
 });
 
-$('li').each(function(i) {
+$('li').each(function (i) {
     console.log(`Item ${i}: ${jq(this).attr('class')}`);
 });
 // Item 0: even
@@ -110,6 +122,7 @@ $('li').each(function(i) {
 ```
 
 ### Preserving Existing Classes
+
 ```javascript
 const html = `<div class="existing">Content</div>`;
 const $ = jq(html);
@@ -119,19 +132,18 @@ console.log($('div').attr('class')); // "existing new-class"
 ```
 
 ### Method Chaining
+
 ```javascript
 const html = `<div id="element">Text</div>`;
 const $ = jq(html);
 
-$('#element')
-    .addClass('primary')
-    .addClass('highlighted')
-    .attr('data-status', 'active');
+$('#element').addClass('primary').addClass('highlighted').attr('data-status', 'active');
 
 console.log($('#element').attr('class')); // "primary highlighted"
 ```
 
 ### Conditional Classes
+
 ```javascript
 const html = `
     <div>
@@ -143,18 +155,19 @@ const html = `
 
 const $ = jq(html);
 
-$('span').addClass(function(index, currentClass) {
+$('span').addClass(function (index, currentClass) {
     const status = jq(this).attr('data-status');
     return status === 'active' ? 'text-success' : 'text-muted';
 });
 
-$('span').each(function() {
+$('span').each(function () {
     const $span = jq(this);
     console.log($span.attr('data-status'), '->', $span.attr('class'));
 });
 ```
 
 ### Form Field States
+
 ```javascript
 const html = `
     <form>
@@ -166,18 +179,19 @@ const html = `
 
 const $ = jq(html);
 
-$('input').addClass(function() {
+$('input').addClass(function () {
     const value = jq(this).attr('value');
     return value ? 'filled' : 'empty';
 });
 
-$('input').each(function() {
+$('input').each(function () {
     const $input = jq(this);
     console.log($input.attr('id'), ':', $input.attr('class'));
 });
 ```
 
 ### Table Styling
+
 ```javascript
 const html = `
     <table>
@@ -190,7 +204,7 @@ const html = `
 const $ = jq(html);
 
 // Stripe table rows
-$('tr').addClass(function(index) {
+$('tr').addClass(function (index) {
     return index % 2 === 0 ? 'row-even' : 'row-odd';
 });
 
@@ -199,6 +213,7 @@ $('td').addClass('cell');
 ```
 
 ### Navigation Menu
+
 ```javascript
 const html = `
     <nav>
@@ -211,16 +226,19 @@ const html = `
 const $ = jq(html);
 const currentPage = '/about';
 
-$('a').addClass('nav-link').addClass(function() {
-    return jq(this).attr('href') === currentPage ? 'active' : '';
-});
+$('a')
+    .addClass('nav-link')
+    .addClass(function () {
+        return jq(this).attr('href') === currentPage ? 'active' : '';
+    });
 
-$('a').each(function() {
+$('a').each(function () {
     console.log(jq(this).attr('href'), '->', jq(this).attr('class'));
 });
 ```
 
 ### Button States
+
 ```javascript
 const html = `
     <div>
@@ -234,12 +252,12 @@ const $ = jq(html);
 
 $('button')
     .addClass('btn')
-    .addClass(function() {
+    .addClass(function () {
         const type = jq(this).attr('data-type');
         return `btn-${type}`;
     });
 
-$('button').each(function() {
+$('button').each(function () {
     console.log(jq(this).text(), ':', jq(this).attr('class'));
 });
 ```
@@ -264,25 +282,29 @@ $('button').each(function() {
 ## Common Patterns
 
 ### Pattern 1: Basic class addition
+
 ```javascript
 $('element').addClass('className');
 ```
 
 ### Pattern 2: Multiple classes
+
 ```javascript
 $('element').addClass('class1 class2 class3');
 ```
 
 ### Pattern 3: Conditional classes
+
 ```javascript
-$('element').addClass(function() {
+$('element').addClass(function () {
     return condition ? 'classA' : 'classB';
 });
 ```
 
 ### Pattern 4: Index-based classes
+
 ```javascript
-$('element').addClass(function(index) {
+$('element').addClass(function (index) {
     return `item-${index}`;
 });
 ```

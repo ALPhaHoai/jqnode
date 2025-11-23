@@ -95,17 +95,21 @@ const employeeTable = `
     </table>
 `;
 // Ignore ID (index 0) and Salary (index 3) columns
-const filteredData = jq(employeeTable).find('table').toJSON({
-    ignoreColumns: [0, 3]
-});
+const filteredData = jq(employeeTable)
+    .find('table')
+    .toJSON({
+        ignoreColumns: [0, 3],
+    });
 console.log('Data without ID and Salary columns:');
 console.log(JSON.stringify(filteredData, null, 2));
 
 // Example 4: Including only specific columns
 console.log('\n\nExample 4: Including Only Specific Columns');
-const onlyNameEmail = jq(employeeTable).find('table').toJSON({
-    onlyColumns: [1, 2]  // Only Name and Department
-});
+const onlyNameEmail = jq(employeeTable)
+    .find('table')
+    .toJSON({
+        onlyColumns: [1, 2], // Only Name and Department
+    });
 console.log('Only Name and Department:');
 console.log(JSON.stringify(onlyNameEmail, null, 2));
 
@@ -142,9 +146,7 @@ console.log(JSON.stringify(allTablesData, null, 2));
 
 // Example 6: Chaining with findTableWithHeader
 console.log('\n\nExample 6: Chaining with findTableWithHeader()');
-const specificTable = jq(multipleTables)
-    .findTableWithHeader('Region')
-    .toJSON();
+const specificTable = jq(multipleTables).findTableWithHeader('Region').toJSON();
 console.log('Only tables with "Region" header:');
 console.log(JSON.stringify(specificTable, null, 2));
 
@@ -263,8 +265,8 @@ const inventoryTable = `
 
 const inventory = jq(inventoryTable).find('table').toJSON();
 // Filter active products with stock
-const activeProducts = inventory.filter(item =>
-    item.Status === 'Active' && parseInt(item.Stock) > 0
+const activeProducts = inventory.filter(
+    (item) => item.Status === 'Active' && parseInt(item.Stock) > 0,
 );
 console.log('Active products in stock:');
 console.log(JSON.stringify(activeProducts, null, 2));
@@ -273,7 +275,7 @@ console.log(JSON.stringify(activeProducts, null, 2));
 const totalValue = inventory.reduce((sum, item) => {
     const price = parseFloat(item.Price.replace('$', ''));
     const stock = parseInt(item.Stock);
-    return sum + (price * stock);
+    return sum + price * stock;
 }, 0);
 console.log(`\nTotal inventory value: $${totalValue.toFixed(2)}`);
 

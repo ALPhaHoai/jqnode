@@ -274,7 +274,7 @@ function getCurrentValueForCallback(element: HtmlNode): string | string[] {
 function setValueFromCallback(
     element: HtmlNode,
     callback: (index: number, value: string | string[]) => any,
-    index: number
+    index: number,
 ): void {
     const currentValue = getCurrentValueForCallback(element);
     const result = callback.call(element, index, currentValue);
@@ -300,10 +300,7 @@ function setValueFromCallback(
  * @param {string} [value] - Value to set (if setting)
  * @returns {string|JQ} Current value if getting, JQ instance if setting
  */
-function val(
-    this: JQ,
-    value?: FormValueInput
-): GetterSetterReturn<string | string[]> {
+function val(this: JQ, value?: FormValueInput): GetterSetterReturn<string | string[]> {
     // Getter: Get value from first element
     if (value === undefined) {
         return getElementValue(this.nodes[0]);

@@ -45,15 +45,18 @@ class JQ {
         this.nodes = nodes || [];
 
         // Set up parent references for the node tree only if nodes are DOM elements
-        const hasDomNodes = this.nodes.some(node =>
-            node && typeof node === 'object' && (node.type === 'element' || node.type === 'text')
+        const hasDomNodes = this.nodes.some(
+            (node) =>
+                node &&
+                typeof node === 'object' &&
+                (node.type === 'element' || node.type === 'text'),
         );
 
         if (hasDomNodes) {
             setupParentReferences(this.nodes);
             // Add root nodes to global registry for selector searches (avoid duplicates)
             if (this.nodes.length > 0) {
-                this.nodes.forEach(node => {
+                this.nodes.forEach((node) => {
                     if (!JQ.allRootNodes.includes(node)) {
                         JQ.allRootNodes.push(node);
                     }
@@ -83,7 +86,7 @@ class JQ {
                 }
                 (target as any)[prop] = value;
                 return true;
-            }
+            },
         }) as JQ;
     }
 

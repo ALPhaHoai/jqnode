@@ -8,7 +8,22 @@ import type { HtmlNode } from './types';
 /**
  * HTML5 void elements that are always self-closing
  */
-const VOID_ELEMENTS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
+const VOID_ELEMENTS = new Set([
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+]);
 
 /**
  * Elements whose content should be treated as raw text, not parsed as HTML
@@ -19,25 +34,52 @@ const RAW_TEXT_ELEMENTS = new Set(['script', 'style']);
  * Tags that auto-close when certain other tags are encountered
  */
 const AUTO_CLOSE_RULES: Record<string, string[]> = {
-    'p': ['address', 'article', 'aside', 'blockquote', 'div', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul'],
-    'li': ['li'],
-    'dt': ['dt', 'dd'],
-    'dd': ['dt', 'dd'],
-    'option': ['option', 'optgroup'],
-    'optgroup': ['optgroup'],
-    'tr': ['tr'],
-    'td': ['td', 'th'],
-    'th': ['td', 'th'],
-    'thead': ['tbody', 'tfoot'],
-    'tbody': ['tbody', 'tfoot'],
-    'tfoot': ['tbody'],
-    'colgroup': ['thead', 'tbody', 'tfoot', 'tr'],
-    'body': ['head'],
-    'head': ['body'],
-    'rb': ['rb', 'rt', 'rtc', 'rp'],
-    'rt': ['rb', 'rt', 'rtc', 'rp'],
-    'rtc': ['rb', 'rtc', 'rp'],
-    'rp': ['rb', 'rt', 'rtc', 'rp']
+    p: [
+        'address',
+        'article',
+        'aside',
+        'blockquote',
+        'div',
+        'dl',
+        'fieldset',
+        'footer',
+        'form',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'header',
+        'hgroup',
+        'hr',
+        'main',
+        'nav',
+        'ol',
+        'p',
+        'pre',
+        'section',
+        'table',
+        'ul',
+    ],
+    li: ['li'],
+    dt: ['dt', 'dd'],
+    dd: ['dt', 'dd'],
+    option: ['option', 'optgroup'],
+    optgroup: ['optgroup'],
+    tr: ['tr'],
+    td: ['td', 'th'],
+    th: ['td', 'th'],
+    thead: ['tbody', 'tfoot'],
+    tbody: ['tbody', 'tfoot'],
+    tfoot: ['tbody'],
+    colgroup: ['thead', 'tbody', 'tfoot', 'tr'],
+    body: ['head'],
+    head: ['body'],
+    rb: ['rb', 'rt', 'rtc', 'rp'],
+    rt: ['rb', 'rt', 'rtc', 'rp'],
+    rtc: ['rb', 'rtc', 'rp'],
+    rp: ['rb', 'rt', 'rtc', 'rp'],
 };
 
 /**
@@ -100,13 +142,16 @@ function parseHTML(html: string): HtmlNode[] {
                 index++;
                 skipWhitespace();
 
-                const quote = (html[index] === '"' || html[index] === "'") ? html[index++] : null;
+                const quote = html[index] === '"' || html[index] === "'" ? html[index++] : null;
                 let val = '';
                 let attrCharCount = 0;
 
                 // Add safety limit to prevent infinite loops on malformed HTML
-                while (index < length && attrCharCount < MAX_ATTRIBUTE_VALUE_LENGTH &&
-                    (quote ? html[index] !== quote : !/\s|\/|>/.test(html[index]))) {
+                while (
+                    index < length &&
+                    attrCharCount < MAX_ATTRIBUTE_VALUE_LENGTH &&
+                    (quote ? html[index] !== quote : !/\s|\/|>/.test(html[index]))
+                ) {
                     val += html[index++];
                     attrCharCount++;
                 }
@@ -157,7 +202,7 @@ function parseHTML(html: string): HtmlNode[] {
                     const doctypeNode: HtmlNode = {
                         type: 'text',
                         name: '!DOCTYPE',
-                        data: doctypeText.trim()
+                        data: doctypeText.trim(),
                     };
                     nodes.push(doctypeNode);
                 } else if (html.substr(index, 9) === '<![CDATA[') {
@@ -172,7 +217,7 @@ function parseHTML(html: string): HtmlNode[] {
                     }
                     const cdataNode: HtmlNode = {
                         type: 'text',
-                        data: cdataText
+                        data: cdataText,
                     };
                     nodes.push(cdataNode);
                 } else if (html.substr(index, 4) === '<!--') {
@@ -187,7 +232,7 @@ function parseHTML(html: string): HtmlNode[] {
                     }
                     const commentNode: HtmlNode = {
                         type: 'comment',
-                        data: commentText
+                        data: commentText,
                     };
                     nodes.push(commentNode);
                 } else if (html[index + 1] === '?') {
@@ -207,7 +252,7 @@ function parseHTML(html: string): HtmlNode[] {
                     const piNode: HtmlNode = {
                         type: 'text',
                         name: `?${name}`,
-                        data: piText.trim()
+                        data: piText.trim(),
                     };
                     nodes.push(piNode);
                 } else if (html[index + 1] === '/') {
@@ -230,7 +275,10 @@ function parseHTML(html: string): HtmlNode[] {
                     const closingTagLower = tagName.toLowerCase();
 
                     // If we're expecting a specific closing tag and this matches it, return
-                    if (expectedClosingTag && closingTagLower === expectedClosingTag.toLowerCase()) {
+                    if (
+                        expectedClosingTag &&
+                        closingTagLower === expectedClosingTag.toLowerCase()
+                    ) {
                         return nodes;
                     }
 
@@ -292,7 +340,7 @@ function parseHTML(html: string): HtmlNode[] {
                             tagName: tagName,
                             attribs: attributes,
                             attributes: attributes,
-                            children: []
+                            children: [],
                         };
                         nodes.push(element);
                     } else {
@@ -301,7 +349,9 @@ function parseHTML(html: string): HtmlNode[] {
                             // Parse raw text until closing tag
                             let rawText = '';
                             const closingTag = `</${tagName}`;
-                            const closingIndex = html.toLowerCase().indexOf(closingTag.toLowerCase(), index);
+                            const closingIndex = html
+                                .toLowerCase()
+                                .indexOf(closingTag.toLowerCase(), index);
 
                             if (closingIndex !== -1) {
                                 rawText = html.substring(index, closingIndex);
@@ -326,7 +376,7 @@ function parseHTML(html: string): HtmlNode[] {
                                 tagName: tagName,
                                 attribs: attributes,
                                 attributes: attributes,
-                                children: rawText ? [{ type: 'text', data: rawText }] : []
+                                children: rawText ? [{ type: 'text', data: rawText }] : [],
                             };
                             nodes.push(element);
                         } else {
@@ -338,7 +388,7 @@ function parseHTML(html: string): HtmlNode[] {
                                 tagName: tagName,
                                 attribs: attributes,
                                 attributes: attributes,
-                                children
+                                children,
                             };
                             nodes.push(element);
                         }
@@ -356,7 +406,7 @@ function parseHTML(html: string): HtmlNode[] {
                 if (text) {
                     const textNode: HtmlNode = {
                         type: 'text',
-                        data: decodeHTMLEntities(text)
+                        data: decodeHTMLEntities(text),
                     };
                     nodes.push(textNode);
                 }

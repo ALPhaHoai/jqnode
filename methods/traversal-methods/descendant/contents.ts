@@ -3,7 +3,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the children of each element in the set, including text and comment nodes.
-  * @see https://api.jquery.com/contents/
+ * @see https://api.jquery.com/contents/
  */
 function contents(this: JQ): JQ {
     const contents: HtmlNode[] = [];
@@ -13,9 +13,12 @@ function contents(this: JQ): JQ {
     function convertDomNode(domNode: HtmlNode | ChildNode): HtmlNode | null {
         if (domNode.nodeType === 1) {
             // Element node - need to check if it's a DOM Element or HtmlNode
-            const tagName = 'tagName' in domNode ?
-                (typeof domNode.tagName === 'string' ? domNode.tagName.toLowerCase() : String(domNode.tagName).toLowerCase()) :
-                '';
+            const tagName =
+                'tagName' in domNode
+                    ? typeof domNode.tagName === 'string'
+                        ? domNode.tagName.toLowerCase()
+                        : String(domNode.tagName).toLowerCase()
+                    : '';
 
             // Create attributes object
             const attributes: Record<string, string> = {};
@@ -23,7 +26,10 @@ function contents(this: JQ): JQ {
             // Handle attributes - check if it's a NamedNodeMap (DOM) or plain object (HtmlNode)
             if ('attributes' in domNode && domNode.attributes) {
                 // Type guard: check if it's a NamedNodeMap by checking for length property
-                if ('length' in domNode.attributes && typeof domNode.attributes.length === 'number') {
+                if (
+                    'length' in domNode.attributes &&
+                    typeof domNode.attributes.length === 'number'
+                ) {
                     // DOM NamedNodeMap
                     const attrs = domNode.attributes as unknown as NamedNodeMap;
                     for (let i = 0; i < attrs.length; i++) {
@@ -48,12 +54,22 @@ function contents(this: JQ): JQ {
                 properties: {},
                 children: [],
                 parent: undefined,
-                _originalElement: ('nodeType' in domNode && domNode.nodeType === 1 ? (domNode as Element) : undefined) as Element | undefined
+                _originalElement: ('nodeType' in domNode && domNode.nodeType === 1
+                    ? (domNode as Element)
+                    : undefined) as Element | undefined,
             };
 
             // Copy properties from DOM element
             if ('nodeType' in domNode && domNode.nodeType === 1) {
-                const propNames = ['value', 'checked', 'selected', 'type', 'name', 'disabled', 'readonly'] as const;
+                const propNames = [
+                    'value',
+                    'checked',
+                    'selected',
+                    'type',
+                    'name',
+                    'disabled',
+                    'readonly',
+                ] as const;
                 for (const prop of propNames) {
                     // Use type assertion with unknown intermediate
                     const value = (domNode as unknown as Record<string, unknown>)[prop];
@@ -66,21 +82,31 @@ function contents(this: JQ): JQ {
             return node;
         } else if (domNode.nodeType === 3) {
             // Text node
-            const textContent = 'textContent' in domNode ? domNode.textContent : ('data' in domNode ? (domNode as HtmlNode).data : null);
+            const textContent =
+                'textContent' in domNode
+                    ? domNode.textContent
+                    : 'data' in domNode
+                      ? (domNode as HtmlNode).data
+                      : null;
             return {
                 type: 'text',
                 value: textContent || undefined,
                 data: textContent || undefined,
-                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null
+                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null,
             };
         } else if (domNode.nodeType === 8) {
             // Comment node
-            const textContent = 'textContent' in domNode ? domNode.textContent : ('data' in domNode ? (domNode as HtmlNode).data : null);
+            const textContent =
+                'textContent' in domNode
+                    ? domNode.textContent
+                    : 'data' in domNode
+                      ? (domNode as HtmlNode).data
+                      : null;
             return {
                 type: 'comment',
                 value: textContent || undefined,
                 data: textContent || undefined,
-                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null
+                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null,
             };
         }
         return null;

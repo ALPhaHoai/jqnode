@@ -7,7 +7,7 @@ import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../typ
 function prop(
     this: JQ,
     name: string | Record<string, AttributeValue>,
-    value?: AttributeValue | ((index: number, oldVal: any) => AttributeValue)
+    value?: AttributeValue | ((index: number, oldVal: any) => AttributeValue),
 ): GetterSetterReturn<AttributeValue> {
     // Handle object map: prop({ key: value, ... })
     if (typeof name === 'object' && name !== null) {
@@ -39,7 +39,26 @@ function prop(
         if (result === undefined && element.attributes && element.attributes[name] !== undefined) {
             const attrValue = element.attributes[name];
             // Handle boolean attributes
-            const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+            const booleanAttributes = [
+                'checked',
+                'selected',
+                'disabled',
+                'readonly',
+                'required',
+                'multiple',
+                'autofocus',
+                'autoplay',
+                'hidden',
+                'controls',
+                'loop',
+                'muted',
+                'default',
+                'open',
+                'reversed',
+                'scoped',
+                'async',
+                'defer',
+            ];
             if (booleanAttributes.includes(name)) {
                 result = attrValue !== undefined; // If attribute exists, property is true
             } else {
@@ -71,9 +90,32 @@ function prop(
                 currentProp = (element as any)[name];
             }
 
-            if (currentProp === undefined && element.attributes && element.attributes[name] !== undefined) {
+            if (
+                currentProp === undefined &&
+                element.attributes &&
+                element.attributes[name] !== undefined
+            ) {
                 const attrValue = element.attributes[name];
-                const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+                const booleanAttributes = [
+                    'checked',
+                    'selected',
+                    'disabled',
+                    'readonly',
+                    'required',
+                    'multiple',
+                    'autofocus',
+                    'autoplay',
+                    'hidden',
+                    'controls',
+                    'loop',
+                    'muted',
+                    'default',
+                    'open',
+                    'reversed',
+                    'scoped',
+                    'async',
+                    'defer',
+                ];
                 if (booleanAttributes.includes(name)) {
                     currentProp = attrValue !== undefined;
                 } else {
@@ -93,7 +135,26 @@ function prop(
         if (element._originalElement) {
             const domElement = element._originalElement as unknown as Record<string, unknown>;
             // For boolean properties like checked/selected/disabled, we should always sync
-            const booleanProps = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+            const booleanProps = [
+                'checked',
+                'selected',
+                'disabled',
+                'readonly',
+                'required',
+                'multiple',
+                'autofocus',
+                'autoplay',
+                'hidden',
+                'controls',
+                'loop',
+                'muted',
+                'default',
+                'open',
+                'reversed',
+                'scoped',
+                'async',
+                'defer',
+            ];
 
             if (booleanProps.includes(name) || domElement[name] !== undefined) {
                 domElement[name] = valToSet;

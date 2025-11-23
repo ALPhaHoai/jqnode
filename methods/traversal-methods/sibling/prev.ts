@@ -4,7 +4,7 @@ import JQClass from '../../../jq';
 
 /**
  * Gets the immediately preceding sibling of each element, optionally filtered by a selector.
-  * @see https://api.jquery.com/prev/
+ * @see https://api.jquery.com/prev/
  */
 function prev(this: JQ, selector?: CssSelector): JQ {
     const prevSiblings: HtmlNode[] = [];
@@ -20,7 +20,10 @@ function prev(this: JQ, selector?: CssSelector): JQ {
                     if (parsedSelector) {
                         for (let i = currentIndex - 1; i >= 0; i--) {
                             const sibling = allChildren[i];
-                            if (sibling.type === 'element' && nodeMatchesSelector(sibling, parsedSelector)) {
+                            if (
+                                sibling.type === 'element' &&
+                                nodeMatchesSelector(sibling, parsedSelector)
+                            ) {
                                 prevSiblings.push(sibling);
                                 break;
                             }

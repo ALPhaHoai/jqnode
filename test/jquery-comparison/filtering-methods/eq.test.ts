@@ -420,8 +420,9 @@ describe('eq() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('eq() should work with large collections - jquery-comparison', () => {
-        const html = Array.from({ length: 100 }, (_, i) =>
-            `<div class="item">Item ${i + 1}</div>`
+        const html = Array.from(
+            { length: 100 },
+            (_, i) => `<div class="item">Item ${i + 1}</div>`,
         ).join('');
         const { jquery: jqLarge, nodeQuery: nqLarge } = createTestDom(html);
         const nqLargeCollection = nqLarge.find('.item');

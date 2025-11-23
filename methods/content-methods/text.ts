@@ -8,8 +8,8 @@ import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
 function text(this: JQ, value?: string): GetterSetterReturn<string> {
     if (value === undefined) {
         // Get text content from element nodes only
-        const elementNodes = this.nodes.filter((node: HtmlNode) =>
-            node.type === 'element' || node.nodeType === 1
+        const elementNodes = this.nodes.filter(
+            (node: HtmlNode) => node.type === 'element' || node.nodeType === 1,
         );
 
         // Check if any element is detached (from fractional eq() indices)
@@ -21,14 +21,16 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
             return '';
         }
 
-        const result = elementNodes.map((node: HtmlNode) => {
-            // Use HTML5 textContent property as single source of truth
-            if ('textContent' in node) {
-                return node.textContent || '';
-            }
-            // Fallback to internal node traversal for parsed nodes
-            return getTextContent(node);
-        }).join('');
+        const result = elementNodes
+            .map((node: HtmlNode) => {
+                // Use HTML5 textContent property as single source of truth
+                if ('textContent' in node) {
+                    return node.textContent || '';
+                }
+                // Fallback to internal node traversal for parsed nodes
+                return getTextContent(node);
+            })
+            .join('');
 
         const unescapedResult = unescapeHtml(result);
         return unescapedResult;

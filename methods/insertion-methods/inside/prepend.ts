@@ -12,7 +12,12 @@ function prepend(this: JQ, ...content: ContentInput[]): JQ {
     const nodesToPrepend: HtmlNode[] = [];
     for (const item of content) {
         // Check if this is a JQ object containing existing elements
-        if (item && typeof item === 'object' && ((item as any).constructor && (item as any).constructor.name === 'JQ' || (item as any).nodes && Array.isArray((item as any).nodes))) {
+        if (
+            item &&
+            typeof item === 'object' &&
+            (((item as any).constructor && (item as any).constructor.name === 'JQ') ||
+                ((item as any).nodes && Array.isArray((item as any).nodes)))
+        ) {
             nodesToPrepend.push(...(item as any).nodes);
         } else {
             nodesToPrepend.push(...this._normalizeContent(item));

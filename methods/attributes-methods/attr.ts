@@ -7,9 +7,28 @@ import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../typ
 function attr(
     this: JQ,
     name: string | Record<string, AttributeValue>,
-    value?: AttributeValue | ((index: number, attr: string) => string | number | void | undefined)
+    value?: AttributeValue | ((index: number, attr: string) => string | number | void | undefined),
 ): GetterSetterReturn<string> {
-    const booleanAttributes = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple', 'autofocus', 'autoplay', 'hidden', 'controls', 'loop', 'muted', 'default', 'open', 'reversed', 'scoped', 'async', 'defer'];
+    const booleanAttributes = [
+        'checked',
+        'selected',
+        'disabled',
+        'readonly',
+        'required',
+        'multiple',
+        'autofocus',
+        'autoplay',
+        'hidden',
+        'controls',
+        'loop',
+        'muted',
+        'default',
+        'open',
+        'reversed',
+        'scoped',
+        'async',
+        'defer',
+    ];
 
     // Handle object map: attr({ key: value, ... })
     if (typeof name === 'object' && name !== null) {
@@ -59,7 +78,10 @@ function attr(
         let valToSet: AttributeValue | undefined;
 
         if (typeof value === 'function') {
-            const currentAttr = element.attributes && element.attributes[name] !== undefined ? String(element.attributes[name]) : '';
+            const currentAttr =
+                element.attributes && element.attributes[name] !== undefined
+                    ? String(element.attributes[name])
+                    : '';
             const result = value.call(element, index, currentAttr);
             if (result === undefined) return; // Don't change if undefined returned
             valToSet = result as AttributeValue;

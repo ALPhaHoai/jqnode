@@ -4,11 +4,12 @@ import JQClass from '../../../jq';
 
 /**
  * Gets all following siblings up to but not including the element matched by the selector.
-  * @see https://api.jquery.com/nextUntil/
+ * @see https://api.jquery.com/nextUntil/
  */
 function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
     const followingSiblings: HtmlNode[] = [];
-    const parsedStopSelector = selector && typeof selector === 'string' ? parseSelector(selector) : null;
+    const parsedStopSelector =
+        selector && typeof selector === 'string' ? parseSelector(selector) : null;
     const parsedFilterSelector = filter ? parseSelector(filter) : null;
 
     for (const node of this.nodes) {
@@ -22,22 +23,41 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     const isElementSibling = sibling.type === 'element';
 
                     if (parsedStopSelector) {
-                        const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                        const selectorList =
+                            'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                                ? parsedStopSelector.selectors
+                                : [parsedStopSelector];
                         if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             break;
                         }
                     }
-                    if (selector && typeof selector === 'object' && selector.type === 'element' && sibling === selector) {
+                    if (
+                        selector &&
+                        typeof selector === 'object' &&
+                        selector.type === 'element' &&
+                        sibling === selector
+                    ) {
                         break;
                     }
-                    if (selector && typeof selector === 'object' && 'nodes' in selector && selector.nodes && Array.isArray(selector.nodes) && selector.nodes.includes(sibling)) {
+                    if (
+                        selector &&
+                        typeof selector === 'object' &&
+                        'nodes' in selector &&
+                        selector.nodes &&
+                        Array.isArray(selector.nodes) &&
+                        selector.nodes.includes(sibling)
+                    ) {
                         break;
                     }
 
                     if (!isElementSibling) continue;
 
                     if (parsedFilterSelector) {
-                        const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                        const selectorList =
+                            'type' in parsedFilterSelector &&
+                            parsedFilterSelector.type === 'compound'
+                                ? parsedFilterSelector.selectors
+                                : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             continue;
                         }
@@ -47,6 +67,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 }
             }
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const jqModule = require('../../../jq');
             const rootNodes = (jqModule.default || jqModule).allRootNodes;
             const currentIndex = rootNodes.indexOf(node);
@@ -57,22 +78,41 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     const isElementSibling = sibling.type === 'element';
 
                     if (parsedStopSelector) {
-                        const selectorList = ('type' in parsedStopSelector && parsedStopSelector.type === 'compound') ? parsedStopSelector.selectors : [parsedStopSelector];
+                        const selectorList =
+                            'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                                ? parsedStopSelector.selectors
+                                : [parsedStopSelector];
                         if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             break;
                         }
                     }
-                    if (selector && typeof selector === 'object' && selector.type === 'element' && sibling === selector) {
+                    if (
+                        selector &&
+                        typeof selector === 'object' &&
+                        selector.type === 'element' &&
+                        sibling === selector
+                    ) {
                         break;
                     }
-                    if (selector && typeof selector === 'object' && 'nodes' in selector && selector.nodes && Array.isArray(selector.nodes) && selector.nodes.includes(sibling)) {
+                    if (
+                        selector &&
+                        typeof selector === 'object' &&
+                        'nodes' in selector &&
+                        selector.nodes &&
+                        Array.isArray(selector.nodes) &&
+                        selector.nodes.includes(sibling)
+                    ) {
                         break;
                     }
 
                     if (!isElementSibling) continue;
 
                     if (parsedFilterSelector) {
-                        const selectorList = ('type' in parsedFilterSelector && parsedFilterSelector.type === 'compound') ? parsedFilterSelector.selectors : [parsedFilterSelector];
+                        const selectorList =
+                            'type' in parsedFilterSelector &&
+                            parsedFilterSelector.type === 'compound'
+                                ? parsedFilterSelector.selectors
+                                : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
                             continue;
                         }

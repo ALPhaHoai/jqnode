@@ -22,7 +22,10 @@ function _normalizeContent(content: ContentInput): HtmlNode[] {
         }
 
         // Check for single HtmlNode
-        if ('type' in content && (content.type === 'element' || content.type === 'text' || content.type === 'comment')) {
+        if (
+            'type' in content &&
+            (content.type === 'element' || content.type === 'text' || content.type === 'comment')
+        ) {
             // Single node object
             return [content as HtmlNode];
         }

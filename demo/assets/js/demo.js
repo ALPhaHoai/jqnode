@@ -12,29 +12,21 @@ function generateCodeExample(sectionId, code) {
 // Initialize code examples on page load
 document.addEventListener('DOMContentLoaded', function () {
     // Generate code examples for all demo sections using actual demo functions
-    generateCodeExample('html-parsing',
-        demoSimpleHTMLParsing.toString());
+    generateCodeExample('html-parsing', demoSimpleHTMLParsing.toString());
 
-    generateCodeExample('dom-traversal',
-        demoTraversal.toString());
+    generateCodeExample('dom-traversal', demoTraversal.toString());
 
-    generateCodeExample('content-manipulation',
-        demoContent.toString());
+    generateCodeExample('content-manipulation', demoContent.toString());
 
-    generateCodeExample('attributes-classes',
-        demoAttributes.toString());
+    generateCodeExample('attributes-classes', demoAttributes.toString());
 
-    generateCodeExample('element-insertion',
-        demoInsertion.toString());
+    generateCodeExample('element-insertion', demoInsertion.toString());
 
-    generateCodeExample('filtering-iteration',
-        demoFiltering.toString());
+    generateCodeExample('filtering-iteration', demoFiltering.toString());
 
-    generateCodeExample('method-chaining',
-        demoChaining.toString());
+    generateCodeExample('method-chaining', demoChaining.toString());
 
-    generateCodeExample('advanced-features',
-        demoAdvanced.toString());
+    generateCodeExample('advanced-features', demoAdvanced.toString());
 });
 
 // Demo Functions
@@ -52,7 +44,7 @@ function demoSimpleHTMLParsing() {
 
     const result = {
         title: $title.text(),
-        itemsCount: $items.length
+        itemsCount: $items.length,
     };
 
     document.getElementById('parsing-result').innerHTML = `
@@ -88,7 +80,7 @@ function demoHTMLParsing() {
         rootElements: $root.length,
         title: $title.text(),
         itemsCount: $items.length,
-        inputValue: $input.val()
+        inputValue: $input.val(),
     };
 
     document.getElementById('parsing-result').innerHTML = `
@@ -119,7 +111,7 @@ function demoTraversal() {
         firstChild: $container.children().first().text(),
         lastChild: $container.children().last().text(),
         findSpan: $container.find('span').text(),
-        siblings: $container.children().first().siblings().length
+        siblings: $container.children().first().siblings().length,
     };
 
     document.getElementById('traversal-result').innerHTML = `
@@ -154,7 +146,7 @@ function demoContent() {
         originalText,
         originalValue,
         newText: $p.text(),
-        newValue: $input.val()
+        newValue: $input.val(),
     };
 
     document.getElementById('content-result').innerHTML = `
@@ -179,7 +171,7 @@ function demoAttributes() {
     const result = {
         dataId: $demo.attr('data-id'),
         hasActive: $btn.hasClass('active'),
-        classes: $btn.attr('class')
+        classes: $btn.attr('class'),
     };
 
     $demo.attr('data-id', '456');
@@ -214,7 +206,7 @@ function demoInsertion() {
     $p.after('<div>After paragraph</div>');
 
     const result = {
-        finalHTML: $demo.html()
+        finalHTML: $demo.html(),
     };
 
     document.getElementById('insertion-result').innerHTML = `
@@ -242,7 +234,7 @@ function demoFiltering() {
         activeItems: $items.filter('.active').length,
         visibleItems: $items.filter(':visible').length,
         firstItem: $items.first().text(),
-        lastItem: $items.last().text()
+        lastItem: $items.last().text(),
     };
 
     document.getElementById('filtering-result').innerHTML = `
@@ -270,9 +262,9 @@ function demoChaining() {
 
     // Simple method chaining
     $demo
-        .find('li.active')      // Find active items
-        .addClass('highlight')  // Add highlight class
-        .text('Updated');       // Change text
+        .find('li.active') // Find active items
+        .addClass('highlight') // Add highlight class
+        .text('Updated'); // Change text
 
     // Add attribute to the ul element separately
     $demo.find('ul').attr('data-processed', 'true');
@@ -283,7 +275,7 @@ function demoChaining() {
     const demoResult = {
         processedItems,
         hasProcessed,
-        finalHTML: $demo.html()
+        finalHTML: $demo.html(),
     };
 
     document.getElementById('chaining-result').innerHTML = `
@@ -312,7 +304,7 @@ function demoAdvanced() {
     const result = {
         original: array,
         mapped: mapped,
-        eachResult: eachResult.join(', ')
+        eachResult: eachResult.join(', '),
     };
 
     document.getElementById('advanced-result').innerHTML = `
@@ -340,7 +332,7 @@ function runIndividualTests() {
         { name: 'Element Insertion', func: demoInsertion },
         { name: 'Filtering & Iteration', func: demoFiltering },
         { name: 'Method Chaining', func: demoChaining },
-        { name: 'Advanced Features', func: demoAdvanced }
+        { name: 'Advanced Features', func: demoAdvanced },
     ];
 
     testFunctions.forEach(function (test) {

@@ -72,6 +72,7 @@ const length: number = root.length; // Type: number
 ### Type Definitions
 
 All methods are fully typed with:
+
 - Parameter types
 - Return type inference
 - Generic support where applicable
@@ -100,19 +101,17 @@ const className: string = root.find('.text').attr('class');
 const hasClass: boolean = root.hasClass('text');
 
 // Chaining preserves types
-root.find('p')
-    .attr('data-index', '1')
-    .text('New text')
-    .addClass('modified');
+root.find('p').attr('data-index', '1').text('New text').addClass('modified');
 ```
 
 ### Available Type Files
 
 The package includes 22 TypeScript declaration files covering:
+
 - Core JQ class and factory function
 - All DOM manipulation methods
 - Traversal and filtering methods
-- Insertion methods  
+- Insertion methods
 - Attribute and CSS methods
 - Selector engine
 - HTML parser
@@ -155,7 +154,6 @@ const title = root.find('.title');
 console.log(title.text()); // "Hello World"
 ```
 
-
 ### Using .load() Method
 
 The `.load()` static method provides a convenient way to parse HTML, especially useful when working with API responses. **New:** The returned object is callable, supporting jQuery-like syntax!
@@ -165,12 +163,12 @@ const jq = require('@alphahoai/jqnode');
 
 // Load HTML from API response
 const result = { data: '<table><tr><td>Data</td></tr></table>' };
-const $ = jq.load(result?.data || "");
+const $ = jq.load(result?.data || '');
 
 // ✨ NEW: You can now use jQuery-like callable syntax!
-const tables = $("table");  // Callable syntax
+const tables = $('table'); // Callable syntax
 // or use traditional method:
-const tables2 = $.find("table");  // Traditional syntax
+const tables2 = $.find('table'); // Traditional syntax
 
 console.log('Tables found:', tables.length);
 ```
@@ -181,15 +179,15 @@ console.log('Tables found:', tables.length);
 const $ = jq.load('<div><p class="text">Hello</p><p class="text">World</p></div>');
 
 // jQuery-like syntax (NEW!)
-const paragraphs1 = $('p');           // ✅ Works!
-const paragraphs2 = $('p.text');      // ✅ Works!
+const paragraphs1 = $('p'); // ✅ Works!
+const paragraphs2 = $('p.text'); // ✅ Works!
 
 // Traditional syntax (still works)
-const paragraphs3 = $.find('p');      // ✅ Works!
+const paragraphs3 = $.find('p'); // ✅ Works!
 
 // All methods still available
 paragraphs1.each((i, el) => console.log(jq(el).text()));
-console.log('Length:', $.length);    // ✅ Properties work too!
+console.log('Length:', $.length); // ✅ Properties work too!
 ```
 
 ### Browser
@@ -256,6 +254,7 @@ npm run test:browser:serve
 - **`browser-test/example-converted-attr-test.html`** - Detailed conversion examples
 
 The comprehensive test suite covers:
+
 - **Attributes Methods**: `attr()`, `hasClass()`, `prop()`, `removeAttr()`, `removeProp()`, `toggleClass()`, `val()`
 - **Content Methods**: `html()`, `text()`
 - **Traversal Methods**: `find()`, `parent()`, `children()`, `siblings()`, `closest()`, etc.
@@ -285,6 +284,7 @@ npm run example:debug
 jqnode provides a jQuery-compatible API. Key methods include:
 
 ### Factory Function
+
 - `$('html string')` - Parse HTML string
 - `$('#id')` - Select by ID
 - `$('.class')` - Select by class
@@ -292,6 +292,7 @@ jqnode provides a jQuery-compatible API. Key methods include:
 - `$(nodeArray)` - Create from node array
 
 ### Traversal
+
 - `find(selector)` - Find descendants
 - `parent()` - Get parent element
 - `children()` - Get child elements
@@ -299,6 +300,7 @@ jqnode provides a jQuery-compatible API. Key methods include:
 - `closest(selector)` - Find closest ancestor
 
 ### Manipulation
+
 - `html()` / `html(content)` - Get/set HTML content
 - `text()` / `text(content)` - Get/set text content
 - `attr(name)` / `attr(name, value)` - Get/set attributes
@@ -308,6 +310,7 @@ jqnode provides a jQuery-compatible API. Key methods include:
 - `cssCamel(property)` / `cssCamel(property, value)` - Get/set CSS styles with camelCase property names (React-compatible)
 
 ### Filtering
+
 - `filter(selector)` - Filter elements
 - `not(selector)` - Exclude elements
 - `has(selector)` - Filter by descendants
@@ -316,12 +319,14 @@ jqnode provides a jQuery-compatible API. Key methods include:
 - `first()` / `last()` - Get first/last element
 
 ### Insertion
+
 - `append(content)` - Insert content at end
 - `prepend(content)` - Insert content at beginning
 - `before(content)` - Insert before element
 - `after(content)` - Insert after element
 
 ### Iteration
+
 - `each(callback)` - Iterate over elements
 - `map(callback)` - Transform elements
 

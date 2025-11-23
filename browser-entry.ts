@@ -8,8 +8,8 @@ if (typeof process === 'undefined') {
     (global as any).process = {
         env: {
             JQNODE_DEBUG: '0',
-            DEBUG: ''
-        }
+            DEBUG: '',
+        },
     };
 }
 

@@ -3,20 +3,24 @@
 Get all following siblings of each element.
 
 ## Syntax
+
 ```javascript
-jq(selector).nextAll()
-jq(selector).nextAll(selector)
+jq(selector).nextAll();
+jq(selector).nextAll(selector);
 ```
 
 ## Parameters
+
 - **selector** (String, optional): Filter siblings by selector
 
 ## Returns
+
 JQ instance containing following siblings
 
 ## Examples
 
 ### Get All Following
+
 ```javascript
 const $ = jq(`
     <ul>
@@ -32,6 +36,7 @@ console.log(following.length); // 3
 ```
 
 ### Filter Following
+
 ```javascript
 const $ = jq(`
     <div>
@@ -48,12 +53,14 @@ console.log(followingSpans.length); // 2
 ```
 
 ## Use Cases
+
 - Select remaining items in list
 - Process following elements
 - Navigation menus
 - Sequential processing
 
 ## Related
+
 - **next()** - Get immediate next sibling
 - **nextUntil()** - Get siblings until selector
 - **prevAll()** - Get all previous siblings

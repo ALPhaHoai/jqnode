@@ -25,7 +25,7 @@ function createTestDom(html: string = '<div></div>') {
         nodeQuery,
         jquery,
         document: document,
-        window: window
+        window: window,
     };
 }
 
@@ -38,24 +38,29 @@ function createTestDom(html: string = '<div></div>') {
 function normalizeHtml(html: string): string {
     if (!html) return '';
 
-    return html
-        // Remove extra whitespace between tags
-        .replace(/>\s+</g, '><')
-        // Remove whitespace around text
-        .replace(/\s+/g, ' ')
-        // Normalize self-closing tags
-        .replace(/<([^>]+)\/>/g, '<$1>')
-        // Remove trailing whitespace
-        .trim()
-        // Normalize quotes around attributes
-        .replace(/="([^"]*)"/g, '="$1"')
-        // Sort attributes for consistent comparison (basic implementation)
-        .replace(/<([a-zA-Z][a-zA-Z0-9]*)((?:\s+[a-zA-Z][a-zA-Z0-9-]*="[^"]*")*)(\s*\/?)>/g, (match, tag, attrs, closing) => {
-            if (!attrs) return match;
+    return (
+        html
+            // Remove extra whitespace between tags
+            .replace(/>\s+</g, '><')
+            // Remove whitespace around text
+            .replace(/\s+/g, ' ')
+            // Normalize self-closing tags
+            .replace(/<([^>]+)\/>/g, '<$1>')
+            // Remove trailing whitespace
+            .trim()
+            // Normalize quotes around attributes
+            .replace(/="([^"]*)"/g, '="$1"')
+            // Sort attributes for consistent comparison (basic implementation)
+            .replace(
+                /<([a-zA-Z][a-zA-Z0-9]*)((?:\s+[a-zA-Z][a-zA-Z0-9-]*="[^"]*")*)(\s*\/?)>/g,
+                (match, tag, attrs, closing) => {
+                    if (!attrs) return match;
 
-            const attrPairs = attrs.trim().split(/\s+/).sort();
-            return `<${tag}${attrPairs.length ? ' ' + attrPairs.join(' ') : ''}${closing}>`;
-        });
+                    const attrPairs = attrs.trim().split(/\s+/).sort();
+                    return `<${tag}${attrPairs.length ? ' ' + attrPairs.join(' ') : ''}${closing}>`;
+                },
+            )
+    );
 }
 
 /**
@@ -69,18 +74,29 @@ function compareResults(nqResult: any, jqResult: any, context: string = ''): boo
     // Handle null/undefined
     if (nqResult === jqResult) return true;
 
-    if ((nqResult === null || nqResult === undefined) &&
-        (jqResult === null || jqResult === undefined)) return true;
+    if (
+        (nqResult === null || nqResult === undefined) &&
+        (jqResult === null || jqResult === undefined)
+    )
+        return true;
 
-    if (nqResult === null || nqResult === undefined ||
-        jqResult === null || jqResult === undefined) {
-        throw new Error(`${context}: One result is null/undefined while the other is not. Node-query: ${nqResult}, jQuery: ${jqResult}`);
+    if (
+        nqResult === null ||
+        nqResult === undefined ||
+        jqResult === null ||
+        jqResult === undefined
+    ) {
+        throw new Error(
+            `${context}: One result is null/undefined while the other is not. Node-query: ${nqResult}, jQuery: ${jqResult}`,
+        );
     }
 
     // Handle arrays
     if (Array.isArray(nqResult) && Array.isArray(jqResult)) {
         if (nqResult.length !== jqResult.length) {
-            throw new Error(`${context}: Array lengths differ. Node-query: ${nqResult.length}, jQuery: ${jqResult.length}`);
+            throw new Error(
+                `${context}: Array lengths differ. Node-query: ${nqResult.length}, jQuery: ${jqResult.length}`,
+            );
         }
 
         for (let i = 0; i < nqResult.length; i++) {
@@ -97,12 +113,16 @@ function compareResults(nqResult: any, jqResult: any, context: string = ''): boo
         const jqKeys = Object.keys(jqResult).sort();
 
         if (nqKeys.length !== jqKeys.length) {
-            throw new Error(`${context}: Object key counts differ. Node-query keys: ${nqKeys.join(',')}, jQuery keys: ${jqKeys.join(',')}`);
+            throw new Error(
+                `${context}: Object key counts differ. Node-query keys: ${nqKeys.join(',')}, jQuery keys: ${jqKeys.join(',')}`,
+            );
         }
 
         for (let i = 0; i < nqKeys.length; i++) {
             if (nqKeys[i] !== jqKeys[i]) {
-                throw new Error(`${context}: Object keys differ at index ${i}. Node-query: ${nqKeys[i]}, jQuery: ${jqKeys[i]}`);
+                throw new Error(
+                    `${context}: Object keys differ at index ${i}. Node-query: ${nqKeys[i]}, jQuery: ${jqKeys[i]}`,
+                );
             }
 
             const key = nqKeys[i];
@@ -115,7 +135,9 @@ function compareResults(nqResult: any, jqResult: any, context: string = ''): boo
 
     // Handle primitives and other types
     if (nqResult !== jqResult) {
-        throw new Error(`${context}: Values differ. Node-query: ${JSON.stringify(nqResult)}, jQuery: ${JSON.stringify(jqResult)}`);
+        throw new Error(
+            `${context}: Values differ. Node-query: ${JSON.stringify(nqResult)}, jQuery: ${JSON.stringify(jqResult)}`,
+        );
     }
 
     return true;
@@ -182,10 +204,4 @@ function extractHtmlContent(element: any): string {
     return '';
 }
 
-export {
-    createTestDom,
-    normalizeHtml,
-    compareResults,
-    extractTextContent,
-    extractHtmlContent
-};
+export { createTestDom, normalizeHtml, compareResults, extractTextContent, extractHtmlContent };

@@ -1,2 +1,3398 @@
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e="undefined"!=typeof globalThis?globalThis:e||self).$=t()}(this,function(){"use strict";var e,t,n="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};function o(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}function r(){if(t)return e;return t=1,e={parseHTML:function(e){if("string"!=typeof e)throw new TypeError("parseHTML expects a string");let t=0;const n=e.length;function o(){for(;t<n&&/\s/.test(e[t]);)t++}function r(){const r={};for(;t<n&&(o(),">"!==e[t]&&("/"!==e[t]||">"!==e[t+1]));){let s="";for(;t<n&&/[^\s=/>]/.test(e[t]);)s+=e[t++];if(!s)break;o();let i=s;if("="===e[t]){t++,o();const r='"'===e[t]||"'"===e[t]?e[t++]:null;let s="";for(;t<n&&(r?e[t]!==r:!/\s|\/|>/.test(e[t]));)s+=e[t++];r&&e[t]===r&&t++,i=s}r[s]=i}return r}const s=function o(){const s=[];for(;t<n;)if("<"===e[t])if("\x3c!--"===e.substr(t,4)){t+=4;let o="";for(;t<n&&"--\x3e"!==e.substr(t,3);)o+=e[t++];"--\x3e"===e.substr(t,3)&&(t+=3);const r={type:"comment",value:o};s.push(r)}else{if("/"===e[t+1]){t+=2;let o="";for(;t<n&&">"!==e[t];)o+=e[t++];return t++,s}{t++;let i="";for(;t<n&&/[a-zA-Z0-9]/.test(e[t]);)i+=e[t++];const l=r();let a=!1;"/"===e[t]&&">"===e[t+1]?(a=!0,t+=2):">"===e[t]&&t++;if(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"].includes(i)&&(a=!0),a){const e={type:"element",tagName:i.toUpperCase(),attributes:l,children:[]};s.push(e)}else{const e=o(),t={type:"element",tagName:i.toUpperCase(),attributes:l,children:e};s.push(t)}}}else{let o="";for(;t<n&&"<"!==e[t];)o+=e[t++];if(o){const e={type:"text",value:o};s.push(e)}}return s}();return s}},e}var s,i,l,a,c,u,d,f,h,p,g,m,b,y,$,N,v,L,J,Q,E,w,_,x,S,C,A,j,O,T,R,F,k,U,G,D,B,M,I,z,W,H,q,P,Z,Y,K,V,X,ee,te,ne,oe,re,se,ie,le,ae,ce,ue,de,fe,he,pe,ge,me,be,ye,$e,Ne,ve,Le,Je,Qe,Ee,we,_e,xe,Se,Ce,Ae,je,Oe,Te,Re,Fe,ke,Ue,Ge,De,Be,Me,Ie,ze,We,He,qe,Pe,Ze,Ye,Ke,Ve,Xe,et,tt,nt,ot,rt,st,it,lt,at={exports:{}};function ct(){if(i)return s;function e(e){if("string"!=typeof e)return null;const n=e.trim();if(n.startsWith("<")||!n)return null;if("#"===n||"."===n)throw new SyntaxError(`Invalid selector: ${n}`);const o=function(e){const t=[];let n=0,o=!1;function r(){const t=e[n++];return"\\"===t&&n<e.length?e[n++]:t}function s(t){let o="";for(;n<e.length;){const s=e[n];if(t.test(s))break;o+=r()}return o}for(;n<e.length;){const i=e[n];if(/\s/.test(i)){for(;n<e.length&&/\s/.test(e[n]);)n++;o&&n<e.length&&!/[>,+~]/.test(e[n])&&t.push({type:"combinator",value:" "});continue}if(">"===i||"+"===i||"~"===i||" "===i){t.push({type:"combinator",value:i}),n++,o=!1;continue}if(","===i){t.push({type:"comma",value:","}),n++,o=!1;continue}if("["===i){let s="[";for(n++;n<e.length&&"]"!==e[n];)s+=r();if(n>=e.length)throw new SyntaxError(`Unclosed attribute selector: ${s}`);s+="]",n++,t.push({type:"attribute",value:s}),o=!0;continue}if(":"===i){let s=":";for(n++;n<e.length&&/[a-zA-Z0-9\-_]/.test(e[n]);)s+=r();if(n<e.length&&"("===e[n]){s+="(",n++;let t=1;for(;n<e.length&&t>0;){const e=r();s+=e,"("===e?t++:")"===e&&t--}}t.push({type:"pseudo",value:s}),o=!0;continue}if("*"===i){t.push({type:"universal",value:"*"}),n++,o=!0;continue}if("#"===i){let e="#";n++,e+=s(/[\s\[\]{}().,>+#]/),t.push({type:"id",value:e}),o=!0;continue}if("."===i){let e=".";n++,e+=s(/[\s\[\]{}().,>:+#]/),t.push({type:"class",value:e}),o=!0;continue}const l=s(/[\s\[\]{}().,>:+#.]/);l?(t.push({type:"ident",value:l}),o=!0):n++}return t}(n);if(0===o.length)return null;const r=[];let s=[],i=0;for(;i<o.length;)"comma"===o[i].type?s.length>0&&(r.push(t(s)),s=[]):s.push(o[i]),i++;if(s.length>0&&r.push(t(s)),0===r.length)return null;const l=1===r.length?r[0]:{type:"compound",selectors:r},a=e=>"compound"===e.type?e.selectors.some(a):null!==e.tagName||null!==e.id&&""!==e.id||e.classes&&e.classes.length>0||e.attributes&&e.attributes.length>0||e.pseudos&&e.pseudos.length>0||!0===e.universal;return a(l)?l:null}function t(e){const t=[];let o=0;for(;o<e.length&&"comma"!==e[o].type;){const r=n(e,o);t.push(r.part),o=r.nextIndex,o<e.length&&"combinator"===e[o].type&&(t.push({type:"combinator",combinator:e[o].value}),o++)}return 1===t.length?t[0]:{type:"complex",parts:t}}function n(e,t){let n=t;const s={tagName:null,id:null,classes:[],attributes:[],pseudos:[]};for(;n<e.length;){const t=e[n];if("universal"===t.type)s.universal=!0,n++;else if("ident"===t.type)s.tagName=t.value,n++;else if("id"===t.type){let e=t.value.substring(1);const o=e.indexOf(":");if(-1!==o){const t=(":"+e.substring(o+1)).match(/^:([a-z-]+)(?:\((.+)\))?$/);if(t&&c(t[1])){e=e.substring(0,o);const n=t[1],r=t[2]||null;s.pseudos.push({name:n,args:r})}}e&&(s.id=e),n++}else if("class"===t.type){const e=t.value.substring(1);e&&s.classes.push(e),n++}else if("attribute"===t.type)s.attributes.push(o(t.value)),n++;else{if("pseudo"!==t.type){if("comma"===t.type)break;break}s.pseudos.push(r(t.value)),n++}}return{part:s,nextIndex:n}}function o(e){const t=e.slice(1,-1),n=t.match(/^([^=~|^$*]+)(?:([~|^$*]?=)(.+))?$/);if(!n)return{name:t,operator:null,value:null};const[,o,r,s]=n;return{name:o.trim(),operator:r||null,value:s?s.replace(/^["']|["']$/g,""):null}}function r(e){const t=e.match(/^:([a-z-]+)(?:\((.+)\))?$/);if(!t)return{name:e.substring(1),args:null};const[,n,o]=t;return{name:n,args:o?o.trim():null}}function l(e,t,n={}){if(!("element"===e.type||1===e.nodeType))return!1;if("compound"===t.type)return t.selectors.some(t=>l(e,t,n));const o=e.tagName&&e.tagName.toLowerCase()||"",r=(t.tagName||"").toLowerCase();if(!t.universal&&r&&o!==r)return!1;if(t.tagName,null!==t.id){if(""===t.id)return!1;const n=e.attributes&&e.attributes.id||e.id;if(!n||n!==t.id)return!1}if(t.classes.length>0){if(t.classes.some(e=>""===e))return!1;const n=e.attributes&&e.attributes.class||e.className;if(!n)return!1;const o=("string"==typeof n?n:String(n)).toLowerCase().split(/\s+/);for(const e of t.classes)if(!o.includes(e.toLowerCase()))return!1}for(const n of t.attributes)if(!a(e,n))return!1;for(const o of t.pseudos)if(!u(e,o,n))return!1;return!0}function a(e,t){const n=e.attributes&&e.attributes[t.name];if(null===t.operator)return void 0!==n;if(void 0===n)return!1;const o=String(n);switch(t.operator){case"=":return o===t.value;case"~=":return o.split(/\s+/).includes(t.value);case"|=":return o===t.value||o.startsWith(t.value+"-");case"^=":return o.startsWith(t.value);case"$=":return o.endsWith(t.value);case"*=":return o.includes(t.value);default:return!1}}function c(e){return["first-child","first","last-child","last","only-child","nth-child","nth-of-type","first-of-type","last-of-type","only-of-type","nth-last-child","nth-last-of-type","not","empty","root"].includes(e)}function u(t,n,o){const r=o.siblings||[],s=r.indexOf(t);switch(n.name){case"first-child":return 0===s;case"first":case"last":default:return!1;case"last-child":return s===r.length-1;case"only-child":return 1===r.length;case"nth-child":return d(n.args,s+1);case"nth-of-type":const i=r.slice(0,s+1).filter(e=>e.tagName===t.tagName).length;return d(n.args,i);case"first-of-type":return s===r.findIndex(e=>e.tagName===t.tagName);case"last-of-type":const a=r.slice().reverse().findIndex(e=>e.tagName===t.tagName);return s===r.length-1-a;case"only-of-type":return 1===r.filter(e=>e.tagName===t.tagName).length;case"nth-last-child":return d(n.args,r.length-s);case"nth-last-of-type":const c=r.filter(e=>e.tagName===t.tagName),u=c.length-c.indexOf(t);return d(n.args,u);case"not":const f=e(n.args);return!f||!l(t,f,o);case"empty":return!t.children||0===t.children.length||t.children.every(e=>"text"===e.type&&!e.value.trim());case"root":return o.isRoot||!1}}function d(e,t){if(!e)return!1;if("even"===(e=e.trim().toLowerCase()))return t%2==0;if("odd"===e)return t%2==1;const n=e.match(/^(\d*)n(?:([+-]\d+))?$/);if(!n){const n=parseInt(e);return!isNaN(n)&&t===n}const[,o="1",r="0"]=n,s=parseInt(o)||1,i=parseInt(r)||0;return(t-i)%s===0&&(t-i)/s>=0}function f(e,t){return"complex"===t.type?function(e,t){let n=[];const o=t[0];if("combinator"===o.type)return[];n=g(e,o);for(let r=1;r<t.length;r+=2){const s=t[r],i=t[r+1];if("combinator"!==s.type)return[];if(!i)return[];n=h(n,s.combinator,o,i,e)}return n}(e,t.parts):g(e,t)}function h(e,t,n,o,r){const s=[];switch(t){case" ":for(const t of e){const e=g(t.children||[],o);s.push(...e)}break;case">":for(const t of e)if(t.children)for(const e of t.children)"element"===e.type&&m(e,o,r)&&s.push(e);break;case"+":for(const t of e){const e=p(t),n=e.indexOf(t);if(n>=0&&n<e.length-1){const t=e[n+1];"element"===t.type&&m(t,o,r)&&s.push(t)}}break;case"~":for(const t of e){const e=p(t),n=e.indexOf(t);if(n>=0)for(let t=n+1;t<e.length;t++){const n=e[t];"element"===n.type&&m(n,o,r)&&s.push(n)}}}return[...new Set(s)]}function p(e){return e.parent&&e.parent.children?e.parent.children.filter(e=>"element"===e.type):[e]}function g(e,t){const n=[];return function o(r){for(const s of r)"element"===s.type&&(m(s,t,e)&&n.push(s),s.children&&o(s.children))}(e),n}function m(e,t,n){const o={};o.isRoot=n.includes(e);const r=e.parent||e.parentNode;return r?r.children?o.siblings=r.children.filter(e=>"element"===e.type):r.childNodes?o.siblings=Array.from(r.childNodes).filter(e=>1===e.nodeType):o.siblings=[]:o.siblings=[],l(e,t,o)}function b(e,t=null){for(const n of e)void 0===n.parent&&(n.parent=t),n.children&&b(n.children,n)}return i=1,s={parseSelector:e,nodeMatchesSelector:l,selectNodes:function(t,n){return b(t),function(t,n){let o;try{o=e(n)}catch(e){if(e instanceof SyntaxError)throw e;return[]}if(!o)return[];if("compound"===o.type){const e=new Set;for(const n of o.selectors)f(t,n).forEach(t=>e.add(t));return Array.from(e)}return f(t,o)}(t,n)},isCSSSelector:function(e){const t=e.trim();return!!t&&!t.startsWith("<")},setupParentReferences:b}}function ut(){if(x)return _;return x=1,_={getTextContent:function e(t){if("text"===t.type)return t.value;if("element"===t.type){if(t._originalElement)return t._originalElement.textContent||"";let n="";for(const o of t.children){n+=e(o)}return n}return""},nodeToHTML:function e(t){if("text"===t.type)return t.value;if("element"===t.type){const n=Object.entries(t.attributes||{}).map(([e,t])=>!0===t?e:`${e}="${t}"`).join(" "),o=t.tagName?t.tagName.toLowerCase():"",r=n?`<${o} ${n}>`:`<${o}>`;if(0===t.children.length){return["area","base","br","col","embed","hr","img","input","link","meta","source","track","wbr"].includes(o)?r.replace(">",">"):r.replace(">","/>")}return`${r}${t.children.map(e).join("")}</${o}>`}return""},unescapeHtml:function(e){return e.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&apos;/g,"'")}},_}function dt(){if(ot)return at.exports;ot=1;const e=(...e)=>{("1"===process.env.JQNODE_DEBUG||"jqnode"===process.env.DEBUG||process.env.DEBUG&&process.env.DEBUG.includes("jqnode"))&&console.log("[DEBUG]",...e)};class t{static allRootNodes=[];static className="JQ";static clearRootNodesRegistry(){t.allRootNodes=[]}constructor(n){this.nodes=n||[];const{setupParentReferences:o}=ct();return this.nodes.some(e=>e&&"object"==typeof e&&("element"===e.type||"text"===e.type))&&(o(this.nodes),this.nodes.length>0&&this.nodes.forEach(e=>{t.allRootNodes.includes(e)||t.allRootNodes.push(e)})),"undefined"==typeof jest&&e(`JQ constructor: Created JQ instance with ${this.nodes.length} nodes`),new Proxy(this,{get(e,t){if("string"==typeof t&&/^\d+$/.test(t)){const n=parseInt(t,10);return e.nodes[n]}return"length"===t?e.nodes.length:e[t]},set:(e,t,n)=>("string"!=typeof t||!/^\d+$/.test(t))&&(e[t]=n,!0)})}[Symbol.iterator](){return this.nodes[Symbol.iterator]()}get[Symbol.toStringTag](){return"JQ"}}return t.className="JQ",t.prototype.debugLog=e,t.prototype.find=function(){if(a)return l;a=1;const{selectNodes:e}=ct();return l=function(t){this.debugLog(`JQ.find: Searching for selector "${t}" within ${this.nodes.length} nodes`);const n=new this.constructor(e(this.nodes,t));return n._prevObject=this,this.debugLog(`JQ.find: Found ${n.nodes.length} matching elements`),n},l}(),t.prototype.attr=u?c:(u=1,c=function(e,t){const n=["checked","selected","disabled","readonly","required","multiple"];if(void 0===t){const t=this.nodes[0];if(!t)return void this.debugLog(`JQ.attr: No elements found for getting attribute "${e}"`);if(t._originalElement){const o=t._originalElement.getAttribute(e);if(this.debugLog(`JQ.attr: Getting attribute "${e}" from _originalElement, value: ${o}`),null===o)return;return n.includes(e)?e:o}if(1===t.nodeType){const o=t.getAttribute(e);if(this.debugLog(`JQ.attr: Getting attribute "${e}" from DOM element, value: ${o}`),null===o)return;return n.includes(e)?e:o}const o=t.attributes?t.attributes[e]:void 0;if(n.includes(e))return this.debugLog(`JQ.attr: Getting boolean attribute "${e}" from internal node, value: ${o}`),o;const r=o;return this.debugLog(`JQ.attr: Getting attribute "${e}" from internal node, value: ${r}`),r}return this.debugLog(`JQ.attr: Setting attribute "${e}" = "${t}" on ${this.nodes.length} elements`),this.nodes.forEach(o=>{o&&(1!==o.nodeType?o.attributes&&(n.includes(e)?(o.attributes[e]=!0===t?e:t,o._originalElement&&(!0===t?o._originalElement.setAttribute(e,e):!1===t||null==t?o._originalElement.removeAttribute(e):o._originalElement.setAttribute(e,t))):(o.attributes[e]=t,o._originalElement&&o._originalElement.setAttribute(e,t))):n.includes(e)?!0===t?o.setAttribute(e,e):!1===t||null==t?o.removeAttribute(e):o.setAttribute(e,t):null==t?o.removeAttribute(e):o.setAttribute(e,t))}),this}),t.prototype.prop=f?d:(f=1,d=function(e,t){if(void 0===t){const t=this.nodes[0];if(!t)return;t.properties||(t.properties={});const n=t.properties[e];return"value"===e&&void 0!==n?String(n):(this.debugLog(`JQ.prop: Getting property "${e}" from first element, value: ${n}`),n)}return this.debugLog(`JQ.prop: Setting property "${e}" = "${t}" on ${this.nodes.length} elements`),this.nodes.forEach(n=>{n&&(n.properties||(n.properties={}),n.properties[e]=t,n._originalElement&&void 0!==n._originalElement[e]&&(n._originalElement[e]=t))}),this}),t.prototype.removeAttr=p?h:(p=1,h=function(e){return this.debugLog(`JQ.removeAttr: Removing attribute "${e}" from ${this.nodes.length} elements`),this.nodes.forEach(t=>{t&&t.attributes&&(delete t.attributes[e],t._originalElement&&t._originalElement.removeAttribute(e))}),this}),t.prototype.removeProp=m?g:(m=1,g=function(e){return this.debugLog(`JQ.removeProp: Removing property "${e}" from ${this.nodes.length} elements`),["checked","selected","disabled","readonly","required","type","name"].includes(e)?(this.debugLog(`JQ.removeProp: Not removing standard HTML property "${e}"`),this):"value"===e?(this.nodes.forEach(t=>{t&&t._originalElement&&"value"===e||t&&t.properties}),this):(this.nodes.forEach(t=>{t&&t.properties&&(delete t.properties[e],t._originalElement&&t._originalElement[e])}),this)}),t.prototype.val=y?b:(y=1,b=function(e){if(void 0===e){const e=this.nodes[0];if(!e)return;if(e.tagName&&"input"===e.tagName.toLowerCase()){if(e.properties&&void 0!==e.properties.value){const t=e.properties.value;return this.debugLog(`JQ.val: Getting input value from properties: ${t}`),t}if(e.attributes&&void 0!==e.attributes.value){const t=e.attributes.value;return this.debugLog(`JQ.val: Getting input value from attributes: ${t}`),t}}else if(e.tagName&&"select"===e.tagName.toLowerCase()){if(e.children){const t=[];for(const n of e.children)"element"===n.type&&n.tagName&&"option"===n.tagName.toLowerCase()&&n.attributes&&n.attributes.selected&&t.push(n.attributes.value||n.children[0]?.value||"");if(e.attributes&&e.attributes.multiple)return this.debugLog(`JQ.val: Getting multiple select values: ${t}`),t;{if(e.properties&&void 0!==e.properties.value){const t=e.properties.value;return this.debugLog(`JQ.val: Getting single select value from properties: ${t}`),t}const n=t.length>0?t[0]:"";return this.debugLog(`JQ.val: Getting single select value: ${n}`),n}}}else if(e.tagName&&"textarea"===e.tagName.toLowerCase()){if(e.properties&&void 0!==e.properties.value){const t=e.properties.value;return this.debugLog(`JQ.val: Getting textarea value from properties: ${t}`),t}if(e.children&&e.children.length>0){const t=e.children.filter(e=>"text"===e.type).map(e=>e.value).join("");return this.debugLog(`JQ.val: Getting textarea value from text content: ${t}`),t}}return this.debugLog("JQ.val: No value found for element, returning empty string for non-form elements"),""}return"function"==typeof e?(this.debugLog(`JQ.val: Setting value using function on ${this.nodes.length} elements`),this.nodes.forEach((t,n)=>{if(t){let o;o=t.tagName&&"input"===t.tagName.toLowerCase()||t.tagName&&"select"===t.tagName.toLowerCase()?t.properties&&void 0!==t.properties.value?t.properties.value:t.attributes&&void 0!==t.attributes.value?t.attributes.value:void 0:t.tagName&&"textarea"===t.tagName.toLowerCase()?t.properties&&void 0!==t.properties.value?t.properties.value:t.children&&t.children.length>0?t.children.filter(e=>"text"===e.type).map(e=>e.value).join(""):void 0:void 0;const r=e.call(t,n,o),s=null==r?"":String(r);this.debugLog(`JQ.val: Function returned "${s}" for element ${n}`),t.tagName&&"input"===t.tagName.toLowerCase()||t.tagName&&"select"===t.tagName.toLowerCase()?(t.properties||(t.properties={}),t.properties.value=s):t.tagName&&"textarea"===t.tagName.toLowerCase()&&(t.properties||(t.properties={}),t.properties.value=s,t.children=[{type:"text",value:s}])}}),this):(this.debugLog(`JQ.val: Setting value on ${this.nodes.length} elements`),this.nodes.forEach(t=>{if(t)if(t.tagName&&"input"===t.tagName.toLowerCase()){const n=null==e?"":String(e);t.properties||(t.properties={}),t.properties.value=n,t._originalElement&&(t._originalElement.value=n)}else if(t.tagName&&"select"===t.tagName.toLowerCase())if(t.attributes&&t.attributes.multiple&&Array.isArray(e))t.children&&t.children.forEach(t=>{if("element"===t.type&&t.tagName&&"option"===t.tagName.toLowerCase()){const n=t.attributes&&t.attributes.value,o=e.includes(n);t.attributes||(t.attributes={}),t.attributes.selected=o}});else{const n=null==e?"":String(e);t.properties||(t.properties={}),t.properties.value=n,t._originalElement&&(t._originalElement.value=n),t.children&&t.children.forEach(e=>{if("element"===e.type&&e.tagName&&"option"===e.tagName.toLowerCase()){const t=(e.attributes&&e.attributes.value)===n;e.attributes||(e.attributes={}),e.attributes.selected=t}})}else if(t.tagName&&"textarea"===t.tagName.toLowerCase()){const n=null==e?"":String(e);t.properties||(t.properties={}),t.properties.value=n,t.children=[{type:"text",value:n}],t._originalElement&&(t._originalElement.value=n)}}),this)}),t.prototype.addClass=N?$:(N=1,$=function(e){if(this.debugLog(`JQ.addClass: Adding classes "${e}" to ${this.nodes.length} elements`),"function"==typeof e)return this.nodes.forEach((n,o)=>{if(!n||!n.attributes)return;const r=n.attributes.class||"",s=e.call(n,o,r);"string"==typeof s&&t(n,s)}),this;function t(e,t){if(!e||!e.attributes)return;e.attributes.class||(e.attributes.class="");let n=e.attributes.class.split(/\s+/).filter(e=>e.length>0);t.split(/\s+/).filter(e=>e.length>0).forEach(e=>{n.includes(e)||n.push(e)}),e.attributes.class=n.join(" "),e._originalElement&&(e._originalElement.className=e.attributes.class)}return this.nodes.forEach(n=>{t(n,e)}),this}),t.prototype.removeClass=L?v:(L=1,v=function(e){if(this.debugLog(`JQ.removeClass: Removing classes "${e}" from ${this.nodes.length} elements`),"function"==typeof e)return this.nodes.forEach((n,o)=>{if(!n||!n.attributes)return;n._originalElement&&(n.attributes.class=n._originalElement.className||"");const r=n.attributes.class||"",s=e.call(n,o,r);"string"==typeof s&&t(n,s,!0)}),this;function t(e,t,n=!0){if(!e||!e.attributes)return;e.attributes.class||(e.attributes.class="");let o=e.attributes.class.split(/\s+/).filter(e=>e.length>0);null==t?o=[]:t.split(/\s+/).filter(e=>e.length>0).forEach(e=>{const t=o.indexOf(e);-1!==t&&o.splice(t,1)}),e.attributes.class=o.join(" "),n&&e._originalElement&&(e._originalElement.className=e.attributes.class)}return this.nodes.forEach(n=>{t(n,e,!0)}),this}),t.prototype.toggleClass=Q?J:(Q=1,J=function(e,t){return this.debugLog(`JQ.toggleClass: Toggling classes "${e}" with state ${t} on ${this.nodes.length} elements`),this.nodes.forEach(n=>{if(!n||!n.attributes)return;const o=n.attributes.class||"";n.attributes.class||(n.attributes.class="");let r=n.attributes.class.split(/\s+/).filter(e=>e.length>0);if("function"==typeof e){const t=Array.prototype.indexOf.call(this.nodes,n),r=e.call(n,t,o);if("string"!=typeof r)return;e=r}e.split(/\s+/).filter(e=>e.length>0).forEach(e=>{const n=r.indexOf(e);!0===t?-1===n&&r.push(e):!1===t?-1!==n&&r.splice(n,1):-1===n?r.push(e):r.splice(n,1)}),n.attributes.class=r.join(" "),n._originalElement&&(n._originalElement.className=n.attributes.class)}),this}),t.prototype.hasClass=w?E:(w=1,E=function(e){if(this.debugLog(`JQ.hasClass: Checking if first element has class "${e}"`),0===this.nodes.length)return this.debugLog("JQ.hasClass: No elements to check"),!1;const t=this.nodes[0];if(t._originalElement){const n=(t._originalElement.className||"").split(/\s+/).filter(e=>e.length>0),o=n.includes(e);return this.debugLog(`JQ.hasClass: DOM element classes: [${n.join(", ")}], has "${e}": ${o}`),o}if(!t.attributes||!t.attributes.class)return this.debugLog("JQ.hasClass: Element has no class attribute"),!1;const n=t.attributes.class.split(/\s+/),o=n.includes(e);return this.debugLog(`JQ.hasClass: Internal attributes class: "${t.attributes.class}", classes: [${n.join(", ")}], has "${e}": ${o}`),this.debugLog(`JQ.hasClass: Element classes: [${n.join(", ")}], has "${e}": ${o}`),o}),t.prototype.text=function(){if(C)return S;C=1;const{getTextContent:e,unescapeHtml:t}=ut();return S=function(n){if(void 0===n){const n=this.nodes.filter(e=>"element"===e.type||1===e.nodeType);if(n.some(e=>e._detached))return"";if(0===n.length)return"";const o=n.map(t=>1===t.nodeType?t.textContent||"":e(t)).join(""),r=t(o);return this.debugLog(`JQ.text: Getting text content from ${n.length} element nodes, total length: ${r.length}`),r}return this.debugLog(`JQ.text: Setting text content "${n}" on ${this.nodes.length} elements`),this.nodes.forEach(e=>{1===e.nodeType?e.textContent=n:e.children=[{type:"text",value:n}]}),this}}(),t.prototype.html=function(){if(j)return A;j=1;const{nodeToHTML:e}=ut(),{parseHTML:t}=r();return A=function(n){if(void 0===n){if(0===this.nodes.length)return;const t=this.nodes[0];if("element"===t.type){const n=t.children.map(t=>e(t)).join("");return this.debugLog(`JQ.html: Getting inner HTML of first element, result length: ${n.length}`),n}{const n=e(t);return this.debugLog(`JQ.html: Converting non-element node to HTML, result length: ${n.length}`),n}}return this.debugLog(`JQ.html: Setting inner HTML on ${this.nodes.length} elements`),this.nodes.forEach(e=>{if("element"===e.type){const o=t(n);e.children=o}}),this}}(),t.prototype.each=T?O:(T=1,O=function(e){this.debugLog(`JQ.each: Iterating over ${this.nodes.length} elements`);for(let t=0;t<this.nodes.length&&!1!==e.call(this.nodes[t],t,this.nodes[t]);t++);return this}),t.prototype.map=F?R:(F=1,R=function(e){this.debugLog(`JQ.map: Mapping over ${this.nodes.length} elements`);const t=[];for(let n=0;n<this.nodes.length;n++)try{const o=e.call(this.nodes[n],n,this.nodes[n]);null!=o&&(Array.isArray(o)?t.push(...o):t.push(o))}catch(e){this.debugLog(`JQ.map: Skipping element at index ${n} due to error: ${e.message}`)}return this.debugLog(`JQ.map: Mapped to ${t.length} results`),new this.constructor(t)}),t.prototype.parent=function(){if(U)return k;U=1;const{selectNodes:e}=ct();return k=function(t){this.debugLog(`JQ.parent: Finding parents for ${this.nodes.length} elements, selector: ${t||"none"}`);const n=[],o=new Set;for(const e of this.nodes){let t=e.parent||e.parentNode;if(t&&!o.has(t)){let r=!1,s=!1;e.parent&&"element"===e.parent.type?(r=!0,s=e.tagName&&"html"===e.tagName.toLowerCase()):e.parentNode&&1===e.parentNode.nodeType&&(r=!0,s="html"===e.parentNode.tagName.toLowerCase()),r&&!s&&(o.add(t),n.push(t))}}let r=n;if(t){const o=this._findCommonRoots(),s=e(o,t);r=n.filter(e=>s.includes(e))}this.debugLog(`JQ.parent: Found ${r.length} parent elements`);const s=new(0,this.constructor)(r);return s._prevObject=this,s},k}(),t.prototype.parents=function(){if(D)return G;D=1;const{parseSelector:e,nodeMatchesSelector:t}=ct();return G=function(n){this.debugLog(`JQ.parents: Finding ancestors for ${this.nodes.length} elements, selector: ${n||"none"}`);const o=[],r=new Set;let s=null;if(n&&(s=e(n),!s))return this.debugLog(`JQ.parents: Invalid selector "${n}", returning empty result`),new this.constructor([]);for(const e of this.nodes)if(e._originalElement){let n=e._originalElement.parentElement;for(;n&&1===n.nodeType;){const e={};for(let t=0;t<n.attributes.length;t++){const o=n.attributes[t];e[o.name]=o.value}const i=`${n.tagName.toLowerCase()}-${JSON.stringify(e)}`;if(!r.has(i)){r.add(i);const l={type:"element",tagName:n.tagName.toLowerCase(),attributes:e,properties:{},children:[],parent:null,_originalElement:n};s&&!t(l,s)||o.push(l)}n=n.parentElement}}else{let n=e.parent;for(;n;){if("element"===n.type){const e=`${n.tagName}-${JSON.stringify(n.attributes)}`;r.has(e)||(r.add(e),s&&!t(n,s)||o.push(n))}n=n.parent}}return this.debugLog(`JQ.parents: Found ${o.length} ancestor elements`),new this.constructor(o)},G}(),t.prototype.parentsUntil=function(){if(M)return B;M=1;const{selectNodes:e}=ct();return B=function(t,n){this.debugLog(`JQ.parentsUntil: Finding ancestors until selector: ${t||"none"}, filter: ${n||"none"}`);const o=[],r=new Set,s=new Set;if(t)if("string"==typeof t){const n=this._findCommonRoots();e(n,t).forEach(e=>s.add(e))}else t&&"object"==typeof t&&"element"===t.type?s.add(t):t&&t.nodes&&Array.isArray(t.nodes)&&t.nodes.forEach(e=>s.add(e));for(const e of this.nodes)if(e._originalElement){let t=e._originalElement.parentElement;for(;t&&1===t.nodeType;){const e=Array.from(s).some(e=>{if(e._originalElement===t)return!0;if(e.tagName===t.tagName.toLowerCase()){const n=e.attributes||{},o={};for(let e=0;e<t.attributes.length;e++){const n=t.attributes[e];o[n.name]=n.value}return Object.keys(n).every(e=>o[e]===n[e])}return!1});if(e)break;const n={};for(let e=0;e<t.attributes.length;e++){const o=t.attributes[e];n[o.name]=o.value}const i=`dom-${t.tagName.toLowerCase()}-${JSON.stringify(n)}`;if(!r.has(i)){r.add(i);const e={type:"element",tagName:t.tagName.toUpperCase(),attributes:n,properties:{},children:[],parent:null,_originalElement:t};o.push(e)}t=t.parentElement}}else{let t=e.parent;for(;t&&!s.has(t);){const e=`internal-${t.tagName}-${JSON.stringify(t.attributes)}`;r.has(e)||(r.add(e),o.push(t)),t=t.parent}}let i=o;if(n){const t=this._findCommonRoots(),r=e(t,n);i=o.filter(e=>r.includes(e))}return this.debugLog(`JQ.parentsUntil: Found ${i.length} ancestor elements`),new this.constructor(i)},B}(),t.prototype.closest=function(){if(z)return I;z=1;const{parseSelector:e,nodeMatchesSelector:t}=ct();return I=function(n){if(this.debugLog(`JQ.closest: Finding closest ancestors matching "${n}" for ${this.nodes.length} elements`),!n)return this.debugLog("JQ.closest: No selector provided, returning empty result"),new this.constructor([]);const o=e(n);if(!o)return this.debugLog(`JQ.closest: Invalid selector "${n}", returning empty result`),new this.constructor([]);const r=[],s=new Set;for(const e of this.nodes){let n=e;for(;n;){if(("element"===n.type||1===n.nodeType)&&t(n,o)){s.has(n)||(s.add(n),r.push(n));break}n=n.parent||n.parentNode}}return this.debugLog(`JQ.closest: Found ${r.length} closest elements`),new(0,this.constructor)(r)},I}(),t.prototype.children=function(){if(H)return W;H=1;const{selectNodes:e}=ct();return W=function(t){this.debugLog(`JQ.children: Finding children for ${this.nodes.length} elements, selector: ${t||"none"}`);const n=[],o=new Set;for(const e of this.nodes){const t=e.children||(e.childNodes?Array.from(e.childNodes).filter(e=>1===e.nodeType):[]);for(const e of t)("element"===e.type||1===e.nodeType)&&!o.has(e)&&(o.add(e),n.push(e))}let r=n;if(t){const o=this._findCommonRoots(),s=e(o,t);r=n.filter(e=>s.includes(e))}this.debugLog(`JQ.children: Found ${r.length} child elements`);const s=new(0,this.constructor)(r);return s._prevObject=this,s},W}(),t.prototype.contents=(P||(P=1,q=function(){this.debugLog(`JQ.contents: Finding all child nodes for ${this.nodes.length} elements`);const e=[],t=new Set;function n(e){if(1===e.nodeType){const t={type:"element",tagName:e.tagName.toLowerCase(),attributes:{},properties:{},children:[],parent:null,_originalElement:e};if(e.attributes)for(let n=0;n<e.attributes.length;n++){const o=e.attributes[n];t.attributes[o.name]=o.value}if(1===e.nodeType){const n=["value","checked","selected","type","name","disabled","readonly"];for(const o of n)void 0!==e[o]&&(t.properties[o]=e[o])}return t}return 3===e.nodeType?{type:"text",value:e.textContent,_originalElement:e}:8===e.nodeType?{type:"comment",value:e.textContent,_originalElement:e}:null}for(const o of this.nodes)if(o._originalElement){const r=o._originalElement.childNodes;for(let o=0;o<r.length;o++){const s=n(r[o]);s&&!t.has(s)&&(t.add(s),e.push(s))}}else if(o.children)for(const n of o.children)t.has(n)||(t.add(n),e.push(n));return this.debugLog(`JQ.contents: Found ${e.length} child nodes`),new this.constructor(e)}),q),t.prototype.siblings=function(){if(Y)return Z;Y=1;const{nodeMatchesSelector:e,parseSelector:t}=ct();return Z=function(n){this.debugLog(`JQ.siblings: Finding siblings for ${this.nodes.length} elements, selector: ${n||"none"}`);const o=[],r=new Set;let s=null;n&&(s=t(n));for(const t of this.nodes)t.parent&&t.parent.children&&t.parent.children.forEach(n=>{if(n!==t&&"element"===n.type&&!r.has(n)){r.add(n);let t=!0;s&&(e(n,s)||(t=!1)),t&&o.push(n)}});return this.debugLog(`JQ.siblings: Found ${o.length} siblings`),new this.constructor(o)},Z}(),t.prototype.next=(V||(V=1,ct(),K=function(e){this.debugLog(`JQ.next: Finding next sibling for ${this.nodes.length} elements, selector: ${e||"none"}`);const t=[];for(const n of this.nodes)if(n.parent&&n.parent.children){const o=n.parent.children.filter(e=>"element"===e.type),r=o.indexOf(n);if(-1!==r)if(e){const{nodeMatchesSelector:n,parseSelector:s}=ct(),i=s(e);for(let e=r+1;e<o.length;e++){const r=o[e];if(("compound"===i.type?i.selectors:[i]).some(e=>n(r,e))){t.push(r);break}}}else r<o.length-1&&t.push(o[r+1])}else{const o=dt().allRootNodes,r=o.indexOf(n);if(-1!==r)if(e){const{nodeMatchesSelector:n,parseSelector:s}=ct(),i=s(e);for(let e=r+1;e<o.length;e++){const r=o[e];if("element"===r.type&&("compound"===i.type?i.selectors:[i]).some(e=>n(r,e))){t.push(r);break}}}else for(let e=r+1;e<o.length;e++){const n=o[e];if("element"===n.type){t.push(n);break}}}return this.debugLog(`JQ.next: Found ${t.length} next sibling elements`),new this.constructor(t)}),K),t.prototype.nextAll=(ee||(ee=1,ct(),X=function(e){this.debugLog(`JQ.nextAll: Finding all following siblings for ${this.nodes.length} elements, selector: ${e||"none"}`);const t=[],n=new Set;for(const e of this.nodes)if(e.parent&&e.parent.children){const o=e.parent.children.filter(e=>"element"===e.type),r=o.indexOf(e);if(-1!==r)for(let e=r+1;e<o.length;e++){const r=o[e];n.has(r)||(n.add(r),t.push(r))}}let o=t;if(e){const{nodeMatchesSelector:n,parseSelector:r}=ct(),s=r(e);o=t.filter(e=>("compound"===s.type?s.selectors:[s]).some(t=>n(e,t)))}return this.debugLog(`JQ.nextAll: Found ${o.length} following sibling elements`),new this.constructor(o)}),X),t.prototype.nextUntil=(ne||(ne=1,ct(),te=function(e,t){this.debugLog(`JQ.nextUntil: Finding following siblings until selector: ${e||"none"}, filter: ${t||"none"}`);const n=[],{nodeMatchesSelector:o,parseSelector:r}=ct(),s=e&&"string"==typeof e?r(e):null,i=t?r(t):null;for(const t of this.nodes)if(t.parent&&t.parent.children){const r=t.parent.children,l=r.indexOf(t);if(-1!==l)for(let t=l+1;t<r.length;t++){const l=r[t],a="element"===l.type;if(s&&("compound"===s.type?s.selectors:[s]).some(e=>o(l,e)))break;if(e&&"object"==typeof e&&"element"===e.type&&l===e)break;if(e&&e.nodes&&Array.isArray(e.nodes)&&e.nodes.includes(l))break;if(a){if(i&&!("compound"===i.type?i.selectors:[i]).some(e=>o(l,e)))continue;n.push(l)}}}else{const r=dt().allRootNodes,l=r.indexOf(t);if(-1!==l)for(let t=l+1;t<r.length;t++){const l=r[t],a="element"===l.type;if(s&&("compound"===s.type?s.selectors:[s]).some(e=>o(l,e)))break;if(e&&"object"==typeof e&&"element"===e.type&&l===e)break;if(e&&e.nodes&&Array.isArray(e.nodes)&&e.nodes.includes(l))break;if(a){if(i&&!("compound"===i.type?i.selectors:[i]).some(e=>o(l,e)))continue;n.push(l)}}}return this.debugLog(`JQ.nextUntil: Found ${n.length} following sibling elements`),new this.constructor(n)}),te),t.prototype.prev=function(){if(re)return oe;re=1;const{nodeMatchesSelector:e,parseSelector:t}=ct();return oe=function(n){this.debugLog(`JQ.prev: Finding previous sibling for ${this.nodes.length} elements, selector: ${n||"none"}`);const o=[];for(const r of this.nodes)if(r.parent&&r.parent.children){const s=r.parent.children,i=s.indexOf(r);if(i>0)if(n){const r=t(n);for(let t=i-1;t>=0;t--){const n=s[t];if("element"===n.type&&e(n,r)){o.push(n);break}}}else for(let e=i-1;e>=0;e--){const t=s[e];if("element"===t.type){o.push(t);break}}}return this.debugLog(`JQ.prev: Found ${o.length} previous sibling elements`),new this.constructor(o)},oe}(),t.prototype.prevAll=function(){if(ie)return se;ie=1;const{nodeMatchesSelector:e,parseSelector:t}=ct();return se=function(n){this.debugLog(`JQ.prevAll: Finding all preceding siblings for ${this.nodes.length} elements, selector: ${n||"none"}`);const o=[];let r=null;n&&(r=t(n));for(const t of this.nodes)if(t._originalElement){let n=t._originalElement.previousElementSibling;for(;n;){let t=!0;if(r){const o="compound"===r.type?r.selectors:[r],s={type:"element",tagName:n.tagName.toLowerCase(),attributes:{},_originalElement:n};for(let e=0;e<n.attributes.length;e++){const t=n.attributes[e];s.attributes[t.name]=t.value}o.some(t=>e(s,t))||(t=!1)}if(t){const e={type:"element",tagName:n.tagName.toLowerCase(),attributes:{},properties:{},children:[],parent:null,_originalElement:n};for(let t=0;t<n.attributes.length;t++){const o=n.attributes[t];e.attributes[o.name]=o.value}o.push(e)}n=n.previousElementSibling}}else if(t.parent&&t.parent.children){const n=t.parent.children,s=n.indexOf(t);for(let t=0;t<s;t++){const s=n[t];if("element"===s.type){let t=!0;r&&(e(s,r)||(t=!1)),t&&o.push(s)}}}const s=[],i=new Set;for(const e of o)i.has(e)||(i.add(e),s.push(e));return this.debugLog(`JQ.prevAll: Found ${s.length} preceding siblings`),new this.constructor(s)},se}(),t.prototype.prevUntil=(ae||(ae=1,ct(),le=function(e,t){this.debugLog(`JQ.prevUntil: Finding preceding siblings until selector: ${e||"none"}, filter: ${t||"none"}`);const n=[],{nodeMatchesSelector:o,parseSelector:r}=ct();let s=null,i=null;e&&("string"==typeof e?s=r(e):e._originalElement?i=e._originalElement:e.nodeType?i=e:e.nodes&&e.nodes.length>0&&(i=e.nodes[0]._originalElement||e.nodes[0]));const l=t?r(t):null;for(const e of this.nodes)if(e._originalElement){let t=e._originalElement.previousElementSibling;for(;t;){let e=!1;if(s){const n="compound"===s.type?s.selectors:[s],r={type:"element",tagName:t.tagName.toLowerCase(),attributes:{},_originalElement:t};for(let e=0;e<t.attributes.length;e++){const n=t.attributes[e];r.attributes[n.name]=n.value}n.some(e=>o(r,e))&&(e=!0)}else i&&t===i&&(e=!0);if(e)break;let r=!0;if(l){const e="compound"===l.type?l.selectors:[l],n={type:"element",tagName:t.tagName.toLowerCase(),attributes:{},_originalElement:t};for(let e=0;e<t.attributes.length;e++){const o=t.attributes[e];n.attributes[o.name]=o.value}e.some(e=>o(n,e))||(r=!1)}if(r){const e={type:"element",tagName:t.tagName.toLowerCase(),attributes:{},properties:{},children:[],parent:null,_originalElement:t};for(let n=0;n<t.attributes.length;n++){const o=t.attributes[n];e.attributes[o.name]=o.value}n.push(e)}t=t.previousElementSibling}}else if(e.parent&&e.parent.children){const t=e.parent.children.filter(e=>"element"===e.type),r=t.indexOf(e);if(r>0)for(let e=r-1;e>=0;e--){const r=t[e];let a=!1;if(s?("compound"===s.type?s.selectors:[s]).some(e=>o(r,e))&&(a=!0):i&&(r._originalElement!==i&&r!==i||(a=!0)),a)break;l&&!("compound"===l.type?l.selectors:[l]).some(e=>o(r,e))||n.push(r)}}const a=[],c=new Set;for(const e of n)c.has(e)||(c.add(e),a.push(e));return this.debugLog(`JQ.prevUntil: Found ${a.length} unique preceding sibling elements in reverse document order (farthest first)`),new this.constructor(a)}),le),t.prototype.eq=ue?ce:(ue=1,ce=function(e){this.debugLog(`JQ.eq: Selecting element at index ${e} from ${this.nodes.length} elements`);const t=e;let n=Number(e);if(void 0===e)return this.debugLog(`JQ.eq: Index ${t} is undefined, returning empty result`),new this.constructor([]);if(isNaN(n))return this.debugLog(`JQ.eq: Index ${t} converts to NaN, returning empty result`),new this.constructor([]);if(n=Math.trunc(n),n<0&&(n=this.nodes.length+n),n>=0&&n<this.nodes.length){let e=this.nodes[n];"number"==typeof t&&t%1!=0&&(e={...e,_detached:!0});const o=new this.constructor([e]);return o._prevObject=this,this.debugLog(`JQ.eq: Found element at index ${n}`),o}this.debugLog(`JQ.eq: Index ${t} is out of bounds, returning empty result`);const o=new this.constructor([]);return o._prevObject=this,o}),t.prototype.end=fe?de:(fe=1,de=function(){return this.debugLog("JQ.end: Ending current filtering operation, returning to previous selection"),this._prevObject?(this.debugLog(`JQ.end: Returning to previous object with ${this._prevObject.nodes.length} elements`),this._prevObject):(this.debugLog("JQ.end: No previous selection available, returning current selection"),this)}),t.prototype.first=pe?he:(pe=1,he=function(){return this.debugLog(`JQ.first: Selecting first element from ${this.nodes.length} elements`),this.eq(0)}),t.prototype.last=me?ge:(me=1,ge=function(){return this.debugLog(`JQ.last: Selecting last element from ${this.nodes.length} elements`),this.eq(-1)}),t.prototype.filter=function(){if(ye)return be;ye=1;const{nodeMatchesSelector:e,parseSelector:t}=ct();return be=function(n,o){if(this.debugLog(`JQ.filter: Filtering ${this.nodes.length} elements with ${typeof n}`),"string"==typeof n){const o=t(n);if(!o)return this.debugLog(`JQ.filter: Invalid selector "${n}", returning empty result`),new this.constructor([]);const r=this.nodes.filter(t=>{if(t.attributes)for(const[e,n]of Object.entries(t.attributes))"string"!=typeof n&&(t.attributes[e]=String(n));const n={};return t.parent&&t.parent.children?n.siblings=t.parent.children.filter(e=>"element"===e.type):n.siblings=[],e(t,o,n)});r.forEach(e=>{if(e.attributes)for(const[t,n]of Object.entries(e.attributes))"string"!=typeof n&&(e.attributes[t]=String(n))}),this.debugLog(`JQ.filter: Filtered to ${r.length} elements using selector "${n}"`);const s=new this.constructor(r);return s._prevObject=this,s}if("function"==typeof n){const e=[];for(let t=0;t<this.nodes.length;t++){const r=this.nodes[t];try{n.call(o||r,t,r)&&e.push(r)}catch(e){this.debugLog(`JQ.filter: Skipping element at index ${t} due to error: ${e.message}`)}}this.debugLog(`JQ.filter: Filtered to ${e.length} elements using function`);const t=new this.constructor(e);return t._prevObject=this,t}this.debugLog("JQ.filter: Invalid selector/function, returning empty result");const r=new this.constructor([]);return r._prevObject=this,r}}(),t.prototype.not=function(){if(Ne)return $e;Ne=1;const{selectNodes:e}=ct();return $e=function(t){if(this.debugLog(`JQ.not: Removing elements matching ${typeof t} from ${this.nodes.length} elements`),"string"==typeof t){const n=this._findCommonRoots(),o=e(n,t),r=this.nodes.filter(e=>!o.includes(e));return this.debugLog(`JQ.not: Filtered to ${r.length} elements using selector "${t}"`),new this.constructor(r)}if("function"==typeof t){const e=[];for(let n=0;n<this.nodes.length;n++){const o=this.nodes[n];try{t.call(o,n,o)||e.push(o)}catch(t){e.push(o)}}return this.debugLog(`JQ.not: Filtered to ${e.length} elements using function`),new this.constructor(e)}return this.debugLog("JQ.not: Invalid selector/function, returning all elements"),new this.constructor(this.nodes)}}(),t.prototype.has=function(){if(Le)return ve;Le=1;const{selectNodes:e}=ct();return ve=function(t){this.debugLog("JQ.has: Finding elements with descendants matching "+typeof t);const n=[];if("string"==typeof t){for(const o of this.nodes)if("element"===o.type&&o.children){const r=o.children.filter(e=>"element"===e.type);try{e(r,t).length>0&&n.push(o)}catch(e){if(e instanceof SyntaxError)throw e}}}else if(t&&"object"==typeof t&&"element"===t.type)for(const e of this.nodes)"element"===e.type&&e.children&&this._hasDescendant(e,t)&&n.push(e);return this.debugLog(`JQ.has: Found ${n.length} elements with matching descendants`),new this.constructor(n)}}(),t.prototype.is=function(){if(Qe)return Je;Qe=1;const{selectNodes:e}=ct();return Je=function(t){if(this.debugLog(`JQ.is: Checking if any of ${this.nodes.length} elements match ${typeof t}`),"string"==typeof t){const n=this._findCommonRoots(),o=e(n,t),r=this.nodes.some(e=>o.includes(e));return this.debugLog(`JQ.is: Selector match result: ${r}`),r}if(t&&"object"==typeof t){if("element"===t.type){const e=this.nodes.includes(t);return this.debugLog(`JQ.is: Element match result: ${e}`),e}if(t instanceof this.constructor){const e=this.nodes.some(e=>t.nodes.includes(e));return this.debugLog(`JQ.is: JQ object match result: ${e}`),e}}return this.debugLog("JQ.is: Invalid argument, returning false"),!1}}(),t.prototype.slice=(we||(we=1,Ee=function(e,t){this.debugLog(`JQ.slice: Slicing elements from ${e} to ${t||"end"} in ${this.nodes.length} elements`);const n=this.nodes.slice(e,t);return this.debugLog(`JQ.slice: Sliced to ${n.length} elements`),new this.constructor(n)}),Ee),t.prototype.append=xe?_e:(xe=1,_e=function(...e){this.debugLog(`JQ.append: Appending content to ${this.nodes.length} elements`);const t=[],n=[];for(const o of e)o&&"object"==typeof o&&(o.constructor&&"JQ"===o.constructor.name||o.nodes&&Array.isArray(o.nodes))?n.push(o):t.push(...this._normalizeContent(o));this.debugLog(`JQ.append: Normalized ${t.length} nodes to append, ${n.length} JQ objects to clone`);for(const e of this.nodes)if("element"===e.type&&e.children){if(t.length>0){const n=t.map(e=>this._cloneNode(e));e.children.push(...n),this.debugLog(`JQ.append: Appended ${n.length} cloned nodes to element <${e.tagName}>`)}for(const t of n){for(const n of t.nodes){if(n.parent&&n.parent.children){const e=n.parent.children.indexOf(n);-1!==e&&n.parent.children.splice(e,1)}const t=dt().allRootNodes.indexOf(n);-1!==t&&dt().allRootNodes.splice(t,1),e.children.push(n),n.parent=e}this.debugLog(`JQ.append: Moved ${t.nodes.length} nodes to element <${e.tagName}>`)}}return this}),t.prototype.appendTo=Ce?Se:(Ce=1,Se=function(e){let t;this.debugLog(`JQ.appendTo: Appending ${this.nodes.length} elements to target`);let n=!1;if(e instanceof this.constructor)t=e;else if("string"==typeof e)if(e.trim().startsWith("<"))t=new this.constructor(this._normalizeContent(e)),n=!0;else{const{selectNodes:n}=ct();t=new this.constructor(n(this.constructor.allRootNodes,e))}else t=new this.constructor(this._normalizeContent(e)),n=!0;this.debugLog(`JQ.appendTo: Target has ${t.nodes.length} elements`);for(const e of t.nodes)if("element"===e.type&&e.children){const t=this.nodes.map(e=>this._cloneNode(e));e.children.push(...t);for(const n of t)n.parent=e;this.debugLog(`JQ.appendTo: Appended ${t.length} elements to target <${e.tagName}>`)}if(n)for(const e of t.nodes)this.constructor.allRootNodes.includes(e)||(this.constructor.allRootNodes.push(e),this.debugLog(`JQ.appendTo: Added dynamic target <${e.tagName}> to root nodes`));return this}),t.prototype.prepend=je?Ae:(je=1,Ae=function(...e){this.debugLog(`JQ.prepend: Prepending content to ${this.nodes.length} elements`);const t=[];for(const n of e)t.push(...this._normalizeContent(n));this.debugLog(`JQ.prepend: Normalized ${t.length} nodes to prepend`);for(const e of this.nodes)if("element"===e.type&&e.children){const n=t.map(e=>this._cloneNode(e));e.children.unshift(...n),this.debugLog(`JQ.prepend: Prepended ${n.length} nodes to element <${e.tagName}>`)}return this}),t.prototype.prependTo=Te?Oe:(Te=1,Oe=function(e){let t;this.debugLog(`JQ.prependTo: Prepending ${this.nodes.length} elements to target`);let n=!1;if(e instanceof this.constructor)t=e;else if("string"==typeof e)if(e.trim().startsWith("<"))t=new this.constructor(this._normalizeContent(e)),n=!0;else{const{selectNodes:n}=ct();t=new this.constructor(n(this.constructor.allRootNodes,e))}else t=new this.constructor(this._normalizeContent(e)),n=!0;this.debugLog(`JQ.prependTo: Target has ${t.nodes.length} elements`);for(const e of t.nodes)if("element"===e.type&&e.children){const t=this.nodes.map(e=>this._cloneNode(e));e.children.unshift(...t);for(const n of t)n.parent=e;this.debugLog(`JQ.prependTo: Prepended ${t.length} elements to target <${e.tagName}>`)}if(n)for(const e of t.nodes)this.constructor.allRootNodes.includes(e)||(this.constructor.allRootNodes.push(e),this.debugLog(`JQ.prependTo: Added dynamic target <${e.tagName}> to root nodes`));return this}),t.prototype.before=Fe?Re:(Fe=1,Re=function(...e){this.debugLog(`JQ.before: Inserting content before ${this.nodes.length} elements`);const t=[],n=[];for(const o of e)o&&"object"==typeof o&&(o.constructor&&"JQ"===o.constructor.name||o.nodes&&Array.isArray(o.nodes))?n.push(o):t.push(...this._normalizeContent(o));this.debugLog(`JQ.before: Normalized ${t.length} nodes to insert, ${n.length} JQ objects to clone`);for(const e of this.nodes)if(e.parent&&e.parent.children){const o=e.parent.children,r=o.indexOf(e);if(-1!==r){if(t.length>0){const n=t.map(e=>this._cloneNode(e));o.splice(r,0,...n);for(const t of n)t.parent=e.parent;this.debugLog(`JQ.before: Inserted ${n.length} cloned nodes before element <${e.tagName}>`)}for(const t of n){for(let n=t.nodes.length-1;n>=0;n--){const s=t.nodes[n],i=this._cloneNode(s);if(s.parent&&s.parent.children){const e=s.parent.children.indexOf(s);-1!==e&&s.parent.children.splice(e,1)}const l=dt().allRootNodes.indexOf(s);-1!==l&&dt().allRootNodes.splice(l,1),o.splice(r,0,i),i.parent=e.parent}this.debugLog(`JQ.before: Cloned and moved ${t.nodes.length} nodes before element <${e.tagName}>`)}}}return this}),t.prototype.insertBefore=function(){if(Ue)return ke;Ue=1;const{isCSSSelector:e,selectNodes:t}=ct();return ke=function(n){let o;this.debugLog(`JQ.insertBefore: Inserting ${this.nodes.length} elements before target`);let r=!1;if(n&&n.constructor&&"JQ"===n.constructor.name)o=n;else if("string"==typeof n)if(e(n)){const e=t(dt().allRootNodes,n);o=new this.constructor(e)}else o=new this.constructor(this._normalizeContent(n)),r=!0;else o=new this.constructor(this._normalizeContent(n)),r=!0;this.debugLog(`JQ.insertBefore: Target has ${o.nodes.length} elements`);for(const e of o.nodes){if(e.parent&&e.parent.children){const t=e.parent.children,n=t.indexOf(e);if(-1!==n){for(const e of this.nodes){if(e.parent&&e.parent.children){const t=e.parent.children.indexOf(e);-1!==t&&e.parent.children.splice(t,1)}const t=dt().allRootNodes.indexOf(e);-1!==t&&dt().allRootNodes.splice(t,1)}const o=this.nodes.map(e=>this._cloneNode(e));t.splice(n,0,...o);for(const t of o)t.parent=e.parent;this.debugLog(`JQ.insertBefore: Cloned ${o.length} elements before target <${e.tagName}>`)}}if(e._originalElement&&e._originalElement.parentNode)for(const t of this.nodes)if(t._originalElement)e._originalElement.parentNode.insertBefore(t._originalElement,e._originalElement);else if("element"===t.type){const n=document.createElement(t.tagName);if(t.attributes)for(const[e,o]of Object.entries(t.attributes))n.setAttribute(e,o);if(t.properties)for(const[e,o]of Object.entries(t.properties))n[e]=o;e._originalElement.parentNode.insertBefore(n,e._originalElement),t._originalElement=n}else if("text"===t.type){const n=document.createTextNode(t.value||"");e._originalElement.parentNode.insertBefore(n,e._originalElement),t._originalElement=n}}if(r){for(const e of this.nodes)if(e.parent&&e.parent.children){const t=e.parent.children.indexOf(e);-1!==t&&e.parent.children.splice(t,1)}const e=dt().allRootNodes;for(const t of this.nodes){const n=e.indexOf(t);-1!==n&&e.splice(n,1)}const t=this.nodes.map(e=>this._cloneNode(e));for(const n of o.nodes){const o=e.indexOf(n);if(-1!==o){e.splice(o,0,...t);break}}for(const e of t)e.parent=null;this.debugLog(`JQ.insertBefore: Cloned ${t.length} elements before ${o.nodes.length} targets at root level`)}return this}}(),t.prototype.after=De?Ge:(De=1,Ge=function(...e){this.debugLog(`JQ.after: Inserting content after ${this.nodes.length} elements`);const t=[],n=[];for(const o of e)o&&"object"==typeof o&&(o.constructor&&"JQ"===o.constructor.name||o.nodes&&Array.isArray(o.nodes))?n.push(o):t.push(...this._normalizeContent(o));this.debugLog(`JQ.after: Normalized ${t.length} nodes to insert, ${n.length} JQ objects to clone`);for(const e of this.nodes){if(e.parent&&e.parent.children){const o=e.parent.children,r=o.indexOf(e);if(-1!==r){if(t.length>0){const n=t.map(e=>this._cloneNode(e));o.splice(r+1,0,...n);for(const t of n)t.parent=e.parent;this.debugLog(`JQ.after: Inserted ${n.length} cloned nodes after element <${e.tagName}>`)}let s=r+1;for(const t of n){const n=[];for(const e of t.nodes){const t=this._cloneNode(e);if(n.push(t),e.parent&&e.parent.children){const t=e.parent.children.indexOf(e);-1!==t&&e.parent.children.splice(t,1)}const o=dt().allRootNodes.indexOf(e);-1!==o&&dt().allRootNodes.splice(o,1)}o.splice(s,0,...n);for(const t of n)t.parent=e.parent;s+=n.length,this.debugLog(`JQ.after: Cloned and moved ${t.nodes.length} nodes after element <${e.tagName}>`)}}}if(e._originalElement&&e._originalElement.parentNode){for(const n of t)if(n._originalElement)e._originalElement.parentNode.insertBefore(n._originalElement,e._originalElement.nextSibling);else if("element"===n.type){const t=document.createElement(n.tagName);if(n.attributes)for(const[e,o]of Object.entries(n.attributes))t.setAttribute(e,o);if(n.properties)for(const[e,o]of Object.entries(n.properties))t[e]=o;e._originalElement.parentNode.insertBefore(t,e._originalElement.nextSibling),n._originalElement=t}else if("text"===n.type){const t=document.createTextNode(n.value||"");e._originalElement.parentNode.insertBefore(t,e._originalElement.nextSibling),n._originalElement=t}let o=e._originalElement.nextSibling;for(const t of n)for(const n of t.nodes)if(n._originalElement){const t=n._originalElement.cloneNode(!0);e._originalElement.parentNode.insertBefore(t,o),o=t.nextSibling}}}return this}),t.prototype.insertAfter=Me?Be:(Me=1,ct(),Be=function(e){let t;this.debugLog(`JQ.insertAfter: Inserting ${this.nodes.length} elements after target`);let n=!1;if(e instanceof this.constructor)t=e;else if("string"==typeof e){const{isCSSSelector:o,selectNodes:r}=ct();if(o(e)){const n=r(dt().allRootNodes,e);t=new this.constructor(n)}else t=new this.constructor(this._normalizeContent(e)),n=!0}else t=new this.constructor(this._normalizeContent(e)),n=!0;if(this.debugLog(`JQ.insertAfter: Target has ${t.nodes.length} elements`),n)for(const e of t.nodes)dt().allRootNodes.includes(e)||(dt().allRootNodes.push(e),this.debugLog(`JQ.insertAfter: Added dynamic target <${e.tagName}> to root nodes`));for(const e of t.nodes)if(e.parent&&e.parent.children){const t=e.parent.children,o=t.indexOf(e);if(-1!==o){for(const e of this.nodes){if(e.parent&&e.parent.children){const t=e.parent.children.indexOf(e);-1!==t&&e.parent.children.splice(t,1)}if(!n){const t=dt().allRootNodes.indexOf(e);-1!==t&&dt().allRootNodes.splice(t,1)}}const r=this.nodes.map(e=>this._cloneNode(e));t.splice(o+1,0,...r);for(const t of r)t.parent=e.parent;this.debugLog(`JQ.insertAfter: Cloned ${r.length} elements after target <${e.tagName}>`)}}else{const t=dt().allRootNodes,o=t.indexOf(e);if(-1!==o){for(const e of this.nodes){if(e.parent&&e.parent.children){const t=e.parent.children.indexOf(e);-1!==t&&e.parent.children.splice(t,1)}if(!n){const n=t.indexOf(e);-1!==n&&t.splice(n,1)}}const r=this.nodes.map(e=>this._cloneNode(e));t.splice(o+1,0,...r),this.debugLog(`JQ.insertAfter: Cloned ${r.length} root elements after target <${e.tagName}>`)}}return this}),t.prototype.wrap=ze?Ie:(ze=1,Ie=function(e){this.debugLog(`JQ.wrap: Wrapping ${this.nodes.length} elements`);const t=this._normalizeContent(e);this.debugLog(`JQ.wrap: Normalized ${t.length} wrapper nodes`);for(const e of this.nodes)if(e.parent&&e.parent.children){const n=e.parent.children,o=n.indexOf(e);if(-1!==o&&t.length>0){const r=this._cloneNode(t[0]);let s=r;for(;s.children&&s.children.length>0;){const e=s.children[s.children.length-1];if("element"!==e.type)break;s=e}const i=this._cloneNode(e);s.children?s.children.push(i):s.children=[i],i.parent=s,n[o]=r,r.parent=e.parent,this.debugLog(`JQ.wrap: Wrapped element <${e.tagName}> with <${r.tagName}>`)}}return this}),t.prototype.wrapAll=He?We:(He=1,We=function(e){if(this.debugLog(`JQ.wrapAll: Wrapping all ${this.nodes.length} elements together`),0===this.nodes.length)return this;const t=this._normalizeContent(e);if(this.debugLog(`JQ.wrapAll: Normalized ${t.length} wrapper nodes`),0===t.length)return this;const n=this.nodes[0];if(!n.parent||!n.parent.children)return this;const o=n.parent,r=o.children;let s=r.indexOf(n);if(-1===s)return this;const i=this._cloneNode(t[0]);let l=i;for(;l.children&&l.children.length>0;){const e=l.children[l.children.length-1];if("element"!==e.type)break;l=e}const a=this.nodes.map(e=>this._cloneNode(e));l.children?l.children.push(...a):l.children=[...a];for(const e of a)e.parent=l;const c=this.nodes.map(e=>r.indexOf(e)).filter(e=>-1!==e).sort((e,t)=>t-e);for(const e of c)r.splice(e,1);return r.splice(s,0,i),i.parent=o,this.debugLog(`JQ.wrapAll: Wrapped ${a.length} elements with <${i.tagName}>`),this}),t.prototype.wrapInner=Pe?qe:(Pe=1,qe=function(e){this.debugLog(`JQ.wrapInner: Wrapping inner content of ${this.nodes.length} elements`);const t=this._normalizeContent(e);this.debugLog(`JQ.wrapInner: Normalized ${t.length} wrapper nodes`);for(const e of this.nodes)if("element"===e.type&&t.length>0){const n=this._cloneNode(t[0]);let o=n;for(;"element"===o.type&&o.children&&o.children.length>0;){let e=!1;for(let t=o.children.length-1;t>=0;t--)if("element"===o.children[t].type){o=o.children[t],e=!0;break}if(!e)break}if(e.children&&e.children.length>0){const t=e.children.map(e=>this._cloneNode(e));o.children||(o.children=[]),o.children.push(...t);for(const e of t)e.parent=o}e.children=[n],n.parent=e,this.debugLog(`JQ.wrapInner: Wrapped inner content of <${e.tagName}> with <${n.tagName}>`)}return this}),t.prototype._normalizeContent=function(){if(Ye)return Ze;Ye=1;const{parseHTML:e}=r();return dt().debugLog,Ze=function(t){if("string"==typeof t)return e(t);if(t&&"object"==typeof t){if("element"===t.type||"text"===t.type||"comment"===t.type)return[t];if(t.constructor&&"JQ"===t.constructor.name)return t.nodes.slice();if(t.nodes&&Array.isArray(t.nodes))return t.nodes.slice();if(Array.isArray(t)){const e=[];for(const n of t)e.push(...this._normalizeContent(n));return e}}return[]}}(),t.prototype._cloneNode=(Ve||(Ve=1,dt().debugLog,Ke=function e(t){if(!t)return t;const n={type:t.type,value:t.value,tagName:t.tagName,attributes:t.attributes?{...t.attributes}:void 0,children:t.children?t.children.map(t=>e(t)):void 0};if(n.children)for(const e of n.children)e.parent=n;return n}),Ke),t.prototype._hasDescendant=et?Xe:(et=1,dt().debugLog,Xe=function(e,t){if(e.children)for(const n of e.children)if(n===t||"element"===n.type&&this._hasDescendant(n,t))return!0;return!1}),t.prototype._findCommonRoots=nt?tt:(nt=1,dt().debugLog,tt=function(){const e=new Set;for(const t of this.nodes){let n=t;for(;n.parent||n.parentNode;)n=n.parent||n.parentNode;e.add(n)}return Array.from(e)}),at.exports=t,at.exports.debugLog=e,at.exports}function ft(){if(st)return rt;st=1;const{parseHTML:e}=r(),t=dt(),{isCSSSelector:n,selectNodes:o}=ct();function s(e){if(!e||"object"!=typeof e||!e.nodeType)throw new Error("Invalid DOM element provided");const t={type:1===e.nodeType?"element":"text",tagName:e.nodeName?e.nodeName.toUpperCase():void 0,attributes:{},properties:{},children:[],parent:null,_originalElement:e};if(e.attributes){const n=["checked","selected","disabled","readonly","required","multiple"];for(let o=0;o<e.attributes.length;o++){const r=e.attributes[o];let s;s=n.includes(r.name)?r.name:"string"==typeof r.value?r.value:String(r.value),t.attributes[r.name]=s}}if(1===e.nodeType){const n=["value","checked","selected","type","name","disabled","readonly"];for(const o of n)void 0!==e[o]&&(t.properties[o]=e[o]);for(const n in e)e.hasOwnProperty&&e.hasOwnProperty(n)&&"function"!=typeof e[n]&&"object"!=typeof e[n]&&!n.startsWith("on")&&"attributes"!==n&&"childNodes"!==n&&"children"!==n&&"parentNode"!==n&&"ownerDocument"!==n&&(t.properties[n]=e[n])}if(e.childNodes)for(let n=0;n<e.childNodes.length;n++){const o=e.childNodes[n];if(1===o.nodeType){const e=s(o);e.parent=t,t.children.push(e)}else if(3===o.nodeType){const e={type:"text",value:o.textContent||"",parent:t};t.children.push(e)}}return 3===e.nodeType&&(t.value=e.textContent||"",delete t.attributes,delete t.properties,delete t.children),t}function i(n,r){if("undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Called with input type: ${typeof n}, context provided: ${!!r}`),"string"==typeof n){const s=n.trim();if(s.startsWith("<")&&s.endsWith(">")){"undefined"==typeof jest&&console.log("[DEBUG] JQFactory: Detected HTML string, parsing...");let o=e(n);return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: HTML parsing returned ${o.length} root nodes`),o=o.filter(e=>!("text"===e.type&&""===e.value.trim())),"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: After filtering whitespace, ${o.length} root nodes`),new t(o)}if(n.startsWith(".")||n.startsWith("#")||n.includes(" ")||n.includes(">")||n.includes("+")||n.includes("~")||n.includes("[")||n.includes("]")||n.includes(":")){let e=r;if(void 0===r)e=t.allRootNodes;else{if(null===r)return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Null context provided for selector "${n}", returning empty result`),new t([]);if(!Array.isArray(e))return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Invalid context provided for selector "${n}", returning empty result`),new t([])}"undefined"==typeof jest&&(console.log(`[DEBUG] JQFactory: Detected CSS selector: "${n}"`),console.log(`[DEBUG] JQFactory: Searching within ${e.length} context nodes`));const s=o(e,n);return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Selector search returned ${s.length} nodes`),new t(s)}{let s=r;if(void 0===r)s=t.allRootNodes;else{if(null===r)return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Null context provided for selector (tag): "${n}", returning empty result`),new t([]);if(!Array.isArray(s))return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Invalid context provided for selector (tag): "${n}", returning empty result`),new t([])}if(s.length>0){"undefined"==typeof jest&&(console.log(`[DEBUG] JQFactory: Detected CSS selector (tag): "${n}"`),console.log(`[DEBUG] JQFactory: Searching within ${s.length} context nodes`));const e=o(s,n);return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Selector search returned ${e.length} nodes`),new t(e)}{"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: No root nodes, treating as HTML content: "${n}"`);const o=e(n);return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: HTML parsing returned ${o.length} root nodes`),new t(o)}}}if(Array.isArray(n))return"undefined"==typeof jest&&console.log(`[DEBUG] JQFactory: Received array of ${n.length} nodes`),new t(n);if(n&&"object"==typeof n&&n.type)return"undefined"==typeof jest&&console.log("[DEBUG] JQFactory: Received single node object"),new t([n]);if(n&&"object"==typeof n&&n.nodeType){"undefined"==typeof jest&&console.log("[DEBUG] JQFactory: Received DOM element, converting to internal format");const e=s(n);return new t([e])}return"undefined"==typeof jest&&console.log("[DEBUG] JQFactory: Invalid input, creating empty JQ instance"),new t([])}return i.clearRootNodesRegistry=t.clearRootNodesRegistry,i.fn=t.prototype,i.clearRootNodesRegistry=t.clearRootNodesRegistry,i.each=function(e,t){if(Array.isArray(e))for(let n=0;n<e.length&&!1!==t.call(e[n],n,e[n]);n++);else if(e&&"object"==typeof e)for(let n in e)if(e.hasOwnProperty(n)&&!1===t.call(e[n],n,e[n]))break;return e},i.fn.yourFunctionName=function(){return console.log("Called yourFunctionName on "+this.nodes.length+" elements."),this.nodes.forEach(e=>{e.attributes&&(e.attributes["data-custom-method-called"]="true")}),this},i.map=function(e,t){const n=[];if(Array.isArray(e))for(let o=0;o<e.length;o++){const r=t.call(e[o],e[o],o);null!=r&&(Array.isArray(r)?n.push(...r):n.push(r))}else if(e&&"object"==typeof e)for(let o in e)if(e.hasOwnProperty(o)){const r=t.call(e[o],e[o],o);null!=r&&(Array.isArray(r)?n.push(...r):n.push(r))}return n},rt=i}return o(lt?it:(lt=1,"undefined"==typeof process&&(n.process={env:{NODE_QUERY_DEBUG:"0",DEBUG:""}}),"undefined"==typeof jest&&(n.jest=void 0),it=ft()))});
+!(function (e, t) {
+    'object' == typeof exports && 'undefined' != typeof module
+        ? (module.exports = t())
+        : 'function' == typeof define && define.amd
+          ? define(t)
+          : ((e = 'undefined' != typeof globalThis ? globalThis : e || self).$ = t());
+})(this, function () {
+    'use strict';
+    var e,
+        t,
+        n =
+            'undefined' != typeof globalThis
+                ? globalThis
+                : 'undefined' != typeof window
+                  ? window
+                  : 'undefined' != typeof global
+                    ? global
+                    : 'undefined' != typeof self
+                      ? self
+                      : {};
+    function o(e) {
+        return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, 'default')
+            ? e.default
+            : e;
+    }
+    function r() {
+        if (t) return e;
+        return (
+            (t = 1),
+            (e = {
+                parseHTML: function (e) {
+                    if ('string' != typeof e) throw new TypeError('parseHTML expects a string');
+                    let t = 0;
+                    const n = e.length;
+                    function o() {
+                        for (; t < n && /\s/.test(e[t]); ) t++;
+                    }
+                    function r() {
+                        const r = {};
+                        for (
+                            ;
+                            t < n && (o(), '>' !== e[t] && ('/' !== e[t] || '>' !== e[t + 1]));
+
+                        ) {
+                            let s = '';
+                            for (; t < n && /[^\s=/>]/.test(e[t]); ) s += e[t++];
+                            if (!s) break;
+                            o();
+                            let i = s;
+                            if ('=' === e[t]) {
+                                (t++, o());
+                                const r = '"' === e[t] || "'" === e[t] ? e[t++] : null;
+                                let s = '';
+                                for (; t < n && (r ? e[t] !== r : !/\s|\/|>/.test(e[t])); )
+                                    s += e[t++];
+                                (r && e[t] === r && t++, (i = s));
+                            }
+                            r[s] = i;
+                        }
+                        return r;
+                    }
+                    const s = (function o() {
+                        const s = [];
+                        for (; t < n; )
+                            if ('<' === e[t])
+                                if ('\x3c!--' === e.substr(t, 4)) {
+                                    t += 4;
+                                    let o = '';
+                                    for (; t < n && '--\x3e' !== e.substr(t, 3); ) o += e[t++];
+                                    '--\x3e' === e.substr(t, 3) && (t += 3);
+                                    const r = { type: 'comment', value: o };
+                                    s.push(r);
+                                } else {
+                                    if ('/' === e[t + 1]) {
+                                        t += 2;
+                                        let o = '';
+                                        for (; t < n && '>' !== e[t]; ) o += e[t++];
+                                        return (t++, s);
+                                    }
+                                    {
+                                        t++;
+                                        let i = '';
+                                        for (; t < n && /[a-zA-Z0-9]/.test(e[t]); ) i += e[t++];
+                                        const l = r();
+                                        let a = !1;
+                                        '/' === e[t] && '>' === e[t + 1]
+                                            ? ((a = !0), (t += 2))
+                                            : '>' === e[t] && t++;
+                                        if (
+                                            ([
+                                                'area',
+                                                'base',
+                                                'br',
+                                                'col',
+                                                'embed',
+                                                'hr',
+                                                'img',
+                                                'input',
+                                                'link',
+                                                'meta',
+                                                'param',
+                                                'source',
+                                                'track',
+                                                'wbr',
+                                            ].includes(i) && (a = !0),
+                                            a)
+                                        ) {
+                                            const e = {
+                                                type: 'element',
+                                                tagName: i.toUpperCase(),
+                                                attributes: l,
+                                                children: [],
+                                            };
+                                            s.push(e);
+                                        } else {
+                                            const e = o(),
+                                                t = {
+                                                    type: 'element',
+                                                    tagName: i.toUpperCase(),
+                                                    attributes: l,
+                                                    children: e,
+                                                };
+                                            s.push(t);
+                                        }
+                                    }
+                                }
+                            else {
+                                let o = '';
+                                for (; t < n && '<' !== e[t]; ) o += e[t++];
+                                if (o) {
+                                    const e = { type: 'text', value: o };
+                                    s.push(e);
+                                }
+                            }
+                        return s;
+                    })();
+                    return s;
+                },
+            }),
+            e
+        );
+    }
+    var s,
+        i,
+        l,
+        a,
+        c,
+        u,
+        d,
+        f,
+        h,
+        p,
+        g,
+        m,
+        b,
+        y,
+        $,
+        N,
+        v,
+        L,
+        J,
+        Q,
+        E,
+        w,
+        _,
+        x,
+        S,
+        C,
+        A,
+        j,
+        O,
+        T,
+        R,
+        F,
+        k,
+        U,
+        G,
+        D,
+        B,
+        M,
+        I,
+        z,
+        W,
+        H,
+        q,
+        P,
+        Z,
+        Y,
+        K,
+        V,
+        X,
+        ee,
+        te,
+        ne,
+        oe,
+        re,
+        se,
+        ie,
+        le,
+        ae,
+        ce,
+        ue,
+        de,
+        fe,
+        he,
+        pe,
+        ge,
+        me,
+        be,
+        ye,
+        $e,
+        Ne,
+        ve,
+        Le,
+        Je,
+        Qe,
+        Ee,
+        we,
+        _e,
+        xe,
+        Se,
+        Ce,
+        Ae,
+        je,
+        Oe,
+        Te,
+        Re,
+        Fe,
+        ke,
+        Ue,
+        Ge,
+        De,
+        Be,
+        Me,
+        Ie,
+        ze,
+        We,
+        He,
+        qe,
+        Pe,
+        Ze,
+        Ye,
+        Ke,
+        Ve,
+        Xe,
+        et,
+        tt,
+        nt,
+        ot,
+        rt,
+        st,
+        it,
+        lt,
+        at = { exports: {} };
+    function ct() {
+        if (i) return s;
+        function e(e) {
+            if ('string' != typeof e) return null;
+            const n = e.trim();
+            if (n.startsWith('<') || !n) return null;
+            if ('#' === n || '.' === n) throw new SyntaxError(`Invalid selector: ${n}`);
+            const o = (function (e) {
+                const t = [];
+                let n = 0,
+                    o = !1;
+                function r() {
+                    const t = e[n++];
+                    return '\\' === t && n < e.length ? e[n++] : t;
+                }
+                function s(t) {
+                    let o = '';
+                    for (; n < e.length; ) {
+                        const s = e[n];
+                        if (t.test(s)) break;
+                        o += r();
+                    }
+                    return o;
+                }
+                for (; n < e.length; ) {
+                    const i = e[n];
+                    if (/\s/.test(i)) {
+                        for (; n < e.length && /\s/.test(e[n]); ) n++;
+                        o &&
+                            n < e.length &&
+                            !/[>,+~]/.test(e[n]) &&
+                            t.push({ type: 'combinator', value: ' ' });
+                        continue;
+                    }
+                    if ('>' === i || '+' === i || '~' === i || ' ' === i) {
+                        (t.push({ type: 'combinator', value: i }), n++, (o = !1));
+                        continue;
+                    }
+                    if (',' === i) {
+                        (t.push({ type: 'comma', value: ',' }), n++, (o = !1));
+                        continue;
+                    }
+                    if ('[' === i) {
+                        let s = '[';
+                        for (n++; n < e.length && ']' !== e[n]; ) s += r();
+                        if (n >= e.length)
+                            throw new SyntaxError(`Unclosed attribute selector: ${s}`);
+                        ((s += ']'), n++, t.push({ type: 'attribute', value: s }), (o = !0));
+                        continue;
+                    }
+                    if (':' === i) {
+                        let s = ':';
+                        for (n++; n < e.length && /[a-zA-Z0-9\-_]/.test(e[n]); ) s += r();
+                        if (n < e.length && '(' === e[n]) {
+                            ((s += '('), n++);
+                            let t = 1;
+                            for (; n < e.length && t > 0; ) {
+                                const e = r();
+                                ((s += e), '(' === e ? t++ : ')' === e && t--);
+                            }
+                        }
+                        (t.push({ type: 'pseudo', value: s }), (o = !0));
+                        continue;
+                    }
+                    if ('*' === i) {
+                        (t.push({ type: 'universal', value: '*' }), n++, (o = !0));
+                        continue;
+                    }
+                    if ('#' === i) {
+                        let e = '#';
+                        (n++,
+                            (e += s(/[\s\[\]{}().,>+#]/)),
+                            t.push({ type: 'id', value: e }),
+                            (o = !0));
+                        continue;
+                    }
+                    if ('.' === i) {
+                        let e = '.';
+                        (n++,
+                            (e += s(/[\s\[\]{}().,>:+#]/)),
+                            t.push({ type: 'class', value: e }),
+                            (o = !0));
+                        continue;
+                    }
+                    const l = s(/[\s\[\]{}().,>:+#.]/);
+                    l ? (t.push({ type: 'ident', value: l }), (o = !0)) : n++;
+                }
+                return t;
+            })(n);
+            if (0 === o.length) return null;
+            const r = [];
+            let s = [],
+                i = 0;
+            for (; i < o.length; )
+                ('comma' === o[i].type ? s.length > 0 && (r.push(t(s)), (s = [])) : s.push(o[i]),
+                    i++);
+            if ((s.length > 0 && r.push(t(s)), 0 === r.length)) return null;
+            const l = 1 === r.length ? r[0] : { type: 'compound', selectors: r },
+                a = (e) =>
+                    'compound' === e.type
+                        ? e.selectors.some(a)
+                        : null !== e.tagName ||
+                          (null !== e.id && '' !== e.id) ||
+                          (e.classes && e.classes.length > 0) ||
+                          (e.attributes && e.attributes.length > 0) ||
+                          (e.pseudos && e.pseudos.length > 0) ||
+                          !0 === e.universal;
+            return a(l) ? l : null;
+        }
+        function t(e) {
+            const t = [];
+            let o = 0;
+            for (; o < e.length && 'comma' !== e[o].type; ) {
+                const r = n(e, o);
+                (t.push(r.part),
+                    (o = r.nextIndex),
+                    o < e.length &&
+                        'combinator' === e[o].type &&
+                        (t.push({ type: 'combinator', combinator: e[o].value }), o++));
+            }
+            return 1 === t.length ? t[0] : { type: 'complex', parts: t };
+        }
+        function n(e, t) {
+            let n = t;
+            const s = { tagName: null, id: null, classes: [], attributes: [], pseudos: [] };
+            for (; n < e.length; ) {
+                const t = e[n];
+                if ('universal' === t.type) ((s.universal = !0), n++);
+                else if ('ident' === t.type) ((s.tagName = t.value), n++);
+                else if ('id' === t.type) {
+                    let e = t.value.substring(1);
+                    const o = e.indexOf(':');
+                    if (-1 !== o) {
+                        const t = (':' + e.substring(o + 1)).match(/^:([a-z-]+)(?:\((.+)\))?$/);
+                        if (t && c(t[1])) {
+                            e = e.substring(0, o);
+                            const n = t[1],
+                                r = t[2] || null;
+                            s.pseudos.push({ name: n, args: r });
+                        }
+                    }
+                    (e && (s.id = e), n++);
+                } else if ('class' === t.type) {
+                    const e = t.value.substring(1);
+                    (e && s.classes.push(e), n++);
+                } else if ('attribute' === t.type) (s.attributes.push(o(t.value)), n++);
+                else {
+                    if ('pseudo' !== t.type) {
+                        if ('comma' === t.type) break;
+                        break;
+                    }
+                    (s.pseudos.push(r(t.value)), n++);
+                }
+            }
+            return { part: s, nextIndex: n };
+        }
+        function o(e) {
+            const t = e.slice(1, -1),
+                n = t.match(/^([^=~|^$*]+)(?:([~|^$*]?=)(.+))?$/);
+            if (!n) return { name: t, operator: null, value: null };
+            const [, o, r, s] = n;
+            return {
+                name: o.trim(),
+                operator: r || null,
+                value: s ? s.replace(/^["']|["']$/g, '') : null,
+            };
+        }
+        function r(e) {
+            const t = e.match(/^:([a-z-]+)(?:\((.+)\))?$/);
+            if (!t) return { name: e.substring(1), args: null };
+            const [, n, o] = t;
+            return { name: n, args: o ? o.trim() : null };
+        }
+        function l(e, t, n = {}) {
+            if (!('element' === e.type || 1 === e.nodeType)) return !1;
+            if ('compound' === t.type) return t.selectors.some((t) => l(e, t, n));
+            const o = (e.tagName && e.tagName.toLowerCase()) || '',
+                r = (t.tagName || '').toLowerCase();
+            if (!t.universal && r && o !== r) return !1;
+            if ((t.tagName, null !== t.id)) {
+                if ('' === t.id) return !1;
+                const n = (e.attributes && e.attributes.id) || e.id;
+                if (!n || n !== t.id) return !1;
+            }
+            if (t.classes.length > 0) {
+                if (t.classes.some((e) => '' === e)) return !1;
+                const n = (e.attributes && e.attributes.class) || e.className;
+                if (!n) return !1;
+                const o = ('string' == typeof n ? n : String(n)).toLowerCase().split(/\s+/);
+                for (const e of t.classes) if (!o.includes(e.toLowerCase())) return !1;
+            }
+            for (const n of t.attributes) if (!a(e, n)) return !1;
+            for (const o of t.pseudos) if (!u(e, o, n)) return !1;
+            return !0;
+        }
+        function a(e, t) {
+            const n = e.attributes && e.attributes[t.name];
+            if (null === t.operator) return void 0 !== n;
+            if (void 0 === n) return !1;
+            const o = String(n);
+            switch (t.operator) {
+                case '=':
+                    return o === t.value;
+                case '~=':
+                    return o.split(/\s+/).includes(t.value);
+                case '|=':
+                    return o === t.value || o.startsWith(t.value + '-');
+                case '^=':
+                    return o.startsWith(t.value);
+                case '$=':
+                    return o.endsWith(t.value);
+                case '*=':
+                    return o.includes(t.value);
+                default:
+                    return !1;
+            }
+        }
+        function c(e) {
+            return [
+                'first-child',
+                'first',
+                'last-child',
+                'last',
+                'only-child',
+                'nth-child',
+                'nth-of-type',
+                'first-of-type',
+                'last-of-type',
+                'only-of-type',
+                'nth-last-child',
+                'nth-last-of-type',
+                'not',
+                'empty',
+                'root',
+            ].includes(e);
+        }
+        function u(t, n, o) {
+            const r = o.siblings || [],
+                s = r.indexOf(t);
+            switch (n.name) {
+                case 'first-child':
+                    return 0 === s;
+                case 'first':
+                case 'last':
+                default:
+                    return !1;
+                case 'last-child':
+                    return s === r.length - 1;
+                case 'only-child':
+                    return 1 === r.length;
+                case 'nth-child':
+                    return d(n.args, s + 1);
+                case 'nth-of-type':
+                    const i = r.slice(0, s + 1).filter((e) => e.tagName === t.tagName).length;
+                    return d(n.args, i);
+                case 'first-of-type':
+                    return s === r.findIndex((e) => e.tagName === t.tagName);
+                case 'last-of-type':
+                    const a = r
+                        .slice()
+                        .reverse()
+                        .findIndex((e) => e.tagName === t.tagName);
+                    return s === r.length - 1 - a;
+                case 'only-of-type':
+                    return 1 === r.filter((e) => e.tagName === t.tagName).length;
+                case 'nth-last-child':
+                    return d(n.args, r.length - s);
+                case 'nth-last-of-type':
+                    const c = r.filter((e) => e.tagName === t.tagName),
+                        u = c.length - c.indexOf(t);
+                    return d(n.args, u);
+                case 'not':
+                    const f = e(n.args);
+                    return !f || !l(t, f, o);
+                case 'empty':
+                    return (
+                        !t.children ||
+                        0 === t.children.length ||
+                        t.children.every((e) => 'text' === e.type && !e.value.trim())
+                    );
+                case 'root':
+                    return o.isRoot || !1;
+            }
+        }
+        function d(e, t) {
+            if (!e) return !1;
+            if ('even' === (e = e.trim().toLowerCase())) return t % 2 == 0;
+            if ('odd' === e) return t % 2 == 1;
+            const n = e.match(/^(\d*)n(?:([+-]\d+))?$/);
+            if (!n) {
+                const n = parseInt(e);
+                return !isNaN(n) && t === n;
+            }
+            const [, o = '1', r = '0'] = n,
+                s = parseInt(o) || 1,
+                i = parseInt(r) || 0;
+            return (t - i) % s === 0 && (t - i) / s >= 0;
+        }
+        function f(e, t) {
+            return 'complex' === t.type
+                ? (function (e, t) {
+                      let n = [];
+                      const o = t[0];
+                      if ('combinator' === o.type) return [];
+                      n = g(e, o);
+                      for (let r = 1; r < t.length; r += 2) {
+                          const s = t[r],
+                              i = t[r + 1];
+                          if ('combinator' !== s.type) return [];
+                          if (!i) return [];
+                          n = h(n, s.combinator, o, i, e);
+                      }
+                      return n;
+                  })(e, t.parts)
+                : g(e, t);
+        }
+        function h(e, t, n, o, r) {
+            const s = [];
+            switch (t) {
+                case ' ':
+                    for (const t of e) {
+                        const e = g(t.children || [], o);
+                        s.push(...e);
+                    }
+                    break;
+                case '>':
+                    for (const t of e)
+                        if (t.children)
+                            for (const e of t.children)
+                                'element' === e.type && m(e, o, r) && s.push(e);
+                    break;
+                case '+':
+                    for (const t of e) {
+                        const e = p(t),
+                            n = e.indexOf(t);
+                        if (n >= 0 && n < e.length - 1) {
+                            const t = e[n + 1];
+                            'element' === t.type && m(t, o, r) && s.push(t);
+                        }
+                    }
+                    break;
+                case '~':
+                    for (const t of e) {
+                        const e = p(t),
+                            n = e.indexOf(t);
+                        if (n >= 0)
+                            for (let t = n + 1; t < e.length; t++) {
+                                const n = e[t];
+                                'element' === n.type && m(n, o, r) && s.push(n);
+                            }
+                    }
+            }
+            return [...new Set(s)];
+        }
+        function p(e) {
+            return e.parent && e.parent.children
+                ? e.parent.children.filter((e) => 'element' === e.type)
+                : [e];
+        }
+        function g(e, t) {
+            const n = [];
+            return (
+                (function o(r) {
+                    for (const s of r)
+                        'element' === s.type &&
+                            (m(s, t, e) && n.push(s), s.children && o(s.children));
+                })(e),
+                n
+            );
+        }
+        function m(e, t, n) {
+            const o = {};
+            o.isRoot = n.includes(e);
+            const r = e.parent || e.parentNode;
+            return (
+                r
+                    ? r.children
+                        ? (o.siblings = r.children.filter((e) => 'element' === e.type))
+                        : r.childNodes
+                          ? (o.siblings = Array.from(r.childNodes).filter((e) => 1 === e.nodeType))
+                          : (o.siblings = [])
+                    : (o.siblings = []),
+                l(e, t, o)
+            );
+        }
+        function b(e, t = null) {
+            for (const n of e)
+                (void 0 === n.parent && (n.parent = t), n.children && b(n.children, n));
+        }
+        return (
+            (i = 1),
+            (s = {
+                parseSelector: e,
+                nodeMatchesSelector: l,
+                selectNodes: function (t, n) {
+                    return (
+                        b(t),
+                        (function (t, n) {
+                            let o;
+                            try {
+                                o = e(n);
+                            } catch (e) {
+                                if (e instanceof SyntaxError) throw e;
+                                return [];
+                            }
+                            if (!o) return [];
+                            if ('compound' === o.type) {
+                                const e = new Set();
+                                for (const n of o.selectors) f(t, n).forEach((t) => e.add(t));
+                                return Array.from(e);
+                            }
+                            return f(t, o);
+                        })(t, n)
+                    );
+                },
+                isCSSSelector: function (e) {
+                    const t = e.trim();
+                    return !!t && !t.startsWith('<');
+                },
+                setupParentReferences: b,
+            })
+        );
+    }
+    function ut() {
+        if (x) return _;
+        return (
+            (x = 1),
+            (_ = {
+                getTextContent: function e(t) {
+                    if ('text' === t.type) return t.value;
+                    if ('element' === t.type) {
+                        if (t._originalElement) return t._originalElement.textContent || '';
+                        let n = '';
+                        for (const o of t.children) {
+                            n += e(o);
+                        }
+                        return n;
+                    }
+                    return '';
+                },
+                nodeToHTML: function e(t) {
+                    if ('text' === t.type) return t.value;
+                    if ('element' === t.type) {
+                        const n = Object.entries(t.attributes || {})
+                                .map(([e, t]) => (!0 === t ? e : `${e}="${t}"`))
+                                .join(' '),
+                            o = t.tagName ? t.tagName.toLowerCase() : '',
+                            r = n ? `<${o} ${n}>` : `<${o}>`;
+                        if (0 === t.children.length) {
+                            return [
+                                'area',
+                                'base',
+                                'br',
+                                'col',
+                                'embed',
+                                'hr',
+                                'img',
+                                'input',
+                                'link',
+                                'meta',
+                                'source',
+                                'track',
+                                'wbr',
+                            ].includes(o)
+                                ? r.replace('>', '>')
+                                : r.replace('>', '/>');
+                        }
+                        return `${r}${t.children.map(e).join('')}</${o}>`;
+                    }
+                    return '';
+                },
+                unescapeHtml: function (e) {
+                    return e
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&amp;/g, '&')
+                        .replace(/&quot;/g, '"')
+                        .replace(/&#39;/g, "'")
+                        .replace(/&apos;/g, "'");
+                },
+            }),
+            _
+        );
+    }
+    function dt() {
+        if (ot) return at.exports;
+        ot = 1;
+        const e = (...e) => {
+            ('1' === process.env.JQNODE_DEBUG ||
+                'jqnode' === process.env.DEBUG ||
+                (process.env.DEBUG && process.env.DEBUG.includes('jqnode'))) &&
+                console.log('[DEBUG]', ...e);
+        };
+        class t {
+            static allRootNodes = [];
+            static className = 'JQ';
+            static clearRootNodesRegistry() {
+                t.allRootNodes = [];
+            }
+            constructor(n) {
+                this.nodes = n || [];
+                const { setupParentReferences: o } = ct();
+                return (
+                    this.nodes.some(
+                        (e) =>
+                            e &&
+                            'object' == typeof e &&
+                            ('element' === e.type || 'text' === e.type),
+                    ) &&
+                        (o(this.nodes),
+                        this.nodes.length > 0 &&
+                            this.nodes.forEach((e) => {
+                                t.allRootNodes.includes(e) || t.allRootNodes.push(e);
+                            })),
+                    'undefined' == typeof jest &&
+                        e(`JQ constructor: Created JQ instance with ${this.nodes.length} nodes`),
+                    new Proxy(this, {
+                        get(e, t) {
+                            if ('string' == typeof t && /^\d+$/.test(t)) {
+                                const n = parseInt(t, 10);
+                                return e.nodes[n];
+                            }
+                            return 'length' === t ? e.nodes.length : e[t];
+                        },
+                        set: (e, t, n) =>
+                            ('string' != typeof t || !/^\d+$/.test(t)) && ((e[t] = n), !0),
+                    })
+                );
+            }
+            [Symbol.iterator]() {
+                return this.nodes[Symbol.iterator]();
+            }
+            get [Symbol.toStringTag]() {
+                return 'JQ';
+            }
+        }
+        return (
+            (t.className = 'JQ'),
+            (t.prototype.debugLog = e),
+            (t.prototype.find = (function () {
+                if (a) return l;
+                a = 1;
+                const { selectNodes: e } = ct();
+                return (
+                    (l = function (t) {
+                        this.debugLog(
+                            `JQ.find: Searching for selector "${t}" within ${this.nodes.length} nodes`,
+                        );
+                        const n = new this.constructor(e(this.nodes, t));
+                        return (
+                            (n._prevObject = this),
+                            this.debugLog(`JQ.find: Found ${n.nodes.length} matching elements`),
+                            n
+                        );
+                    }),
+                    l
+                );
+            })()),
+            (t.prototype.attr = u
+                ? c
+                : ((u = 1),
+                  (c = function (e, t) {
+                      const n = [
+                          'checked',
+                          'selected',
+                          'disabled',
+                          'readonly',
+                          'required',
+                          'multiple',
+                      ];
+                      if (void 0 === t) {
+                          const t = this.nodes[0];
+                          if (!t)
+                              return void this.debugLog(
+                                  `JQ.attr: No elements found for getting attribute "${e}"`,
+                              );
+                          if (t._originalElement) {
+                              const o = t._originalElement.getAttribute(e);
+                              if (
+                                  (this.debugLog(
+                                      `JQ.attr: Getting attribute "${e}" from _originalElement, value: ${o}`,
+                                  ),
+                                  null === o)
+                              )
+                                  return;
+                              return n.includes(e) ? e : o;
+                          }
+                          if (1 === t.nodeType) {
+                              const o = t.getAttribute(e);
+                              if (
+                                  (this.debugLog(
+                                      `JQ.attr: Getting attribute "${e}" from DOM element, value: ${o}`,
+                                  ),
+                                  null === o)
+                              )
+                                  return;
+                              return n.includes(e) ? e : o;
+                          }
+                          const o = t.attributes ? t.attributes[e] : void 0;
+                          if (n.includes(e))
+                              return (
+                                  this.debugLog(
+                                      `JQ.attr: Getting boolean attribute "${e}" from internal node, value: ${o}`,
+                                  ),
+                                  o
+                              );
+                          const r = o;
+                          return (
+                              this.debugLog(
+                                  `JQ.attr: Getting attribute "${e}" from internal node, value: ${r}`,
+                              ),
+                              r
+                          );
+                      }
+                      return (
+                          this.debugLog(
+                              `JQ.attr: Setting attribute "${e}" = "${t}" on ${this.nodes.length} elements`,
+                          ),
+                          this.nodes.forEach((o) => {
+                              o &&
+                                  (1 !== o.nodeType
+                                      ? o.attributes &&
+                                        (n.includes(e)
+                                            ? ((o.attributes[e] = !0 === t ? e : t),
+                                              o._originalElement &&
+                                                  (!0 === t
+                                                      ? o._originalElement.setAttribute(e, e)
+                                                      : !1 === t || null == t
+                                                        ? o._originalElement.removeAttribute(e)
+                                                        : o._originalElement.setAttribute(e, t)))
+                                            : ((o.attributes[e] = t),
+                                              o._originalElement &&
+                                                  o._originalElement.setAttribute(e, t)))
+                                      : n.includes(e)
+                                        ? !0 === t
+                                            ? o.setAttribute(e, e)
+                                            : !1 === t || null == t
+                                              ? o.removeAttribute(e)
+                                              : o.setAttribute(e, t)
+                                        : null == t
+                                          ? o.removeAttribute(e)
+                                          : o.setAttribute(e, t));
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.prop = f
+                ? d
+                : ((f = 1),
+                  (d = function (e, t) {
+                      if (void 0 === t) {
+                          const t = this.nodes[0];
+                          if (!t) return;
+                          t.properties || (t.properties = {});
+                          const n = t.properties[e];
+                          return 'value' === e && void 0 !== n
+                              ? String(n)
+                              : (this.debugLog(
+                                    `JQ.prop: Getting property "${e}" from first element, value: ${n}`,
+                                ),
+                                n);
+                      }
+                      return (
+                          this.debugLog(
+                              `JQ.prop: Setting property "${e}" = "${t}" on ${this.nodes.length} elements`,
+                          ),
+                          this.nodes.forEach((n) => {
+                              n &&
+                                  (n.properties || (n.properties = {}),
+                                  (n.properties[e] = t),
+                                  n._originalElement &&
+                                      void 0 !== n._originalElement[e] &&
+                                      (n._originalElement[e] = t));
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.removeAttr = p
+                ? h
+                : ((p = 1),
+                  (h = function (e) {
+                      return (
+                          this.debugLog(
+                              `JQ.removeAttr: Removing attribute "${e}" from ${this.nodes.length} elements`,
+                          ),
+                          this.nodes.forEach((t) => {
+                              t &&
+                                  t.attributes &&
+                                  (delete t.attributes[e],
+                                  t._originalElement && t._originalElement.removeAttribute(e));
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.removeProp = m
+                ? g
+                : ((m = 1),
+                  (g = function (e) {
+                      return (
+                          this.debugLog(
+                              `JQ.removeProp: Removing property "${e}" from ${this.nodes.length} elements`,
+                          ),
+                          [
+                              'checked',
+                              'selected',
+                              'disabled',
+                              'readonly',
+                              'required',
+                              'type',
+                              'name',
+                          ].includes(e)
+                              ? (this.debugLog(
+                                    `JQ.removeProp: Not removing standard HTML property "${e}"`,
+                                ),
+                                this)
+                              : 'value' === e
+                                ? (this.nodes.forEach((t) => {
+                                      (t && t._originalElement && 'value' === e) ||
+                                          (t && t.properties);
+                                  }),
+                                  this)
+                                : (this.nodes.forEach((t) => {
+                                      t &&
+                                          t.properties &&
+                                          (delete t.properties[e],
+                                          t._originalElement && t._originalElement[e]);
+                                  }),
+                                  this)
+                      );
+                  }))),
+            (t.prototype.val = y
+                ? b
+                : ((y = 1),
+                  (b = function (e) {
+                      if (void 0 === e) {
+                          const e = this.nodes[0];
+                          if (!e) return;
+                          if (e.tagName && 'input' === e.tagName.toLowerCase()) {
+                              if (e.properties && void 0 !== e.properties.value) {
+                                  const t = e.properties.value;
+                                  return (
+                                      this.debugLog(
+                                          `JQ.val: Getting input value from properties: ${t}`,
+                                      ),
+                                      t
+                                  );
+                              }
+                              if (e.attributes && void 0 !== e.attributes.value) {
+                                  const t = e.attributes.value;
+                                  return (
+                                      this.debugLog(
+                                          `JQ.val: Getting input value from attributes: ${t}`,
+                                      ),
+                                      t
+                                  );
+                              }
+                          } else if (e.tagName && 'select' === e.tagName.toLowerCase()) {
+                              if (e.children) {
+                                  const t = [];
+                                  for (const n of e.children)
+                                      'element' === n.type &&
+                                          n.tagName &&
+                                          'option' === n.tagName.toLowerCase() &&
+                                          n.attributes &&
+                                          n.attributes.selected &&
+                                          t.push(n.attributes.value || n.children[0]?.value || '');
+                                  if (e.attributes && e.attributes.multiple)
+                                      return (
+                                          this.debugLog(
+                                              `JQ.val: Getting multiple select values: ${t}`,
+                                          ),
+                                          t
+                                      );
+                                  {
+                                      if (e.properties && void 0 !== e.properties.value) {
+                                          const t = e.properties.value;
+                                          return (
+                                              this.debugLog(
+                                                  `JQ.val: Getting single select value from properties: ${t}`,
+                                              ),
+                                              t
+                                          );
+                                      }
+                                      const n = t.length > 0 ? t[0] : '';
+                                      return (
+                                          this.debugLog(
+                                              `JQ.val: Getting single select value: ${n}`,
+                                          ),
+                                          n
+                                      );
+                                  }
+                              }
+                          } else if (e.tagName && 'textarea' === e.tagName.toLowerCase()) {
+                              if (e.properties && void 0 !== e.properties.value) {
+                                  const t = e.properties.value;
+                                  return (
+                                      this.debugLog(
+                                          `JQ.val: Getting textarea value from properties: ${t}`,
+                                      ),
+                                      t
+                                  );
+                              }
+                              if (e.children && e.children.length > 0) {
+                                  const t = e.children
+                                      .filter((e) => 'text' === e.type)
+                                      .map((e) => e.value)
+                                      .join('');
+                                  return (
+                                      this.debugLog(
+                                          `JQ.val: Getting textarea value from text content: ${t}`,
+                                      ),
+                                      t
+                                  );
+                              }
+                          }
+                          return (
+                              this.debugLog(
+                                  'JQ.val: No value found for element, returning empty string for non-form elements',
+                              ),
+                              ''
+                          );
+                      }
+                      return 'function' == typeof e
+                          ? (this.debugLog(
+                                `JQ.val: Setting value using function on ${this.nodes.length} elements`,
+                            ),
+                            this.nodes.forEach((t, n) => {
+                                if (t) {
+                                    let o;
+                                    o =
+                                        (t.tagName && 'input' === t.tagName.toLowerCase()) ||
+                                        (t.tagName && 'select' === t.tagName.toLowerCase())
+                                            ? t.properties && void 0 !== t.properties.value
+                                                ? t.properties.value
+                                                : t.attributes && void 0 !== t.attributes.value
+                                                  ? t.attributes.value
+                                                  : void 0
+                                            : t.tagName && 'textarea' === t.tagName.toLowerCase()
+                                              ? t.properties && void 0 !== t.properties.value
+                                                  ? t.properties.value
+                                                  : t.children && t.children.length > 0
+                                                    ? t.children
+                                                          .filter((e) => 'text' === e.type)
+                                                          .map((e) => e.value)
+                                                          .join('')
+                                                    : void 0
+                                              : void 0;
+                                    const r = e.call(t, n, o),
+                                        s = null == r ? '' : String(r);
+                                    (this.debugLog(
+                                        `JQ.val: Function returned "${s}" for element ${n}`,
+                                    ),
+                                        (t.tagName && 'input' === t.tagName.toLowerCase()) ||
+                                        (t.tagName && 'select' === t.tagName.toLowerCase())
+                                            ? (t.properties || (t.properties = {}),
+                                              (t.properties.value = s))
+                                            : t.tagName &&
+                                              'textarea' === t.tagName.toLowerCase() &&
+                                              (t.properties || (t.properties = {}),
+                                              (t.properties.value = s),
+                                              (t.children = [{ type: 'text', value: s }])));
+                                }
+                            }),
+                            this)
+                          : (this.debugLog(
+                                `JQ.val: Setting value on ${this.nodes.length} elements`,
+                            ),
+                            this.nodes.forEach((t) => {
+                                if (t)
+                                    if (t.tagName && 'input' === t.tagName.toLowerCase()) {
+                                        const n = null == e ? '' : String(e);
+                                        (t.properties || (t.properties = {}),
+                                            (t.properties.value = n),
+                                            t._originalElement && (t._originalElement.value = n));
+                                    } else if (t.tagName && 'select' === t.tagName.toLowerCase())
+                                        if (
+                                            t.attributes &&
+                                            t.attributes.multiple &&
+                                            Array.isArray(e)
+                                        )
+                                            t.children &&
+                                                t.children.forEach((t) => {
+                                                    if (
+                                                        'element' === t.type &&
+                                                        t.tagName &&
+                                                        'option' === t.tagName.toLowerCase()
+                                                    ) {
+                                                        const n =
+                                                                t.attributes && t.attributes.value,
+                                                            o = e.includes(n);
+                                                        (t.attributes || (t.attributes = {}),
+                                                            (t.attributes.selected = o));
+                                                    }
+                                                });
+                                        else {
+                                            const n = null == e ? '' : String(e);
+                                            (t.properties || (t.properties = {}),
+                                                (t.properties.value = n),
+                                                t._originalElement &&
+                                                    (t._originalElement.value = n),
+                                                t.children &&
+                                                    t.children.forEach((e) => {
+                                                        if (
+                                                            'element' === e.type &&
+                                                            e.tagName &&
+                                                            'option' === e.tagName.toLowerCase()
+                                                        ) {
+                                                            const t =
+                                                                (e.attributes &&
+                                                                    e.attributes.value) === n;
+                                                            (e.attributes || (e.attributes = {}),
+                                                                (e.attributes.selected = t));
+                                                        }
+                                                    }));
+                                        }
+                                    else if (t.tagName && 'textarea' === t.tagName.toLowerCase()) {
+                                        const n = null == e ? '' : String(e);
+                                        (t.properties || (t.properties = {}),
+                                            (t.properties.value = n),
+                                            (t.children = [{ type: 'text', value: n }]),
+                                            t._originalElement && (t._originalElement.value = n));
+                                    }
+                            }),
+                            this);
+                  }))),
+            (t.prototype.addClass = N
+                ? $
+                : ((N = 1),
+                  ($ = function (e) {
+                      if (
+                          (this.debugLog(
+                              `JQ.addClass: Adding classes "${e}" to ${this.nodes.length} elements`,
+                          ),
+                          'function' == typeof e)
+                      )
+                          return (
+                              this.nodes.forEach((n, o) => {
+                                  if (!n || !n.attributes) return;
+                                  const r = n.attributes.class || '',
+                                      s = e.call(n, o, r);
+                                  'string' == typeof s && t(n, s);
+                              }),
+                              this
+                          );
+                      function t(e, t) {
+                          if (!e || !e.attributes) return;
+                          e.attributes.class || (e.attributes.class = '');
+                          let n = e.attributes.class.split(/\s+/).filter((e) => e.length > 0);
+                          (t
+                              .split(/\s+/)
+                              .filter((e) => e.length > 0)
+                              .forEach((e) => {
+                                  n.includes(e) || n.push(e);
+                              }),
+                              (e.attributes.class = n.join(' ')),
+                              e._originalElement &&
+                                  (e._originalElement.className = e.attributes.class));
+                      }
+                      return (
+                          this.nodes.forEach((n) => {
+                              t(n, e);
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.removeClass = L
+                ? v
+                : ((L = 1),
+                  (v = function (e) {
+                      if (
+                          (this.debugLog(
+                              `JQ.removeClass: Removing classes "${e}" from ${this.nodes.length} elements`,
+                          ),
+                          'function' == typeof e)
+                      )
+                          return (
+                              this.nodes.forEach((n, o) => {
+                                  if (!n || !n.attributes) return;
+                                  n._originalElement &&
+                                      (n.attributes.class = n._originalElement.className || '');
+                                  const r = n.attributes.class || '',
+                                      s = e.call(n, o, r);
+                                  'string' == typeof s && t(n, s, !0);
+                              }),
+                              this
+                          );
+                      function t(e, t, n = !0) {
+                          if (!e || !e.attributes) return;
+                          e.attributes.class || (e.attributes.class = '');
+                          let o = e.attributes.class.split(/\s+/).filter((e) => e.length > 0);
+                          (null == t
+                              ? (o = [])
+                              : t
+                                    .split(/\s+/)
+                                    .filter((e) => e.length > 0)
+                                    .forEach((e) => {
+                                        const t = o.indexOf(e);
+                                        -1 !== t && o.splice(t, 1);
+                                    }),
+                              (e.attributes.class = o.join(' ')),
+                              n &&
+                                  e._originalElement &&
+                                  (e._originalElement.className = e.attributes.class));
+                      }
+                      return (
+                          this.nodes.forEach((n) => {
+                              t(n, e, !0);
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.toggleClass = Q
+                ? J
+                : ((Q = 1),
+                  (J = function (e, t) {
+                      return (
+                          this.debugLog(
+                              `JQ.toggleClass: Toggling classes "${e}" with state ${t} on ${this.nodes.length} elements`,
+                          ),
+                          this.nodes.forEach((n) => {
+                              if (!n || !n.attributes) return;
+                              const o = n.attributes.class || '';
+                              n.attributes.class || (n.attributes.class = '');
+                              let r = n.attributes.class.split(/\s+/).filter((e) => e.length > 0);
+                              if ('function' == typeof e) {
+                                  const t = Array.prototype.indexOf.call(this.nodes, n),
+                                      r = e.call(n, t, o);
+                                  if ('string' != typeof r) return;
+                                  e = r;
+                              }
+                              (e
+                                  .split(/\s+/)
+                                  .filter((e) => e.length > 0)
+                                  .forEach((e) => {
+                                      const n = r.indexOf(e);
+                                      !0 === t
+                                          ? -1 === n && r.push(e)
+                                          : !1 === t
+                                            ? -1 !== n && r.splice(n, 1)
+                                            : -1 === n
+                                              ? r.push(e)
+                                              : r.splice(n, 1);
+                                  }),
+                                  (n.attributes.class = r.join(' ')),
+                                  n._originalElement &&
+                                      (n._originalElement.className = n.attributes.class));
+                          }),
+                          this
+                      );
+                  }))),
+            (t.prototype.hasClass = w
+                ? E
+                : ((w = 1),
+                  (E = function (e) {
+                      if (
+                          (this.debugLog(`JQ.hasClass: Checking if first element has class "${e}"`),
+                          0 === this.nodes.length)
+                      )
+                          return (this.debugLog('JQ.hasClass: No elements to check'), !1);
+                      const t = this.nodes[0];
+                      if (t._originalElement) {
+                          const n = (t._originalElement.className || '')
+                                  .split(/\s+/)
+                                  .filter((e) => e.length > 0),
+                              o = n.includes(e);
+                          return (
+                              this.debugLog(
+                                  `JQ.hasClass: DOM element classes: [${n.join(', ')}], has "${e}": ${o}`,
+                              ),
+                              o
+                          );
+                      }
+                      if (!t.attributes || !t.attributes.class)
+                          return (this.debugLog('JQ.hasClass: Element has no class attribute'), !1);
+                      const n = t.attributes.class.split(/\s+/),
+                          o = n.includes(e);
+                      return (
+                          this.debugLog(
+                              `JQ.hasClass: Internal attributes class: "${t.attributes.class}", classes: [${n.join(', ')}], has "${e}": ${o}`,
+                          ),
+                          this.debugLog(
+                              `JQ.hasClass: Element classes: [${n.join(', ')}], has "${e}": ${o}`,
+                          ),
+                          o
+                      );
+                  }))),
+            (t.prototype.text = (function () {
+                if (C) return S;
+                C = 1;
+                const { getTextContent: e, unescapeHtml: t } = ut();
+                return (S = function (n) {
+                    if (void 0 === n) {
+                        const n = this.nodes.filter(
+                            (e) => 'element' === e.type || 1 === e.nodeType,
+                        );
+                        if (n.some((e) => e._detached)) return '';
+                        if (0 === n.length) return '';
+                        const o = n
+                                .map((t) => (1 === t.nodeType ? t.textContent || '' : e(t)))
+                                .join(''),
+                            r = t(o);
+                        return (
+                            this.debugLog(
+                                `JQ.text: Getting text content from ${n.length} element nodes, total length: ${r.length}`,
+                            ),
+                            r
+                        );
+                    }
+                    return (
+                        this.debugLog(
+                            `JQ.text: Setting text content "${n}" on ${this.nodes.length} elements`,
+                        ),
+                        this.nodes.forEach((e) => {
+                            1 === e.nodeType
+                                ? (e.textContent = n)
+                                : (e.children = [{ type: 'text', value: n }]);
+                        }),
+                        this
+                    );
+                });
+            })()),
+            (t.prototype.html = (function () {
+                if (j) return A;
+                j = 1;
+                const { nodeToHTML: e } = ut(),
+                    { parseHTML: t } = r();
+                return (A = function (n) {
+                    if (void 0 === n) {
+                        if (0 === this.nodes.length) return;
+                        const t = this.nodes[0];
+                        if ('element' === t.type) {
+                            const n = t.children.map((t) => e(t)).join('');
+                            return (
+                                this.debugLog(
+                                    `JQ.html: Getting inner HTML of first element, result length: ${n.length}`,
+                                ),
+                                n
+                            );
+                        }
+                        {
+                            const n = e(t);
+                            return (
+                                this.debugLog(
+                                    `JQ.html: Converting non-element node to HTML, result length: ${n.length}`,
+                                ),
+                                n
+                            );
+                        }
+                    }
+                    return (
+                        this.debugLog(
+                            `JQ.html: Setting inner HTML on ${this.nodes.length} elements`,
+                        ),
+                        this.nodes.forEach((e) => {
+                            if ('element' === e.type) {
+                                const o = t(n);
+                                e.children = o;
+                            }
+                        }),
+                        this
+                    );
+                });
+            })()),
+            (t.prototype.each = T
+                ? O
+                : ((T = 1),
+                  (O = function (e) {
+                      this.debugLog(`JQ.each: Iterating over ${this.nodes.length} elements`);
+                      for (
+                          let t = 0;
+                          t < this.nodes.length && !1 !== e.call(this.nodes[t], t, this.nodes[t]);
+                          t++
+                      );
+                      return this;
+                  }))),
+            (t.prototype.map = F
+                ? R
+                : ((F = 1),
+                  (R = function (e) {
+                      this.debugLog(`JQ.map: Mapping over ${this.nodes.length} elements`);
+                      const t = [];
+                      for (let n = 0; n < this.nodes.length; n++)
+                          try {
+                              const o = e.call(this.nodes[n], n, this.nodes[n]);
+                              null != o && (Array.isArray(o) ? t.push(...o) : t.push(o));
+                          } catch (e) {
+                              this.debugLog(
+                                  `JQ.map: Skipping element at index ${n} due to error: ${e.message}`,
+                              );
+                          }
+                      return (
+                          this.debugLog(`JQ.map: Mapped to ${t.length} results`),
+                          new this.constructor(t)
+                      );
+                  }))),
+            (t.prototype.parent = (function () {
+                if (U) return k;
+                U = 1;
+                const { selectNodes: e } = ct();
+                return (
+                    (k = function (t) {
+                        this.debugLog(
+                            `JQ.parent: Finding parents for ${this.nodes.length} elements, selector: ${t || 'none'}`,
+                        );
+                        const n = [],
+                            o = new Set();
+                        for (const e of this.nodes) {
+                            let t = e.parent || e.parentNode;
+                            if (t && !o.has(t)) {
+                                let r = !1,
+                                    s = !1;
+                                (e.parent && 'element' === e.parent.type
+                                    ? ((r = !0),
+                                      (s = e.tagName && 'html' === e.tagName.toLowerCase()))
+                                    : e.parentNode &&
+                                      1 === e.parentNode.nodeType &&
+                                      ((r = !0),
+                                      (s = 'html' === e.parentNode.tagName.toLowerCase())),
+                                    r && !s && (o.add(t), n.push(t)));
+                            }
+                        }
+                        let r = n;
+                        if (t) {
+                            const o = this._findCommonRoots(),
+                                s = e(o, t);
+                            r = n.filter((e) => s.includes(e));
+                        }
+                        this.debugLog(`JQ.parent: Found ${r.length} parent elements`);
+                        const s = new (0, this.constructor)(r);
+                        return ((s._prevObject = this), s);
+                    }),
+                    k
+                );
+            })()),
+            (t.prototype.parents = (function () {
+                if (D) return G;
+                D = 1;
+                const { parseSelector: e, nodeMatchesSelector: t } = ct();
+                return (
+                    (G = function (n) {
+                        this.debugLog(
+                            `JQ.parents: Finding ancestors for ${this.nodes.length} elements, selector: ${n || 'none'}`,
+                        );
+                        const o = [],
+                            r = new Set();
+                        let s = null;
+                        if (n && ((s = e(n)), !s))
+                            return (
+                                this.debugLog(
+                                    `JQ.parents: Invalid selector "${n}", returning empty result`,
+                                ),
+                                new this.constructor([])
+                            );
+                        for (const e of this.nodes)
+                            if (e._originalElement) {
+                                let n = e._originalElement.parentElement;
+                                for (; n && 1 === n.nodeType; ) {
+                                    const e = {};
+                                    for (let t = 0; t < n.attributes.length; t++) {
+                                        const o = n.attributes[t];
+                                        e[o.name] = o.value;
+                                    }
+                                    const i = `${n.tagName.toLowerCase()}-${JSON.stringify(e)}`;
+                                    if (!r.has(i)) {
+                                        r.add(i);
+                                        const l = {
+                                            type: 'element',
+                                            tagName: n.tagName.toLowerCase(),
+                                            attributes: e,
+                                            properties: {},
+                                            children: [],
+                                            parent: null,
+                                            _originalElement: n,
+                                        };
+                                        (s && !t(l, s)) || o.push(l);
+                                    }
+                                    n = n.parentElement;
+                                }
+                            } else {
+                                let n = e.parent;
+                                for (; n; ) {
+                                    if ('element' === n.type) {
+                                        const e = `${n.tagName}-${JSON.stringify(n.attributes)}`;
+                                        r.has(e) || (r.add(e), (s && !t(n, s)) || o.push(n));
+                                    }
+                                    n = n.parent;
+                                }
+                            }
+                        return (
+                            this.debugLog(`JQ.parents: Found ${o.length} ancestor elements`),
+                            new this.constructor(o)
+                        );
+                    }),
+                    G
+                );
+            })()),
+            (t.prototype.parentsUntil = (function () {
+                if (M) return B;
+                M = 1;
+                const { selectNodes: e } = ct();
+                return (
+                    (B = function (t, n) {
+                        this.debugLog(
+                            `JQ.parentsUntil: Finding ancestors until selector: ${t || 'none'}, filter: ${n || 'none'}`,
+                        );
+                        const o = [],
+                            r = new Set(),
+                            s = new Set();
+                        if (t)
+                            if ('string' == typeof t) {
+                                const n = this._findCommonRoots();
+                                e(n, t).forEach((e) => s.add(e));
+                            } else
+                                t && 'object' == typeof t && 'element' === t.type
+                                    ? s.add(t)
+                                    : t &&
+                                      t.nodes &&
+                                      Array.isArray(t.nodes) &&
+                                      t.nodes.forEach((e) => s.add(e));
+                        for (const e of this.nodes)
+                            if (e._originalElement) {
+                                let t = e._originalElement.parentElement;
+                                for (; t && 1 === t.nodeType; ) {
+                                    const e = Array.from(s).some((e) => {
+                                        if (e._originalElement === t) return !0;
+                                        if (e.tagName === t.tagName.toLowerCase()) {
+                                            const n = e.attributes || {},
+                                                o = {};
+                                            for (let e = 0; e < t.attributes.length; e++) {
+                                                const n = t.attributes[e];
+                                                o[n.name] = n.value;
+                                            }
+                                            return Object.keys(n).every((e) => o[e] === n[e]);
+                                        }
+                                        return !1;
+                                    });
+                                    if (e) break;
+                                    const n = {};
+                                    for (let e = 0; e < t.attributes.length; e++) {
+                                        const o = t.attributes[e];
+                                        n[o.name] = o.value;
+                                    }
+                                    const i = `dom-${t.tagName.toLowerCase()}-${JSON.stringify(n)}`;
+                                    if (!r.has(i)) {
+                                        r.add(i);
+                                        const e = {
+                                            type: 'element',
+                                            tagName: t.tagName.toUpperCase(),
+                                            attributes: n,
+                                            properties: {},
+                                            children: [],
+                                            parent: null,
+                                            _originalElement: t,
+                                        };
+                                        o.push(e);
+                                    }
+                                    t = t.parentElement;
+                                }
+                            } else {
+                                let t = e.parent;
+                                for (; t && !s.has(t); ) {
+                                    const e = `internal-${t.tagName}-${JSON.stringify(t.attributes)}`;
+                                    (r.has(e) || (r.add(e), o.push(t)), (t = t.parent));
+                                }
+                            }
+                        let i = o;
+                        if (n) {
+                            const t = this._findCommonRoots(),
+                                r = e(t, n);
+                            i = o.filter((e) => r.includes(e));
+                        }
+                        return (
+                            this.debugLog(`JQ.parentsUntil: Found ${i.length} ancestor elements`),
+                            new this.constructor(i)
+                        );
+                    }),
+                    B
+                );
+            })()),
+            (t.prototype.closest = (function () {
+                if (z) return I;
+                z = 1;
+                const { parseSelector: e, nodeMatchesSelector: t } = ct();
+                return (
+                    (I = function (n) {
+                        if (
+                            (this.debugLog(
+                                `JQ.closest: Finding closest ancestors matching "${n}" for ${this.nodes.length} elements`,
+                            ),
+                            !n)
+                        )
+                            return (
+                                this.debugLog(
+                                    'JQ.closest: No selector provided, returning empty result',
+                                ),
+                                new this.constructor([])
+                            );
+                        const o = e(n);
+                        if (!o)
+                            return (
+                                this.debugLog(
+                                    `JQ.closest: Invalid selector "${n}", returning empty result`,
+                                ),
+                                new this.constructor([])
+                            );
+                        const r = [],
+                            s = new Set();
+                        for (const e of this.nodes) {
+                            let n = e;
+                            for (; n; ) {
+                                if (('element' === n.type || 1 === n.nodeType) && t(n, o)) {
+                                    s.has(n) || (s.add(n), r.push(n));
+                                    break;
+                                }
+                                n = n.parent || n.parentNode;
+                            }
+                        }
+                        return (
+                            this.debugLog(`JQ.closest: Found ${r.length} closest elements`),
+                            new (0, this.constructor)(r)
+                        );
+                    }),
+                    I
+                );
+            })()),
+            (t.prototype.children = (function () {
+                if (H) return W;
+                H = 1;
+                const { selectNodes: e } = ct();
+                return (
+                    (W = function (t) {
+                        this.debugLog(
+                            `JQ.children: Finding children for ${this.nodes.length} elements, selector: ${t || 'none'}`,
+                        );
+                        const n = [],
+                            o = new Set();
+                        for (const e of this.nodes) {
+                            const t =
+                                e.children ||
+                                (e.childNodes
+                                    ? Array.from(e.childNodes).filter((e) => 1 === e.nodeType)
+                                    : []);
+                            for (const e of t)
+                                ('element' === e.type || 1 === e.nodeType) &&
+                                    !o.has(e) &&
+                                    (o.add(e), n.push(e));
+                        }
+                        let r = n;
+                        if (t) {
+                            const o = this._findCommonRoots(),
+                                s = e(o, t);
+                            r = n.filter((e) => s.includes(e));
+                        }
+                        this.debugLog(`JQ.children: Found ${r.length} child elements`);
+                        const s = new (0, this.constructor)(r);
+                        return ((s._prevObject = this), s);
+                    }),
+                    W
+                );
+            })()),
+            (t.prototype.contents =
+                (P ||
+                    ((P = 1),
+                    (q = function () {
+                        this.debugLog(
+                            `JQ.contents: Finding all child nodes for ${this.nodes.length} elements`,
+                        );
+                        const e = [],
+                            t = new Set();
+                        function n(e) {
+                            if (1 === e.nodeType) {
+                                const t = {
+                                    type: 'element',
+                                    tagName: e.tagName.toLowerCase(),
+                                    attributes: {},
+                                    properties: {},
+                                    children: [],
+                                    parent: null,
+                                    _originalElement: e,
+                                };
+                                if (e.attributes)
+                                    for (let n = 0; n < e.attributes.length; n++) {
+                                        const o = e.attributes[n];
+                                        t.attributes[o.name] = o.value;
+                                    }
+                                if (1 === e.nodeType) {
+                                    const n = [
+                                        'value',
+                                        'checked',
+                                        'selected',
+                                        'type',
+                                        'name',
+                                        'disabled',
+                                        'readonly',
+                                    ];
+                                    for (const o of n) void 0 !== e[o] && (t.properties[o] = e[o]);
+                                }
+                                return t;
+                            }
+                            return 3 === e.nodeType
+                                ? { type: 'text', value: e.textContent, _originalElement: e }
+                                : 8 === e.nodeType
+                                  ? { type: 'comment', value: e.textContent, _originalElement: e }
+                                  : null;
+                        }
+                        for (const o of this.nodes)
+                            if (o._originalElement) {
+                                const r = o._originalElement.childNodes;
+                                for (let o = 0; o < r.length; o++) {
+                                    const s = n(r[o]);
+                                    s && !t.has(s) && (t.add(s), e.push(s));
+                                }
+                            } else if (o.children)
+                                for (const n of o.children) t.has(n) || (t.add(n), e.push(n));
+                        return (
+                            this.debugLog(`JQ.contents: Found ${e.length} child nodes`),
+                            new this.constructor(e)
+                        );
+                    })),
+                q)),
+            (t.prototype.siblings = (function () {
+                if (Y) return Z;
+                Y = 1;
+                const { nodeMatchesSelector: e, parseSelector: t } = ct();
+                return (
+                    (Z = function (n) {
+                        this.debugLog(
+                            `JQ.siblings: Finding siblings for ${this.nodes.length} elements, selector: ${n || 'none'}`,
+                        );
+                        const o = [],
+                            r = new Set();
+                        let s = null;
+                        n && (s = t(n));
+                        for (const t of this.nodes)
+                            t.parent &&
+                                t.parent.children &&
+                                t.parent.children.forEach((n) => {
+                                    if (n !== t && 'element' === n.type && !r.has(n)) {
+                                        r.add(n);
+                                        let t = !0;
+                                        (s && (e(n, s) || (t = !1)), t && o.push(n));
+                                    }
+                                });
+                        return (
+                            this.debugLog(`JQ.siblings: Found ${o.length} siblings`),
+                            new this.constructor(o)
+                        );
+                    }),
+                    Z
+                );
+            })()),
+            (t.prototype.next =
+                (V ||
+                    ((V = 1),
+                    ct(),
+                    (K = function (e) {
+                        this.debugLog(
+                            `JQ.next: Finding next sibling for ${this.nodes.length} elements, selector: ${e || 'none'}`,
+                        );
+                        const t = [];
+                        for (const n of this.nodes)
+                            if (n.parent && n.parent.children) {
+                                const o = n.parent.children.filter((e) => 'element' === e.type),
+                                    r = o.indexOf(n);
+                                if (-1 !== r)
+                                    if (e) {
+                                        const { nodeMatchesSelector: n, parseSelector: s } = ct(),
+                                            i = s(e);
+                                        for (let e = r + 1; e < o.length; e++) {
+                                            const r = o[e];
+                                            if (
+                                                ('compound' === i.type ? i.selectors : [i]).some(
+                                                    (e) => n(r, e),
+                                                )
+                                            ) {
+                                                t.push(r);
+                                                break;
+                                            }
+                                        }
+                                    } else r < o.length - 1 && t.push(o[r + 1]);
+                            } else {
+                                const o = dt().allRootNodes,
+                                    r = o.indexOf(n);
+                                if (-1 !== r)
+                                    if (e) {
+                                        const { nodeMatchesSelector: n, parseSelector: s } = ct(),
+                                            i = s(e);
+                                        for (let e = r + 1; e < o.length; e++) {
+                                            const r = o[e];
+                                            if (
+                                                'element' === r.type &&
+                                                ('compound' === i.type ? i.selectors : [i]).some(
+                                                    (e) => n(r, e),
+                                                )
+                                            ) {
+                                                t.push(r);
+                                                break;
+                                            }
+                                        }
+                                    } else
+                                        for (let e = r + 1; e < o.length; e++) {
+                                            const n = o[e];
+                                            if ('element' === n.type) {
+                                                t.push(n);
+                                                break;
+                                            }
+                                        }
+                            }
+                        return (
+                            this.debugLog(`JQ.next: Found ${t.length} next sibling elements`),
+                            new this.constructor(t)
+                        );
+                    })),
+                K)),
+            (t.prototype.nextAll =
+                (ee ||
+                    ((ee = 1),
+                    ct(),
+                    (X = function (e) {
+                        this.debugLog(
+                            `JQ.nextAll: Finding all following siblings for ${this.nodes.length} elements, selector: ${e || 'none'}`,
+                        );
+                        const t = [],
+                            n = new Set();
+                        for (const e of this.nodes)
+                            if (e.parent && e.parent.children) {
+                                const o = e.parent.children.filter((e) => 'element' === e.type),
+                                    r = o.indexOf(e);
+                                if (-1 !== r)
+                                    for (let e = r + 1; e < o.length; e++) {
+                                        const r = o[e];
+                                        n.has(r) || (n.add(r), t.push(r));
+                                    }
+                            }
+                        let o = t;
+                        if (e) {
+                            const { nodeMatchesSelector: n, parseSelector: r } = ct(),
+                                s = r(e);
+                            o = t.filter((e) =>
+                                ('compound' === s.type ? s.selectors : [s]).some((t) => n(e, t)),
+                            );
+                        }
+                        return (
+                            this.debugLog(
+                                `JQ.nextAll: Found ${o.length} following sibling elements`,
+                            ),
+                            new this.constructor(o)
+                        );
+                    })),
+                X)),
+            (t.prototype.nextUntil =
+                (ne ||
+                    ((ne = 1),
+                    ct(),
+                    (te = function (e, t) {
+                        this.debugLog(
+                            `JQ.nextUntil: Finding following siblings until selector: ${e || 'none'}, filter: ${t || 'none'}`,
+                        );
+                        const n = [],
+                            { nodeMatchesSelector: o, parseSelector: r } = ct(),
+                            s = e && 'string' == typeof e ? r(e) : null,
+                            i = t ? r(t) : null;
+                        for (const t of this.nodes)
+                            if (t.parent && t.parent.children) {
+                                const r = t.parent.children,
+                                    l = r.indexOf(t);
+                                if (-1 !== l)
+                                    for (let t = l + 1; t < r.length; t++) {
+                                        const l = r[t],
+                                            a = 'element' === l.type;
+                                        if (
+                                            s &&
+                                            ('compound' === s.type ? s.selectors : [s]).some((e) =>
+                                                o(l, e),
+                                            )
+                                        )
+                                            break;
+                                        if (
+                                            e &&
+                                            'object' == typeof e &&
+                                            'element' === e.type &&
+                                            l === e
+                                        )
+                                            break;
+                                        if (
+                                            e &&
+                                            e.nodes &&
+                                            Array.isArray(e.nodes) &&
+                                            e.nodes.includes(l)
+                                        )
+                                            break;
+                                        if (a) {
+                                            if (
+                                                i &&
+                                                !('compound' === i.type ? i.selectors : [i]).some(
+                                                    (e) => o(l, e),
+                                                )
+                                            )
+                                                continue;
+                                            n.push(l);
+                                        }
+                                    }
+                            } else {
+                                const r = dt().allRootNodes,
+                                    l = r.indexOf(t);
+                                if (-1 !== l)
+                                    for (let t = l + 1; t < r.length; t++) {
+                                        const l = r[t],
+                                            a = 'element' === l.type;
+                                        if (
+                                            s &&
+                                            ('compound' === s.type ? s.selectors : [s]).some((e) =>
+                                                o(l, e),
+                                            )
+                                        )
+                                            break;
+                                        if (
+                                            e &&
+                                            'object' == typeof e &&
+                                            'element' === e.type &&
+                                            l === e
+                                        )
+                                            break;
+                                        if (
+                                            e &&
+                                            e.nodes &&
+                                            Array.isArray(e.nodes) &&
+                                            e.nodes.includes(l)
+                                        )
+                                            break;
+                                        if (a) {
+                                            if (
+                                                i &&
+                                                !('compound' === i.type ? i.selectors : [i]).some(
+                                                    (e) => o(l, e),
+                                                )
+                                            )
+                                                continue;
+                                            n.push(l);
+                                        }
+                                    }
+                            }
+                        return (
+                            this.debugLog(
+                                `JQ.nextUntil: Found ${n.length} following sibling elements`,
+                            ),
+                            new this.constructor(n)
+                        );
+                    })),
+                te)),
+            (t.prototype.prev = (function () {
+                if (re) return oe;
+                re = 1;
+                const { nodeMatchesSelector: e, parseSelector: t } = ct();
+                return (
+                    (oe = function (n) {
+                        this.debugLog(
+                            `JQ.prev: Finding previous sibling for ${this.nodes.length} elements, selector: ${n || 'none'}`,
+                        );
+                        const o = [];
+                        for (const r of this.nodes)
+                            if (r.parent && r.parent.children) {
+                                const s = r.parent.children,
+                                    i = s.indexOf(r);
+                                if (i > 0)
+                                    if (n) {
+                                        const r = t(n);
+                                        for (let t = i - 1; t >= 0; t--) {
+                                            const n = s[t];
+                                            if ('element' === n.type && e(n, r)) {
+                                                o.push(n);
+                                                break;
+                                            }
+                                        }
+                                    } else
+                                        for (let e = i - 1; e >= 0; e--) {
+                                            const t = s[e];
+                                            if ('element' === t.type) {
+                                                o.push(t);
+                                                break;
+                                            }
+                                        }
+                            }
+                        return (
+                            this.debugLog(`JQ.prev: Found ${o.length} previous sibling elements`),
+                            new this.constructor(o)
+                        );
+                    }),
+                    oe
+                );
+            })()),
+            (t.prototype.prevAll = (function () {
+                if (ie) return se;
+                ie = 1;
+                const { nodeMatchesSelector: e, parseSelector: t } = ct();
+                return (
+                    (se = function (n) {
+                        this.debugLog(
+                            `JQ.prevAll: Finding all preceding siblings for ${this.nodes.length} elements, selector: ${n || 'none'}`,
+                        );
+                        const o = [];
+                        let r = null;
+                        n && (r = t(n));
+                        for (const t of this.nodes)
+                            if (t._originalElement) {
+                                let n = t._originalElement.previousElementSibling;
+                                for (; n; ) {
+                                    let t = !0;
+                                    if (r) {
+                                        const o = 'compound' === r.type ? r.selectors : [r],
+                                            s = {
+                                                type: 'element',
+                                                tagName: n.tagName.toLowerCase(),
+                                                attributes: {},
+                                                _originalElement: n,
+                                            };
+                                        for (let e = 0; e < n.attributes.length; e++) {
+                                            const t = n.attributes[e];
+                                            s.attributes[t.name] = t.value;
+                                        }
+                                        o.some((t) => e(s, t)) || (t = !1);
+                                    }
+                                    if (t) {
+                                        const e = {
+                                            type: 'element',
+                                            tagName: n.tagName.toLowerCase(),
+                                            attributes: {},
+                                            properties: {},
+                                            children: [],
+                                            parent: null,
+                                            _originalElement: n,
+                                        };
+                                        for (let t = 0; t < n.attributes.length; t++) {
+                                            const o = n.attributes[t];
+                                            e.attributes[o.name] = o.value;
+                                        }
+                                        o.push(e);
+                                    }
+                                    n = n.previousElementSibling;
+                                }
+                            } else if (t.parent && t.parent.children) {
+                                const n = t.parent.children,
+                                    s = n.indexOf(t);
+                                for (let t = 0; t < s; t++) {
+                                    const s = n[t];
+                                    if ('element' === s.type) {
+                                        let t = !0;
+                                        (r && (e(s, r) || (t = !1)), t && o.push(s));
+                                    }
+                                }
+                            }
+                        const s = [],
+                            i = new Set();
+                        for (const e of o) i.has(e) || (i.add(e), s.push(e));
+                        return (
+                            this.debugLog(`JQ.prevAll: Found ${s.length} preceding siblings`),
+                            new this.constructor(s)
+                        );
+                    }),
+                    se
+                );
+            })()),
+            (t.prototype.prevUntil =
+                (ae ||
+                    ((ae = 1),
+                    ct(),
+                    (le = function (e, t) {
+                        this.debugLog(
+                            `JQ.prevUntil: Finding preceding siblings until selector: ${e || 'none'}, filter: ${t || 'none'}`,
+                        );
+                        const n = [],
+                            { nodeMatchesSelector: o, parseSelector: r } = ct();
+                        let s = null,
+                            i = null;
+                        e &&
+                            ('string' == typeof e
+                                ? (s = r(e))
+                                : e._originalElement
+                                  ? (i = e._originalElement)
+                                  : e.nodeType
+                                    ? (i = e)
+                                    : e.nodes &&
+                                      e.nodes.length > 0 &&
+                                      (i = e.nodes[0]._originalElement || e.nodes[0]));
+                        const l = t ? r(t) : null;
+                        for (const e of this.nodes)
+                            if (e._originalElement) {
+                                let t = e._originalElement.previousElementSibling;
+                                for (; t; ) {
+                                    let e = !1;
+                                    if (s) {
+                                        const n = 'compound' === s.type ? s.selectors : [s],
+                                            r = {
+                                                type: 'element',
+                                                tagName: t.tagName.toLowerCase(),
+                                                attributes: {},
+                                                _originalElement: t,
+                                            };
+                                        for (let e = 0; e < t.attributes.length; e++) {
+                                            const n = t.attributes[e];
+                                            r.attributes[n.name] = n.value;
+                                        }
+                                        n.some((e) => o(r, e)) && (e = !0);
+                                    } else i && t === i && (e = !0);
+                                    if (e) break;
+                                    let r = !0;
+                                    if (l) {
+                                        const e = 'compound' === l.type ? l.selectors : [l],
+                                            n = {
+                                                type: 'element',
+                                                tagName: t.tagName.toLowerCase(),
+                                                attributes: {},
+                                                _originalElement: t,
+                                            };
+                                        for (let e = 0; e < t.attributes.length; e++) {
+                                            const o = t.attributes[e];
+                                            n.attributes[o.name] = o.value;
+                                        }
+                                        e.some((e) => o(n, e)) || (r = !1);
+                                    }
+                                    if (r) {
+                                        const e = {
+                                            type: 'element',
+                                            tagName: t.tagName.toLowerCase(),
+                                            attributes: {},
+                                            properties: {},
+                                            children: [],
+                                            parent: null,
+                                            _originalElement: t,
+                                        };
+                                        for (let n = 0; n < t.attributes.length; n++) {
+                                            const o = t.attributes[n];
+                                            e.attributes[o.name] = o.value;
+                                        }
+                                        n.push(e);
+                                    }
+                                    t = t.previousElementSibling;
+                                }
+                            } else if (e.parent && e.parent.children) {
+                                const t = e.parent.children.filter((e) => 'element' === e.type),
+                                    r = t.indexOf(e);
+                                if (r > 0)
+                                    for (let e = r - 1; e >= 0; e--) {
+                                        const r = t[e];
+                                        let a = !1;
+                                        if (
+                                            (s
+                                                ? ('compound' === s.type ? s.selectors : [s]).some(
+                                                      (e) => o(r, e),
+                                                  ) && (a = !0)
+                                                : i &&
+                                                  ((r._originalElement !== i && r !== i) ||
+                                                      (a = !0)),
+                                            a)
+                                        )
+                                            break;
+                                        (l &&
+                                            !('compound' === l.type ? l.selectors : [l]).some((e) =>
+                                                o(r, e),
+                                            )) ||
+                                            n.push(r);
+                                    }
+                            }
+                        const a = [],
+                            c = new Set();
+                        for (const e of n) c.has(e) || (c.add(e), a.push(e));
+                        return (
+                            this.debugLog(
+                                `JQ.prevUntil: Found ${a.length} unique preceding sibling elements in reverse document order (farthest first)`,
+                            ),
+                            new this.constructor(a)
+                        );
+                    })),
+                le)),
+            (t.prototype.eq = ue
+                ? ce
+                : ((ue = 1),
+                  (ce = function (e) {
+                      this.debugLog(
+                          `JQ.eq: Selecting element at index ${e} from ${this.nodes.length} elements`,
+                      );
+                      const t = e;
+                      let n = Number(e);
+                      if (void 0 === e)
+                          return (
+                              this.debugLog(
+                                  `JQ.eq: Index ${t} is undefined, returning empty result`,
+                              ),
+                              new this.constructor([])
+                          );
+                      if (isNaN(n))
+                          return (
+                              this.debugLog(
+                                  `JQ.eq: Index ${t} converts to NaN, returning empty result`,
+                              ),
+                              new this.constructor([])
+                          );
+                      if (
+                          ((n = Math.trunc(n)),
+                          n < 0 && (n = this.nodes.length + n),
+                          n >= 0 && n < this.nodes.length)
+                      ) {
+                          let e = this.nodes[n];
+                          'number' == typeof t && t % 1 != 0 && (e = { ...e, _detached: !0 });
+                          const o = new this.constructor([e]);
+                          return (
+                              (o._prevObject = this),
+                              this.debugLog(`JQ.eq: Found element at index ${n}`),
+                              o
+                          );
+                      }
+                      this.debugLog(`JQ.eq: Index ${t} is out of bounds, returning empty result`);
+                      const o = new this.constructor([]);
+                      return ((o._prevObject = this), o);
+                  }))),
+            (t.prototype.end = fe
+                ? de
+                : ((fe = 1),
+                  (de = function () {
+                      return (
+                          this.debugLog(
+                              'JQ.end: Ending current filtering operation, returning to previous selection',
+                          ),
+                          this._prevObject
+                              ? (this.debugLog(
+                                    `JQ.end: Returning to previous object with ${this._prevObject.nodes.length} elements`,
+                                ),
+                                this._prevObject)
+                              : (this.debugLog(
+                                    'JQ.end: No previous selection available, returning current selection',
+                                ),
+                                this)
+                      );
+                  }))),
+            (t.prototype.first = pe
+                ? he
+                : ((pe = 1),
+                  (he = function () {
+                      return (
+                          this.debugLog(
+                              `JQ.first: Selecting first element from ${this.nodes.length} elements`,
+                          ),
+                          this.eq(0)
+                      );
+                  }))),
+            (t.prototype.last = me
+                ? ge
+                : ((me = 1),
+                  (ge = function () {
+                      return (
+                          this.debugLog(
+                              `JQ.last: Selecting last element from ${this.nodes.length} elements`,
+                          ),
+                          this.eq(-1)
+                      );
+                  }))),
+            (t.prototype.filter = (function () {
+                if (ye) return be;
+                ye = 1;
+                const { nodeMatchesSelector: e, parseSelector: t } = ct();
+                return (be = function (n, o) {
+                    if (
+                        (this.debugLog(
+                            `JQ.filter: Filtering ${this.nodes.length} elements with ${typeof n}`,
+                        ),
+                        'string' == typeof n)
+                    ) {
+                        const o = t(n);
+                        if (!o)
+                            return (
+                                this.debugLog(
+                                    `JQ.filter: Invalid selector "${n}", returning empty result`,
+                                ),
+                                new this.constructor([])
+                            );
+                        const r = this.nodes.filter((t) => {
+                            if (t.attributes)
+                                for (const [e, n] of Object.entries(t.attributes))
+                                    'string' != typeof n && (t.attributes[e] = String(n));
+                            const n = {};
+                            return (
+                                t.parent && t.parent.children
+                                    ? (n.siblings = t.parent.children.filter(
+                                          (e) => 'element' === e.type,
+                                      ))
+                                    : (n.siblings = []),
+                                e(t, o, n)
+                            );
+                        });
+                        (r.forEach((e) => {
+                            if (e.attributes)
+                                for (const [t, n] of Object.entries(e.attributes))
+                                    'string' != typeof n && (e.attributes[t] = String(n));
+                        }),
+                            this.debugLog(
+                                `JQ.filter: Filtered to ${r.length} elements using selector "${n}"`,
+                            ));
+                        const s = new this.constructor(r);
+                        return ((s._prevObject = this), s);
+                    }
+                    if ('function' == typeof n) {
+                        const e = [];
+                        for (let t = 0; t < this.nodes.length; t++) {
+                            const r = this.nodes[t];
+                            try {
+                                n.call(o || r, t, r) && e.push(r);
+                            } catch (e) {
+                                this.debugLog(
+                                    `JQ.filter: Skipping element at index ${t} due to error: ${e.message}`,
+                                );
+                            }
+                        }
+                        this.debugLog(`JQ.filter: Filtered to ${e.length} elements using function`);
+                        const t = new this.constructor(e);
+                        return ((t._prevObject = this), t);
+                    }
+                    this.debugLog('JQ.filter: Invalid selector/function, returning empty result');
+                    const r = new this.constructor([]);
+                    return ((r._prevObject = this), r);
+                });
+            })()),
+            (t.prototype.not = (function () {
+                if (Ne) return $e;
+                Ne = 1;
+                const { selectNodes: e } = ct();
+                return ($e = function (t) {
+                    if (
+                        (this.debugLog(
+                            `JQ.not: Removing elements matching ${typeof t} from ${this.nodes.length} elements`,
+                        ),
+                        'string' == typeof t)
+                    ) {
+                        const n = this._findCommonRoots(),
+                            o = e(n, t),
+                            r = this.nodes.filter((e) => !o.includes(e));
+                        return (
+                            this.debugLog(
+                                `JQ.not: Filtered to ${r.length} elements using selector "${t}"`,
+                            ),
+                            new this.constructor(r)
+                        );
+                    }
+                    if ('function' == typeof t) {
+                        const e = [];
+                        for (let n = 0; n < this.nodes.length; n++) {
+                            const o = this.nodes[n];
+                            try {
+                                t.call(o, n, o) || e.push(o);
+                            } catch (t) {
+                                e.push(o);
+                            }
+                        }
+                        return (
+                            this.debugLog(
+                                `JQ.not: Filtered to ${e.length} elements using function`,
+                            ),
+                            new this.constructor(e)
+                        );
+                    }
+                    return (
+                        this.debugLog('JQ.not: Invalid selector/function, returning all elements'),
+                        new this.constructor(this.nodes)
+                    );
+                });
+            })()),
+            (t.prototype.has = (function () {
+                if (Le) return ve;
+                Le = 1;
+                const { selectNodes: e } = ct();
+                return (ve = function (t) {
+                    this.debugLog('JQ.has: Finding elements with descendants matching ' + typeof t);
+                    const n = [];
+                    if ('string' == typeof t) {
+                        for (const o of this.nodes)
+                            if ('element' === o.type && o.children) {
+                                const r = o.children.filter((e) => 'element' === e.type);
+                                try {
+                                    e(r, t).length > 0 && n.push(o);
+                                } catch (e) {
+                                    if (e instanceof SyntaxError) throw e;
+                                }
+                            }
+                    } else if (t && 'object' == typeof t && 'element' === t.type)
+                        for (const e of this.nodes)
+                            'element' === e.type &&
+                                e.children &&
+                                this._hasDescendant(e, t) &&
+                                n.push(e);
+                    return (
+                        this.debugLog(
+                            `JQ.has: Found ${n.length} elements with matching descendants`,
+                        ),
+                        new this.constructor(n)
+                    );
+                });
+            })()),
+            (t.prototype.is = (function () {
+                if (Qe) return Je;
+                Qe = 1;
+                const { selectNodes: e } = ct();
+                return (Je = function (t) {
+                    if (
+                        (this.debugLog(
+                            `JQ.is: Checking if any of ${this.nodes.length} elements match ${typeof t}`,
+                        ),
+                        'string' == typeof t)
+                    ) {
+                        const n = this._findCommonRoots(),
+                            o = e(n, t),
+                            r = this.nodes.some((e) => o.includes(e));
+                        return (this.debugLog(`JQ.is: Selector match result: ${r}`), r);
+                    }
+                    if (t && 'object' == typeof t) {
+                        if ('element' === t.type) {
+                            const e = this.nodes.includes(t);
+                            return (this.debugLog(`JQ.is: Element match result: ${e}`), e);
+                        }
+                        if (t instanceof this.constructor) {
+                            const e = this.nodes.some((e) => t.nodes.includes(e));
+                            return (this.debugLog(`JQ.is: JQ object match result: ${e}`), e);
+                        }
+                    }
+                    return (this.debugLog('JQ.is: Invalid argument, returning false'), !1);
+                });
+            })()),
+            (t.prototype.slice =
+                (we ||
+                    ((we = 1),
+                    (Ee = function (e, t) {
+                        this.debugLog(
+                            `JQ.slice: Slicing elements from ${e} to ${t || 'end'} in ${this.nodes.length} elements`,
+                        );
+                        const n = this.nodes.slice(e, t);
+                        return (
+                            this.debugLog(`JQ.slice: Sliced to ${n.length} elements`),
+                            new this.constructor(n)
+                        );
+                    })),
+                Ee)),
+            (t.prototype.append = xe
+                ? _e
+                : ((xe = 1),
+                  (_e = function (...e) {
+                      this.debugLog(
+                          `JQ.append: Appending content to ${this.nodes.length} elements`,
+                      );
+                      const t = [],
+                          n = [];
+                      for (const o of e)
+                          o &&
+                          'object' == typeof o &&
+                          ((o.constructor && 'JQ' === o.constructor.name) ||
+                              (o.nodes && Array.isArray(o.nodes)))
+                              ? n.push(o)
+                              : t.push(...this._normalizeContent(o));
+                      this.debugLog(
+                          `JQ.append: Normalized ${t.length} nodes to append, ${n.length} JQ objects to clone`,
+                      );
+                      for (const e of this.nodes)
+                          if ('element' === e.type && e.children) {
+                              if (t.length > 0) {
+                                  const n = t.map((e) => this._cloneNode(e));
+                                  (e.children.push(...n),
+                                      this.debugLog(
+                                          `JQ.append: Appended ${n.length} cloned nodes to element <${e.tagName}>`,
+                                      ));
+                              }
+                              for (const t of n) {
+                                  for (const n of t.nodes) {
+                                      if (n.parent && n.parent.children) {
+                                          const e = n.parent.children.indexOf(n);
+                                          -1 !== e && n.parent.children.splice(e, 1);
+                                      }
+                                      const t = dt().allRootNodes.indexOf(n);
+                                      (-1 !== t && dt().allRootNodes.splice(t, 1),
+                                          e.children.push(n),
+                                          (n.parent = e));
+                                  }
+                                  this.debugLog(
+                                      `JQ.append: Moved ${t.nodes.length} nodes to element <${e.tagName}>`,
+                                  );
+                              }
+                          }
+                      return this;
+                  }))),
+            (t.prototype.appendTo = Ce
+                ? Se
+                : ((Ce = 1),
+                  (Se = function (e) {
+                      let t;
+                      this.debugLog(
+                          `JQ.appendTo: Appending ${this.nodes.length} elements to target`,
+                      );
+                      let n = !1;
+                      if (e instanceof this.constructor) t = e;
+                      else if ('string' == typeof e)
+                          if (e.trim().startsWith('<'))
+                              ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                          else {
+                              const { selectNodes: n } = ct();
+                              t = new this.constructor(n(this.constructor.allRootNodes, e));
+                          }
+                      else ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                      this.debugLog(`JQ.appendTo: Target has ${t.nodes.length} elements`);
+                      for (const e of t.nodes)
+                          if ('element' === e.type && e.children) {
+                              const t = this.nodes.map((e) => this._cloneNode(e));
+                              e.children.push(...t);
+                              for (const n of t) n.parent = e;
+                              this.debugLog(
+                                  `JQ.appendTo: Appended ${t.length} elements to target <${e.tagName}>`,
+                              );
+                          }
+                      if (n)
+                          for (const e of t.nodes)
+                              this.constructor.allRootNodes.includes(e) ||
+                                  (this.constructor.allRootNodes.push(e),
+                                  this.debugLog(
+                                      `JQ.appendTo: Added dynamic target <${e.tagName}> to root nodes`,
+                                  ));
+                      return this;
+                  }))),
+            (t.prototype.prepend = je
+                ? Ae
+                : ((je = 1),
+                  (Ae = function (...e) {
+                      this.debugLog(
+                          `JQ.prepend: Prepending content to ${this.nodes.length} elements`,
+                      );
+                      const t = [];
+                      for (const n of e) t.push(...this._normalizeContent(n));
+                      this.debugLog(`JQ.prepend: Normalized ${t.length} nodes to prepend`);
+                      for (const e of this.nodes)
+                          if ('element' === e.type && e.children) {
+                              const n = t.map((e) => this._cloneNode(e));
+                              (e.children.unshift(...n),
+                                  this.debugLog(
+                                      `JQ.prepend: Prepended ${n.length} nodes to element <${e.tagName}>`,
+                                  ));
+                          }
+                      return this;
+                  }))),
+            (t.prototype.prependTo = Te
+                ? Oe
+                : ((Te = 1),
+                  (Oe = function (e) {
+                      let t;
+                      this.debugLog(
+                          `JQ.prependTo: Prepending ${this.nodes.length} elements to target`,
+                      );
+                      let n = !1;
+                      if (e instanceof this.constructor) t = e;
+                      else if ('string' == typeof e)
+                          if (e.trim().startsWith('<'))
+                              ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                          else {
+                              const { selectNodes: n } = ct();
+                              t = new this.constructor(n(this.constructor.allRootNodes, e));
+                          }
+                      else ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                      this.debugLog(`JQ.prependTo: Target has ${t.nodes.length} elements`);
+                      for (const e of t.nodes)
+                          if ('element' === e.type && e.children) {
+                              const t = this.nodes.map((e) => this._cloneNode(e));
+                              e.children.unshift(...t);
+                              for (const n of t) n.parent = e;
+                              this.debugLog(
+                                  `JQ.prependTo: Prepended ${t.length} elements to target <${e.tagName}>`,
+                              );
+                          }
+                      if (n)
+                          for (const e of t.nodes)
+                              this.constructor.allRootNodes.includes(e) ||
+                                  (this.constructor.allRootNodes.push(e),
+                                  this.debugLog(
+                                      `JQ.prependTo: Added dynamic target <${e.tagName}> to root nodes`,
+                                  ));
+                      return this;
+                  }))),
+            (t.prototype.before = Fe
+                ? Re
+                : ((Fe = 1),
+                  (Re = function (...e) {
+                      this.debugLog(
+                          `JQ.before: Inserting content before ${this.nodes.length} elements`,
+                      );
+                      const t = [],
+                          n = [];
+                      for (const o of e)
+                          o &&
+                          'object' == typeof o &&
+                          ((o.constructor && 'JQ' === o.constructor.name) ||
+                              (o.nodes && Array.isArray(o.nodes)))
+                              ? n.push(o)
+                              : t.push(...this._normalizeContent(o));
+                      this.debugLog(
+                          `JQ.before: Normalized ${t.length} nodes to insert, ${n.length} JQ objects to clone`,
+                      );
+                      for (const e of this.nodes)
+                          if (e.parent && e.parent.children) {
+                              const o = e.parent.children,
+                                  r = o.indexOf(e);
+                              if (-1 !== r) {
+                                  if (t.length > 0) {
+                                      const n = t.map((e) => this._cloneNode(e));
+                                      o.splice(r, 0, ...n);
+                                      for (const t of n) t.parent = e.parent;
+                                      this.debugLog(
+                                          `JQ.before: Inserted ${n.length} cloned nodes before element <${e.tagName}>`,
+                                      );
+                                  }
+                                  for (const t of n) {
+                                      for (let n = t.nodes.length - 1; n >= 0; n--) {
+                                          const s = t.nodes[n],
+                                              i = this._cloneNode(s);
+                                          if (s.parent && s.parent.children) {
+                                              const e = s.parent.children.indexOf(s);
+                                              -1 !== e && s.parent.children.splice(e, 1);
+                                          }
+                                          const l = dt().allRootNodes.indexOf(s);
+                                          (-1 !== l && dt().allRootNodes.splice(l, 1),
+                                              o.splice(r, 0, i),
+                                              (i.parent = e.parent));
+                                      }
+                                      this.debugLog(
+                                          `JQ.before: Cloned and moved ${t.nodes.length} nodes before element <${e.tagName}>`,
+                                      );
+                                  }
+                              }
+                          }
+                      return this;
+                  }))),
+            (t.prototype.insertBefore = (function () {
+                if (Ue) return ke;
+                Ue = 1;
+                const { isCSSSelector: e, selectNodes: t } = ct();
+                return (ke = function (n) {
+                    let o;
+                    this.debugLog(
+                        `JQ.insertBefore: Inserting ${this.nodes.length} elements before target`,
+                    );
+                    let r = !1;
+                    if (n && n.constructor && 'JQ' === n.constructor.name) o = n;
+                    else if ('string' == typeof n)
+                        if (e(n)) {
+                            const e = t(dt().allRootNodes, n);
+                            o = new this.constructor(e);
+                        } else ((o = new this.constructor(this._normalizeContent(n))), (r = !0));
+                    else ((o = new this.constructor(this._normalizeContent(n))), (r = !0));
+                    this.debugLog(`JQ.insertBefore: Target has ${o.nodes.length} elements`);
+                    for (const e of o.nodes) {
+                        if (e.parent && e.parent.children) {
+                            const t = e.parent.children,
+                                n = t.indexOf(e);
+                            if (-1 !== n) {
+                                for (const e of this.nodes) {
+                                    if (e.parent && e.parent.children) {
+                                        const t = e.parent.children.indexOf(e);
+                                        -1 !== t && e.parent.children.splice(t, 1);
+                                    }
+                                    const t = dt().allRootNodes.indexOf(e);
+                                    -1 !== t && dt().allRootNodes.splice(t, 1);
+                                }
+                                const o = this.nodes.map((e) => this._cloneNode(e));
+                                t.splice(n, 0, ...o);
+                                for (const t of o) t.parent = e.parent;
+                                this.debugLog(
+                                    `JQ.insertBefore: Cloned ${o.length} elements before target <${e.tagName}>`,
+                                );
+                            }
+                        }
+                        if (e._originalElement && e._originalElement.parentNode)
+                            for (const t of this.nodes)
+                                if (t._originalElement)
+                                    e._originalElement.parentNode.insertBefore(
+                                        t._originalElement,
+                                        e._originalElement,
+                                    );
+                                else if ('element' === t.type) {
+                                    const n = document.createElement(t.tagName);
+                                    if (t.attributes)
+                                        for (const [e, o] of Object.entries(t.attributes))
+                                            n.setAttribute(e, o);
+                                    if (t.properties)
+                                        for (const [e, o] of Object.entries(t.properties)) n[e] = o;
+                                    (e._originalElement.parentNode.insertBefore(
+                                        n,
+                                        e._originalElement,
+                                    ),
+                                        (t._originalElement = n));
+                                } else if ('text' === t.type) {
+                                    const n = document.createTextNode(t.value || '');
+                                    (e._originalElement.parentNode.insertBefore(
+                                        n,
+                                        e._originalElement,
+                                    ),
+                                        (t._originalElement = n));
+                                }
+                    }
+                    if (r) {
+                        for (const e of this.nodes)
+                            if (e.parent && e.parent.children) {
+                                const t = e.parent.children.indexOf(e);
+                                -1 !== t && e.parent.children.splice(t, 1);
+                            }
+                        const e = dt().allRootNodes;
+                        for (const t of this.nodes) {
+                            const n = e.indexOf(t);
+                            -1 !== n && e.splice(n, 1);
+                        }
+                        const t = this.nodes.map((e) => this._cloneNode(e));
+                        for (const n of o.nodes) {
+                            const o = e.indexOf(n);
+                            if (-1 !== o) {
+                                e.splice(o, 0, ...t);
+                                break;
+                            }
+                        }
+                        for (const e of t) e.parent = null;
+                        this.debugLog(
+                            `JQ.insertBefore: Cloned ${t.length} elements before ${o.nodes.length} targets at root level`,
+                        );
+                    }
+                    return this;
+                });
+            })()),
+            (t.prototype.after = De
+                ? Ge
+                : ((De = 1),
+                  (Ge = function (...e) {
+                      this.debugLog(
+                          `JQ.after: Inserting content after ${this.nodes.length} elements`,
+                      );
+                      const t = [],
+                          n = [];
+                      for (const o of e)
+                          o &&
+                          'object' == typeof o &&
+                          ((o.constructor && 'JQ' === o.constructor.name) ||
+                              (o.nodes && Array.isArray(o.nodes)))
+                              ? n.push(o)
+                              : t.push(...this._normalizeContent(o));
+                      this.debugLog(
+                          `JQ.after: Normalized ${t.length} nodes to insert, ${n.length} JQ objects to clone`,
+                      );
+                      for (const e of this.nodes) {
+                          if (e.parent && e.parent.children) {
+                              const o = e.parent.children,
+                                  r = o.indexOf(e);
+                              if (-1 !== r) {
+                                  if (t.length > 0) {
+                                      const n = t.map((e) => this._cloneNode(e));
+                                      o.splice(r + 1, 0, ...n);
+                                      for (const t of n) t.parent = e.parent;
+                                      this.debugLog(
+                                          `JQ.after: Inserted ${n.length} cloned nodes after element <${e.tagName}>`,
+                                      );
+                                  }
+                                  let s = r + 1;
+                                  for (const t of n) {
+                                      const n = [];
+                                      for (const e of t.nodes) {
+                                          const t = this._cloneNode(e);
+                                          if ((n.push(t), e.parent && e.parent.children)) {
+                                              const t = e.parent.children.indexOf(e);
+                                              -1 !== t && e.parent.children.splice(t, 1);
+                                          }
+                                          const o = dt().allRootNodes.indexOf(e);
+                                          -1 !== o && dt().allRootNodes.splice(o, 1);
+                                      }
+                                      o.splice(s, 0, ...n);
+                                      for (const t of n) t.parent = e.parent;
+                                      ((s += n.length),
+                                          this.debugLog(
+                                              `JQ.after: Cloned and moved ${t.nodes.length} nodes after element <${e.tagName}>`,
+                                          ));
+                                  }
+                              }
+                          }
+                          if (e._originalElement && e._originalElement.parentNode) {
+                              for (const n of t)
+                                  if (n._originalElement)
+                                      e._originalElement.parentNode.insertBefore(
+                                          n._originalElement,
+                                          e._originalElement.nextSibling,
+                                      );
+                                  else if ('element' === n.type) {
+                                      const t = document.createElement(n.tagName);
+                                      if (n.attributes)
+                                          for (const [e, o] of Object.entries(n.attributes))
+                                              t.setAttribute(e, o);
+                                      if (n.properties)
+                                          for (const [e, o] of Object.entries(n.properties))
+                                              t[e] = o;
+                                      (e._originalElement.parentNode.insertBefore(
+                                          t,
+                                          e._originalElement.nextSibling,
+                                      ),
+                                          (n._originalElement = t));
+                                  } else if ('text' === n.type) {
+                                      const t = document.createTextNode(n.value || '');
+                                      (e._originalElement.parentNode.insertBefore(
+                                          t,
+                                          e._originalElement.nextSibling,
+                                      ),
+                                          (n._originalElement = t));
+                                  }
+                              let o = e._originalElement.nextSibling;
+                              for (const t of n)
+                                  for (const n of t.nodes)
+                                      if (n._originalElement) {
+                                          const t = n._originalElement.cloneNode(!0);
+                                          (e._originalElement.parentNode.insertBefore(t, o),
+                                              (o = t.nextSibling));
+                                      }
+                          }
+                      }
+                      return this;
+                  }))),
+            (t.prototype.insertAfter = Me
+                ? Be
+                : ((Me = 1),
+                  ct(),
+                  (Be = function (e) {
+                      let t;
+                      this.debugLog(
+                          `JQ.insertAfter: Inserting ${this.nodes.length} elements after target`,
+                      );
+                      let n = !1;
+                      if (e instanceof this.constructor) t = e;
+                      else if ('string' == typeof e) {
+                          const { isCSSSelector: o, selectNodes: r } = ct();
+                          if (o(e)) {
+                              const n = r(dt().allRootNodes, e);
+                              t = new this.constructor(n);
+                          } else ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                      } else ((t = new this.constructor(this._normalizeContent(e))), (n = !0));
+                      if (
+                          (this.debugLog(`JQ.insertAfter: Target has ${t.nodes.length} elements`),
+                          n)
+                      )
+                          for (const e of t.nodes)
+                              dt().allRootNodes.includes(e) ||
+                                  (dt().allRootNodes.push(e),
+                                  this.debugLog(
+                                      `JQ.insertAfter: Added dynamic target <${e.tagName}> to root nodes`,
+                                  ));
+                      for (const e of t.nodes)
+                          if (e.parent && e.parent.children) {
+                              const t = e.parent.children,
+                                  o = t.indexOf(e);
+                              if (-1 !== o) {
+                                  for (const e of this.nodes) {
+                                      if (e.parent && e.parent.children) {
+                                          const t = e.parent.children.indexOf(e);
+                                          -1 !== t && e.parent.children.splice(t, 1);
+                                      }
+                                      if (!n) {
+                                          const t = dt().allRootNodes.indexOf(e);
+                                          -1 !== t && dt().allRootNodes.splice(t, 1);
+                                      }
+                                  }
+                                  const r = this.nodes.map((e) => this._cloneNode(e));
+                                  t.splice(o + 1, 0, ...r);
+                                  for (const t of r) t.parent = e.parent;
+                                  this.debugLog(
+                                      `JQ.insertAfter: Cloned ${r.length} elements after target <${e.tagName}>`,
+                                  );
+                              }
+                          } else {
+                              const t = dt().allRootNodes,
+                                  o = t.indexOf(e);
+                              if (-1 !== o) {
+                                  for (const e of this.nodes) {
+                                      if (e.parent && e.parent.children) {
+                                          const t = e.parent.children.indexOf(e);
+                                          -1 !== t && e.parent.children.splice(t, 1);
+                                      }
+                                      if (!n) {
+                                          const n = t.indexOf(e);
+                                          -1 !== n && t.splice(n, 1);
+                                      }
+                                  }
+                                  const r = this.nodes.map((e) => this._cloneNode(e));
+                                  (t.splice(o + 1, 0, ...r),
+                                      this.debugLog(
+                                          `JQ.insertAfter: Cloned ${r.length} root elements after target <${e.tagName}>`,
+                                      ));
+                              }
+                          }
+                      return this;
+                  }))),
+            (t.prototype.wrap = ze
+                ? Ie
+                : ((ze = 1),
+                  (Ie = function (e) {
+                      this.debugLog(`JQ.wrap: Wrapping ${this.nodes.length} elements`);
+                      const t = this._normalizeContent(e);
+                      this.debugLog(`JQ.wrap: Normalized ${t.length} wrapper nodes`);
+                      for (const e of this.nodes)
+                          if (e.parent && e.parent.children) {
+                              const n = e.parent.children,
+                                  o = n.indexOf(e);
+                              if (-1 !== o && t.length > 0) {
+                                  const r = this._cloneNode(t[0]);
+                                  let s = r;
+                                  for (; s.children && s.children.length > 0; ) {
+                                      const e = s.children[s.children.length - 1];
+                                      if ('element' !== e.type) break;
+                                      s = e;
+                                  }
+                                  const i = this._cloneNode(e);
+                                  (s.children ? s.children.push(i) : (s.children = [i]),
+                                      (i.parent = s),
+                                      (n[o] = r),
+                                      (r.parent = e.parent),
+                                      this.debugLog(
+                                          `JQ.wrap: Wrapped element <${e.tagName}> with <${r.tagName}>`,
+                                      ));
+                              }
+                          }
+                      return this;
+                  }))),
+            (t.prototype.wrapAll = He
+                ? We
+                : ((He = 1),
+                  (We = function (e) {
+                      if (
+                          (this.debugLog(
+                              `JQ.wrapAll: Wrapping all ${this.nodes.length} elements together`,
+                          ),
+                          0 === this.nodes.length)
+                      )
+                          return this;
+                      const t = this._normalizeContent(e);
+                      if (
+                          (this.debugLog(`JQ.wrapAll: Normalized ${t.length} wrapper nodes`),
+                          0 === t.length)
+                      )
+                          return this;
+                      const n = this.nodes[0];
+                      if (!n.parent || !n.parent.children) return this;
+                      const o = n.parent,
+                          r = o.children;
+                      let s = r.indexOf(n);
+                      if (-1 === s) return this;
+                      const i = this._cloneNode(t[0]);
+                      let l = i;
+                      for (; l.children && l.children.length > 0; ) {
+                          const e = l.children[l.children.length - 1];
+                          if ('element' !== e.type) break;
+                          l = e;
+                      }
+                      const a = this.nodes.map((e) => this._cloneNode(e));
+                      l.children ? l.children.push(...a) : (l.children = [...a]);
+                      for (const e of a) e.parent = l;
+                      const c = this.nodes
+                          .map((e) => r.indexOf(e))
+                          .filter((e) => -1 !== e)
+                          .sort((e, t) => t - e);
+                      for (const e of c) r.splice(e, 1);
+                      return (
+                          r.splice(s, 0, i),
+                          (i.parent = o),
+                          this.debugLog(
+                              `JQ.wrapAll: Wrapped ${a.length} elements with <${i.tagName}>`,
+                          ),
+                          this
+                      );
+                  }))),
+            (t.prototype.wrapInner = Pe
+                ? qe
+                : ((Pe = 1),
+                  (qe = function (e) {
+                      this.debugLog(
+                          `JQ.wrapInner: Wrapping inner content of ${this.nodes.length} elements`,
+                      );
+                      const t = this._normalizeContent(e);
+                      this.debugLog(`JQ.wrapInner: Normalized ${t.length} wrapper nodes`);
+                      for (const e of this.nodes)
+                          if ('element' === e.type && t.length > 0) {
+                              const n = this._cloneNode(t[0]);
+                              let o = n;
+                              for (
+                                  ;
+                                  'element' === o.type && o.children && o.children.length > 0;
+
+                              ) {
+                                  let e = !1;
+                                  for (let t = o.children.length - 1; t >= 0; t--)
+                                      if ('element' === o.children[t].type) {
+                                          ((o = o.children[t]), (e = !0));
+                                          break;
+                                      }
+                                  if (!e) break;
+                              }
+                              if (e.children && e.children.length > 0) {
+                                  const t = e.children.map((e) => this._cloneNode(e));
+                                  (o.children || (o.children = []), o.children.push(...t));
+                                  for (const e of t) e.parent = o;
+                              }
+                              ((e.children = [n]),
+                                  (n.parent = e),
+                                  this.debugLog(
+                                      `JQ.wrapInner: Wrapped inner content of <${e.tagName}> with <${n.tagName}>`,
+                                  ));
+                          }
+                      return this;
+                  }))),
+            (t.prototype._normalizeContent = (function () {
+                if (Ye) return Ze;
+                Ye = 1;
+                const { parseHTML: e } = r();
+                return (
+                    dt().debugLog,
+                    (Ze = function (t) {
+                        if ('string' == typeof t) return e(t);
+                        if (t && 'object' == typeof t) {
+                            if ('element' === t.type || 'text' === t.type || 'comment' === t.type)
+                                return [t];
+                            if (t.constructor && 'JQ' === t.constructor.name)
+                                return t.nodes.slice();
+                            if (t.nodes && Array.isArray(t.nodes)) return t.nodes.slice();
+                            if (Array.isArray(t)) {
+                                const e = [];
+                                for (const n of t) e.push(...this._normalizeContent(n));
+                                return e;
+                            }
+                        }
+                        return [];
+                    })
+                );
+            })()),
+            (t.prototype._cloneNode =
+                (Ve ||
+                    ((Ve = 1),
+                    dt().debugLog,
+                    (Ke = function e(t) {
+                        if (!t) return t;
+                        const n = {
+                            type: t.type,
+                            value: t.value,
+                            tagName: t.tagName,
+                            attributes: t.attributes ? { ...t.attributes } : void 0,
+                            children: t.children ? t.children.map((t) => e(t)) : void 0,
+                        };
+                        if (n.children) for (const e of n.children) e.parent = n;
+                        return n;
+                    })),
+                Ke)),
+            (t.prototype._hasDescendant = et
+                ? Xe
+                : ((et = 1),
+                  dt().debugLog,
+                  (Xe = function (e, t) {
+                      if (e.children)
+                          for (const n of e.children)
+                              if (n === t || ('element' === n.type && this._hasDescendant(n, t)))
+                                  return !0;
+                      return !1;
+                  }))),
+            (t.prototype._findCommonRoots = nt
+                ? tt
+                : ((nt = 1),
+                  dt().debugLog,
+                  (tt = function () {
+                      const e = new Set();
+                      for (const t of this.nodes) {
+                          let n = t;
+                          for (; n.parent || n.parentNode; ) n = n.parent || n.parentNode;
+                          e.add(n);
+                      }
+                      return Array.from(e);
+                  }))),
+            (at.exports = t),
+            (at.exports.debugLog = e),
+            at.exports
+        );
+    }
+    function ft() {
+        if (st) return rt;
+        st = 1;
+        const { parseHTML: e } = r(),
+            t = dt(),
+            { isCSSSelector: n, selectNodes: o } = ct();
+        function s(e) {
+            if (!e || 'object' != typeof e || !e.nodeType)
+                throw new Error('Invalid DOM element provided');
+            const t = {
+                type: 1 === e.nodeType ? 'element' : 'text',
+                tagName: e.nodeName ? e.nodeName.toUpperCase() : void 0,
+                attributes: {},
+                properties: {},
+                children: [],
+                parent: null,
+                _originalElement: e,
+            };
+            if (e.attributes) {
+                const n = ['checked', 'selected', 'disabled', 'readonly', 'required', 'multiple'];
+                for (let o = 0; o < e.attributes.length; o++) {
+                    const r = e.attributes[o];
+                    let s;
+                    ((s = n.includes(r.name)
+                        ? r.name
+                        : 'string' == typeof r.value
+                          ? r.value
+                          : String(r.value)),
+                        (t.attributes[r.name] = s));
+                }
+            }
+            if (1 === e.nodeType) {
+                const n = ['value', 'checked', 'selected', 'type', 'name', 'disabled', 'readonly'];
+                for (const o of n) void 0 !== e[o] && (t.properties[o] = e[o]);
+                for (const n in e)
+                    e.hasOwnProperty &&
+                        e.hasOwnProperty(n) &&
+                        'function' != typeof e[n] &&
+                        'object' != typeof e[n] &&
+                        !n.startsWith('on') &&
+                        'attributes' !== n &&
+                        'childNodes' !== n &&
+                        'children' !== n &&
+                        'parentNode' !== n &&
+                        'ownerDocument' !== n &&
+                        (t.properties[n] = e[n]);
+            }
+            if (e.childNodes)
+                for (let n = 0; n < e.childNodes.length; n++) {
+                    const o = e.childNodes[n];
+                    if (1 === o.nodeType) {
+                        const e = s(o);
+                        ((e.parent = t), t.children.push(e));
+                    } else if (3 === o.nodeType) {
+                        const e = { type: 'text', value: o.textContent || '', parent: t };
+                        t.children.push(e);
+                    }
+                }
+            return (
+                3 === e.nodeType &&
+                    ((t.value = e.textContent || ''),
+                    delete t.attributes,
+                    delete t.properties,
+                    delete t.children),
+                t
+            );
+        }
+        function i(n, r) {
+            if (
+                ('undefined' == typeof jest &&
+                    console.log(
+                        `[DEBUG] JQFactory: Called with input type: ${typeof n}, context provided: ${!!r}`,
+                    ),
+                'string' == typeof n)
+            ) {
+                const s = n.trim();
+                if (s.startsWith('<') && s.endsWith('>')) {
+                    'undefined' == typeof jest &&
+                        console.log('[DEBUG] JQFactory: Detected HTML string, parsing...');
+                    let o = e(n);
+                    return (
+                        'undefined' == typeof jest &&
+                            console.log(
+                                `[DEBUG] JQFactory: HTML parsing returned ${o.length} root nodes`,
+                            ),
+                        (o = o.filter((e) => !('text' === e.type && '' === e.value.trim()))),
+                        'undefined' == typeof jest &&
+                            console.log(
+                                `[DEBUG] JQFactory: After filtering whitespace, ${o.length} root nodes`,
+                            ),
+                        new t(o)
+                    );
+                }
+                if (
+                    n.startsWith('.') ||
+                    n.startsWith('#') ||
+                    n.includes(' ') ||
+                    n.includes('>') ||
+                    n.includes('+') ||
+                    n.includes('~') ||
+                    n.includes('[') ||
+                    n.includes(']') ||
+                    n.includes(':')
+                ) {
+                    let e = r;
+                    if (void 0 === r) e = t.allRootNodes;
+                    else {
+                        if (null === r)
+                            return (
+                                'undefined' == typeof jest &&
+                                    console.log(
+                                        `[DEBUG] JQFactory: Null context provided for selector "${n}", returning empty result`,
+                                    ),
+                                new t([])
+                            );
+                        if (!Array.isArray(e))
+                            return (
+                                'undefined' == typeof jest &&
+                                    console.log(
+                                        `[DEBUG] JQFactory: Invalid context provided for selector "${n}", returning empty result`,
+                                    ),
+                                new t([])
+                            );
+                    }
+                    'undefined' == typeof jest &&
+                        (console.log(`[DEBUG] JQFactory: Detected CSS selector: "${n}"`),
+                        console.log(
+                            `[DEBUG] JQFactory: Searching within ${e.length} context nodes`,
+                        ));
+                    const s = o(e, n);
+                    return (
+                        'undefined' == typeof jest &&
+                            console.log(
+                                `[DEBUG] JQFactory: Selector search returned ${s.length} nodes`,
+                            ),
+                        new t(s)
+                    );
+                }
+                {
+                    let s = r;
+                    if (void 0 === r) s = t.allRootNodes;
+                    else {
+                        if (null === r)
+                            return (
+                                'undefined' == typeof jest &&
+                                    console.log(
+                                        `[DEBUG] JQFactory: Null context provided for selector (tag): "${n}", returning empty result`,
+                                    ),
+                                new t([])
+                            );
+                        if (!Array.isArray(s))
+                            return (
+                                'undefined' == typeof jest &&
+                                    console.log(
+                                        `[DEBUG] JQFactory: Invalid context provided for selector (tag): "${n}", returning empty result`,
+                                    ),
+                                new t([])
+                            );
+                    }
+                    if (s.length > 0) {
+                        'undefined' == typeof jest &&
+                            (console.log(`[DEBUG] JQFactory: Detected CSS selector (tag): "${n}"`),
+                            console.log(
+                                `[DEBUG] JQFactory: Searching within ${s.length} context nodes`,
+                            ));
+                        const e = o(s, n);
+                        return (
+                            'undefined' == typeof jest &&
+                                console.log(
+                                    `[DEBUG] JQFactory: Selector search returned ${e.length} nodes`,
+                                ),
+                            new t(e)
+                        );
+                    }
+                    {
+                        'undefined' == typeof jest &&
+                            console.log(
+                                `[DEBUG] JQFactory: No root nodes, treating as HTML content: "${n}"`,
+                            );
+                        const o = e(n);
+                        return (
+                            'undefined' == typeof jest &&
+                                console.log(
+                                    `[DEBUG] JQFactory: HTML parsing returned ${o.length} root nodes`,
+                                ),
+                            new t(o)
+                        );
+                    }
+                }
+            }
+            if (Array.isArray(n))
+                return (
+                    'undefined' == typeof jest &&
+                        console.log(`[DEBUG] JQFactory: Received array of ${n.length} nodes`),
+                    new t(n)
+                );
+            if (n && 'object' == typeof n && n.type)
+                return (
+                    'undefined' == typeof jest &&
+                        console.log('[DEBUG] JQFactory: Received single node object'),
+                    new t([n])
+                );
+            if (n && 'object' == typeof n && n.nodeType) {
+                'undefined' == typeof jest &&
+                    console.log(
+                        '[DEBUG] JQFactory: Received DOM element, converting to internal format',
+                    );
+                const e = s(n);
+                return new t([e]);
+            }
+            return (
+                'undefined' == typeof jest &&
+                    console.log('[DEBUG] JQFactory: Invalid input, creating empty JQ instance'),
+                new t([])
+            );
+        }
+        return (
+            (i.clearRootNodesRegistry = t.clearRootNodesRegistry),
+            (i.fn = t.prototype),
+            (i.clearRootNodesRegistry = t.clearRootNodesRegistry),
+            (i.each = function (e, t) {
+                if (Array.isArray(e))
+                    for (let n = 0; n < e.length && !1 !== t.call(e[n], n, e[n]); n++);
+                else if (e && 'object' == typeof e)
+                    for (let n in e) if (e.hasOwnProperty(n) && !1 === t.call(e[n], n, e[n])) break;
+                return e;
+            }),
+            (i.fn.yourFunctionName = function () {
+                return (
+                    console.log('Called yourFunctionName on ' + this.nodes.length + ' elements.'),
+                    this.nodes.forEach((e) => {
+                        e.attributes && (e.attributes['data-custom-method-called'] = 'true');
+                    }),
+                    this
+                );
+            }),
+            (i.map = function (e, t) {
+                const n = [];
+                if (Array.isArray(e))
+                    for (let o = 0; o < e.length; o++) {
+                        const r = t.call(e[o], e[o], o);
+                        null != r && (Array.isArray(r) ? n.push(...r) : n.push(r));
+                    }
+                else if (e && 'object' == typeof e)
+                    for (let o in e)
+                        if (e.hasOwnProperty(o)) {
+                            const r = t.call(e[o], e[o], o);
+                            null != r && (Array.isArray(r) ? n.push(...r) : n.push(r));
+                        }
+                return n;
+            }),
+            (rt = i)
+        );
+    }
+    return o(
+        lt
+            ? it
+            : ((lt = 1),
+              'undefined' == typeof process &&
+                  (n.process = { env: { NODE_QUERY_DEBUG: '0', DEBUG: '' } }),
+              'undefined' == typeof jest && (n.jest = void 0),
+              (it = ft())),
+    );
+});
 //# sourceMappingURL=jqnode.umd.js.map

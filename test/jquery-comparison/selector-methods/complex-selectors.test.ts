@@ -118,8 +118,12 @@ describe('Complex selector combinations and edge cases - Node-Query vs jQuery Co
         const { jquery: jqAttrClass, nodeQuery: nqAttrClass } = createTestDom(attrClassHtml);
 
         // Complex attribute and class combinations
-        const nqComplexAttrClass = nqAttrClass.find('.item[data-type="primary"][data-status="active"]');
-        const jqComplexAttrClass = jqAttrClass.find('.item[data-type="primary"][data-status="active"]');
+        const nqComplexAttrClass = nqAttrClass.find(
+            '.item[data-type="primary"][data-status="active"]',
+        );
+        const jqComplexAttrClass = jqAttrClass.find(
+            '.item[data-type="primary"][data-status="active"]',
+        );
 
         expect(nqComplexAttrClass.nodes).toHaveLength(2); // div and span 2
         expect(jqComplexAttrClass.length).toBe(2);

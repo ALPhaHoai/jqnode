@@ -6,7 +6,7 @@ import JQClass from '../../../jq';
  * Insert every element in the set of matched elements after the target.
  * @param target - Target elements to insert after
  * @returns The JQ instance for chaining
-  * @see https://api.jquery.com/insertAfter/
+ * @see https://api.jquery.com/insertAfter/
  */
 function insertAfter(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
     let targetJQ: JQ;

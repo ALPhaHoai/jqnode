@@ -26,14 +26,14 @@ npm run test:browser:serve
 
 ### Quick References
 
-| Section | Purpose | Read Time |
-|---------|---------|-----------|
-| **30-Second Start** | Fastest way to start | 30 sec |
-| **5-Minute Tutorial** | Hands-on learning | 5 min |
-| **Conversion Patterns** | Technical conversion guide | 5 min |
-| **Step-by-Step Conversion** | Complete workflow | 10 min |
-| **Complete Guide** | Everything (you're here!) | 15 min |
-| **browser-test/README.md** | Browser test directory docs | 5 min |
+| Section                     | Purpose                     | Read Time |
+| --------------------------- | --------------------------- | --------- |
+| **30-Second Start**         | Fastest way to start        | 30 sec    |
+| **5-Minute Tutorial**       | Hands-on learning           | 5 min     |
+| **Conversion Patterns**     | Technical conversion guide  | 5 min     |
+| **Step-by-Step Conversion** | Complete workflow           | 10 min    |
+| **Complete Guide**          | Everything (you're here!)   | 15 min    |
+| **browser-test/README.md**  | Browser test directory docs | 5 min     |
 
 ### When to Read Each
 
@@ -71,27 +71,27 @@ npm test
 
 ### Script Files
 
-| File | Purpose |
-|------|---------|
+| File                                    | Purpose                                    |
+| --------------------------------------- | ------------------------------------------ |
 | **scripts/convert-tests-to-browser.js** | Auto-converts Jest tests to browser format |
 
 ## 🌐 Browser Test Files
 
 ### Ready to Use
 
-| File | Description | Tests |
-|------|-------------|-------|
-| **browser-test/index.html** | Basic smoke tests | ~10 |
-| **browser-test/all-tests/index.html** | Comprehensive tests with jQuery comparison | ~821 |
-| **browser-test/example-converted-attr-test.html** | Detailed conversion example | 6 |
+| File                                              | Description                                | Tests |
+| ------------------------------------------------- | ------------------------------------------ | ----- |
+| **browser-test/index.html**                       | Basic smoke tests                          | ~10   |
+| **browser-test/all-tests/index.html**             | Comprehensive tests with jQuery comparison | ~821  |
+| **browser-test/example-converted-attr-test.html** | Detailed conversion example                | 6     |
 
 ### Generated (Run scripts to create)
 
-| File | Command to Generate |
-|------|---------------------|
+| File                                  | Command to Generate             |
+| ------------------------------------- | ------------------------------- |
 | **browser-test/all-tests/index.html** | `npm run test:browser:generate` |
 | **browser-test/all-tests/styles.css** | `npm run test:browser:generate` |
-| **browser-test/all-tests/tests.js** | `npm run test:browser:generate` |
+| **browser-test/all-tests/tests.js**   | `npm run test:browser:generate` |
 
 ## 📊 Your Test Suite
 
@@ -110,6 +110,7 @@ Manual Required:    0 files (0%)
 **Bottom line:** Almost everything auto-converts!
 
 ### Test Categories
+
 ```
 Categories:
   ├─ attributes-methods/     71 tests
@@ -131,6 +132,7 @@ Only **2 files** need special attention:
 ### Testing Strategy by Category
 
 #### ✅ Easy Categories (Auto-convert)
+
 - **attributes-methods/** (7 files, 71 tests)
 - **content-methods/** (2 files, 4 tests)
 - **traversal-methods/** (14 files, 165 tests)
@@ -139,12 +141,14 @@ Only **2 files** need special attention:
 **Action:** Run `npm run test:browser:generate`
 
 #### ⚠️ Medium Categories (Auto + Review)
+
 - **filtering-methods/** (8 files, 237 tests) - Many tests, may be slow
 - **selector-methods/** (8 files, 168 tests) - Complex selectors
 
 **Action:** Auto-convert, then review performance
 
 #### ✋ Special Attention
+
 - **fn-extension.test.js** - Uses Jest mocks, may need adaptation
 
 **Action:** Manual conversion with example template
@@ -168,24 +172,30 @@ Only **2 files** need special attention:
 Check your test structure in the `test/` directory - you have 57 test files with 821 tests total.
 
 ### Step 2: Look at an Example (2 min)
+
 Open: `browser-test/example-converted-attr-test.html`
 
 Look at the side-by-side comparison:
+
 - Left: Jest format (Node.js)
 - Right: Mocha/Chai format (Browser)
 
 ### Step 3: Run All Tests (30 sec)
+
 ```bash
 npm run test:browser:serve
 ```
 
 ### Step 4: Check Results (1 min)
+
 Browser opens showing:
+
 - ✓ Green = Passed
 - ✗ Red = Failed
 - Click to expand details
 
 ### Step 5: Try Manual Conversion (1 min)
+
 1. Copy `example-converted-attr-test.html`
 2. Change a test
 3. Reload browser
@@ -218,6 +228,7 @@ Browser opens showing:
 ### Step 1: Understand Your Test Structure
 
 Check the test directory structure and examine the existing tests:
+
 - `test/jquery-comparison/` - Tests comparing with jQuery behavior
 - `test/jqnode/` - Core jqnode functionality tests
 
@@ -241,9 +252,10 @@ npm run test:browser:generate
 #### Approach B: Manual Conversion (Best Quality)
 
 1. Start with the example:
-   ```bash
-   # Open browser-test/example-converted-attr-test.html
-   ```
+
+    ```bash
+    # Open browser-test/example-converted-attr-test.html
+    ```
 
 2. Copy it as a template for your own tests
 
@@ -256,9 +268,10 @@ npm run test:browser:generate
 #### Approach C: Hybrid (Recommended)
 
 1. Auto-generate first:
-   ```bash
-   npm run test:browser:generate
-   ```
+
+    ```bash
+    npm run test:browser:generate
+    ```
 
 2. Test in browser
 
@@ -273,16 +286,19 @@ npm run test:browser:generate
 ### Step 3: Run in Browser
 
 #### Option 1: Double-click HTML file
+
 ```
 browser-test/all-tests.html
 ```
 
 #### Option 2: Use local server (Better)
+
 ```bash
 npm run test:browser:serve
 ```
 
 This:
+
 1. Builds your library
 2. Generates tests
 3. Starts HTTP server
@@ -291,33 +307,39 @@ This:
 ## 🎯 Three Ways to Test
 
 ### Way 1: Auto-Everything (Fastest)
+
 ```bash
 npm run test:browser:serve
 ```
+
 - **Time:** 30 seconds
 - **Tests:** All 821 tests
 - **Control:** Low
 - **Best for:** Quick validation
 
 ### Way 2: Example-Based (Learning)
+
 ```bash
 # Just double-click these files:
 browser-test/index.html
 browser-test/example-converted-attr-test.html
 browser-test/all-tests/index.html
 ```
+
 - **Time:** 5 minutes
 - **Tests:** Sample tests
 - **Control:** High
 - **Best for:** Understanding how it works
 
 ### Way 3: Manual Conversion (Best Quality)
+
 ```bash
 # 1. Use example as template
 # 2. Copy browser-test/example-converted-attr-test.html
 # 3. Convert your tests following the pattern
 # 4. Test in browser
 ```
+
 - **Time:** 1-2 hours for all
 - **Tests:** Exactly what you need
 - **Control:** Complete
@@ -326,15 +348,18 @@ browser-test/all-tests/index.html
 ## 🔄 Common Workflows
 
 ### Workflow 1: Quick Validation
+
 ```bash
 npm run test:browser:serve
 # Browse results
 # Done!
 ```
+
 **Time:** 1 minute
 **Use for:** Quick check before committing
 
 ### Workflow 2: Manual Conversion
+
 ```bash
 # 1. Copy example
 cp browser-test/example-converted-attr-test.html browser-test/my-tests.html
@@ -343,10 +368,12 @@ cp browser-test/example-converted-attr-test.html browser-test/my-tests.html
 # 3. Open in browser
 # 4. Iterate until working
 ```
+
 **Time:** 30 min per file
 **Use for:** Critical test suites, complex tests
 
 ### Workflow 3: Hybrid Approach
+
 ```bash
 # 1. Auto-generate
 npm run test:browser:generate
@@ -357,10 +384,12 @@ npm run test:browser:serve
 # 3. Manually fix any failures
 # 4. Create detailed versions of important tests
 ```
+
 **Time:** 1-2 hours total
 **Use for:** Production deployment prep
 
 ### Daily Development
+
 ```bash
 # Edit code → Run Jest
 npm test
@@ -370,6 +399,7 @@ npm run test:browser:serve
 ```
 
 ### Before Deploying
+
 ```bash
 # Run all tests
 npm test                      # Node.js
@@ -380,6 +410,7 @@ npm run test:browser:serve    # Browser
 ```
 
 ### Adding New Features
+
 ```bash
 # 1. Write Jest test
 npm test
@@ -397,6 +428,7 @@ git add test/ browser-test/
 ## 🎯 Testing Strategies
 
 ### Strategy 1: Manual Conversion (Best for Critical Tests)
+
 1. Start with your most important test file
 2. Create a new HTML file in `browser-test/`
 3. Convert tests one by one
@@ -406,6 +438,7 @@ git add test/ browser-test/
 **Cons:** Time-consuming for many tests
 
 ### Strategy 2: Auto-Generation (Best for Quick Coverage)
+
 1. Run `npm run test:browser:generate`
 2. Open `browser-test/all-tests.html`
 3. Fix any failing tests
@@ -414,6 +447,7 @@ git add test/ browser-test/
 **Cons:** May need manual fixes
 
 ### Strategy 3: Hybrid Approach (Recommended)
+
 1. Use auto-generation for initial coverage
 2. Manually convert critical test suites
 3. Keep both versions maintained
@@ -426,40 +460,44 @@ git add test/ browser-test/
 ### Development Workflow
 
 1. **Write tests in Jest format** (for Node.js development)
-   ```bash
-   npm test
-   ```
+
+    ```bash
+    npm test
+    ```
 
 2. **Convert to browser tests** when needed
-   ```bash
-   node scripts/convert-tests-to-browser.js
-   ```
+
+    ```bash
+    node scripts/convert-tests-to-browser.js
+    ```
 
 3. **Open in browser** to verify browser compatibility
-   ```bash
-   # Open browser-test/all-tests/index.html
-   ```
+    ```bash
+    # Open browser-test/all-tests/index.html
+    ```
 
 ### Comprehensive Testing
 
 For comprehensive testing across Node.js, browser, and jQuery compatibility:
 
 1. **Run comprehensive tests** (includes Node.js, browser, and jQuery comparison)
-   ```bash
-   node test-runner/comprehensive_test_runner.js
-   ```
+
+    ```bash
+    node test-runner/comprehensive_test_runner.js
+    ```
 
 2. **Skip specific test types** as needed
-   ```bash
-   # Skip browser tests (faster for development)
-   node test-runner/comprehensive_test_runner.js --skip-browser
 
-   # Skip Node.js tests (browser-only)
-   node test-runner/comprehensive_test_runner.js --skip-node --skip-jquery
+    ```bash
+    # Skip browser tests (faster for development)
+    node test-runner/comprehensive_test_runner.js --skip-browser
 
-   # Test single file
-   node test-runner/comprehensive_test_runner.js selector-methods.js
-   ```
+    # Skip Node.js tests (browser-only)
+    node test-runner/comprehensive_test_runner.js --skip-node --skip-jquery
+
+    # Test single file
+    node test-runner/comprehensive_test_runner.js selector-methods.js
+    ```
 
 ### CI/CD Integration
 
@@ -472,27 +510,27 @@ name: Tests
 on: [push, pull_request]
 
 jobs:
-  comprehensive-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm install
-      - run: npm run build
-      - run: node test-runner/comprehensive_test_runner.js --skip-browser
+    comprehensive-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+            - run: npm install
+            - run: npm run build
+            - run: node test-runner/comprehensive_test_runner.js --skip-browser
 
-  browser-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm install
-      - run: npm run build
-      - run: node scripts/convert-tests-to-browser.js
-      - run: npm install -g http-server
-      - run: http-server -p 8080 &
-      - uses: microsoft/playwright-github-action@v1
-      - run: npx playwright test browser-test/all-tests/index.html
+    browser-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+            - run: npm install
+            - run: npm run build
+            - run: node scripts/convert-tests-to-browser.js
+            - run: npm install -g http-server
+            - run: http-server -p 8080 &
+            - uses: microsoft/playwright-github-action@v1
+            - run: npx playwright test browser-test/all-tests/index.html
 ```
 
 ## 🚀 Quick Start Options
@@ -500,11 +538,13 @@ jobs:
 ### Option 1: Automated Converter (Recommended for Quick Setup)
 
 1. **Run the converter script:**
+
 ```bash
 node scripts/convert-tests-to-browser.js
 ```
 
 2. **Open the generated test file:**
+
 ```bash
 # Open browser-test/all-tests/index.html in your browser
 ```
@@ -531,7 +571,8 @@ try {
     const passed = result.text() === 'test' && result.nodes.length === 1;
 
     this.addTestResult('Section Name', 'should do something', passed);
-    if (passed) this.passedTests++; else this.failedTests++;
+    if (passed) this.passedTests++;
+    else this.failedTests++;
     this.totalTests++;
 } catch (error) {
     this.addTestResult('Section Name', 'should do something', false, error.message);
@@ -545,26 +586,26 @@ try {
 For advanced users who want to run Jest tests directly in browsers:
 
 1. **Install dependencies:**
+
 ```bash
 npm install --save-dev karma karma-chrome-launcher karma-firefox-launcher karma-jest karma-jasmine
 ```
 
 2. **Create karma.conf.js:**
+
 ```javascript
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         frameworks: ['jest'],
-        files: [
-            'dist/jqnode.umd.js',
-            'test/**/*.test.js'
-        ],
+        files: ['dist/jqnode.umd.js', 'test/**/*.test.js'],
         browsers: ['Chrome', 'Firefox'],
-        singleRun: true
+        singleRun: true,
     });
 };
 ```
 
 3. **Run tests:**
+
 ```bash
 npx karma start
 ```
@@ -666,28 +707,29 @@ Are you integrating with CI/CD?
 
 ## Jest → Browser Assertion Conversion Table
 
-| Jest Assertion | Browser Equivalent |
-|---------------|-------------------|
-| `expect(x).toBe(y)` | `x === y` |
-| `expect(x).toEqual(y)` | `JSON.stringify(x) === JSON.stringify(y)` |
-| `expect(arr).toHaveLength(n)` | `arr.length === n` |
-| `expect(x).toBeInstanceOf(Class)` | `x instanceof Class` |
-| `expect(x).toBeTruthy()` | `!!x` |
-| `expect(x).toBeFalsy()` | `!x` |
-| `expect(arr).toContain(item)` | `arr.includes(item)` |
-| `expect(x).toBeDefined()` | `x !== undefined` |
-| `expect(x).toBeUndefined()` | `x === undefined` |
-| `expect(x).toBeNull()` | `x === null` |
-| `expect(x).toBeGreaterThan(y)` | `x > y` |
-| `expect(x).toBeLessThan(y)` | `x < y` |
-| `expect(x).toMatch(regex)` | `regex.test(x)` |
-| `expect(fn).toThrow()` | `try { fn(); passed = false; } catch { passed = true; }` |
+| Jest Assertion                    | Browser Equivalent                                       |
+| --------------------------------- | -------------------------------------------------------- |
+| `expect(x).toBe(y)`               | `x === y`                                                |
+| `expect(x).toEqual(y)`            | `JSON.stringify(x) === JSON.stringify(y)`                |
+| `expect(arr).toHaveLength(n)`     | `arr.length === n`                                       |
+| `expect(x).toBeInstanceOf(Class)` | `x instanceof Class`                                     |
+| `expect(x).toBeTruthy()`          | `!!x`                                                    |
+| `expect(x).toBeFalsy()`           | `!x`                                                     |
+| `expect(arr).toContain(item)`     | `arr.includes(item)`                                     |
+| `expect(x).toBeDefined()`         | `x !== undefined`                                        |
+| `expect(x).toBeUndefined()`       | `x === undefined`                                        |
+| `expect(x).toBeNull()`            | `x === null`                                             |
+| `expect(x).toBeGreaterThan(y)`    | `x > y`                                                  |
+| `expect(x).toBeLessThan(y)`       | `x < y`                                                  |
+| `expect(x).toMatch(regex)`        | `regex.test(x)`                                          |
+| `expect(fn).toThrow()`            | `try { fn(); passed = false; } catch { passed = true; }` |
 
 ## 📝 Conversion Patterns
 
 ### 3-Step Conversion Process
 
 #### Step 1: Change Test Syntax
+
 ```javascript
 // Jest                           // Mocha/Chai
 test('name', () => {})            it('name', function() {})
@@ -695,6 +737,7 @@ describe('suite', () => {})       describe('suite', function() {})
 ```
 
 #### Step 2: Update Imports
+
 ```javascript
 // Jest
 const $ = require('../index');
@@ -705,6 +748,7 @@ const $ = window.$;
 ```
 
 #### Step 3: Convert Assertions
+
 ```javascript
 // Jest                              // Mocha/Chai
 expect(x).toBe(y)                    expect(x).to.equal(y)
@@ -757,51 +801,55 @@ describe('attr() method', () => {
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.css">
-</head>
-<body>
-    <div id="mocha"></div>
+    <head>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.css"
+        />
+    </head>
+    <body>
+        <div id="mocha"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.10/chai.min.js"></script>
-    <script src="../dist/jqnode.umd.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/10.2.0/mocha.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.10/chai.min.js"></script>
+        <script src="../dist/jqnode.umd.js"></script>
 
-    <script>
-        mocha.setup('bdd');
-        const expect = chai.expect;
-        const $ = window.$;
+        <script>
+            mocha.setup('bdd');
+            const expect = chai.expect;
+            const $ = window.$;
 
-        describe('attr() method', function() {
-            let root;
+            describe('attr() method', function () {
+                let root;
 
-            beforeEach(function() {
-                root = $('<div><p data-test="value">Text</p></div>');
+                beforeEach(function () {
+                    root = $('<div><p data-test="value">Text</p></div>');
+                });
+
+                it('should get attributes', function () {
+                    const p = root.find('p');
+                    expect(p.attr('data-test')).to.equal('value');
+                    expect(p.text()).to.equal('Text');
+                    expect(root.nodes).to.have.lengthOf(1);
+                });
+
+                it('should set attributes', function () {
+                    const p = root.find('p');
+                    p.attr('new-attr', 'new-value');
+                    expect(p.attr('new-attr')).to.equal('new-value');
+                });
             });
 
-            it('should get attributes', function() {
-                const p = root.find('p');
-                expect(p.attr('data-test')).to.equal('value');
-                expect(p.text()).to.equal('Text');
-                expect(root.nodes).to.have.lengthOf(1);
-            });
-
-            it('should set attributes', function() {
-                const p = root.find('p');
-                p.attr('new-attr', 'new-value');
-                expect(p.attr('new-attr')).to.equal('new-value');
-            });
-        });
-
-        mocha.run();
-    </script>
-</body>
+            mocha.run();
+        </script>
+    </body>
 </html>
 ```
 
 ### Common Patterns
 
 #### Pattern: Async Tests
+
 ```javascript
 // Jest
 test('async test', async () => {
@@ -810,13 +858,14 @@ test('async test', async () => {
 });
 
 // Mocha/Chai
-it('async test', async function() {
+it('async test', async function () {
     const result = await fetchData();
     expect(result).to.equal('data');
 });
 ```
 
 #### Pattern: Testing Exceptions
+
 ```javascript
 // Jest
 test('should throw error', () => {
@@ -826,14 +875,15 @@ test('should throw error', () => {
 });
 
 // Mocha/Chai
-it('should throw error', function() {
-    expect(function() {
+it('should throw error', function () {
+    expect(function () {
         throwError();
     }).to.throw();
 });
 ```
 
 #### Pattern: Multiple Assertions
+
 ```javascript
 // Jest
 test('multiple checks', () => {
@@ -843,7 +893,7 @@ test('multiple checks', () => {
 });
 
 // Mocha/Chai
-it('multiple checks', function() {
+it('multiple checks', function () {
     expect(x).to.equal(1);
     expect(y).to.equal(2);
     expect(z).to.equal(3);
@@ -907,6 +957,7 @@ The generated browser test suite includes:
 ### Tests pass in Node but fail in browser
 
 **Common causes:**
+
 - DOM-specific APIs not available in Node
 - Different HTML parsing behavior
 - Module system differences (CommonJS vs ES6)
@@ -916,6 +967,7 @@ The generated browser test suite includes:
 ### Async tests not working
 
 **Jest format:**
+
 ```javascript
 test('async test', async () => {
     const result = await someAsyncFunction();
@@ -924,6 +976,7 @@ test('async test', async () => {
 ```
 
 **Browser format:**
+
 ```javascript
 async runAsyncTest() {
     try {
@@ -939,6 +992,7 @@ async runAsyncTest() {
 ### Performance issues with many tests
 
 If you have hundreds of tests:
+
 1. Break tests into smaller groups
 2. Use the filter feature to run specific test categories
 3. Consider using Karma for parallelized test execution
@@ -946,6 +1000,7 @@ If you have hundreds of tests:
 ### Issue: Assertion errors are unclear
 
 **Solution:**
+
 ```javascript
 // Add descriptive messages
 expect(value).to.equal(expected, 'value should match expected');
@@ -955,9 +1010,10 @@ expect(arr).to.have.lengthOf(3, 'array should have 3 items');
 ### Issue: Tests timeout
 
 **Solution:**
+
 ```javascript
 // Increase timeout for slow operations
-it('slow test', function() {
+it('slow test', function () {
     this.timeout(5000); // 5 seconds
     // ... slow operation
 });
@@ -966,6 +1022,7 @@ it('slow test', function() {
 ### Issue: Generated file doesn't work
 
 **Solution:**
+
 ```bash
 # Make sure library is built first
 npm run build
@@ -977,11 +1034,13 @@ npm run test:browser:generate
 ### Issue: Tests pass in Node but fail in browser
 
 **Common causes:**
+
 1. Library not built for browser (run `npm run build`)
 2. UMD bundle not loaded correctly
 3. Browser-specific behavior differences
 
 **Debug:**
+
 1. Open browser DevTools (F12)
 2. Check Console tab for errors
 3. Check Network tab for loading issues
@@ -989,6 +1048,7 @@ npm run test:browser:generate
 ### Issue: Tests not showing in browser
 
 **Solution:**
+
 ```bash
 # Rebuild library first
 npm run build
@@ -998,6 +1058,7 @@ npm run test:browser:generate
 ### Issue: Some tests fail in browser but pass in Node
 
 **Solution:**
+
 ```bash
 # Open DevTools console (F12)
 # Look for errors
@@ -1008,6 +1069,7 @@ npm run build
 ### Issue: Page loads but no tests run
 
 **Solution:**
+
 ```bash
 # Check browser console
 # Likely: library not loaded
@@ -1017,17 +1079,18 @@ npm run build
 
 ## 🚨 Troubleshooting Quick Index
 
-| Problem | Solution | File |
-|---------|----------|------|
-| Don't know where to start | Read quick start | browser-test/README.md |
-| How to convert assertions? | Check reference table | BROWSER_TESTING_REFERENCE.md |
-| Tests fail in browser | Debug guide | BROWSER_TESTING_REFERENCE.md |
-| Need to set up CI/CD | CI/CD section | BROWSER_TESTING_REFERENCE.md |
-| Want detailed example | Open in browser | browser-test/example-converted-attr-test.html |
+| Problem                    | Solution              | File                                          |
+| -------------------------- | --------------------- | --------------------------------------------- |
+| Don't know where to start  | Read quick start      | browser-test/README.md                        |
+| How to convert assertions? | Check reference table | BROWSER_TESTING_REFERENCE.md                  |
+| Tests fail in browser      | Debug guide           | BROWSER_TESTING_REFERENCE.md                  |
+| Need to set up CI/CD       | CI/CD section         | BROWSER_TESTING_REFERENCE.md                  |
+| Want detailed example      | Open in browser       | browser-test/example-converted-attr-test.html |
 
 ## 📊 Cheat Sheet
 
 ### Most Used Commands
+
 ```bash
 npm run test:browser:serve     # All-in-one: build, generate, serve
 npm run test:browser:generate  # Generate browser tests from Jest
@@ -1035,6 +1098,7 @@ npm test                       # Run original Jest tests
 ```
 
 ### Most Used Files
+
 ```bash
 browser-test/example-converted-attr-test.html  # Copy this as template
 browser-test/README.md                        # Browser test documentation
@@ -1042,6 +1106,7 @@ browser-test/all-tests/index.html             # All tests (generated)
 ```
 
 ### Most Used Patterns
+
 ```javascript
 // Jest → Browser
 expect(x).toBe(y)              → expect(x).to.equal(y)
@@ -1120,7 +1185,7 @@ runner.test('example test', () => {
     if (result.text() !== 'test') throw new Error('Test failed');
 });
 
-runner.run().then(results => {
+runner.run().then((results) => {
     console.log(`Passed: ${results.passed}, Failed: ${results.failed}`);
 });
 ```
@@ -1128,6 +1193,7 @@ runner.run().then(results => {
 ## Examples
 
 See the following files for examples:
+
 - `browser-test/index.html` - Basic browser test
 - `browser-test/example-converted-attr-test.html` - Manual test example
 - `browser-test/all-tests/index.html` - Auto-generated from Jest tests (run converter first)
@@ -1155,8 +1221,8 @@ See the following files for examples:
 ---
 
 **Remember:** The goal isn't to replace Jest tests. Keep both!
+
 - **Jest** = Fast Node.js development
 - **Browser** = Real-world validation
 
 **Quick Win:** `npm run test:browser:serve` ← Try this now!
-

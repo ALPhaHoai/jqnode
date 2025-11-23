@@ -3,15 +3,14 @@ import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
  * Internal CSS helper method with camelCase property support.
- * 
+ *
  * Note: This is not a jQuery method. For jQuery CSS manipulation, use the .css() method.
  */
 function cssCamel(
     this: JQ,
     prop: string | string[] | Record<string, string | number>,
-    value?: string | number | ((index: number, currentValue: string) => string | number)
+    value?: string | number | ((index: number, currentValue: string) => string | number),
 ): JQ {
-
     // GETTER CASES
     // Arrays and non-objects (strings) go through getter logic
     if (value === undefined && (typeof prop !== 'object' || Array.isArray(prop))) {
@@ -53,7 +52,6 @@ function cssCamel(
 
     // Case 2: Set single property with function
     if (typeof value === 'function') {
-
         this.nodes.forEach(function (element: HtmlNode, index: number) {
             if (!element) return;
 
@@ -74,5 +72,3 @@ function cssCamel(
 }
 
 export = cssCamel;
-
-
