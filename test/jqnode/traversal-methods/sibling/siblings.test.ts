@@ -28,19 +28,19 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(5); // All sibling elements except itself
 
-        const hasFirstSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('first'));
+        const hasFirstSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('first'));
         expect(hasFirstSibling).toBe(true);
 
-        const hasThirdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('third'));
+        const hasThirdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('third'));
         expect(hasThirdSibling).toBe(true);
 
-        const hasFourthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fourth'));
+        const hasFourthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('fourth'));
         expect(hasFourthSibling).toBe(true);
 
-        const hasNotSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('not-sibling'));
+        const hasNotSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('not-sibling'));
         expect(hasNotSibling).toBe(true);
 
-        const hasFifthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fifth'));
+        const hasFifthSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('fifth'));
         expect(hasFifthSibling).toBe(true);
     });
 
@@ -49,7 +49,7 @@ describe('siblings() method', () => {
         const activeSiblings = secondElement.siblings('.active');
 
         expect(activeSiblings.nodes).toHaveLength(1);
-        const activeSiblingsClass = activeSiblings.nodes[0].attributes.class;
+        const activeSiblingsClass = activeSiblings.nodes[0].attributes?.class;
         expect(activeSiblingsClass).toBe('sibling third active');
         const activeSiblingsText = activeSiblings.text();
         expect(activeSiblingsText).toBe('Third Active');
@@ -60,7 +60,7 @@ describe('siblings() method', () => {
         const siblingElements = secondElement.siblings('.sibling');
 
         expect(siblingElements.nodes).toHaveLength(4);
-        const allHaveSiblingClass = siblingElements.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
+        const allHaveSiblingClass = siblingElements.nodes.every((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('sibling'));
         expect(allHaveSiblingClass).toBe(true);
     });
 
@@ -124,10 +124,10 @@ describe('siblings() method', () => {
 
         expect(complexSiblings.nodes).toHaveLength(2);
 
-        const hasThirdComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('third'));
+        const hasThirdComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('third'));
         expect(hasThirdComplexSibling).toBe(true);
 
-        const hasFifthComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes.class.includes('fifth'));
+        const hasFifthComplexSibling = complexSiblings.nodes.some((node: HtmlNode) => node.attributes?.class && (node.attributes.class as string).includes('fifth'));
         expect(hasFifthComplexSibling).toBe(true);
     });
 
@@ -159,10 +159,10 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(2);
 
-        const hasTypeASibling = siblings.nodes.some((node: HtmlNode) => node.attributes['data-type'] === 'a');
+        const hasTypeASibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.['data-type'] === 'a');
         expect(hasTypeASibling).toBe(true);
 
-        const hasTypeCSibling = siblings.nodes.some((node: HtmlNode) => node.attributes['data-type'] === 'c');
+        const hasTypeCSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.['data-type'] === 'c');
         expect(hasTypeCSibling).toBe(true);
     });
 
@@ -173,19 +173,19 @@ describe('siblings() method', () => {
         expect(allSiblings.nodes).toHaveLength(5);
         // Should be in document order: first, third, fourth, not-sibling, fifth
 
-        const firstSiblingIsFirst = allSiblings.nodes[0].attributes.class.includes('first');
+        const firstSiblingIsFirst = (allSiblings.nodes[0].attributes?.class as string)?.includes('first');
         expect(firstSiblingIsFirst).toBe(true);
 
-        const secondSiblingIsThird = allSiblings.nodes[1].attributes.class.includes('third');
+        const secondSiblingIsThird = (allSiblings.nodes[1].attributes?.class as string)?.includes('third');
         expect(secondSiblingIsThird).toBe(true);
 
-        const thirdSiblingIsFourth = allSiblings.nodes[2].attributes.class.includes('fourth');
+        const thirdSiblingIsFourth = (allSiblings.nodes[2].attributes?.class as string)?.includes('fourth');
         expect(thirdSiblingIsFourth).toBe(true);
 
-        const fourthSiblingIsNotSibling = allSiblings.nodes[3].attributes.class.includes('not-sibling');
+        const fourthSiblingIsNotSibling = (allSiblings.nodes[3].attributes?.class as string)?.includes('not-sibling');
         expect(fourthSiblingIsNotSibling).toBe(true);
 
-        const fifthSiblingIsFifth = allSiblings.nodes[4].attributes.class.includes('fifth');
+        const fifthSiblingIsFifth = (allSiblings.nodes[4].attributes?.class as string)?.includes('fifth');
         expect(fifthSiblingIsFifth).toBe(true);
     });
 
@@ -203,10 +203,10 @@ describe('siblings() method', () => {
 
         expect(siblings.nodes).toHaveLength(2);
 
-        const hasFirstIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.id === 'first');
+        const hasFirstIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.id === 'first');
         expect(hasFirstIdSibling).toBe(true);
 
-        const hasThirdIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes.id === 'third');
+        const hasThirdIdSibling = siblings.nodes.some((node: HtmlNode) => node.attributes?.id === 'third');
         expect(hasThirdIdSibling).toBe(true);
     });
 

@@ -46,7 +46,8 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 }
             }
         } else {
-            const rootNodes = require('../../../jq').allRootNodes;
+            const jqModule = require('../../../jq');
+            const rootNodes = (jqModule.default || jqModule).allRootNodes;
             const currentIndex = rootNodes.indexOf(node);
 
             if (currentIndex !== -1) {

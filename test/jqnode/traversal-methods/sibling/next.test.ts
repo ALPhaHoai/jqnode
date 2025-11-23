@@ -132,7 +132,7 @@ describe('next() method', () => {
         const nextSibling = bElement.next('[data-type="c"]');
 
         expect(nextSibling.nodes).toHaveLength(1);
-        const nextSiblingDataType = nextSibling.nodes[0].attributes['data-type'];
+        const nextSiblingDataType = nextSibling.nodes[0].attributes?.['data-type'];
         expect(nextSiblingDataType).toBe('c');
         const nextSiblingDataTypeText = nextSibling.text();
         expect(nextSiblingDataTypeText).toBe('C');
@@ -151,7 +151,7 @@ describe('next() method', () => {
         const nextSibling = firstElement.next('#second');
 
         expect(nextSibling.nodes).toHaveLength(1);
-        const nextSiblingId = nextSibling.nodes[0].attributes.id;
+        const nextSiblingId = nextSibling.nodes[0].attributes?.id;
         expect(nextSiblingId).toBe('second');
     });
 

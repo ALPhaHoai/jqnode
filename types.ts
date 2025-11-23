@@ -173,7 +173,7 @@ export interface JQ {
 
     toJSON(): unknown;
 
-    findTableWithHeader(headerText: string): JQ;
+    findTableWithHeader(headerText: string | string[]): JQ;
 
     title(): string;
 

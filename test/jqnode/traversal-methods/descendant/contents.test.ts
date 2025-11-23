@@ -1,5 +1,6 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('contents() method', () => {
     let root: JQ;
@@ -35,16 +36,16 @@ describe('contents() method', () => {
         const contentsNodesCount = contents.nodes.length;
         expect(contentsNodesCount).toBeGreaterThan(3); // At least 4 nodes
 
-        const hasCommentNode = contents.nodes.some(node => node.type === 'comment');
+        const hasCommentNode = contents.nodes.some((node: HtmlNode) => node.type === 'comment');
         expect(hasCommentNode).toBe(true);
 
-        const hasH1Element = contents.nodes.some(node => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
+        const hasH1Element = contents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1');
         expect(hasH1Element).toBe(true);
 
-        const hasDivElement = contents.nodes.some(node => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div');
+        const hasDivElement = contents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div');
         expect(hasDivElement).toBe(true);
 
-        const hasUlElement = contents.nodes.some(node => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'ul');
+        const hasUlElement = contents.nodes.some((node: HtmlNode) => node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'ul');
         expect(hasUlElement).toBe(true);
     });
 
@@ -64,7 +65,7 @@ describe('contents() method', () => {
         const mainDiv = root.find('#main');
         const contents = mainDiv.contents();
 
-        const commentNodes = contents.nodes.filter(node => node.type === 'comment');
+        const commentNodes = contents.nodes.filter((node: HtmlNode) => node.type === 'comment');
         expect(commentNodes).toHaveLength(1);
         const firstCommentValue = commentNodes[0].value;
         expect(firstCommentValue).toBe(' This is a comment ');
@@ -78,10 +79,10 @@ describe('contents() method', () => {
         const contentsNodesCount = contents.nodes.length;
         expect(contentsNodesCount).toBeGreaterThan(3); // Text nodes and element nodes
 
-        const hasElementNode = contents.nodes.some(node => node.type === 'element');
+        const hasElementNode = contents.nodes.some((node: HtmlNode) => node.type === 'element');
         expect(hasElementNode).toBe(true);
 
-        const hasTextNode = contents.nodes.some(node => node.type === 'text');
+        const hasTextNode = contents.nodes.some((node: HtmlNode) => node.type === 'text');
         expect(hasTextNode).toBe(true);
     });
 
@@ -102,13 +103,13 @@ describe('contents() method', () => {
         const contentsNodesCount = contents.nodes.length;
         expect(contentsNodesCount).toBe(2);
 
-        const allAreTextNodes = contents.nodes.every(node => node.type === 'text');
+        const allAreTextNodes = contents.nodes.every((node: HtmlNode) => node.type === 'text');
         expect(allAreTextNodes).toBe(true);
 
-        const hasFirstParagraph = contents.nodes.some(node => node.value.includes('First paragraph'));
+        const hasFirstParagraph = contents.nodes.some((node: HtmlNode) => node.value?.includes('First paragraph'));
         expect(hasFirstParagraph).toBe(true);
 
-        const hasSecondParagraph = contents.nodes.some(node => node.value.includes('Second paragraph'));
+        const hasSecondParagraph = contents.nodes.some((node: HtmlNode) => node.value?.includes('Second paragraph'));
         expect(hasSecondParagraph).toBe(true);
     });
 });

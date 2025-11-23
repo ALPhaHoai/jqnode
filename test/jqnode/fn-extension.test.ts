@@ -1,6 +1,30 @@
-import $ from '../../index';
-import JQ from '../../jq';
+import $, { JQ } from '../../index';
 import { HtmlNode } from '../../types';
+
+// Augment JQ interface to include custom methods defined in these tests
+declare module '../../types' {
+    interface JQ {
+        customHighlight(color?: string): this;
+        markAsSelected(): this;
+        safeOperation(): this;
+        yourFunctionName(): this;
+        addIndex(): this;
+        count(): number;
+        setMultipleAttrs(attr1: string, value1: string, attr2: string, value2: string): this;
+        getNodeCount(): number;
+        getContextType(): string;
+        addAndFind(selector: string): JQ;
+        mark(): this;
+        flag(): this;
+        stamp(): this;
+        eachWithCallback(callback: (node: HtmlNode, index: number) => void): this;
+        addFilterMark(): this;
+        createNewInstance(): JQ;
+        safeAttr(name?: string | null, value?: string | null): this;
+        modifyNodeType(): this;
+        addDepth(depth: string): this;
+    }
+}
 
 describe('$.fn Extension Pattern', () => {
     let root: JQ;
@@ -332,7 +356,10 @@ describe('$.fn Extension Pattern', () => {
         $.fn.modifyNodeType = function () {
             this.nodes.forEach((node: HtmlNode) => {
                 if (node.type === 'element') {
-                    node.customProperty = 'modified';
+                    if (!node.properties) {
+                        node.properties = {};
+                    }
+                    node.properties.customProperty = 'modified';
                 }
             });
             return this;
@@ -342,13 +369,13 @@ describe('$.fn Extension Pattern', () => {
         items.modifyNodeType();
 
         // Verify the custom property was added
-        const firstItemCustomProperty = items.nodes[0].customProperty;
+        const firstItemCustomProperty = items.nodes[0].properties?.customProperty;
         expect(firstItemCustomProperty).toBe('modified');
 
-        const secondItemCustomProperty = items.nodes[1].customProperty;
+        const secondItemCustomProperty = items.nodes[1].properties?.customProperty;
         expect(secondItemCustomProperty).toBe('modified');
 
-        const thirdItemCustomProperty = items.nodes[2].customProperty;
+        const thirdItemCustomProperty = items.nodes[2].properties?.customProperty;
         expect(thirdItemCustomProperty).toBe('modified');
     });
 

@@ -16,7 +16,7 @@ describe('Performance and large document handling', () => {
         const nestedRoot = $(nestedHtml);
         const deepElement = nestedRoot.find('.deep');
         expect(deepElement.nodes).toHaveLength(1);
-        const deepElementClass = deepElement.nodes[0].attributes.class;
+        const deepElementClass = deepElement.nodes[0]?.attributes?.class;
         expect(deepElementClass).toBe('deep');
     });
 
@@ -31,7 +31,7 @@ describe('Performance and large document handling', () => {
         const manyRoot = $(manyHtml);
         const allItems = manyRoot.find('.item');
         expect(allItems.nodes).toHaveLength(100);
-        const allHaveItemClass = allItems.nodes.every(node => node.attributes.class === 'item');
+        const allHaveItemClass = allItems.nodes.every(node => node.attributes?.class === 'item');
         expect(allHaveItemClass).toBe(true);
     });
 });

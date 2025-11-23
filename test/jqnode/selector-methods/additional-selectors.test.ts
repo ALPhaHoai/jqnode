@@ -3424,10 +3424,10 @@ describe('Additional selector tests', () => {
 
       // Quotes in data attributes should be preserved
       const firstItem = items.nodes[0];
-      expect(firstItem.attributes['data-value']).toBe("test'quote");
+      expect(firstItem.attributes?.['data-value']).toBe("test'quote");
 
       const secondItem = items.nodes[1];
-      expect(secondItem.attributes['data-value']).toBe('test"quote');
+      expect(secondItem.attributes?.['data-value']).toBe('test"quote');
     });
 
     test('should handle jQuery-style selector performance with many matches', () => {
@@ -3511,9 +3511,15 @@ describe('Additional selector tests', () => {
       expect(items.nodes).toHaveLength(3);
 
       // Simulate jQuery-style dynamic class changes
-      items.nodes[0].attributes.class = 'item active';
-      items.nodes[1].attributes.class = 'item active';
-      items.nodes[2].attributes.class = 'item inactive';
+      if (items.nodes[0].attributes) {
+        items.nodes[0].attributes.class = 'item active';
+      }
+      if (items.nodes[1].attributes) {
+        items.nodes[1].attributes.class = 'item active';
+      }
+      if (items.nodes[2].attributes) {
+        items.nodes[2].attributes.class = 'item inactive';
+      }
 
       // Re-query should reflect changes (though our implementation doesn't cache)
       const activeItems = dynamicRoot.find('.item.active');
@@ -3595,7 +3601,9 @@ describe('Additional selector tests', () => {
 
       // Long but valid selector
       const longValidClass = 'a'.repeat(100);
-      longRoot.nodes[0].attributes.class = longValidClass;
+      if (longRoot.nodes[0].attributes) {
+        longRoot.nodes[0].attributes.class = longValidClass;
+      }
       const longValidResult = longRoot.find(`.${longValidClass}`);
       expect(longValidResult.nodes).toHaveLength(1);
     });
@@ -3937,13 +3945,15 @@ describe('Additional selector tests', () => {
 
       // Simulate dynamic addition
       const newItem = {
-        type: 'element',
+        type: 'element' as const,
         tagName: 'div',
         attributes: { class: 'item' },
-        children: [{ type: 'text', value: 'Item 1.2' }]
+        children: [{ type: 'text' as const, value: 'Item 1.2' }]
       };
 
-      list1.nodes[0].children.push(newItem);
+      if (list1.nodes[0].children) {
+        list1.nodes[0].children.push(newItem);
+      }
 
       // Re-query should show updated results
       const updatedList1Items = list1.find('.item');

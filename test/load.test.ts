@@ -3,6 +3,7 @@
  */
 
 import $ from '../index';
+import { HtmlNode } from '../types';
 
 describe('$.load()', () => {
     beforeEach(() => {

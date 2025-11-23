@@ -294,7 +294,7 @@ describe('Chaining Patterns', () => {
     const navLink = activeNavItem.find('.nav-link');
 
     // Chain attribute operations
-    navLink.attr('data-original-href', navLink.attr('href'))
+    navLink.attr('data-original-href', (navLink.attr('href') as string | undefined) || '')
       .attr('aria-current', 'page');
 
     expect(navLink.attr('data-original-href')).toBe('/');
@@ -397,7 +397,7 @@ describe('Chaining Patterns', () => {
     const controls = header.find('.widget-controls');
 
     // Chain attribute and content operations
-    title.attr('data-original-title', title.text())
+    title.attr('data-original-title', (title.text() as string | undefined) || '')
       .text('Updated Widget Title');
 
     controls.find('.btn-minimize').attr('title', 'Minimize widget')

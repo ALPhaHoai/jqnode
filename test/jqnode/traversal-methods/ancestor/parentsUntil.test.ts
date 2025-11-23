@@ -53,7 +53,7 @@ describe('parentsUntil() method', () => {
 
     // Should include: div.nested, article, but not section or higher
 
-    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
+    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes?.class === 'nested');
     expect(hasNestedDiv).toBe(true);
 
     const hasArticle = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'article');
@@ -72,10 +72,10 @@ describe('parentsUntil() method', () => {
       expect(node.tagName && node.tagName.toLowerCase()).toBe('div');
     });
 
-    const hasNestedClass = ancestors.nodes.some((node: HtmlNode) => node.attributes.class === 'nested');
+    const hasNestedClass = ancestors.nodes.some((node: HtmlNode) => node.attributes?.class === 'nested');
     expect(hasNestedClass).toBe(true);
 
-    const hasContentClass = ancestors.nodes.some((node: HtmlNode) => node.attributes.class === 'content');
+    const hasContentClass = ancestors.nodes.some((node: HtmlNode) => node.attributes?.class === 'content');
     expect(hasContentClass).toBe(false); // content div is after section
   });
 

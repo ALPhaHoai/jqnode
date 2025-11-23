@@ -28,15 +28,15 @@ describe('prevAll() method', () => {
         const prevSiblings = fifthElement.prevAll();
 
         expect(prevSiblings.nodes).toHaveLength(5); // first, second, third, fourth, span
-        const firstPrevSiblingClass = prevSiblings.nodes[0].attributes.class;
+        const firstPrevSiblingClass = prevSiblings.nodes[0].attributes?.class;
         expect(firstPrevSiblingClass).toBe('sibling first');
-        const secondPrevSiblingClass = prevSiblings.nodes[1].attributes.class;
+        const secondPrevSiblingClass = prevSiblings.nodes[1].attributes?.class;
         expect(secondPrevSiblingClass).toBe('sibling second');
-        const thirdPrevSiblingClass = prevSiblings.nodes[2].attributes.class;
+        const thirdPrevSiblingClass = prevSiblings.nodes[2].attributes?.class;
         expect(thirdPrevSiblingClass).toBe('sibling third active');
-        const fourthPrevSiblingClass = prevSiblings.nodes[3].attributes.class;
+        const fourthPrevSiblingClass = prevSiblings.nodes[3].attributes?.class;
         expect(fourthPrevSiblingClass).toBe('sibling fourth');
-        const fifthPrevSiblingClass = prevSiblings.nodes[4].attributes.class;
+        const fifthPrevSiblingClass = prevSiblings.nodes[4].attributes?.class;
         expect(fifthPrevSiblingClass).toBe('not-sibling');
     });
 
@@ -45,7 +45,7 @@ describe('prevAll() method', () => {
         const prevActive = sixthElement.prevAll('.active');
 
         expect(prevActive.nodes).toHaveLength(1);
-        const prevActiveClass = prevActive.nodes[0].attributes.class;
+        const prevActiveClass = prevActive.nodes[0].attributes?.class;
         expect(prevActiveClass).toBe('sibling third active');
         const prevActiveText = prevActive.text();
         expect(prevActiveText).toBe('Third Active');
@@ -56,7 +56,7 @@ describe('prevAll() method', () => {
         const prevSiblings = fifthElement.prevAll('.sibling');
 
         expect(prevSiblings.nodes).toHaveLength(4);
-        const allPrevHaveSiblingClass = prevSiblings.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
+        const allPrevHaveSiblingClass = prevSiblings.nodes.every((node: HtmlNode) => String(node.attributes?.class || '').includes('sibling'));
         expect(allPrevHaveSiblingClass).toBe(true);
     });
 
@@ -89,11 +89,11 @@ describe('prevAll() method', () => {
         const prevSiblings = sixthElement.prevAll();
 
         expect(prevSiblings.nodes).toHaveLength(6); // first, second, third, fourth, span, fifth
-        const fourthPrevSiblingClass = prevSiblings.nodes[3].attributes.class;
+        const fourthPrevSiblingClass = prevSiblings.nodes[3].attributes?.class;
         expect(fourthPrevSiblingClass).toBe('sibling fourth');
-        const fifthPrevSiblingClass = prevSiblings.nodes[4].attributes.class;
+        const fifthPrevSiblingClass = prevSiblings.nodes[4].attributes?.class;
         expect(fifthPrevSiblingClass).toBe('not-sibling');
-        const sixthPrevSiblingClass = prevSiblings.nodes[5].attributes.class;
+        const sixthPrevSiblingClass = prevSiblings.nodes[5].attributes?.class;
         expect(sixthPrevSiblingClass).toBe('sibling fifth');
     });
 
@@ -123,9 +123,9 @@ describe('prevAll() method', () => {
         const prevComplex = sixthElement.prevAll('[class*="first"], [class*="fourth"]');
 
         expect(prevComplex.nodes).toHaveLength(2);
-        const firstPrevClass = prevComplex.nodes[0].attributes.class;
+        const firstPrevClass = prevComplex.nodes[0].attributes?.class;
         expect(firstPrevClass).toBe('sibling first');
-        const secondPrevClass = prevComplex.nodes[1].attributes.class;
+        const secondPrevClass = prevComplex.nodes[1].attributes?.class;
         expect(secondPrevClass).toBe('sibling fourth');
     });
 
@@ -143,11 +143,11 @@ describe('prevAll() method', () => {
         const prevSiblings = dElement.prevAll('[data-type]');
 
         expect(prevSiblings.nodes).toHaveLength(3);
-        const firstDataType = prevSiblings.nodes[0].attributes['data-type'];
+        const firstDataType = prevSiblings.nodes[0].attributes?.['data-type'];
         expect(firstDataType).toBe('a');
-        const secondDataType = prevSiblings.nodes[1].attributes['data-type'];
+        const secondDataType = prevSiblings.nodes[1].attributes?.['data-type'];
         expect(secondDataType).toBe('b');
-        const thirdDataType = prevSiblings.nodes[2].attributes['data-type'];
+        const thirdDataType = prevSiblings.nodes[2].attributes?.['data-type'];
         expect(thirdDataType).toBe('c');
     });
 
@@ -165,9 +165,9 @@ describe('prevAll() method', () => {
         const prevSiblings = fourthElement.prevAll('#first, #third');
 
         expect(prevSiblings.nodes).toHaveLength(2);
-        const firstPrevId = prevSiblings.nodes[0].attributes.id;
+        const firstPrevId = prevSiblings.nodes[0].attributes?.id;
         expect(firstPrevId).toBe('first');
-        const secondPrevId = prevSiblings.nodes[1].attributes.id;
+        const secondPrevId = prevSiblings.nodes[1].attributes?.id;
         expect(secondPrevId).toBe('third');
     });
 
@@ -176,7 +176,10 @@ describe('prevAll() method', () => {
         const allPrev = fifthElement.prevAll();
 
         expect(allPrev.nodes).toHaveLength(5); // first, second, third, fourth, span
-        const prevClassNames = allPrev.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1] || node.attributes.class);
+        const prevClassNames = allPrev.nodes.map((node: HtmlNode) => {
+            const cls = node.attributes?.class as string || '';
+            return cls.split(' ')[1] || cls;
+        });
         expect(prevClassNames).toEqual(
             ['first', 'second', 'third', 'fourth', 'not-sibling']
         );
@@ -199,7 +202,7 @@ describe('prevAll() method', () => {
         const prevSiblings = lastDiv.prevAll('.item');
 
         expect(prevSiblings.nodes).toHaveLength(3);
-        const divValues = prevSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
+        const divValues = prevSiblings.nodes.map((node: HtmlNode) => node.children?.[0]?.data);
         expect(divValues).toEqual(['Div 1', 'Div 2', 'Div 3']);
     });
 
@@ -227,9 +230,9 @@ describe('prevAll() method', () => {
         const filteredPrev = fifthElement.prevAll('.first, .third');
 
         expect(filteredPrev.nodes).toHaveLength(2);
-        const firstFilteredClass = filteredPrev.nodes[0].attributes.class;
+        const firstFilteredClass = filteredPrev.nodes[0].attributes?.class;
         expect(firstFilteredClass).toBe('sibling first');
-        const secondFilteredClass = filteredPrev.nodes[1].attributes.class;
+        const secondFilteredClass = filteredPrev.nodes[1].attributes?.class;
         expect(secondFilteredClass).toBe('sibling third active');
     });
 
@@ -256,7 +259,7 @@ describe('prevAll() method', () => {
         const prevSiblings = child3.prevAll('.child');
 
         expect(prevSiblings.nodes).toHaveLength(2);
-        const childValues = prevSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
+        const childValues = prevSiblings.nodes.map((node: HtmlNode) => node.children?.[0]?.data);
         expect(childValues).toEqual(['Child 1', 'Child 2']);
     });
 });

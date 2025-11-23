@@ -18,12 +18,12 @@ describe('JQ Factory Function', () => {
             expect(firstNodeTag).toBe('div');
             // Check that the element has text content
             expect(result.nodes[0].children).toHaveLength(1);
-            expect(result.nodes[0].children[0].type).toBe('text');
-            expect(result.nodes[0].children[0].value).toBe('test content');
+            expect(result.nodes[0].children![0].type).toBe('text');
+            expect(result.nodes[0].children![0].data).toBe('test content');
         } else {
             // jQuery result - check using jQuery API
             expect(result[0]).toBeDefined();
-            expect(result[0].tagName.toLowerCase()).toBe('div');
+            expect(result[0]!.tagName?.toLowerCase()).toBe('div');
             expect(result.text()).toBe('test content');
         }
     });
@@ -56,8 +56,8 @@ describe('JQ Factory Function', () => {
     describe('$.each() static method', () => {
         test('$.each() should iterate over arrays', () => {
             const array = [1, 2, 3, 4];
-            let result = [];
-            let indices = [];
+            let result: number[] = [];
+            let indices: number[] = [];
 
             $.each(array, function (index: number, value: number) {
                 result.push(value);
@@ -70,8 +70,8 @@ describe('JQ Factory Function', () => {
 
         test('$.each() should iterate over objects', () => {
             const obj = { a: 1, b: 2, c: 3 };
-            let keys = [];
-            let values = [];
+            let keys: string[] = [];
+            let values: number[] = [];
 
             $.each(obj, function (key: string, value: number) {
                 keys.push(key);
@@ -87,7 +87,7 @@ describe('JQ Factory Function', () => {
 
         test('$.each() should break iteration when callback returns false', () => {
             const array = [1, 2, 3, 4];
-            let result = [];
+            let result: number[] = [];
 
             $.each(array, function (index: number, value: number) {
                 result.push(value);
@@ -109,7 +109,7 @@ describe('JQ Factory Function', () => {
         });
 
         test('$.each() should handle empty arrays', () => {
-            const array = [];
+            const array: number[] = [];
             let count = 0;
 
             $.each(array, function () {

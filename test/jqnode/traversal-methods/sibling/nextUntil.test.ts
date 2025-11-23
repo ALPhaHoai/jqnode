@@ -47,7 +47,7 @@ describe('nextUntil() method', () => {
 
         const nextUntilFilteredNodes = nextUntilFiltered.nodes;
         expect(nextUntilFilteredNodes).toHaveLength(4); // second, third, fourth, fifth (stops before sixth)
-        const nextFilteredClassNames = nextUntilFiltered.nodes.map((node: HtmlNode) => node.attributes.class.split(' ')[1]);
+        const nextFilteredClassNames = nextUntilFiltered.nodes.map((node: HtmlNode) => String(node.attributes?.class || '').split(' ')[1]);
         expect(nextFilteredClassNames).toEqual(['second', 'third', 'fourth', 'fifth']);
     });
 
@@ -204,7 +204,7 @@ describe('nextUntil() method', () => {
 
         const nextUntilLastStopNodes = nextUntilLastStop.nodes;
         expect(nextUntilLastStopNodes).toHaveLength(5); // second, third, fourth, span, fifth
-        const nextUntilClassNames = nextUntilLastStop.nodes.map((node: HtmlNode) => node.attributes.class);
+        const nextUntilClassNames = nextUntilLastStop.nodes.map((node: HtmlNode) => node.attributes?.class);
         expect(nextUntilClassNames).toEqual(['sibling second', 'sibling third stop', 'sibling fourth', 'not-sibling', 'sibling fifth']);
     });
 

@@ -1,0 +1,103 @@
+ts-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+  console.log
+    Child keys: [ 'type', 'data', 'parent' ]
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:207:21)
+
+  console.log
+    Child data: Div 1
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:208:21)
+
+  console.log
+    Child value: undefined
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:209:21)
+
+  console.log
+    Child type: text
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:210:21)
+
+FAIL test/jqnode/traversal-methods/sibling/prevAll.test.ts
+  prevAll() method
+    ΓêÜ prevAll() should get all preceding siblings (10 ms)
+    ΓêÜ prevAll() should work with selector filter (2 ms)
+    ΓêÜ prevAll() should work with class selector (2 ms)
+    ΓêÜ prevAll() should work with tag selector (1 ms)
+    ΓêÜ prevAll() should return empty for first element
+    ΓêÜ prevAll() should work with multiple elements
+    ΓêÜ prevAll() should skip non-element siblings (1 ms)
+    ΓêÜ prevAll() should return empty when selector matches nothing (1 ms)
+    ΓêÜ prevAll() should return empty for elements with no preceding siblings (1 ms)
+    ΓêÜ prevAll() should work on empty collection (1 ms)
+    ΓêÜ prevAll() should work with complex selectors (1 ms)
+    ΓêÜ prevAll() should work with attribute selectors (1 ms)
+    ΓêÜ prevAll() should work with ID selectors (1 ms)
+    ΓêÜ prevAll() should maintain proper order (document order) (2 ms)
+    ├ù prevAll() should handle mixed element types correctly (48 ms)
+    ΓêÜ prevAll() should return different results for different starting positions (1 ms)
+    ΓêÜ prevAll() should work with elements that have no parent (1 ms)
+    ΓêÜ prevAll() should work with multiple selectors in filter (1 ms)
+    ΓêÜ prevAll() should work with the seventh element (single child in different container)
+    ├ù prevAll() should handle elements with same parent correctly (2 ms)
+
+  ΓùÅ prevAll() method ΓÇ║ prevAll() should handle mixed element types correctly
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Array [
+    -   "Div 1",
+    -   "Div 2",
+    -   "Div 3",
+    +   undefined,
+    +   undefined,
+    +   undefined,
+      ]
+
+      211 |         }
+      212 |         const divValues = prevSiblings.nodes.map((node: HtmlNode) => node.children?.[0]?.value);
+    > 213 |         expect(divValues).toEqual(['Div 1', 'Div 2', 'Div 3']);
+          |                           ^
+      214 |     });
+      215 |
+      216 |     test('prevAll() should return different results for different starting positions', () => {
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:213:27)
+
+  ΓùÅ prevAll() method ΓÇ║ prevAll() should handle elements with same parent correctly
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   "Child 1",
+    -   "Child 2",
+    +   undefined,
+    +   undefined,
+      ]
+
+      268 |         expect(prevSiblings.nodes).toHaveLength(2);
+      269 |         const childValues = prevSiblings.nodes.map((node: HtmlNode) => node.children[0].value);
+    > 270 |         expect(childValues).toEqual(['Child 1', 'Child 2']);
+          |                             ^
+      271 |     });
+      272 | });
+      273 |
+
+      at Object.<anonymous> (test/jqnode/traversal-methods/sibling/prevAll.test.ts:270:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 18 passed, 20 total
+Snapshots:   0 total
+Time:        1.871 s
+Ran all test suites matching test/jqnode/traversal-methods/sibling/prevAll.test.ts.

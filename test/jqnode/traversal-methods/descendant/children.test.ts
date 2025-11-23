@@ -1,5 +1,6 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('children() method', () => {
     let root: JQ;
@@ -54,10 +55,10 @@ describe('children() method', () => {
         // Should return p.paragraph, p.paragraph, div.nested
         expect(children.nodes).toHaveLength(3);
 
-        const allAreParagraphsOrDivs = children.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'p' || node.tagName && node.tagName.toLowerCase() === 'div');
+        const allAreParagraphsOrDivs = children.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p' || node.tagName && node.tagName.toLowerCase() === 'div');
         expect(allAreParagraphsOrDivs).toBe(true);
 
-        const spanChildren = children.nodes.filter(node => node.tagName && node.tagName.toLowerCase() === 'span');
+        const spanChildren = children.nodes.filter((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span');
         expect(spanChildren).toHaveLength(0);
     });
 
@@ -75,9 +76,9 @@ describe('children() method', () => {
 
         // Should return both p elements
         expect(paragraphChildren.nodes).toHaveLength(2);
-        const allAreParagraphs = paragraphChildren.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'p');
+        const allAreParagraphs = paragraphChildren.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p');
         expect(allAreParagraphs).toBe(true);
-        const allHaveParagraphClass = paragraphChildren.nodes.every(node => node.attributes.class === 'paragraph');
+        const allHaveParagraphClass = paragraphChildren.nodes.every((node: HtmlNode) => node.attributes?.class === 'paragraph');
         expect(allHaveParagraphClass).toBe(true);
     });
 
@@ -127,7 +128,7 @@ describe('children() method', () => {
 
         // Should return both span elements
         expect(children.nodes).toHaveLength(2);
-        const allAreSpans = children.nodes.every(node => node.tagName && node.tagName.toLowerCase() === 'span');
+        const allAreSpans = children.nodes.every((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span');
         expect(allAreSpans).toBe(true);
     });
 });

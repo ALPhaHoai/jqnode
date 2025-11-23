@@ -58,7 +58,7 @@ describe('nextAll() method', () => {
         const nextSiblings = secondElement.nextAll('.sibling');
 
         expect(nextSiblings.nodes).toHaveLength(4);
-        const allHaveSiblingClass = nextSiblings.nodes.every((node: HtmlNode) => node.attributes.class.includes('sibling'));
+        const allHaveSiblingClass = nextSiblings.nodes.every((node: HtmlNode) => (node.attributes?.class as string | undefined)?.includes('sibling'));
         expect(allHaveSiblingClass).toBe(true);
     });
 

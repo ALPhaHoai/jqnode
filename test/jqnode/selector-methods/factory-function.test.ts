@@ -2,10 +2,10 @@ import $ from '../../../index';
 import JQ from '../../../jq';
 
 describe('Factory function with CSS selectors', () => {
-    let root: JQ;
+  let root: JQ;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <div id="main" class="container">
         <header class="header">
           <h1 id="title" class="title">Welcome</h1>
@@ -31,47 +31,49 @@ describe('Factory function with CSS selectors', () => {
         </footer>
       </div>
     `;
-        root = $(html);
-    });
+    root = $(html);
+  });
 
-    test('should handle ID selectors in factory', () => {
-        const title = $('#title', root.nodes);
-        expect(title.nodes).toHaveLength(1);
-        const titleTag = title.nodes[0].tagName && title.nodes[0].tagName.toLowerCase();
-        expect(titleTag).toBe('h1');
-        const titleId = title.nodes[0].attributes.id;
-        expect(titleId).toBe('title');
-    });
+  test('should handle ID selectors in factory', () => {
+    const title = $('#title', root.nodes);
+    expect(title.nodes).toHaveLength(1);
+    const titleTag = title.nodes[0].tagName && title.nodes[0].tagName.toLowerCase();
+    expect(titleTag).toBe('h1');
+    const titleId = title.nodes[0].attributes?.id;
+    expect(titleId).toBe('title');
+  });
 
-    test('should handle class selectors in factory', () => {
-        const posts = $('.post', root.nodes);
-        expect(posts.nodes).toHaveLength(2);
-        const allHavePostClass = posts.nodes.every(node => node.attributes.class.includes('post'));
-        expect(allHavePostClass).toBe(true);
-    });
+  test('should handle class selectors in factory', () => {
+    const posts = $('.post', root.nodes);
+    expect(posts.nodes).toHaveLength(2);
+    const allHavePostClass = posts.nodes.every(node =>
+      typeof node.attributes?.class === 'string' && node.attributes.class.includes('post')
+    );
+    expect(allHavePostClass).toBe(true);
+  });
 
-    test('should handle combined tag and class selectors in factory', () => {
-        const featuredPost = $('article.featured', root.nodes);
-        expect(featuredPost.nodes).toHaveLength(1);
-        const featuredPostTag = featuredPost.nodes[0].tagName && featuredPost.nodes[0].tagName.toLowerCase();
-        expect(featuredPostTag).toBe('article');
-        const featuredPostClass = featuredPost.nodes[0].attributes.class;
-        expect(featuredPostClass).toContain('featured');
-    });
+  test('should handle combined tag and class selectors in factory', () => {
+    const featuredPost = $('article.featured', root.nodes);
+    expect(featuredPost.nodes).toHaveLength(1);
+    const featuredPostTag = featuredPost.nodes[0].tagName && featuredPost.nodes[0].tagName.toLowerCase();
+    expect(featuredPostTag).toBe('article');
+    const featuredPostClass = featuredPost.nodes[0].attributes?.class;
+    expect(featuredPostClass).toContain('featured');
+  });
 
-    test('should handle combined class and ID selectors in factory', () => {
-        const title = $('.title#title', root.nodes);
-        expect(title.nodes).toHaveLength(1);
-        const titleTag = title.nodes[0].tagName && title.nodes[0].tagName.toLowerCase();
-        expect(titleTag).toBe('h1');
-        const titleClass = title.nodes[0].attributes.class;
-        expect(titleClass).toBe('title');
-        const titleId = title.nodes[0].attributes.id;
-        expect(titleId).toBe('title');
-    });
+  test('should handle combined class and ID selectors in factory', () => {
+    const title = $('.title#title', root.nodes);
+    expect(title.nodes).toHaveLength(1);
+    const titleTag = title.nodes[0].tagName && title.nodes[0].tagName.toLowerCase();
+    expect(titleTag).toBe('h1');
+    const titleClass = title.nodes[0].attributes?.class;
+    expect(titleClass).toBe('title');
+    const titleId = title.nodes[0].attributes?.id;
+    expect(titleId).toBe('title');
+  });
 
-    test('should return empty result for selectors with no context', () => {
-        const result = $('#nonexistent');
-        expect(result.nodes).toHaveLength(0);
-    });
+  test('should return empty result for selectors with no context', () => {
+    const result = $('#nonexistent');
+    expect(result.nodes).toHaveLength(0);
+  });
 });

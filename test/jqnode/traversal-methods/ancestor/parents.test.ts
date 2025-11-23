@@ -55,7 +55,7 @@ describe('parents() method', () => {
     const ancestorsNodesCount = ancestors.nodes.length;
     expect(ancestorsNodesCount).toBeGreaterThan(3);
 
-    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes.class === 'nested');
+    const hasNestedDiv = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div' && node.attributes?.class === 'nested');
     expect(hasNestedDiv).toBe(true);
 
     const hasArticle = ancestors.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'article');

@@ -1,11 +1,12 @@
 import $ from '../../../../index';
 import JQ from '../../../../jq';
+import { HtmlNode } from '../../../../types';
 
 describe('parent() method', () => {
-    let root: JQ;
+  let root: JQ;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <html>
         <head>
           <title>Test Page</title>
@@ -43,44 +44,44 @@ describe('parent() method', () => {
         </body>
       </html>
     `;
-        root = $(html);
-    });
+    root = $(html);
+  });
 
-    test('parent() should get immediate parent of elements', () => {
-        const spans = root.find('span');
-        const parents = spans.parent();
+  test('parent() should get immediate parent of elements', () => {
+    const spans = root.find('span');
+    const parents = spans.parent();
 
-        expect(parents.nodes).toHaveLength(2); // Two spans with different parents
+    expect(parents.nodes).toHaveLength(2); // Two spans with different parents
 
-        const hasPParent = parents.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'p');
-        expect(hasPParent).toBe(true);
+    const hasPParent = parents.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p');
+    expect(hasPParent).toBe(true);
 
-        const hasDivParent = parents.nodes.some(node => node.tagName && node.tagName.toLowerCase() === 'div');
-        expect(hasDivParent).toBe(true);
-    });
+    const hasDivParent = parents.nodes.some((node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'div');
+    expect(hasDivParent).toBe(true);
+  });
 
-    test('parent() should work with selector filter', () => {
-        const spans = root.find('span');
-        const pParents = spans.parent('p');
+  test('parent() should work with selector filter', () => {
+    const spans = root.find('span');
+    const pParents = spans.parent('p');
 
-        expect(pParents.nodes).toHaveLength(1);
-        const pParentTag = pParents.nodes[0].tagName && pParents.nodes[0].tagName.toLowerCase();
-        expect(pParentTag).toBe('p');
-    });
+    expect(pParents.nodes).toHaveLength(1);
+    const pParentTag = pParents.nodes[0].tagName && pParents.nodes[0].tagName.toLowerCase();
+    expect(pParentTag).toBe('p');
+  });
 
-    test('parent() should return empty for root elements', () => {
-        const html = root.find('html');
-        const parents = html.parent();
+  test('parent() should return empty for root elements', () => {
+    const html = root.find('html');
+    const parents = html.parent();
 
-        expect(parents.nodes).toHaveLength(0);
-    });
+    expect(parents.nodes).toHaveLength(0);
+  });
 
-    test('parent() should handle multiple elements with same parent', () => {
-        const listItems = root.find('li');
-        const parents = listItems.parent();
+  test('parent() should handle multiple elements with same parent', () => {
+    const listItems = root.find('li');
+    const parents = listItems.parent();
 
-        expect(parents.nodes).toHaveLength(1); // Both li elements have the same ul parent
-        const parentTag = parents.nodes[0].tagName && parents.nodes[0].tagName.toLowerCase();
-        expect(parentTag).toBe('ul');
-    });
+    expect(parents.nodes).toHaveLength(1); // Both li elements have the same ul parent
+    const parentTag = parents.nodes[0].tagName && parents.nodes[0].tagName.toLowerCase();
+    expect(parentTag).toBe('ul');
+  });
 });
