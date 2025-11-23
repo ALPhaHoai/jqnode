@@ -2,83 +2,159 @@ import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { HtmlNode, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
+// Use ReturnType to infer ParsedSelector from parseSelector function
+type ParsedSelector = NonNullable<ReturnType<typeof parseSelector>>;
+
+/**
+ * Parses and validates the provided selector.
+ * @param selector - The CSS selector to parse
+ * @returns The parsed selector or null if invalid
+ */
+function _parseAndValidateSelector(selector?: CssSelector): ParsedSelector | null {
+    if (!selector) {
+        return null;
+    }
+    return parseSelector(selector);
+}
+
+/**
+ * Creates a unique key for an element to avoid duplicates.
+ * @param tagName - The tag name of the element
+ * @param attributes - The attributes of the element
+ * @returns A unique string key
+ */
+function _createUniqueKey(tagName: string, attributes: Record<string, unknown>): string {
+    return `${tagName.toLowerCase()}-${JSON.stringify(attributes)}`;
+}
+
+/**
+ * Converts a DOM element to internal HtmlNode format.
+ * @param domElement - The DOM element to convert
+ * @returns The converted HtmlNode
+ */
+function _convertDomToNode(domElement: Element): HtmlNode {
+    const attributes: Record<string, string> = {};
+    for (let i = 0; i < domElement.attributes.length; i++) {
+        const attr = domElement.attributes[i];
+        attributes[attr.name] = attr.value;
+    }
+
+    return {
+        type: 'element' as const,
+        name: domElement.tagName.toLowerCase(),
+        tagName: domElement.tagName.toLowerCase(),
+        attributes: attributes,
+        attribs: attributes,
+        properties: {},
+        children: [],
+        parent: undefined,
+        _originalElement: domElement
+    };
+}
+
+/**
+ * Traverses DOM tree parents and collects matching ancestors.
+ * @param node - The starting node with _originalElement
+ * @param parsedSelector - The parsed selector to filter by (or null for all)
+ * @param ancestors - Array to collect matching ancestors
+ * @param seen - Set to track already processed elements
+ */
+function _traverseDomParents(
+    node: HtmlNode,
+    parsedSelector: ParsedSelector | null,
+    ancestors: HtmlNode[],
+    seen: Set<string>
+): void {
+    let domCurrent = node._originalElement?.parentElement;
+
+    while (domCurrent && domCurrent.nodeType === 1) {
+        const domNode = _convertDomToNode(domCurrent);
+        const key = _createUniqueKey(domNode.tagName || '', domNode.attributes!);  // attributes is always set by _convertDomToNode
+
+        if (!seen.has(key)) {
+            seen.add(key);
+
+            // If selector provided, check if this ancestor matches
+            if (!parsedSelector || nodeMatchesSelector(domNode, parsedSelector)) {
+                ancestors.push(domNode);
+            }
+        }
+
+        domCurrent = domCurrent.parentElement;
+    }
+}
+
+/**
+ * Traverses internal node tree parents and collects matching ancestors.
+ * @param node - The starting node
+ * @param parsedSelector - The parsed selector to filter by (or null for all)
+ * @param ancestors - Array to collect matching ancestors
+ * @param seen - Set to track already processed elements
+ */
+function _traverseInternalParents(
+    node: HtmlNode,
+    parsedSelector: ParsedSelector | null,
+    ancestors: HtmlNode[],
+    seen: Set<string>
+): void {
+    let current: HtmlNode | undefined = node.parent;
+
+    while (current) {
+        if (current.type === 'element') {
+            const key = _createUniqueKey(current.tagName || '', current.attributes || {});
+
+            if (!seen.has(key)) {
+                seen.add(key);
+
+                // If selector provided, check if this ancestor matches
+                if (!parsedSelector || nodeMatchesSelector(current, parsedSelector)) {
+                    ancestors.push(current);
+                }
+            }
+        }
+        current = current.parent;
+    }
+}
+
+/**
+ * Collects all parent ancestors for the given nodes.
+ * @param nodes - The nodes to get parents for
+ * @param parsedSelector - The parsed selector to filter by (or null for all)
+ * @returns Array of ancestor nodes
+ */
+function _collectParents(nodes: HtmlNode[], parsedSelector: ParsedSelector | null): HtmlNode[] {
+    const ancestors: HtmlNode[] = [];
+    const seen = new Set<string>();
+
+    for (const node of nodes) {
+        if (node._originalElement) {
+            // Traverse the actual DOM tree
+            _traverseDomParents(node, parsedSelector, ancestors, seen);
+        } else {
+            // Traverse the internal node tree
+            _traverseInternalParents(node, parsedSelector, ancestors, seen);
+        }
+    }
+
+    return ancestors;
+}
+
 /**
  * Gets the ancestors of each element in the current set of matched elements, optionally filtered by a selector.
   * @see https://api.jquery.com/parents/
  */
 function parents(this: JQ, selector?: CssSelector): JQ {
-    const ancestors: HtmlNode[] = [];
-    const seen = new Set<string>();
+    const parsedSelector = _parseAndValidateSelector(selector);
 
-    // Parse selector if provided
-    let parsedSelector = null;
-    if (selector) {
-        parsedSelector = parseSelector(selector);
-        if (!parsedSelector) {
-            const result = Object.create(Object.getPrototypeOf(this));
-            result.nodes = [];
-            result.length = 0;
-            return result;
-        }
+    // If selector was provided but failed to parse, return empty JQ object
+    if (selector && !parsedSelector) {
+        const result = Object.create(Object.getPrototypeOf(this));
+        result.nodes = [];
+        result.length = 0;
+        return result;
     }
 
-    for (const node of this.nodes) {
-        // If we have a DOM element, traverse the actual DOM tree
-        if (node._originalElement) {
-            let domCurrent = node._originalElement.parentElement;
-            while (domCurrent && domCurrent.nodeType === 1) {
-                // Create a unique key to avoid duplicates
-                const attributes: Record<string, string> = {};
-                for (let i = 0; i < domCurrent.attributes.length; i++) {
-                    const attr = domCurrent.attributes[i];
-                    attributes[attr.name] = attr.value;
-                }
-                const key = `${domCurrent.tagName.toLowerCase()}-${JSON.stringify(attributes)}`;
-
-                if (!seen.has(key)) {
-                    seen.add(key);
-
-                    // Convert DOM element to node format
-                    const domNode = {
-                        type: 'element' as const,
-                        name: domCurrent.tagName.toLowerCase(),
-                        tagName: domCurrent.tagName.toLowerCase(),
-                        attributes: attributes,
-                        attribs: attributes,
-                        properties: {},
-                        children: [],
-                        parent: undefined,
-                        _originalElement: domCurrent
-                    };
-
-                    // If selector provided, check if this ancestor matches
-                    if (!parsedSelector || nodeMatchesSelector(domNode, parsedSelector)) {
-                        ancestors.push(domNode);
-                    }
-                }
-                domCurrent = domCurrent.parentElement;
-            }
-        } else {
-            // Otherwise, traverse the internal node tree
-            let current: HtmlNode | undefined = node.parent;
-            while (current) {
-                if (current.type === 'element') {
-                    // Create a unique key to avoid duplicates
-                    const key = `${current.tagName}-${JSON.stringify(current.attributes)}`;
-
-                    if (!seen.has(key)) {
-                        seen.add(key);
-
-                        // If selector provided, check if this ancestor matches
-                        if (!parsedSelector || nodeMatchesSelector(current, parsedSelector)) {
-                            ancestors.push(current);
-                        }
-                    }
-                }
-                current = current.parent;
-            }
-        }
-    }
+    const ancestors = _collectParents(this.nodes, parsedSelector);
     return new JQClass(ancestors);
 }
 
