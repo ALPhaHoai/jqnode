@@ -6,13 +6,13 @@ describe('index() method - Node-Query vs jQuery Comparison', () => {
 
   beforeEach(() => {
     const html = `
-  < div class="container" >
-    <div class="item" id = "item1" > Item 1 </div>
-      < div class="item" id = "item2" > Item 2 </div>
-        < div class="item" id = "item3" > Item 3 </div>
-          < span id = "span1" > Span </span>
-            </div>
-              `;
+      <div class="container">
+        <div class="item" id="item1">Item 1</div>
+        <div class="item" id="item2">Item 2</div>
+        <div class="item" id="item3">Item 3</div>
+        <span id="span1">Span</span>
+      </div>
+    `;
 
     const { jquery, nodeQuery } = createTestDom(html);
     jqRoot = jquery;
@@ -86,12 +86,12 @@ describe('index() method - Node-Query vs jQuery Comparison', () => {
 
   test('index() should work with nested elements - jquery-comparison', () => {
     const html = `
-            < div class="outer" >
-              <div class="inner" >
-                <span id="target" > Target </span>
-                  </div>
-                  </div>
-                    `;
+      <div class="outer">
+        <div class="inner">
+          <span id="target">Target</span>
+        </div>
+      </div>
+    `;
 
     const { jquery, nodeQuery } = createTestDom(html);
 
@@ -112,17 +112,17 @@ describe('index() method - Node-Query vs jQuery Comparison', () => {
 
   test('index() should count only among siblings - jquery-comparison', () => {
     const html = `
-                  < div >
-                  <div class="group" >
-                    <span id="a" > A </span>
-                      < span id = "b" > B </span>
-                        </div>
-                        < div class="group" >
-                          <span id="c" > C </span>
-                            < span id = "d" > D </span>
-                              </div>
-                              </div>
-                                `;
+      <div>
+        <div class="group">
+          <span id="a">A</span>
+          <span id="b">B</span>
+        </div>
+        <div class="group">
+          <span id="c">C</span>
+          <span id="d">D</span>
+        </div>
+      </div>
+    `;
 
     const { jquery, nodeQuery } = createTestDom(html);
 

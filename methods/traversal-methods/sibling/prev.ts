@@ -15,27 +15,26 @@ function prev(this: JQ, selector?: CssSelector): JQ {
             const currentIndex = allChildren.indexOf(node);
 
             if (currentIndex > 0) {
-                if (selector) {
-                    const parsedSelector = parseSelector(selector);
-                    if (parsedSelector) {
-                        for (let i = currentIndex - 1; i >= 0; i--) {
-                            const sibling = allChildren[i];
-                            if (
-                                sibling.type === 'element' &&
-                                nodeMatchesSelector(sibling, parsedSelector)
-                            ) {
-                                prevSiblings.push(sibling);
-                                break;
-                            }
-                        }
+                // Find immediate previous element sibling
+                let prevElementSibling = null;
+                for (let i = currentIndex - 1; i >= 0; i--) {
+                    const sibling = allChildren[i];
+                    if (sibling.type === 'element') {
+                        prevElementSibling = sibling;
+                        break;
                     }
-                } else {
-                    for (let i = currentIndex - 1; i >= 0; i--) {
-                        const sibling = allChildren[i];
-                        if (sibling.type === 'element') {
-                            prevSiblings.push(sibling);
-                            break;
+                }
+
+                if (prevElementSibling) {
+                    if (selector) {
+                        // With selector: only return if immediate prev sibling matches
+                        const parsedSelector = parseSelector(selector);
+                        if (parsedSelector && nodeMatchesSelector(prevElementSibling, parsedSelector)) {
+                            prevSiblings.push(prevElementSibling);
                         }
+                    } else {
+                        // Without selector: return immediate prev sibling
+                        prevSiblings.push(prevElementSibling);
                     }
                 }
             }

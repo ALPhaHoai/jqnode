@@ -17,24 +17,25 @@ function next(this: JQ, selector?: CssSelector): JQ {
             const currentIndex = siblings.indexOf(node);
 
             if (currentIndex !== -1) {
-                if (selector) {
-                    const parsedSelector = parseSelector(selector);
-                    if (parsedSelector) {
-                        for (let i = currentIndex + 1; i < siblings.length; i++) {
-                            const sibling = siblings[i];
+                // Check if there's a next sibling
+                if (currentIndex < siblings.length - 1) {
+                    const nextSibling = siblings[currentIndex + 1];
+
+                    if (selector) {
+                        // With selector: only return if immediate next sibling matches
+                        const parsedSelector = parseSelector(selector);
+                        if (parsedSelector) {
                             const selectorList =
                                 'type' in parsedSelector && parsedSelector.type === 'compound'
                                     ? parsedSelector.selectors
                                     : [parsedSelector];
-                            if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
-                                nextSiblings.push(sibling);
-                                break;
+                            if (selectorList.some((sel) => nodeMatchesSelector(nextSibling, sel))) {
+                                nextSiblings.push(nextSibling);
                             }
                         }
-                    }
-                } else {
-                    if (currentIndex < siblings.length - 1) {
-                        nextSiblings.push(siblings[currentIndex + 1]);
+                    } else {
+                        // Without selector: return immediate next sibling
+                        nextSiblings.push(nextSibling);
                     }
                 }
             }
@@ -44,30 +45,32 @@ function next(this: JQ, selector?: CssSelector): JQ {
             const currentIndex = rootNodes.indexOf(node);
 
             if (currentIndex !== -1) {
-                if (selector) {
-                    const parsedSelector = parseSelector(selector);
-                    if (parsedSelector) {
-                        for (let i = currentIndex + 1; i < rootNodes.length; i++) {
-                            const sibling = rootNodes[i];
-                            if (sibling.type === 'element') {
-                                const selectorList =
-                                    'type' in parsedSelector && parsedSelector.type === 'compound'
-                                        ? parsedSelector.selectors
-                                        : [parsedSelector];
-                                if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
-                                    nextSiblings.push(sibling);
-                                    break;
-                                }
+                // Find immediate next element sibling
+                let nextElementSibling = null;
+                for (let i = currentIndex + 1; i < rootNodes.length; i++) {
+                    const sibling = rootNodes[i];
+                    if (sibling.type === 'element') {
+                        nextElementSibling = sibling;
+                        break;
+                    }
+                }
+
+                if (nextElementSibling) {
+                    if (selector) {
+                        // With selector: only return if immediate next sibling matches
+                        const parsedSelector = parseSelector(selector);
+                        if (parsedSelector) {
+                            const selectorList =
+                                'type' in parsedSelector && parsedSelector.type === 'compound'
+                                    ? parsedSelector.selectors
+                                    : [parsedSelector];
+                            if (selectorList.some((sel) => nodeMatchesSelector(nextElementSibling, sel))) {
+                                nextSiblings.push(nextElementSibling);
                             }
                         }
-                    }
-                } else {
-                    for (let i = currentIndex + 1; i < rootNodes.length; i++) {
-                        const sibling = rootNodes[i];
-                        if (sibling.type === 'element') {
-                            nextSiblings.push(sibling);
-                            break;
-                        }
+                    } else {
+                        // Without selector: return immediate next sibling
+                        nextSiblings.push(nextElementSibling);
                     }
                 }
             }
