@@ -1,8 +1,10 @@
 ﻿import type { JqElement } from '../types';
 
-export interface NodeWithData extends JqElement {
+export interface NodeWithData {
     _jqData?: Record<string, unknown>;
     _jqDataParsed?: boolean;
+    attributes?: any; // Can be JqNamedNodeMap or Record<string, string>
+    children: JqElement[];
 }
 
 export const getData = (node: NodeWithData): Record<string, unknown> => {
@@ -24,7 +26,7 @@ export const parseDataValue = (val: string): unknown => {
         if (val === 'null') return null;
         if (val === +val + '') return +val;
         if (/^[\[\{]/.test(val)) return JSON.parse(val);
-    } catch (e) {}
+    } catch (e) { }
     return val;
 };
 

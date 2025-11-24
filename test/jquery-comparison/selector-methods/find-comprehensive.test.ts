@@ -1,9 +1,9 @@
-﻿import $ from '../../index';
+﻿import $ from '../../../index';
 import jQuery from 'jquery';
-import { createTestDom } from '../utils/jquery-comparison-helpers';
-import { JqElement } from '../../types';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JqElement } from '../../../types';
 
-import JQ from '../../jq';
+import JQ from '../../../jq';
 
 describe('find() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;

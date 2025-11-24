@@ -1,5 +1,6 @@
 ﻿import { getTextContent, unescapeHtml } from '../../utils';
-import type { JqElement, JQ, GetterSetterReturn } from '../../types';
+import { JqElement } from '../../dom/core/JqElement';
+import type { JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the text content of elements.
@@ -43,7 +44,9 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
             node.textContent = value;
         } else {
             // Fallback for internal nodes - replace children with text node
-            node.children = [{ type: 'text', data: value }];
+            const textNode = new JqElement('text');
+            textNode.textData = value || '';
+            node.children = [textNode];
         }
     });
 

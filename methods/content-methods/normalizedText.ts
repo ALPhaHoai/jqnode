@@ -1,6 +1,7 @@
 ﻿import { getTextContent, unescapeHtml } from '../../utils';
 import { normalizeHTML } from '../../utils-static';
-import type { JqElement, JQ } from '../../types';
+import { JqElement } from '../../dom/core/JqElement';
+import type { JQ } from '../../types';
 
 /**
  * Gets or sets the text content of elements with HTML normalization.
@@ -49,7 +50,9 @@ function normalizedText(this: JQ, value?: string): string | JQ {
             node.textContent = value;
         } else {
             // Fallback for internal nodes - replace children with text node
-            node.children = [{ type: 'text', data: value }];
+            const textNode = new JqElement('text');
+            textNode.textData = value || '';
+            node.children = [textNode];
         }
     });
 

@@ -24,10 +24,10 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                     if (parsedStopSelector) {
                         const selectorList =
-                            'type' in parsedStopSelector && parsedStopSelector.internalType === 'compound'
-                                ? parsedStopSelector.selectors
+                            'type' in parsedStopSelector && (parsedStopSelector as any).type === 'compound'
+                                ? (parsedStopSelector as any).selectors
                                 : [parsedStopSelector];
-                        if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                        if (selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {
                             break;
                         }
                     }
@@ -55,10 +55,10 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (parsedFilterSelector) {
                         const selectorList =
                             'type' in parsedFilterSelector &&
-                            parsedFilterSelector.internalType === 'compound'
-                                ? parsedFilterSelector.selectors
+                                parsedFilterSelector.internalType === 'compound'
+                                ? (parsedFilterSelector as any).selectors
                                 : [parsedFilterSelector];
-                        if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                        if (!selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {
                             continue;
                         }
                     }
@@ -79,10 +79,10 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                     if (parsedStopSelector) {
                         const selectorList =
-                            'type' in parsedStopSelector && parsedStopSelector.internalType === 'compound'
-                                ? parsedStopSelector.selectors
+                            'type' in parsedStopSelector && (parsedStopSelector as any).type === 'compound'
+                                ? (parsedStopSelector as any).selectors
                                 : [parsedStopSelector];
-                        if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                        if (selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {
                             break;
                         }
                     }
@@ -110,10 +110,10 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (parsedFilterSelector) {
                         const selectorList =
                             'type' in parsedFilterSelector &&
-                            parsedFilterSelector.internalType === 'compound'
-                                ? parsedFilterSelector.selectors
+                                parsedFilterSelector.internalType === 'compound'
+                                ? (parsedFilterSelector as any).selectors
                                 : [parsedFilterSelector];
-                        if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
+                        if (!selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {
                             continue;
                         }
                     }

@@ -33,7 +33,11 @@ function removeAttr(this: JQ, name: string): JQ {
             attrNames.forEach((attrName) => {
                 // Remove from internal attributes
                 if (element.attributes) {
-                    delete element.attributes[attrName];
+                    try {
+                        element.attributes.removeNamedItem(attrName);
+                    } catch (e) {
+                        // Attribute may not exist
+                    }
                 }
 
                 // Remove from DOM element

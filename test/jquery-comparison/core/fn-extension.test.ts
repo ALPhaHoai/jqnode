@@ -1,12 +1,12 @@
 ﻿// Note: fn-extension tests validate adding custom methods to $.fn (or jQuery.fn)
 // jQuery supports this pattern, so we compare both libraries
-import $ from '../../index';
+import $ from '../../../index';
 import jQuery from 'jquery';
-import { createTestDom } from '../utils/jquery-comparison-helpers';
-import { JQ } from '../../index';
+import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JQ } from '../../../index';
 
 // Augment JQ interface for custom methods
-declare module '../../types' {
+declare module '../../../types' {
     interface JQ {
         customHighlight(color?: string): this;
         getNodeCount(): number;

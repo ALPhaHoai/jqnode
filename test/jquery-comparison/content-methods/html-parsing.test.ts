@@ -1,5 +1,7 @@
-﻿import $ from '../../index';
+﻿import $ from '../../../index';
 import jQuery from 'jquery';
+import { createTestDom, extractTextContent } from '../../utils/jquery-comparison-helpers';
+import type { JQ } from '../../../index';
 
 describe('HTML Parsing - Node-Query vs jQuery Comparison', () => {
     test('should parse HTML consistently with jQuery - jquery-comparison', () => {
