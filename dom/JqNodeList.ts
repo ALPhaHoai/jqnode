@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  */
 
-import {JqElement} from './JqElement';
+import { JqElement } from './JqElement';
 
 export class JqNodeList implements NodeList {
     private _nodes: JqElement[];
@@ -53,18 +53,19 @@ export class JqNodeList implements NodeList {
     forEach(callbackfn: (value: Node, key: number, parent: NodeList) => void, thisArg?: any): void {
         const callback = thisArg !== undefined ? callbackfn.bind(thisArg) : callbackfn;
         for (let i = 0; i < this._nodes.length; i++) {
-            callback(this._nodes[i] as unknown as Node, i, this);
+            callback(this._nodes[i] as unknown as Node, i, this as unknown as NodeList);
         }
     }
 
     /**
      * Iterator support for for...of loops
      */
-    [Symbol.iterator](): IterableIterator<Node> {
+    // @ts-expect-error - ArrayIterator requires recursive [Symbol.dispose] on nested iterators which cannot be satisfied
+    [Symbol.iterator](): IterableIterator<Node> & { [Symbol.dispose]?: () => void } {
         let index = 0;
         const nodes = this._nodes;
 
-        const iterator: IterableIterator<Node> = {
+        const iterator: IterableIterator<Node> & { [Symbol.dispose]?: () => void } = {
             next(): IteratorResult<Node> {
                 if (index < nodes.length) {
                     return {
@@ -78,8 +79,11 @@ export class JqNodeList implements NodeList {
                     };
                 }
             },
-            [Symbol.iterator](): IterableIterator<Node> {
+            [Symbol.iterator](): IterableIterator<Node> & { [Symbol.dispose]?: () => void } {
                 return iterator;
+            },
+            [Symbol.dispose]() {
+                // No-op disposal for compatibility
             }
         };
 
@@ -90,11 +94,12 @@ export class JqNodeList implements NodeList {
      * Returns an iterator allowing code to go through all key/value pairs contained in the collection.
      * In this case, the keys are integers starting from 0 and the values are nodes.
      */
-    entries(): IterableIterator<[number, Node]> {
+    // @ts-expect-error - ArrayIterator requires recursive [Symbol.dispose] on nested iterators which cannot be satisfied
+    entries(): IterableIterator<[number, Node]> & { [Symbol.dispose]?: () => void } {
         const nodes = this._nodes;
         let index = 0;
 
-        const iterator: IterableIterator<[number, Node]> = {
+        const iterator: IterableIterator<[number, Node]> & { [Symbol.dispose]?: () => void } = {
             next(): IteratorResult<[number, Node]> {
                 if (index < nodes.length) {
                     return {
@@ -108,8 +113,11 @@ export class JqNodeList implements NodeList {
                     };
                 }
             },
-            [Symbol.iterator]() {
+            [Symbol.iterator](): IterableIterator<[number, Node]> & { [Symbol.dispose]?: () => void } {
                 return this;
+            },
+            [Symbol.dispose]() {
+                // No-op disposal for compatibility
             }
         };
 
@@ -120,11 +128,12 @@ export class JqNodeList implements NodeList {
      * Returns an iterator allowing code to go through all the keys of the key/value pairs
      * contained in the collection. In this case, the keys are integers starting from 0.
      */
-    keys(): IterableIterator<number> {
+    // @ts-expect-error - ArrayIterator requires recursive [Symbol.dispose] on nested iterators which cannot be satisfied
+    keys(): IterableIterator<number> & { [Symbol.dispose]?: () => void } {
         const length = this._nodes.length;
         let index = 0;
 
-        const iterator: IterableIterator<number> = {
+        const iterator: IterableIterator<number> & { [Symbol.dispose]?: () => void } = {
             next(): IteratorResult<number> {
                 if (index < length) {
                     return {
@@ -138,8 +147,11 @@ export class JqNodeList implements NodeList {
                     };
                 }
             },
-            [Symbol.iterator]() {
+            [Symbol.iterator](): IterableIterator<number> & { [Symbol.dispose]?: () => void } {
                 return this;
+            },
+            [Symbol.dispose]() {
+                // No-op disposal for compatibility
             }
         };
 
@@ -150,11 +162,12 @@ export class JqNodeList implements NodeList {
      * Returns an iterator allowing code to go through all values (nodes) of the
      * key/value pairs contained in the collection.
      */
-    values(): IterableIterator<Node> {
+    // @ts-expect-error - ArrayIterator requires recursive [Symbol.dispose] on nested iterators which cannot be satisfied
+    values(): IterableIterator<Node> & { [Symbol.dispose]?: () => void } {
         const nodes = this._nodes;
         let index = 0;
 
-        const iterator: IterableIterator<Node> = {
+        const iterator: IterableIterator<Node> & { [Symbol.dispose]?: () => void } = {
             next(): IteratorResult<Node> {
                 if (index < nodes.length) {
                     return {
@@ -168,8 +181,11 @@ export class JqNodeList implements NodeList {
                     };
                 }
             },
-            [Symbol.iterator]() {
+            [Symbol.iterator](): IterableIterator<Node> & { [Symbol.dispose]?: () => void } {
                 return this;
+            },
+            [Symbol.dispose]() {
+                // No-op disposal for compatibility
             }
         };
 
@@ -208,13 +224,14 @@ export class JqNodeListOf<TNode extends Node> extends JqNodeList implements Node
         const callback = thisArg !== undefined ? callbackfn.bind(thisArg) : callbackfn;
         const nodes = this._getNodes();
         for (let i = 0; i < nodes.length; i++) {
-            callback(nodes[i] as unknown as TNode, i, this);
+            callback(nodes[i] as unknown as TNode, i, this as unknown as NodeListOf<TNode>);
         }
     }
 
     /**
      * Override item to return the specific node type
      */
+    // @ts-expect-error - DOM spec allows null return but NodeListOf type expects non-null TNode
     override item(index: number): TNode | null {
         const nodes = this._getNodes();
         if (index < 0 || index >= nodes.length) {
@@ -226,11 +243,12 @@ export class JqNodeListOf<TNode extends Node> extends JqNodeList implements Node
     /**
      * Override iterator to use the specific node type
      */
-    override[Symbol.iterator](): IterableIterator<TNode> {
+    // @ts-expect-error - ArrayIterator requires recursive [Symbol.dispose] on nested iterators which cannot be satisfied
+    override[Symbol.iterator](): IterableIterator<TNode> & { [Symbol.dispose]?: () => void } {
         let index = 0;
         const nodes = this._getNodes();
 
-        const iterator: IterableIterator<TNode> = {
+        const iterator: IterableIterator<TNode> & { [Symbol.dispose]?: () => void } = {
             next(): IteratorResult<TNode> {
                 if (index < nodes.length) {
                     return {
@@ -244,8 +262,11 @@ export class JqNodeListOf<TNode extends Node> extends JqNodeList implements Node
                     };
                 }
             },
-            [Symbol.iterator](): IterableIterator<TNode> {
+            [Symbol.iterator](): IterableIterator<TNode> & { [Symbol.dispose]?: () => void } {
                 return iterator;
+            },
+            [Symbol.dispose]() {
+                // No-op disposal for compatibility
             }
         };
 
