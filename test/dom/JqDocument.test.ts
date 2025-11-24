@@ -1,5 +1,5 @@
 import { JqDocument } from '../../dom/JqDocument';
-import { HtmlNode } from '../../dom/HtmlNode';
+import { JqElement } from '../../dom/JqElement';
 import { JqText } from '../../dom/JqText';
 import { JqComment } from '../../dom/JqComment';
 
@@ -17,7 +17,7 @@ describe('JqDocument', () => {
 
     it('should create elements with correct ownerDocument', () => {
         const div = doc.createElement('div');
-        expect(div).toBeInstanceOf(HtmlNode);
+        expect(div).toBeInstanceOf(JqElement);
         expect(div.tagName).toBe('div');
         expect(div.ownerDocument).toBe(doc);
     });
@@ -106,5 +106,9 @@ describe('JqDocument', () => {
 
         expect(doc.head).toBe(head);
         expect(doc.body).toBe(body);
+    });
+
+    it('should have defaultView property returning null', () => {
+        expect(doc.defaultView).toBe(null);
     });
 });

@@ -1,9 +1,9 @@
-import {JqNode} from './JqNode';
-import {JqElement} from './JqElement';
-import {JqText} from './JqText';
-import {JqComment} from './JqComment';
-import {JqHTMLCollection} from './JqHTMLCollection';
-import {JqNodeList, JqNodeListOf} from './JqNodeList';
+import { JqNode } from './JqNode';
+import { JqElement } from './JqElement';
+import { JqText } from './JqText';
+import { JqComment } from './JqComment';
+import { JqHTMLCollection } from './JqHTMLCollection';
+import { JqNodeList, JqNodeListOf } from './JqNodeList';
 
 /**
  * JqDocument - Implementation of the DOM Document interface
@@ -21,6 +21,15 @@ export class JqDocument extends JqNode implements Document {
     override get nodeName(): string {
         return '#document';
     }
+
+    override get nodeValue(): null { return null; }
+    override set nodeValue(value: string | null) { }
+
+    override get textContent(): null { return null; }
+    override set textContent(value: string | null) { }
+
+    override get ownerDocument(): null { return null; }
+    override set ownerDocument(value: Document | null) { }
 
     // Properties
     get URL(): string {
@@ -58,21 +67,19 @@ export class JqDocument extends JqNode implements Document {
 
 
     get documentElement(): HTMLElement {
-        return this._children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName === 'HTML') as unknown as HTMLElement;
+        return this._children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HTML') as unknown as HTMLElement;
     }
 
     get head(): HTMLHeadElement {
-        const docEl = this.documentElement;
+        const docEl = this.documentElement as unknown as JqElement;
         if (!docEl) return null as unknown as HTMLHeadElement;
-        // @ts-ignore
-        return (Array.from(docEl.children || []).find(child => child.nodeName === 'HEAD') as unknown as HTMLHeadElement) || null;
+        return (docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HEAD') as unknown as HTMLHeadElement) || null;
     }
 
     get body(): HTMLElement {
-        const docEl = this.documentElement;
+        const docEl = this.documentElement as unknown as JqElement;
         if (!docEl) return null as unknown as HTMLElement;
-        // @ts-ignore
-        return (Array.from(docEl.children || []).find(child => child.nodeName === 'BODY') as unknown as HTMLElement) || null;
+        return (docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'BODY') as unknown as HTMLElement) || null;
     }
 
     implementation: DOMImplementation = {
@@ -90,6 +97,12 @@ export class JqDocument extends JqNode implements Document {
         return element as unknown as HTMLElement;
     }
 
+    createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement;
+    createElementNS<K extends keyof SVGElementTagNameMap>(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: K): SVGElementTagNameMap[K];
+    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: string): SVGElement;
+    createElementNS<K extends keyof MathMLElementTagNameMap>(namespaceURI: "http://www.w3.org/1998/Math/MathML", qualifiedName: K): MathMLElementTagNameMap[K];
+    createElementNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", qualifiedName: string): MathMLElement;
+    createElementNS(namespaceURI: string | null, qualifiedName: string, options?: ElementCreationOptions): Element;
     createElementNS(namespaceURI: string | null, qualifiedName: string, options?: string | ElementCreationOptions): Element {
         // For now, just treat as normal element
         return this.createElement(qualifiedName) as unknown as Element;
@@ -139,7 +152,7 @@ export class JqDocument extends JqNode implements Document {
         throw new Error('Method not implemented.');
     }
 
-    createEvent(eventInterface: string): Event {
+    createEvent(eventInterface: string): any {
         throw new Error('Method not implemented.');
     }
 
@@ -198,8 +211,12 @@ export class JqDocument extends JqNode implements Document {
         return new JqHTMLCollection(results as any) as unknown as HTMLCollectionOf<Element>;
     }
 
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", localName: string): HTMLCollectionOf<MathMLElement>;
+    getElementsByTagNameNS(namespaceURI: string | null, localName: string): HTMLCollectionOf<Element>;
     getElementsByTagNameNS(namespaceURI: string | null, localName: string): HTMLCollectionOf<Element> {
-        return this.getElementsByTagName(localName);
+        return this.getElementsByTagName(localName) as any;
     }
 
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element> {
@@ -260,11 +277,11 @@ export class JqDocument extends JqNode implements Document {
             length: 0,
             contains: () => false,
             item: () => null,
-            [Symbol.iterator]: function* () { }
+            [Symbol.iterator]: () => [][Symbol.iterator]()
         }
     };
 
-    get defaultView(): WindowProxy | null { return null; }
+    get defaultView(): (Window & typeof globalThis) | null { return null; }
 
     // Event handlers
     onabort: ((this: GlobalEventHandlers, ev: UIEvent) => any) | null = null;
@@ -315,6 +332,35 @@ export class JqDocument extends JqNode implements Document {
 
 
     // Missing properties stubs to satisfy Document interface
+
+    // SVG-related
+    get rootElement(): SVGSVGElement | null { return null; }
+
+    // Style sheets
+    styleSheets: StyleSheetList = {
+        length: 0,
+        item: () => null,
+        [Symbol.iterator]: function* () { yield* []; }
+    } as unknown as StyleSheetList;
+
+    // XML-related (deprecated but required by interface)
+    xmlEncoding: string | null = null;
+    xmlStandalone: boolean = false;
+    xmlVersion: string | null = null;
+
+    // Other missing properties
+    wasDiscarded: boolean = false;
+
+    // Missing event handlers
+    onpointerrawupdate: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onslotchange: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+
+    // Webkit events
+    onwebkitanimationend: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onwebkitanimationiteration: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onwebkitanimationstart: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onwebkittransitionend: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+
     // Legacy/Deprecated properties stubs
     alinkColor: string = '';
     all: HTMLAllCollection = new JqHTMLCollection([]) as unknown as HTMLAllCollection;
