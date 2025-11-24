@@ -2,9 +2,9 @@
  * Tests for JqDOMTokenList implementation
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { JqDOMTokenList } from '../../dom/JqDOMTokenList';
-import { JqElement } from '../../dom/JqElement';
+import { describe, it, expect, beforeEach } from '@jest/globals';
+import { JqDOMTokenList } from '../../dom/collections/JqDOMTokenList';
+import { JqElement } from '../../dom/core/JqElement';
 
 describe('JqDOMTokenList', () => {
     let element: JqElement;

@@ -1,4 +1,4 @@
-﻿import { JqHTMLCollection } from '../../dom/JqHTMLCollection';
+﻿import { JqHTMLCollection } from '../../dom/collections/JqHTMLCollection';
 import { JqElement } from '../../types';
 
 describe('JqHTMLCollection', () => {

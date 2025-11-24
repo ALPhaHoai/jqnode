@@ -53,7 +53,7 @@ describe('Factory function with CSS selectors - Node-Query vs jQuery Comparison'
     expect(nqTitleTag).toBe(jqTitleTag);
     expect(nqTitleTag).toBe('h1');
 
-    const nqTitleId = nqTitle.nodes[0]?.getAttribute('id'];
+    const nqTitleId = nqTitle.nodes[0]?.getAttribute('id');
     const jqTitleId = jqTitle.attr('id');
 
     expect(nqTitleId).toBe(jqTitleId);

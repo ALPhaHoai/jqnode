@@ -92,7 +92,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqContents.nodes).toHaveLength(1);
         expect(jqContents.length).toBe(1);
 
-        const nqText = nqContents.nodes[0].value;
+        const nqText = nqContents.nodes[0].textContent;
         const jqText = jqContents[0].textContent;
 
         expect(nqText).toBe(jqText);
@@ -110,7 +110,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqContents.nodes).toHaveLength(1);
         expect(jqContents.length).toBe(1);
 
-        const nqText = nqContents.nodes[0].value;
+        const nqText = nqContents.nodes[0].textContent;
         const jqText = jqContents[0].textContent;
 
         expect(nqText).toBe(jqText);

@@ -493,10 +493,11 @@ function matchesAttribute(node: JqElement, attr: AttributeSelector): boolean {
     const nodeValue = node.getAttribute(attr.name);
 
     if (attr.operator === null) {
-        return nodeValue !== undefined;
+        // For attribute presence selectors like [id], check if attribute exists
+        return nodeValue !== null;
     }
 
-    if (nodeValue === undefined) {
+    if (nodeValue === null) {
         return false;
     }
 

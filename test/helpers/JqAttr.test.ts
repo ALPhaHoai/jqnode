@@ -1,4 +1,4 @@
-﻿import { JqAttr } from '../../dom/JqAttr';
+﻿import { JqAttr } from '../../dom/core/JqAttr';
 import { JqElement } from '../../types';
 
 describe('JqAttr', () => {

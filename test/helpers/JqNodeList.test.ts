@@ -1,4 +1,4 @@
-import { JqNodeList, JqNodeListOf } from '../../dom/JqNodeList';
+import { JqNodeList, JqNodeListOf } from '../../dom/collections/JqNodeList';
 import { JqElement } from '../../types';
 
 describe('JqNodeList', () => {

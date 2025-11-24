@@ -3,8 +3,8 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap
  */
 
-import {JqElement} from '../core/JqElement';
-import {JqAttr} from '../core/JqAttr';
+import { JqElement } from '../core/JqElement';
+import { JqAttr } from '../core/JqAttr';
 
 export class JqNamedNodeMap implements NamedNodeMap {
     private readonly _node: JqElement;
@@ -15,9 +15,15 @@ export class JqNamedNodeMap implements NamedNodeMap {
         return new Proxy(this, {
             get: (target, prop) => {
                 if (typeof prop === 'string') {
+                    // Handle numeric indices
                     const index = Number(prop);
                     if (!isNaN(index) && Number.isInteger(index)) {
                         return target.item(index);
+                    }
+
+                    // Handle direct attribute access (e.g., attributes.class)
+                    if (prop in target._data) {
+                        return target._data[prop];
                     }
                 }
                 return (target as any)[prop];

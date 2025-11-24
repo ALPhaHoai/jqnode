@@ -84,7 +84,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqHighlights = jqRoot.find('.highlight');
 
         expect(nqHighlights.nodes).toHaveLength(1);
-        expect(nqHighlights.nodes[0].getAttribute('class']).toBe('highlight');
+        expect(nqHighlights.nodes[0].getAttribute('class')).toBe('highlight');
         expect(nqHighlights.text()).toBe('Highlighted text');
 
         expect(jqHighlights.length).toBe(1);
@@ -98,7 +98,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         const jqMain = jqRoot.find('#main');
 
         expect(nqMain.nodes).toHaveLength(1);
-        expect(nqMain.nodes[0].getAttribute('id']).toBe('main');
+        expect(nqMain.nodes[0].getAttribute('id')).toBe('main');
 
         expect(jqMain.length).toBe(1);
         expect(jqMain.attr('id')).toBe('main');
@@ -112,7 +112,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         expect(
             nqSpecialItems.nodes[0].tagName && nqSpecialItems.nodes[0].tagName.toLowerCase(),
         ).toBe('li');
-        expect(nqSpecialItems.nodes[0].getAttribute('class']).toBe('item special');
+        expect(nqSpecialItems.nodes[0].getAttribute('class')).toBe('item special');
 
         expect(jqSpecialItems.length).toBe(1);
         expect(jqSpecialItems[0].tagName.toLowerCase()).toBe('li');
@@ -177,8 +177,8 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         expect(nqNestedSpans.nodes).toHaveLength(2);
         expect(jqNestedSpans.length).toBe(2);
 
-        expect(nqNestedSpans.nodes[0].getAttribute('class']).toBe('highlight');
-        expect(nqNestedSpans.nodes[1].getAttribute('class']).toBe('normal');
+        expect(nqNestedSpans.nodes[0].getAttribute('class')).toBe('highlight');
+        expect(nqNestedSpans.nodes[1].getAttribute('class')).toBe('normal');
 
         expect(jqNestedSpans.eq(0).hasClass('highlight')).toBe(true);
         expect(jqNestedSpans.eq(1).hasClass('normal')).toBe(true);

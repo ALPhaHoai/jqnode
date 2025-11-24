@@ -160,8 +160,9 @@ export class JqNode implements Node {
         if (!other) {
             return false;
         }
+        // Per DOM spec, a node does not contain itself
         if (other === this) {
-            return true;
+            return false;
         }
 
         let node: Node | null = other.parentNode;

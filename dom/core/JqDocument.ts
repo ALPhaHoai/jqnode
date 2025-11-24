@@ -328,8 +328,8 @@ export class JqDocument extends JqNode implements Document {
                     return node as unknown as HTMLElement;
                 }
             }
-            // @ts-ignore
-            const children = node._children || node.children || [];
+            // @ts-ignore - Access children from either JqElement or JqDocument
+            const children = node.children || node._children || [];
             for (const child of children) {
                 const result = traverse(child);
                 if (result) return result;
@@ -346,8 +346,8 @@ export class JqDocument extends JqNode implements Document {
         const matchAll = search === '*';
 
         const traverse = (node: JqNode) => {
-            // @ts-ignore
-            const children = node._children || node.children || [];
+            // @ts-ignore - Access children from either JqElement or JqDocument
+            const children = node.children || node._children || [];
             for (const child of children) {
                 if (child.nodeType === this.ELEMENT_NODE) {
                     if (matchAll || child.nodeName.toLowerCase() === search) {
@@ -379,8 +379,8 @@ export class JqDocument extends JqNode implements Document {
         }
 
         const traverse = (node: JqNode) => {
-            // @ts-ignore
-            const children = node._children || node.children || [];
+            // @ts-ignore - Access children from either JqElement or JqDocument
+            const children = node.children || node._children || [];
             for (const child of children) {
                 if (child.nodeType === this.ELEMENT_NODE) {
                     const classList = ((child as unknown as Element).getAttribute('class') || '').trim().split(/\s+/);

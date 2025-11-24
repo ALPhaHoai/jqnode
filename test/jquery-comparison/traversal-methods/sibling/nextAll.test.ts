@@ -29,7 +29,7 @@ describe('nextAll() method - Node-Query vs jQuery Comparison', () => {
         expect(nqNextAll.nodes).toHaveLength(3);
         expect(jqNextAll.length).toBe(3);
 
-        const nqTexts = nqNextAll.nodes.map((node: JqElement) => node.children[0]?.value || '');
+        const nqTexts = nqNextAll.nodes.map((node: JqElement) => node.textContent || '');
         const jqTexts = [];
         jqNextAll.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());

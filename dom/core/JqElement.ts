@@ -64,6 +64,42 @@ export class JqElement extends JqNode {
     }
 
     /**
+     * Returns the node type string ('element', 'text', 'comment')
+     * This property is commonly used by libraries like cheerio
+     */
+    get type(): string {
+        return this.internalType;
+    }
+
+    /**
+     * Gets or sets the text data for text and comment nodes
+     * Provides compatibility with cheerio-like APIs
+     */
+    get data(): string | undefined {
+        if (this.internalType === 'text' || this.internalType === 'comment') {
+            return this.textData;
+        }
+        return undefined;
+    }
+
+    set data(value: string | undefined) {
+        if (this.internalType === 'text' || this.internalType === 'comment') {
+            this.textData = value || '';
+        }
+    }
+
+    /**
+     * Returns attributes as plain object for backward compatibility
+     * This matches the cheerio/htmlparser2 API
+     */
+    get attribs(): Record<string, string> | undefined {
+        if (this.internalType !== 'element') {
+            return undefined;
+        }
+        return this._attributes._getData();
+    }
+
+    /**
      * Returns a live DOMTokenList which contains the class attribute's tokens.
      */
     get classList(): DOMTokenList {

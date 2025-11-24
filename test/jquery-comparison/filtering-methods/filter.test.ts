@@ -74,7 +74,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
     test('filter() should filter elements using function that checks element properties - jquery-comparison', () => {
         const nqResult = elements.filter(function (index: number, element: JqElement) {
-            return (element.getAttribute('class'] as string | undefined)?.includes('special') ?? false;
+            return (element.getAttribute('class') as string | undefined)?.includes('special') ?? false;
         });
         const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             return $(element).hasClass('special');
