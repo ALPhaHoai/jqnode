@@ -4,11 +4,11 @@
  * and https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import { JqNamedNodeMap } from './JqNamedNodeMap';
-import { JqNode } from './JqNode';
-import { JqHTMLCollection } from './JqHTMLCollection';
-import { JqNodeListOf } from './JqNodeList';
-import { JqDOMTokenList } from './JqDOMTokenList';
+import {JqNamedNodeMap} from './JqNamedNodeMap';
+import {JqNode} from './JqNode';
+import {JqHTMLCollection} from './JqHTMLCollection';
+import {JqNodeListOf} from './JqNodeList';
+import {JqDOMTokenList} from './JqDOMTokenList';
 
 /**
  * Node type identifier

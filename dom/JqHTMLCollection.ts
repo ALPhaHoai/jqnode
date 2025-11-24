@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
  */
 
-import { JqElement } from './JqElement';
+import {JqElement} from './JqElement';
 
 export class JqHTMLCollection {
     private _elements: JqElement[];
@@ -41,7 +41,7 @@ export class JqHTMLCollection {
     /**
      * Returns the specific element at the given zero-based index into the list.
      * Returns null if the index is out of range.
-     * 
+     *
      * An alternative to accessing collection[i] (which instead returns undefined when i is out-of-bounds).
      */
     item(index: number): Element | null {
@@ -55,7 +55,7 @@ export class JqHTMLCollection {
      * Returns the specific node whose ID or, as a fallback, name matches the string specified by name.
      * Matching by name is only done as a last resort, only in HTML, and only if the referenced element
      * supports the name attribute. Returns null if no node exists by the given name.
-     * 
+     *
      * An alternative to accessing collection[name] (which instead returns undefined when name does not exist).
      */
     namedItem(name: string): Element | null {

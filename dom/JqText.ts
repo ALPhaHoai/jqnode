@@ -42,6 +42,14 @@ export class JqText extends JqCharacterData implements Text {
         return '#text';
     }
 
+    override get ownerDocument(): Document {
+        return super.ownerDocument as Document;
+    }
+
+    override set ownerDocument(value: Document) {
+        super.ownerDocument = value;
+    }
+
     /**
      * Returns the HTMLSlotElement representing the <slot> the node is inserted in.
      * In jqnode, this always returns null as we don't support Shadow DOM.

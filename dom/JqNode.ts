@@ -67,7 +67,15 @@ export class JqNode implements Node {
         // To be implemented by subclasses
     }
 
-    ownerDocument: Document | null = null;
+    private _ownerDocument: Document | null = null;
+
+    get ownerDocument(): Document | null {
+        return this._ownerDocument;
+    }
+
+    set ownerDocument(value: Document | null) {
+        this._ownerDocument = value;
+    }
 
     get parentNode(): ParentNode | null {
         return null;

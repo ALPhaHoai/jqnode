@@ -3,8 +3,8 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Attr
  */
 
-import { JqElement } from './JqElement';
-import { JqNodeListOf } from './JqNodeList';
+import {JqElement} from './JqElement';
+import {JqNodeListOf} from './JqNodeList';
 
 export class JqAttr implements Attr {
     private readonly _node: JqElement | null;

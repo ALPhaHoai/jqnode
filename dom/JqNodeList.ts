@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  */
 
-import { JqElement } from './JqElement';
+import {JqElement} from './JqElement';
 
 export class JqNodeList implements NodeList {
     private _nodes: JqElement[];
@@ -36,7 +36,7 @@ export class JqNodeList implements NodeList {
     /**
      * Returns the node at the given zero-based index into the list.
      * Returns null if the index is out of range.
-     * 
+     *
      * An alternative to accessing nodeList[i] (which instead returns undefined when i is out-of-bounds).
      */
     item(index: number): Node | null {

@@ -76,7 +76,7 @@ export abstract class JqCharacterData extends JqNode {
         this._data = value || '';
     }
 
-    override get textContent(): string | null {
+    override get textContent(): string {
         return this._data;
     }
 

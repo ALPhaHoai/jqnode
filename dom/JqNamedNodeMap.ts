@@ -3,8 +3,8 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap
  */
 
-import { JqElement } from './JqElement';
-import { JqAttr } from './JqAttr';
+import {JqElement} from './JqElement';
+import {JqAttr} from './JqAttr';
 
 export class JqNamedNodeMap implements NamedNodeMap {
     private readonly _node: JqElement;

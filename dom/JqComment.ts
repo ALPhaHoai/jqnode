@@ -8,7 +8,7 @@ import { JqElement } from './JqElement';
 
 /**
  * JqComment implements the DOM Comment interface.
- * Comment nodes represent textual notations within markup; 
+ * Comment nodes represent textual notations within markup;
  * they are not displayed but are available in the document's source.
  */
 export class JqComment extends JqCharacterData implements Comment {
@@ -41,6 +41,14 @@ export class JqComment extends JqCharacterData implements Comment {
     // Override Node properties
     override get nodeName(): string {
         return '#comment';
+    }
+
+    override get ownerDocument(): Document {
+        return super.ownerDocument as Document;
+    }
+
+    override set ownerDocument(value: Document) {
+        super.ownerDocument = value;
     }
 
     /**

@@ -1,10 +1,9 @@
-import { JqNode } from './JqNode';
-import { JqElement } from './JqElement';
-import { JqText } from './JqText';
-import { JqComment } from './JqComment';
-import { JqHTMLCollection } from './JqHTMLCollection';
-import { JqNodeList, JqNodeListOf } from './JqNodeList';
-import type { HtmlNode } from '../types';
+import {JqNode} from './JqNode';
+import {JqElement} from './JqElement';
+import {JqText} from './JqText';
+import {JqComment} from './JqComment';
+import {JqHTMLCollection} from './JqHTMLCollection';
+import {JqNodeList, JqNodeListOf} from './JqNodeList';
 
 /**
  * JqDocument - Implementation of the DOM Document interface

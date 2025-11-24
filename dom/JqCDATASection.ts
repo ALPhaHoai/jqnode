@@ -4,17 +4,19 @@
  */
 
 import { JqText } from './JqText';
-import { JqElement } from './JqElement';
 import type { HtmlNode } from '../types';
 
 /**
  * JqCDATASection implements the DOM CDATASection interface.
- * CDATA sections are used to escape blocks of text containing characters 
+ * CDATA sections are used to escape blocks of text containing characters
  * that would otherwise be recognized as markup.
- * 
+ *
  * CDATASection extends Text and has no specific properties or methods of its own.
  */
 export class JqCDATASection extends JqText implements CDATASection {
+    // Override to match CDATASection interface requirements
+    // TypeScript's lib.dom.d.ts defines these as non-nullable for CharacterData-derived types
+
     constructor(data: string = '') {
         super(data);
         this.nodeType = this.CDATA_SECTION_NODE;
@@ -23,7 +25,7 @@ export class JqCDATASection extends JqText implements CDATASection {
     /**
      * Factory method to create a JqCDATASection from an HtmlNode
      */
-    static override fromHtmlNode(node: HtmlNode): JqCDATASection {
+    static fromHtmlNode(node: HtmlNode): JqCDATASection {
         const cdataSection = new JqCDATASection(node.data);
         (cdataSection as any)._htmlNode = node;
         return cdataSection;
@@ -37,7 +39,7 @@ export class JqCDATASection extends JqText implements CDATASection {
     /**
      * Clones this CDATA section node
      */
-    override cloneNode(deep?: boolean): CDATASection {
+    override cloneNode(_deep?: boolean): CDATASection {
         const cloned = new JqCDATASection(this._data);
 
         // CDATA section nodes don't have children, so deep parameter doesn't matter
