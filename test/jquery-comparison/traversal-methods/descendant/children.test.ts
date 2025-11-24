@@ -199,4 +199,190 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(0);
         expect(jqChildren.length).toBe(0);
     });
+
+    test('children() should work with multiple parent elements - jquery-comparison', () => {
+        const html = `
+            <div class="group">
+                <div class="parent" id="p1">
+                    <span class="child">P1-C1</span>
+                    <span class="child">P1-C2</span>
+                </div>
+                <div class="parent" id="p2">
+                    <span class="child">P2-C1</span>
+                    <span class="child">P2-C2</span>
+                </div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqResult = nodeQuery.find('.parent').children();
+        const jqResult = jquery.find('.parent').children();
+
+        expect(nqResult.nodes).toHaveLength(4); // 2 children from each parent
+        expect(jqResult.length).toBe(4);
+
+        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const jqTexts: string[] = [];
+        jqResult.each((index: number, element: HTMLElement) => {
+            jqTexts.push(jQuery(element).text());
+        });
+
+        expect(nqTexts.sort()).toEqual(jqTexts.sort());
+    });
+
+    test('children() should filter by tag name - jquery-comparison', () => {
+        const html = `
+            <div id="mixed">
+                <span>Span 1</span>
+                <div>Div 1</div>
+                <span>Span 2</span>
+                <p>Paragraph 1</p>
+                <div>Div 2</div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqSpans = nodeQuery.find('#mixed').children('span');
+        const jqSpans = jquery.find('#mixed').children('span');
+
+        expect(nqSpans.nodes).toHaveLength(2);
+        expect(jqSpans.length).toBe(2);
+
+        const nqDivs = nodeQuery.find('#mixed').children('div');
+        const jqDivs = jquery.find('#mixed').children('div');
+
+        expect(nqDivs.nodes).toHaveLength(2);
+        expect(jqDivs.length).toBe(2);
+    });
+
+    test('children() should filter by attribute selector - jquery-comparison', () => {
+        const html = `
+            <div id="attrs">
+                <div data-type="foo">Foo 1</div>
+                <div data-type="bar">Bar 1</div>
+                <div data-type="foo">Foo 2</div>
+                <span>No Attr</span>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqResult = nodeQuery.find('#attrs').children('[data-type="foo"]');
+        const jqResult = jquery.find('#attrs').children('[data-type="foo"]');
+
+        expect(nqResult.nodes).toHaveLength(2);
+        expect(jqResult.length).toBe(2);
+    });
+
+    test('children() should work with compound selectors - jquery-comparison', () => {
+        const html = `
+            <div id="compound">
+                <div class="item active">Item 1</div>
+                <div class="item">Item 2</div>
+                <span class="item active">Span 1</span>
+                <div class="item active">Item 3</div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqResult = nodeQuery.find('#compound').children('div.item.active');
+        const jqResult = jquery.find('#compound').children('div.item.active');
+
+        expect(nqResult.nodes).toHaveLength(2);
+        expect(jqResult.length).toBe(2);
+    });
+
+    test('children() should not return text nodes - jquery-comparison', () => {
+        const html = `
+            <div id="text-test">
+                Text before
+                <span>Element 1</span>
+                Text between
+                <span>Element 2</span>
+                Text after
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqChildren = nodeQuery.find('#text-test').children();
+        const jqChildren = jquery.find('#text-test').children();
+
+        // Should only return the 2 span elements, not text nodes
+        expect(nqChildren.nodes).toHaveLength(2);
+        expect(jqChildren.length).toBe(2);
+
+        const nqTags = nqChildren.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
+        const jqTags: string[] = [];
+        jqChildren.each((index: number, element: HTMLElement) => {
+            jqTags.push(element.tagName.toLowerCase());
+        });
+
+        expect(nqTags).toEqual(jqTags);
+        expect(nqTags).toEqual(['span', 'span']);
+    });
+
+    test('children() should work with deeply nested structures - jquery-comparison', () => {
+        const html = `
+            <div id="deep">
+                <div class="level-1">
+                    Level 1
+                    <div class="level-2">
+                        Level 2
+                        <div class="level-3">
+                            Level 3
+                        </div>
+                    </div>
+                </div>
+                <div class="level-1">Level 1 Sibling</div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        // Should only return level-1 children, not level-2 or level-3
+        const nqResult = nodeQuery.find('#deep').children();
+        const jqResult = jquery.find('#deep').children();
+
+        expect(nqResult.nodes).toHaveLength(2);
+        expect(jqResult.length).toBe(2);
+
+        const nqClasses = nqResult.nodes.map((node: HtmlNode) => node.attributes?.class);
+        const jqClasses: string[] = [];
+        jqResult.each((index: number, element: HTMLElement) => {
+            jqClasses.push(element.className);
+        });
+
+        expect(nqClasses).toEqual(jqClasses);
+        expect(nqClasses).toEqual(['level-1', 'level-1']);
+    });
+
+    test('children() should work with different element types - jquery-comparison', () => {
+        const html = `
+            <div id="types">
+                <button class="btn">Button</button>
+                <input type="text" class="input" />
+                <textarea class="textarea"></textarea>
+                <select class="select"><option>Option</option></select>
+                <a href="#" class="link">Link</a>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqAll = nodeQuery.find('#types').children();
+        const jqAll = jquery.find('#types').children();
+
+        expect(nqAll.nodes).toHaveLength(5);
+        expect(jqAll.length).toBe(5);
+
+        const nqTags = nqAll.nodes.map(
+            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+        );
+        const jqTags: string[] = [];
+        jqAll.each((index: number, element: HTMLElement) => {
+            jqTags.push(element.tagName.toLowerCase());
+        });
+
+        expect(nqTags).toEqual(jqTags);
+        expect(nqTags).toEqual(['button', 'input', 'textarea', 'select', 'a']);
+    });
 });

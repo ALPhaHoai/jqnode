@@ -54,7 +54,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         );
         const jqHasH1 = jqContents
             .toArray()
-            .some((node: Node) => node.nodeType === 1 && node.tagName.toLowerCase() === 'h1');
+            .some((node: Node) => node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'h1');
 
         expect(nqHasH1).toBe(jqHasH1);
         expect(nqHasH1).toBe(true);
@@ -153,7 +153,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
             .find('#main')
             .contents()
             .filter((index: number, node: HtmlNode) => {
-                return (
+                return !!(
                     node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div'
                 );
             });
@@ -210,5 +210,161 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTypes).toEqual(jqTypes);
         // jQuery includes whitespace text nodes between elements
         // The exact order depends on the HTML formatting
+    });
+
+    test('contents() should include whitespace text nodes - jquery-comparison', () => {
+        const html = `
+            <div id="whitespace">
+
+                <span>Element</span>
+
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqContents = nodeQuery.find('#whitespace').contents();
+        const jqContents = jquery.find('#whitespace').contents();
+
+        expect(nqContents.nodes.length).toBe(jqContents.length);
+
+        // Count text nodes
+        const nqTextCount = nqContents.nodes.filter((node: HtmlNode) => node.type === 'text').length;
+        const jqTextCount = jqContents.toArray().filter((node: Node) => node.nodeType === 3).length;
+
+        expect(nqTextCount).toBe(jqTextCount);
+        expect(nqTextCount).toBeGreaterThan(0); // Should have whitespace text nodes
+    });
+
+    test('contents() should return only comments for comment-only element - jquery-comparison', () => {
+        const html = `
+            <div id="comments"><!-- Comment 1 --><!-- Comment 2 --><!-- Comment 3 --></div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqContents = nodeQuery.find('#comments').contents();
+        const jqContents = jquery.find('#comments').contents();
+
+        expect(nqContents.nodes).toHaveLength(3);
+        expect(jqContents.length).toBe(3);
+
+        // All should be comment nodes
+        const nqAllComments = nqContents.nodes.every((node: HtmlNode) => node.type === 'comment');
+        const jqAllComments = jqContents.toArray().every((node: Node) => node.nodeType === 8);
+
+        expect(nqAllComments).toBe(true);
+        expect(jqAllComments).toBe(true);
+    });
+
+    test('contents() should work with multiple parent elements - jquery-comparison', () => {
+        const html = `
+            <div class="multi">
+                <div class="parent" id="p1">
+                    Text 1
+                    <span>Element 1</span>
+                    <!-- Comment 1 -->
+                </div>
+                <div class="parent" id="p2">
+                    Text 2
+                    <span>Element 2</span>
+                </div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqResult = nodeQuery.find('.parent').contents();
+        const jqResult = jquery.find('.parent').contents();
+
+        expect(nqResult.nodes.length).toBe(jqResult.length);
+
+        // Should include contents from both parents
+        const nqElementCount = nqResult.nodes.filter((node: HtmlNode) => node.type === 'element').length;
+        const jqElementCount = jqResult.toArray().filter((node: Node) => node.nodeType === 1).length;
+
+        expect(nqElementCount).toBe(jqElementCount);
+        expect(nqElementCount).toBe(2); // 2 span elements total
+    });
+
+    test('contents() should return empty for truly empty element - jquery-comparison', () => {
+        const html = `<div id="empty"></div>`;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqContents = nodeQuery.find('#empty').contents();
+        const jqContents = jquery.find('#empty').contents();
+
+        expect(nqContents.nodes).toHaveLength(0);
+        expect(jqContents.length).toBe(0);
+    });
+
+    test('contents() should correctly identify all node types - jquery-comparison', () => {
+        const html = `
+            <div id="mixed-types">
+                Text node
+                <span>Element</span>
+                More text
+                <!-- Comment -->
+                <div>Another element</div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqContents = nodeQuery.find('#mixed-types').contents();
+        const jqContents = jquery.find('#mixed-types').contents();
+
+        // Count each type
+        const nqCounts = {
+            element: nqContents.nodes.filter((n: HtmlNode) => n.type === 'element').length,
+            text: nqContents.nodes.filter((n: HtmlNode) => n.type === 'text').length,
+            comment: nqContents.nodes.filter((n: HtmlNode) => n.type === 'comment').length,
+        };
+
+        const jqCounts = {
+            element: jqContents.toArray().filter((n: Node) => n.nodeType === 1).length,
+            text: jqContents.toArray().filter((n: Node) => n.nodeType === 3).length,
+            comment: jqContents.toArray().filter((n: Node) => n.nodeType === 8).length,
+        };
+
+        expect(nqCounts.element).toBe(jqCounts.element);
+        expect(nqCounts.text).toBe(jqCounts.text);
+        expect(nqCounts.comment).toBe(jqCounts.comment);
+
+        expect(nqCounts.element).toBe(2); // span and div
+        expect(nqCounts.comment).toBe(1); // one comment
+    });
+
+    test('contents() can be filtered after retrieval - jquery-comparison', () => {
+        const html = `
+            <div id="filter-test">
+                Text 1
+                <div class="keep">Keep 1</div>
+                Text 2
+                <div class="remove">Remove</div>
+                <div class="keep">Keep 2</div>
+            </div>
+        `;
+        const { jquery, nodeQuery } = createTestDom(html);
+
+        const nqResult = nodeQuery
+            .find('#filter-test')
+            .contents()
+            .filter((index: number, node: HtmlNode) => {
+                return !!(
+                    node.type === 'element' &&
+                    node.attribs &&
+                    node.attribs.class &&
+                    node.attribs.class.includes('keep')
+                );
+            });
+        const jqResult = jquery
+            .find('#filter-test')
+            .contents()
+            .filter((index: number, node: Node) => {
+                return (
+                    node.nodeType === 1 &&
+                    (node as Element).classList.contains('keep')
+                );
+            });
+
+        expect(nqResult.nodes).toHaveLength(2);
+        expect(jqResult.length).toBe(2);
     });
 });
