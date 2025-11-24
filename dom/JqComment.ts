@@ -4,7 +4,7 @@
  */
 
 import { JqCharacterData } from './JqCharacterData';
-import { HtmlNode } from './HtmlNode';
+import { JqElement } from './JqElement';
 
 /**
  * JqComment implements the DOM Comment interface.
@@ -13,9 +13,9 @@ import { HtmlNode } from './HtmlNode';
  */
 export class JqComment extends JqCharacterData implements Comment {
     /**
-     * Internal reference to the HtmlNode if this is wrapping one
+     * Internal reference to the JqElement if this is wrapping one
      */
-    private _htmlNode: HtmlNode | null = null;
+    private _jqElement: JqElement | null = null;
 
     constructor(data: string = '') {
         super(data);
@@ -23,19 +23,19 @@ export class JqComment extends JqCharacterData implements Comment {
     }
 
     /**
-     * Factory method to create a JqComment from an HtmlNode
+     * Factory method to create a JqComment from a JqElement
      */
-    static fromHtmlNode(node: HtmlNode): JqComment {
+    static fromJqElement(node: JqElement): JqComment {
         const comment = new JqComment(node.data);
-        comment._htmlNode = node;
+        comment._jqElement = node;
         return comment;
     }
 
     /**
-     * Gets the underlying HtmlNode if available
+     * Gets the underlying JqElement if available
      */
-    getHtmlNode(): HtmlNode | null {
-        return this._htmlNode;
+    getJqElement(): JqElement | null {
+        return this._jqElement;
     }
 
     // Override Node properties
@@ -69,17 +69,17 @@ export class JqComment extends JqCharacterData implements Comment {
         } as unknown as Node;
     }
 
-    // Sync data changes with HtmlNode if present
+    // Sync data changes with JqElement if present
     override set data(value: string) {
         super.data = value;
-        if (this._htmlNode) {
-            this._htmlNode.data = value;
+        if (this._jqElement) {
+            this._jqElement.data = value;
         }
     }
 
     override get data(): string {
-        if (this._htmlNode) {
-            return this._htmlNode.data;
+        if (this._jqElement) {
+            return this._jqElement.data;
         }
         return super.data;
     }

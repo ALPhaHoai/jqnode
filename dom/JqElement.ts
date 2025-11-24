@@ -1,9 +1,13 @@
 /**
- * Core HTML node class for jqnode
+ * Core HTML element class for jqnode
+ * Based on https://developer.mozilla.org/en-US/docs/Web/API/Element
+ * and https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
 import { JqNamedNodeMap } from './JqNamedNodeMap';
 import { JqNode } from './JqNode';
+import { JqHTMLCollection } from './JqHTMLCollection';
+import { JqNodeListOf } from './JqNodeList';
 
 /**
  * Node type identifier
@@ -14,16 +18,16 @@ export type NodeType = 'element' | 'text' | 'comment';
  * Internal HTML node structure
  * Extends JqNode to implement the DOM Node interface
  */
-export class HtmlNode extends JqNode {
+export class JqElement extends JqNode {
     public type: NodeType;
     public name: string = '';
     public tagName: string = ''; // Tag name for elements
     public data: string = '';
     public value: string = ''; // Alternative text content property (used by some parsers)
-    public children: HtmlNode[] = [];
-    public parent: HtmlNode | undefined;
-    public prev: HtmlNode | null = null;
-    public next: HtmlNode | null = null;
+    public children: JqElement[] = [];
+    public parent: JqElement | undefined;
+    public prev: JqElement | null = null;
+    public next: JqElement | null = null;
 
     // Internal tracking for data storage
     public __jqdata__: Record<string, unknown> = {};
@@ -105,7 +109,7 @@ export class HtmlNode extends JqNode {
     }
 
     override get childNodes(): NodeListOf<ChildNode> {
-        return this.children as unknown as NodeListOf<ChildNode>;
+        return new JqNodeListOf<ChildNode>(this.children) as unknown as NodeListOf<ChildNode>;
     }
 
     getAttribute(name: string): string | null {
@@ -130,14 +134,14 @@ export class HtmlNode extends JqNode {
     }
 
     override appendChild<T extends Node>(node: T): T {
-        const htmlNode = node as unknown as HtmlNode;
-        this.children.push(htmlNode);
-        htmlNode.parent = this;
+        const jqElement = node as unknown as JqElement;
+        this.children.push(jqElement);
+        jqElement.parent = this;
         return node;
     }
 
     override removeChild<T extends Node>(child: T): T {
-        const index = this.children.findIndex(c => c === child as unknown as HtmlNode);
+        const index = this.children.findIndex(c => c === child as unknown as JqElement);
         if (index === -1) {
             throw new Error('Node was not found');
         }
@@ -147,33 +151,33 @@ export class HtmlNode extends JqNode {
     }
 
     override insertBefore<T extends Node>(node: T, child: Node | null): T {
-        const htmlNode = node as unknown as HtmlNode;
+        const jqElement = node as unknown as JqElement;
 
         if (child === null) {
             return this.appendChild(node);
         }
 
-        const index = this.children.findIndex(c => c === child as unknown as HtmlNode);
+        const index = this.children.findIndex(c => c === child as unknown as JqElement);
         if (index === -1) {
             throw new Error('Reference node was not found');
         }
 
-        this.children.splice(index, 0, htmlNode);
-        htmlNode.parent = this;
+        this.children.splice(index, 0, jqElement);
+        jqElement.parent = this;
         return node;
     }
 
     override replaceChild<T extends Node>(node: Node, child: T): T {
-        const htmlNode = node as unknown as HtmlNode;
-        const index = this.children.findIndex(c => c === child as unknown as HtmlNode);
+        const jqElement = node as unknown as JqElement;
+        const index = this.children.findIndex(c => c === child as unknown as JqElement);
 
         if (index === -1) {
             throw new Error('Node was not found');
         }
 
         const removed = this.children[index];
-        this.children[index] = htmlNode;
-        htmlNode.parent = this;
+        this.children[index] = jqElement;
+        jqElement.parent = this;
         removed.parent = undefined;
 
         return child;
@@ -183,8 +187,8 @@ export class HtmlNode extends JqNode {
         return this.children.length > 0;
     }
 
-    override cloneNode(deep?: boolean): HtmlNode {
-        const cloned = new HtmlNode(this.type, this.name);
+    override cloneNode(deep?: boolean): JqElement {
+        const cloned = new JqElement(this.type, this.name);
         cloned.tagName = this.tagName;
         cloned.data = this.data;
         cloned.value = this.value;
@@ -217,12 +221,74 @@ export class HtmlNode extends JqNode {
         } else {
             this.children = [];
             if (value) {
-                const textNode = new HtmlNode('text');
+                const textNode = new JqElement('text');
                 textNode.data = value;
                 textNode.parent = this;
                 this.children.push(textNode);
             }
         }
+    }
+
+    /**
+     * Returns an HTMLCollection of descendant elements with the specified tag name.
+     * Returns all descendant elements if tagName is "*".
+     */
+    getElementsByTagName(tagName: string): HTMLCollection {
+        const results: JqElement[] = [];
+        const search = tagName.toLowerCase();
+        const matchAll = search === '*';
+
+        const traverse = (node: JqElement) => {
+            for (const child of node.children) {
+                if (child.type === 'element') {
+                    if (matchAll || child.tagName.toLowerCase() === search) {
+                        results.push(child);
+                    }
+                    traverse(child);
+                }
+            }
+        };
+
+        traverse(this);
+        return new JqHTMLCollection(results) as unknown as HTMLCollection;
+    }
+
+    /**
+     * Returns an HTMLCollection of descendant elements with the specified tag name and namespace.
+     * Currently ignores namespace and delegates to getElementsByTagName.
+     */
+    getElementsByTagNameNS(_namespaceURI: string | null, localName: string): HTMLCollection {
+        return this.getElementsByTagName(localName);
+    }
+
+    /**
+     * Returns an HTMLCollection of descendant elements with the specified class name(s).
+     * Multiple class names can be provided separated by spaces.
+     */
+    getElementsByClassName(classNames: string): HTMLCollection {
+        const results: JqElement[] = [];
+        const classes = classNames.trim().split(/\s+/).filter(c => c.length > 0);
+
+        if (classes.length === 0) {
+            return new JqHTMLCollection(results) as unknown as HTMLCollection;
+        }
+
+        const traverse = (node: JqElement) => {
+            for (const child of node.children) {
+                if (child.type === 'element') {
+                    const classList = (child.getAttribute('class') || '').trim().split(/\s+/);
+                    const hasAllClasses = classes.every(cls => classList.includes(cls));
+
+                    if (hasAllClasses) {
+                        results.push(child);
+                    }
+                    traverse(child);
+                }
+            }
+        };
+
+        traverse(this);
+        return new JqHTMLCollection(results) as unknown as HTMLCollection;
     }
 
     public offsetTop: number = 0; // DOM offset properties

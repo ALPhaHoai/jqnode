@@ -1,10 +1,16 @@
-import { HtmlNode } from './HtmlNode';
+/**
+ * JqAttr - Implementation of the DOM Attr interface
+ * Based on https://developer.mozilla.org/en-US/docs/Web/API/Attr
+ */
+
+import { JqElement } from './JqElement';
+import { JqNodeListOf } from './JqNodeList';
 
 export class JqAttr implements Attr {
-    private readonly _node: HtmlNode;
+    private readonly _node: JqElement;
     private readonly _name: string;
 
-    constructor(node: HtmlNode, name: string) {
+    constructor(node: JqElement, name: string) {
         this._node = node;
         this._name = name;
     }
@@ -25,7 +31,7 @@ export class JqAttr implements Attr {
     }
 
     get ownerElement(): Element | null {
-        // Return the HtmlNode as the owner element
+        // Return the JqElement as the owner element
         return this._node as unknown as Element;
     }
 
@@ -82,7 +88,7 @@ export class JqAttr implements Attr {
         // Attr cloning is always shallow in effect (just name/value),
         // but creating a new JqAttr on the same node would link it to the same live attribute.
         // However, DOM cloneNode on Attr usually creates a standalone Attr.
-        // Since JqAttr is tied to an HtmlNode, we might need a detached node or just return a new instance
+        // Since JqAttr is tied to a JqElement, we might need a detached node or just return a new instance
         // that represents the same data but maybe isn't live if it's supposed to be a copy.
         // But for this implementation, let's return a new JqAttr on the same node for now,
         // or ideally, it should be a copy.
@@ -115,7 +121,7 @@ export class JqAttr implements Attr {
     replaceChild<T extends Node>(_node: Node, _child: T): T { throw new Error('Not supported'); }
 
     readonly baseURI: string = '';
-    readonly childNodes: NodeListOf<ChildNode> = [] as unknown as NodeListOf<ChildNode>;
+    readonly childNodes: NodeListOf<ChildNode> = new JqNodeListOf<ChildNode>([]) as unknown as NodeListOf<ChildNode>;
     readonly firstChild: ChildNode | null = null;
     readonly isConnected: boolean = false;
     readonly lastChild: ChildNode | null = null;

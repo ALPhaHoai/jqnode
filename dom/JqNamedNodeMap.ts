@@ -1,11 +1,16 @@
-import { HtmlNode } from './HtmlNode';
+/**
+ * JqNamedNodeMap - Implementation of the DOM NamedNodeMap interface
+ * Based on https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap
+ */
+
+import { JqElement } from './JqElement';
 import { JqAttr } from './JqAttr';
 
 export class JqNamedNodeMap implements NamedNodeMap {
-    private readonly _node: HtmlNode;
+    private readonly _node: JqElement;
     private _data: Record<string, string> = {};
 
-    constructor(node: HtmlNode) {
+    constructor(node: JqElement) {
         this._node = node;
         return new Proxy(this, {
             get: (target, prop) => {

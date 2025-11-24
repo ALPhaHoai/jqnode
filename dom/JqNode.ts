@@ -3,6 +3,8 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
+import { JqNodeListOf } from './JqNodeList';
+
 /**
  * JqNode implements the DOM Node interface.
  * This is an abstract base class that provides Node functionality.
@@ -34,7 +36,7 @@ export class JqNode implements Node {
     baseURI: string = '';
 
     get childNodes(): NodeListOf<ChildNode> {
-        return [] as unknown as NodeListOf<ChildNode>;
+        return new JqNodeListOf<ChildNode>([]) as unknown as NodeListOf<ChildNode>;
     }
 
     get firstChild(): ChildNode | null {

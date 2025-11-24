@@ -2,16 +2,20 @@
  * Core type definitions for jqnode
  */
 
-import { HtmlNode, NodeType } from './dom/HtmlNode';
+import { JqElement, NodeType } from './dom/JqElement';
+import { JqAttr } from './dom/JqAttr';
+import { JqNamedNodeMap } from './dom/JqNamedNodeMap';
+import { JqHTMLCollection } from './dom/JqHTMLCollection';
 import { JqNode } from './dom/JqNode';
+import { JqElement as HtmlNodeClass } from './dom/JqElement';
 import { JqCharacterData } from './dom/JqCharacterData';
 import { JqText } from './dom/JqText';
 import { JqComment } from './dom/JqComment';
-import { JqAttr } from './dom/JqAttr';
-import { JqNamedNodeMap } from './dom/JqNamedNodeMap';
+import { JqCDATASection } from './dom/JqCDATASection';
 
-// Re-export for convenience
-export { HtmlNode, JqNode, JqCharacterData, JqText, JqComment, JqAttr, JqNamedNodeMap };
+// Export JqElement under both names for backwards compatibility
+export { HtmlNodeClass as HtmlNode, HtmlNodeClass as JqElement };
+export { JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection };
 
 export type { NodeType };
 
@@ -24,22 +28,22 @@ export type CssSelector = string | undefined | null;
 /**
  * Content that can be inserted/appended
  */
-export type ContentInput = string | HtmlNode | HtmlNode[] | JQ;
+export type ContentInput = string | JqElement | JqElement[] | JQ;
 
 /**
  * Callback for iteration methods
  */
-export type EachCallback<T = HtmlNode> = (this: T, index: number, element: T) => void | boolean;
+export type EachCallback<T = JqElement> = (this: T, index: number, element: T) => void | boolean;
 
 /**
  * Callback for map methods
  */
-export type MapCallback<T = HtmlNode, R = unknown> = (this: T, index: number, element: T) => R;
+export type MapCallback<T = JqElement, R = unknown> = (this: T, index: number, element: T) => R;
 
 /**
  * Filter callback
  */
-export type FilterCallback = (this: HtmlNode, index: number, element: HtmlNode) => boolean;
+export type FilterCallback = (this: JqElement, index: number, element: JqElement) => boolean;
 
 /**
  * Class name input for class manipulation methods (addClass, removeClass, toggleClass)
@@ -80,12 +84,12 @@ export type CssProperties = Record<string, CssValueInput>;
 /**
  * Selector or element to use as stopping point in traversal "Until" methods
  */
-export type UntilSelector = CssSelector | HtmlNode;
+export type UntilSelector = CssSelector | JqElement;
 
 /**
  * Element or selector to search for when finding index position
  */
-export type IndexTarget = HtmlNode | JQ | CssSelector;
+export type IndexTarget = JqElement | JQ | CssSelector;
 
 /**
  * Return type for getter/setter methods that can return value or chain
@@ -95,16 +99,16 @@ export type GetterSetterReturn<T> = T | undefined | JQ;
 /**
  * Callback for sorting methods
  */
-export type SortCallback = (a: HtmlNode, b: HtmlNode) => number;
+export type SortCallback = (a: JqElement, b: JqElement) => number;
 
 /**
  * JQ instance interface
  */
 export interface JQ {
-    nodes: HtmlNode[];
+    nodes: JqElement[];
     length: number;
-    [index: number]: HtmlNode | undefined;
-    [Symbol.iterator](): Iterator<HtmlNode>;
+    [index: number]: JqElement | undefined;
+    [Symbol.iterator](): Iterator<JqElement>;
     [Symbol.toStringTag]: string;
     _prevObject?: JQ; // For end() method
 
@@ -175,8 +179,8 @@ export interface JQ {
     last(): JQ;
     filter(selector: CssSelector | FilterCallback): JQ;
     not(selector: CssSelector | FilterCallback): JQ;
-    has(selector: CssSelector | HtmlNode): JQ;
-    is(selector: CssSelector | HtmlNode | JQ): boolean;
+    has(selector: CssSelector | JqElement): JQ;
+    is(selector: CssSelector | JqElement | JQ): boolean;
     slice(start: any, end?: any): JQ;
 
     // Insertion methods
@@ -188,18 +192,18 @@ export interface JQ {
     insertBefore(target: CssSelector | JQ): JQ;
     after(content: ContentInput): JQ;
     insertAfter(target: CssSelector | JQ): JQ;
-    wrap(wrappingElement: string | HtmlNode): JQ;
-    wrapAll(wrappingElement: string | HtmlNode): JQ;
-    wrapInner(wrappingElement: string | HtmlNode): JQ;
+    wrap(wrappingElement: string | JqElement): JQ;
+    wrapAll(wrappingElement: string | JqElement): JQ;
+    wrapInner(wrappingElement: string | JqElement): JQ;
 
     // Iteration methods
     each(callback: EachCallback): JQ;
-    map<R = unknown>(callback: MapCallback<HtmlNode, R>): R[];
+    map<R = unknown>(callback: MapCallback<JqElement, R>): R[];
 
     // Miscellaneous methods
-    toArray(): HtmlNode[];
-    get(): HtmlNode[];
-    get(index: number): HtmlNode | undefined;
+    toArray(): JqElement[];
+    get(): JqElement[];
+    get(index: number): JqElement | undefined;
     index(element?: IndexTarget): number;
     remove(selector?: CssSelector): JQ;
     clone(withDataAndEvents?: boolean, deepWithDataAndEvents?: boolean): JQ;
@@ -222,17 +226,17 @@ export interface JQ {
     end(): JQ;
 
     // Private helpers (prefixed with _)
-    _normalizeContent(content: ContentInput): HtmlNode[];
-    _cloneNode(node: HtmlNode, deep?: boolean): HtmlNode;
-    _hasDescendant(ancestor: HtmlNode, descendant: HtmlNode): boolean;
-    _findCommonRoots(nodes: HtmlNode[]): HtmlNode[];
+    _normalizeContent(content: ContentInput): JqElement[];
+    _cloneNode(node: JqElement, deep?: boolean): JqElement;
+    _hasDescendant(ancestor: JqElement, descendant: JqElement): boolean;
+    _findCommonRoots(nodes: JqElement[]): JqElement[];
 }
 
 /**
  * Static interface for the JQ factory function
  */
 export interface JQStatic {
-    (htmlOrSelectorOrNodes?: string | HtmlNode[] | HtmlNode | any, context?: HtmlNode[] | null): JQ;
+    (htmlOrSelectorOrNodes?: string | JqElement[] | JqElement | any, context?: JqElement[] | null): JQ;
     fn: any;
     clearRootNodesRegistry(): void;
 
@@ -251,7 +255,7 @@ export interface JQStatic {
     now(): number;
     noop(): void;
     param(obj: any, traditional?: boolean): string;
-    parseHTML(html: string): HtmlNode[];
+    parseHTML(html: string): JqElement[];
     parseJSON(json: string): any;
     parseXML(xml: string): any;
     trim(str: string | null | undefined): string;
