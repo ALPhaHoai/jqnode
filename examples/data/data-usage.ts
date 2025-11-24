@@ -1,5 +1,5 @@
 import jq from '../../index';
-import type { JqElement } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 console.log('=== data() Method Examples ===\n');
 
@@ -233,7 +233,7 @@ function toggleDropdown() {
     console.log('Dropdown', state.isOpen ? 'opened' : 'closed');
 }
 
-function selectItem(index) {
+function selectItem(index: number) {
     const state = $10('#dropdown').data('state');
     state.selectedIndex = index;
     state.lastAction = { type: 'select', index, timestamp: Date.now() };
@@ -258,9 +258,9 @@ const html11 = `
 `;
 const $11 = jq.load(html11);
 
-function validateEmail($field) {
-    const value = $field.attr('value');
-    const isValid = value.includes('@') && value.includes('.');
+function validateEmail($field: JQ) {
+    const value = $field.attr('value') as string;
+    const isValid = value && value.includes('@') && value.includes('.');
 
     $field.data({
         isValid: isValid,
@@ -269,9 +269,9 @@ function validateEmail($field) {
     });
 }
 
-function validatePassword($field) {
-    const value = $field.attr('value');
-    const isValid = value.length >= 8;
+function validatePassword($field: JQ) {
+    const value = $field.attr('value') as string;
+    const isValid = value && value.length >= 8;
 
     $field.data({
         isValid: isValid,
@@ -280,9 +280,9 @@ function validatePassword($field) {
     });
 }
 
-function validateUsername($field) {
-    const value = $field.attr('value');
-    const isValid = /^[a-z0-9]+$/i.test(value) && value.length >= 3;
+function validateUsername($field: JQ) {
+    const value = $field.attr('value') as string;
+    const isValid = value && /^[a-z0-9]+$/i.test(value) && value.length >= 3;
 
     $field.data({
         isValid: isValid,

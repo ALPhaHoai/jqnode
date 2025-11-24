@@ -100,6 +100,16 @@ export type GetterSetterReturn<T> = T | undefined | JQ;
 export type SortCallback = (a: JqElement, b: JqElement) => number;
 
 /**
+ * Options for toJSON method
+ */
+export interface ToJSONOptions {
+    ignoreColumns?: number[];
+    onlyColumns?: number[] | null;
+    headings?: string | null;
+    normalizeKeys?: boolean;
+}
+
+/**
  * JQ instance interface
  */
 export interface JQ {
@@ -157,7 +167,7 @@ export interface JQ {
     html(): GetterSetterReturn<string>;
     html(htmlString: string): JQ;
 
-    toJSON(): unknown;
+    toJSON<T = any>(options?: ToJSONOptions): T;
 
     findTableWithHeader(headerText: string | string[]): JQ;
 

@@ -33,7 +33,8 @@ const html2 = `
 `;
 const $2 = jq.load(html2);
 const highScores = $2('span').filter(function (this: JqElement): boolean {
-    return parseInt(jq(this).attr('data-score')) >= 90;
+    const score = jq(this).attr('data-score');
+    return typeof score === 'string' ? parseInt(score) >= 90 : false;
 });
 console.log('High scorers:');
 highScores.each(function (this: JqElement) {
@@ -62,7 +63,8 @@ const $3 = jq.load(html3);
 const affordableElectronics = $3('.product')
     .filter('[data-category="electronics"]')
     .filter(function (this: JqElement): boolean {
-        return parseInt(jq(this).attr('data-price')) < 200;
+        const price = jq(this).attr('data-price');
+        return typeof price === 'string' ? parseInt(price) < 200 : false;
     });
 
 console.log('Affordable electronics:');

@@ -6,7 +6,7 @@
  * 2. Static method: jq.title()
  */
 
-import jq from '../index';
+import jq from '../../index';
 
 console.log('=== Instance Method Examples (Chained Syntax) ===\n');
 

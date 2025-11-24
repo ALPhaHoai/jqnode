@@ -263,7 +263,16 @@ const inventoryTable = `
     </table>
 `;
 
-const inventory = jq(inventoryTable).find('table').toJSON();
+interface InventoryItem {
+    SKU: string;
+    'Product Name': string;
+    Category: string;
+    Price: string;
+    Stock: string;
+    Status: string;
+}
+
+const inventory = jq(inventoryTable).find('table').toJSON<InventoryItem[]>();
 // Filter active products with stock
 const activeProducts = inventory.filter(
     (item) => item.Status === 'Active' && parseInt(item.Stock) > 0,
