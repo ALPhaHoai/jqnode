@@ -8,6 +8,7 @@ import { JqNamedNodeMap } from './JqNamedNodeMap';
 import { JqNode } from './JqNode';
 import { JqHTMLCollection } from './JqHTMLCollection';
 import { JqNodeListOf } from './JqNodeList';
+import { JqDOMTokenList } from './JqDOMTokenList';
 
 /**
  * Node type identifier
@@ -41,6 +42,9 @@ export class JqElement extends JqNode {
     // Attributes stored in JqNamedNodeMap
     private _attributes: JqNamedNodeMap;
 
+    // classList support using JqDOMTokenList
+    private _classList: JqDOMTokenList | null = null;
+
     constructor(type: NodeType = 'element', name: string = '') {
         super();
         this.type = type;
@@ -61,6 +65,16 @@ export class JqElement extends JqNode {
 
     get attributes(): JqNamedNodeMap {
         return this._attributes;
+    }
+
+    /**
+     * Returns a live DOMTokenList which contains the class attribute's tokens.
+     */
+    get classList(): DOMTokenList {
+        if (!this._classList) {
+            this._classList = new JqDOMTokenList(this as unknown as Element, 'class');
+        }
+        return this._classList as unknown as DOMTokenList;
     }
 
     // Node interface implementation

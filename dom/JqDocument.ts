@@ -512,36 +512,6 @@ export class JqDocument extends JqNode implements Document {
 
 
 
-    // Missing properties stubs to satisfy Document interface
-    // Legacy/Deprecated properties stubs
-    all: HTMLAllCollection = new JqHTMLCollection([]) as unknown as HTMLAllCollection;
-    anchors: HTMLCollectionOf<HTMLAnchorElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLAnchorElement>;
-    applets: HTMLCollectionOf<any> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<any>;
-    bgColor: string = '';
-    fgColor: string = '';
-    forms: HTMLCollectionOf<HTMLFormElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLFormElement>;
-    images: HTMLCollectionOf<HTMLImageElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLImageElement>;
-    links: HTMLCollectionOf<HTMLAnchorElement | HTMLAreaElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLAnchorElement | HTMLAreaElement>;
-    plugins: HTMLCollectionOf<HTMLEmbedElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLEmbedElement>;
-    scripts: HTMLCollectionOf<HTMLScriptElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLScriptElement>;
-
-    // More missing properties
-    currentScript: HTMLScriptElement | SVGScriptElement | null = null;
-    embeds: HTMLCollectionOf<HTMLEmbedElement> = new JqHTMLCollection([]) as unknown as HTMLCollectionOf<HTMLEmbedElement>;
-    fragmentDirective: any = {}; // Experimental
-    fullscreen: boolean = false;
-    pictureInPictureEnabled: boolean = false;
-    pointerLockElement: Element | null = null;
-    rootElement: SVGSVGElement | null = null;
-    styleSheets: StyleSheetList = {
-        length: 0,
-        item: () => null,
-        [Symbol.iterator]: function* (): IterableIterator<CSSStyleSheet> { yield* []; }
-    };
-    xmlEncoding: string | null = null;
-    xmlStandalone: boolean = false;
-    xmlVersion: string | null = null;
-
     // More missing properties
     linkColor: string = '';
     vlinkColor: string = '';
@@ -583,127 +553,7 @@ export class JqDocument extends JqNode implements Document {
         } as unknown as ViewTransition;
     }
 
-    // Missing mouse event handlers
-    getAnimations(): Animation[] { return []; }
-    getElementsByName(elementName: string): NodeListOf<HTMLElement> { return new JqNodeList([]) as unknown as NodeListOf<HTMLElement>; }
-    getSelection(): Selection | null { return null; }
-    hasFocus(): boolean { return true; }
-    open(unused1?: string, unused2?: string): Document;
-    open(url: string | URL, name: string, features: string): WindowProxy | null;
-    open(...args: any[]): any { return this; }
-    queryCommandEnabled(commandId: string): boolean { return false; }
-    queryCommandIndeterm(commandId: string): boolean { return false; }
-    queryCommandState(commandId: string): boolean { return false; }
-    queryCommandSupported(commandId: string): boolean { return false; }
-    queryCommandValue(commandId: string): string { return ''; }
-    querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
-    querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
-    querySelector<K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null;
-    querySelector<E extends Element = Element>(selectors: string): E | null;
-    querySelector(selectors: string): Element | null { return null; } // TODO: Implement
-    querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
-    querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
-    querySelectorAll<K extends keyof MathMLElementTagNameMap>(selectors: K): NodeListOf<MathMLElementTagNameMap[K]>;
-    querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
-    querySelectorAll(selectors: string): NodeListOf<Element> { return new JqNodeList([]) as unknown as NodeListOf<Element>; } // TODO: Implement
-    releaseEvents(): void { }
-    write(...text: string[]): void { }
-    writeln(...text: string[]): void { }
 
-    // ParentNode
-    get childElementCount(): number {
-        return this.children.length;
-    }
-
-    get children(): HTMLCollection {
-        const elements = this._children.filter(node => node.nodeType === this.ELEMENT_NODE) as unknown as HtmlNode[];
-        return new JqHTMLCollection(elements) as unknown as HTMLCollection;
-    }
-
-    get childNodes(): NodeListOf<ChildNode> {
-        return new JqNodeListOf<ChildNode>(this._children) as unknown as NodeListOf<ChildNode>;
-    }
-
-    get firstChild(): ChildNode | null {
-        return (this._children[0] as unknown as ChildNode) || null;
-    }
-
-    get lastChild(): ChildNode | null {
-        return (this._children[this._children.length - 1] as unknown as ChildNode) || null;
-    }
-
-    get firstElementChild(): Element | null {
-        return (this._children.find(c => c.nodeType === this.ELEMENT_NODE) as unknown as Element) || null;
-    }
-
-    get lastElementChild(): Element | null {
-        // Reverse search
-        for (let i = this._children.length - 1; i >= 0; i--) {
-            if (this._children[i].nodeType === this.ELEMENT_NODE) {
-                return this._children[i] as unknown as Element;
-            }
-        }
-        return null;
-    }
-
-    append(...nodes: (string | Node)[]): void {
-        nodes.forEach(node => {
-            if (typeof node === 'string') {
-                this.appendChild(this.createTextNode(node));
-            } else {
-                this.appendChild(node);
-            }
-        });
-    }
-
-    prepend(...nodes: (string | Node)[]): void {
-        nodes.reverse().forEach(node => {
-            if (typeof node === 'string') {
-                this.insertBefore(this.createTextNode(node), this.firstChild);
-            } else {
-                this.insertBefore(node, this.firstChild);
-            }
-        });
-    }
-
-    replaceChildren(...nodes: (string | Node)[]): void {
-        this._children = [];
-        this.append(...nodes);
-    }
-
-    override appendChild<T extends Node>(node: T): T {
-        const htmlNode = node as unknown as HtmlNode;
-        this._children.push(htmlNode);
-        htmlNode.parent = this as unknown as HtmlNode;
-        htmlNode.ownerDocument = this as any;
-        return node;
-    }
-
-    override removeChild<T extends Node>(child: T): T {
-        const index = this._children.findIndex(c => c === child as unknown as HtmlNode);
-        if (index === -1) {
-            throw new Error('Node was not found');
-        }
-        const removed = this._children.splice(index, 1)[0];
-        // @ts-ignore
-        removed.parent = undefined;
-        return child;
-    }
-
-    override insertBefore<T extends Node>(node: T, child: Node | null): T {
-        const htmlNode = node as unknown as HtmlNode;
-        if (!child) {
-            return this.appendChild(node);
-        }
-        const index = this._children.findIndex(c => c === child as unknown as HtmlNode);
-        if (index === -1) {
-            throw new Error('Reference node was not found');
-        }
-        this._children.splice(index, 0, htmlNode);
-        htmlNode.parent = this as unknown as HtmlNode;
-        htmlNode.ownerDocument = this as any;
-        return node;
-    }
 
     // Missing mouse event handlers
     onmousedown: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null = null;
@@ -713,6 +563,23 @@ export class JqDocument extends JqNode implements Document {
     onmouseout: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null = null;
     onmouseover: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null = null;
     onmouseup: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null = null;
+    onpaste: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null = null;
+    onpause: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onplay: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onplaying: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onpointercancel: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerdown: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerenter: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerleave: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointermove: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerout: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerover: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onpointerup: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null = null;
+    onprogress: ((this: GlobalEventHandlers, ev: ProgressEvent) => any) | null = null;
+    onratechange: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onreset: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
+    onresize: ((this: GlobalEventHandlers, ev: UIEvent) => any) | null = null;
+    onscroll: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;
 
     // Additional missing event handlers
     onbeforematch: ((this: GlobalEventHandlers, ev: Event) => any) | null = null;

@@ -12,10 +12,11 @@ import { JqCharacterData } from './dom/JqCharacterData';
 import { JqText } from './dom/JqText';
 import { JqComment } from './dom/JqComment';
 import { JqCDATASection } from './dom/JqCDATASection';
+import { JqDOMTokenList } from './dom/JqDOMTokenList';
 
 // Export JqElement under both names for backwards compatibility
 export { HtmlNodeClass as HtmlNode, HtmlNodeClass as JqElement };
-export { JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection };
+export { JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection, JqDOMTokenList };
 
 export type { NodeType };
 
