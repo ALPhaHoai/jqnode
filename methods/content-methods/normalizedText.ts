@@ -13,7 +13,7 @@ function normalizedText(this: JQ, value?: string): string | JQ {
     if (value === undefined) {
         // Get text content from element nodes only
         const elementNodes = this.nodes.filter(
-            (node: HtmlNode) => node.type === 'element' || node.nodeType === 1,
+            (node: HtmlNode) => node.internalType === 'element' || node.nodeType === 1,
         );
 
         // Check if any element is detached (from fractional eq() indices)

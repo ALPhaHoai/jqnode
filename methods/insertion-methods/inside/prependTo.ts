@@ -40,7 +40,7 @@ function prependTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | 
 
     for (let i = 0; i < targetJQ.nodes.length; i++) {
         const targetElement = targetJQ.nodes[i];
-        if (targetElement.type === 'element' && targetElement.children) {
+        if (targetElement.internalType === 'element' && targetElement.children) {
             const isLast = i === lastIndex;
             const nodesToAddForTarget: HtmlNode[] = [];
 

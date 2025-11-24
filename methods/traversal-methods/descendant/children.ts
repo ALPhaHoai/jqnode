@@ -20,7 +20,7 @@ function children(this: JQ, selector?: CssSelector): JQ {
 
         for (const child of nodeChildren) {
             const isElement =
-                ('type' in child && child.type === 'element') ||
+                ('type' in child && child.internalType === 'element') ||
                 ('nodeType' in child && child.nodeType === 1);
             if (isElement && !seen.has(child as HtmlNode)) {
                 seen.add(child as HtmlNode);

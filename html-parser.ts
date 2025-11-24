@@ -360,7 +360,7 @@ function parseHTML(html: string): HtmlNode[] {
                             element.attributes._setData(attributes);
                             if (rawText) {
                                 const textNode = new HtmlNode('text');
-                                textNode.data = rawText;
+                                textNode.textData = rawText;
                                 element.children = [textNode];
                             }
                             nodes.push(element);
@@ -385,7 +385,7 @@ function parseHTML(html: string): HtmlNode[] {
                 // Don't trim whitespace as it may be significant in HTML
                 if (text) {
                     const textNode = new HtmlNode('text');
-                    textNode.data = decodeHTMLEntities(text);
+                    textNode.textData = decodeHTMLEntities(text);
                     nodes.push(textNode);
                 }
             }

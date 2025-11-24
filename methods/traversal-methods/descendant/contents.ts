@@ -80,10 +80,10 @@ function contents(this: JQ): JQ {
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                        ? (domNode as HtmlNode).data
+                        ? (domNode as HtmlNode).textData
                         : null;
             const textNode = new HtmlNode('text');
-            textNode.data = textContent || '';
+            textNode.textData = textContent || '';
             textNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
             return textNode;
         } else if (domNode.nodeType === 8) {
@@ -92,10 +92,10 @@ function contents(this: JQ): JQ {
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                        ? (domNode as HtmlNode).data
+                        ? (domNode as HtmlNode).textData
                         : null;
             const commentNode = new HtmlNode('comment');
-            commentNode.data = textContent || '';
+            commentNode.textData = textContent || '';
             commentNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
             return commentNode;
         }

@@ -11,10 +11,10 @@ function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
 
     if (typeof selectorOrElement === 'string') {
         for (const element of this.nodes) {
-            if (element.type === 'element' && element.children) {
+            if (element.internalType === 'element' && element.children) {
                 // Search only among element children, not including the element itself
                 const elementChildren = element.children.filter(
-                    (child: HtmlNode) => child.type === 'element',
+                    (child: HtmlNode) => child.internalType === 'element',
                 );
                 try {
                     const descendants = selectNodes(elementChildren, selectorOrElement);
@@ -33,11 +33,11 @@ function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
     } else if (
         selectorOrElement &&
         typeof selectorOrElement === 'object' &&
-        selectorOrElement.type === 'element'
+        selectorOrElement.internalType === 'element'
     ) {
         // Direct element reference
         for (const element of this.nodes) {
-            if (element.type === 'element' && element.children) {
+            if (element.internalType === 'element' && element.children) {
                 const hasDescendant = this._hasDescendant(element, selectorOrElement);
                 if (hasDescendant) {
                     matchingElements.push(element);

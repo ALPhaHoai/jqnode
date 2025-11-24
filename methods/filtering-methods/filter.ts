@@ -26,7 +26,7 @@ function filter(
             const selectorContext: { siblings?: HtmlNode[] } = {};
             if (node.parent && node.parent.children) {
                 selectorContext.siblings = node.parent.children.filter(
-                    (child: HtmlNode) => child.type === 'element',
+                    (child: HtmlNode) => child.internalType === 'element',
                 );
             } else {
                 selectorContext.siblings = [];

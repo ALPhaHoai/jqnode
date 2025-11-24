@@ -105,7 +105,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             }
         } else if (node.parent && node.parent.children) {
             const siblings = node.parent.children.filter(
-                (child: HtmlNode) => child.type === 'element',
+                (child: HtmlNode) => child.internalType === 'element',
             );
             const currentIndex = siblings.indexOf(node);
 

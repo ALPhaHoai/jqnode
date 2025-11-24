@@ -20,11 +20,11 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             if (currentIndex !== -1) {
                 for (let i = currentIndex + 1; i < allSiblings.length; i++) {
                     const sibling = allSiblings[i];
-                    const isElementSibling = sibling.type === 'element';
+                    const isElementSibling = sibling.internalType === 'element';
 
                     if (parsedStopSelector) {
                         const selectorList =
-                            'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                            'type' in parsedStopSelector && parsedStopSelector.internalType === 'compound'
                                 ? parsedStopSelector.selectors
                                 : [parsedStopSelector];
                         if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
@@ -34,7 +34,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (
                         selector &&
                         typeof selector === 'object' &&
-                        selector.type === 'element' &&
+                        selector.internalType === 'element' &&
                         sibling === selector
                     ) {
                         break;
@@ -55,7 +55,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (parsedFilterSelector) {
                         const selectorList =
                             'type' in parsedFilterSelector &&
-                            parsedFilterSelector.type === 'compound'
+                            parsedFilterSelector.internalType === 'compound'
                                 ? parsedFilterSelector.selectors
                                 : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
@@ -75,11 +75,11 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             if (currentIndex !== -1) {
                 for (let i = currentIndex + 1; i < rootNodes.length; i++) {
                     const sibling = rootNodes[i];
-                    const isElementSibling = sibling.type === 'element';
+                    const isElementSibling = sibling.internalType === 'element';
 
                     if (parsedStopSelector) {
                         const selectorList =
-                            'type' in parsedStopSelector && parsedStopSelector.type === 'compound'
+                            'type' in parsedStopSelector && parsedStopSelector.internalType === 'compound'
                                 ? parsedStopSelector.selectors
                                 : [parsedStopSelector];
                         if (selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {
@@ -89,7 +89,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (
                         selector &&
                         typeof selector === 'object' &&
-                        selector.type === 'element' &&
+                        selector.internalType === 'element' &&
                         sibling === selector
                     ) {
                         break;
@@ -110,7 +110,7 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (parsedFilterSelector) {
                         const selectorList =
                             'type' in parsedFilterSelector &&
-                            parsedFilterSelector.type === 'compound'
+                            parsedFilterSelector.internalType === 'compound'
                                 ? parsedFilterSelector.selectors
                                 : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {

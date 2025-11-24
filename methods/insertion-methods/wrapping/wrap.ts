@@ -42,7 +42,7 @@ function wrap(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
                     while (targetContainer.children && targetContainer.children.length > 0) {
                         let foundElement = false;
                         for (const child of targetContainer.children) {
-                            if (child.type === 'element') {
+                            if (child.internalType === 'element') {
                                 targetContainer = child;
                                 foundElement = true;
                                 break; // Go down the first element branch

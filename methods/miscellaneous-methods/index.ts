@@ -19,7 +19,7 @@ function index(this: JQ, arg?: IndexTarget): number {
             // Internal nodes or DOM Element.children (HTMLCollection or array-like)
             siblings = Array.from(parent.children as unknown as ArrayLike<HtmlNode>) as HtmlNode[];
             // Filter to ensure only elements are counted
-            siblings = siblings.filter((n: HtmlNode) => n.nodeType === 1 || n.type === 'element');
+            siblings = siblings.filter((n: HtmlNode) => n.nodeType === 1 || n.internalType === 'element');
         } else if (parent.childNodes) {
             // DOM nodes fallback
             siblings = (Array.from(parent.childNodes) as Node[]).filter(

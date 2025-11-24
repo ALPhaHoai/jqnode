@@ -96,7 +96,7 @@ function _traverseInternalParents(
     let current: HtmlNode | undefined = node.parent;
 
     while (current) {
-        if (current.type === 'element') {
+        if (current.internalType === 'element') {
             const attrData = current.attributes._getData();
             const key = _createUniqueKey(current.tagName || '', attrData);
 

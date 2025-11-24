@@ -20,7 +20,7 @@ function siblings(this: JQ, selector?: CssSelector): JQ {
         if (node.parent && node.parent.children) {
             node.parent.children.forEach((sibling: HtmlNode) => {
                 // Exclude the node itself and text nodes
-                if (sibling !== node && sibling.type === 'element' && !seen.has(sibling)) {
+                if (sibling !== node && sibling.internalType === 'element' && !seen.has(sibling)) {
                     seen.add(sibling);
 
                     let shouldInclude = true;

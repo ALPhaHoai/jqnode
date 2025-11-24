@@ -18,7 +18,7 @@ function parent(this: JQ, selector?: CssSelector): JQ {
             let isElement = false;
             let isHtml = false;
 
-            if (node.parent && node.parent.type === 'element') {
+            if (node.parent && node.parent.internalType === 'element') {
                 isElement = true;
                 isHtml = Boolean(node.tagName && node.tagName.toLowerCase() === 'html');
             } else if (node.parentNode && node.parentNode.nodeType === 1) {

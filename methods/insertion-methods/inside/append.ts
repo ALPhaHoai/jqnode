@@ -28,7 +28,7 @@ function append(this: JQ, ...content: ContentInput[]): JQ {
     const lastIndex = this.nodes.length - 1;
     for (let i = 0; i < this.nodes.length; i++) {
         const target = this.nodes[i];
-        if (target.type !== 'element' || !target.children) continue;
+        if (target.internalType !== 'element' || !target.children) continue;
 
         const isLast = i === lastIndex;
 

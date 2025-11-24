@@ -166,8 +166,8 @@ function extractTextContent(element: any): string {
     // Handle node-query node structures
     if (element.nodes && Array.isArray(element.nodes)) {
         return element.nodes
-            .filter((node: HtmlNode) => node.type === 'text')
-            .map((node: HtmlNode) => node.data || '')
+            .filter((node: HtmlNode) => node.internalType === 'text')
+            .map((node: HtmlNode) => node.textData || '')
             .join('');
     }
 

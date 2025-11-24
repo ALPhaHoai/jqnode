@@ -19,7 +19,7 @@ function prev(this: JQ, selector?: CssSelector): JQ {
                 let prevElementSibling = null;
                 for (let i = currentIndex - 1; i >= 0; i--) {
                     const sibling = allChildren[i];
-                    if (sibling.type === 'element') {
+                    if (sibling.internalType === 'element') {
                         prevElementSibling = sibling;
                         break;
                     }

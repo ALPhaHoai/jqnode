@@ -18,7 +18,7 @@ function isTextareaElement(element: HtmlNode): boolean {
 }
 
 function isOptionElement(element: HtmlNode): boolean {
-    return element.type === 'element' && element.tagName?.toLowerCase() === 'option';
+    return element.internalType === 'element' && element.tagName?.toLowerCase() === 'option';
 }
 
 // ============================================================================
@@ -30,8 +30,8 @@ function getTextContentFromChildren(element: HtmlNode): string {
         return '';
     }
     return element.children
-        .filter((child: HtmlNode) => child.type === 'text')
-        .map((child: HtmlNode) => child.data || '')
+        .filter((child: HtmlNode) => child.internalType === 'text')
+        .map((child: HtmlNode) => child.textData || '')
         .join('');
 }
 
@@ -180,7 +180,7 @@ function setTextareaValue(element: HtmlNode, value: string): void {
     ensureProperties(element);
     element.properties!.value = value;
     const textNode = new HtmlNode('text');
-    textNode.data = value;
+    textNode.textData = value;
     element.children = [textNode];
 
     if (element._originalElement) {
@@ -293,7 +293,7 @@ function setValueFromCallback(
         ensureProperties(element);
         element.properties!.value = stringResult;
         const textNode = new HtmlNode('text');
-        textNode.data = stringResult;
+        textNode.textData = stringResult;
         element.children = [textNode];
     }
 }

@@ -32,7 +32,7 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
                         if (child.nodeType === 3) {
                             // Text node
                             const textNode = new HtmlNode('text');
-                            textNode.data = child.textContent || '';
+                            textNode.textData = child.textContent || '';
                             children.push(textNode);
                         } else if (child.nodeType === 1) {
                             // Element node - add placeholder, will be processed if needed
@@ -52,7 +52,7 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
             }
         } else if (node.parent && node.parent.children) {
             const siblings = node.parent.children.filter(
-                (child: HtmlNode) => child.type === 'element',
+                (child: HtmlNode) => child.internalType === 'element',
             );
             const currentIndex = siblings.indexOf(node);
 

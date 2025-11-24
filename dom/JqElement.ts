@@ -22,12 +22,10 @@ export type NodeType = 'element' | 'text' | 'comment';
  * Extends JqNode to implement the DOM Node interface
  */
 export class JqElement extends JqNode {
-    public type: NodeType;
+    public internalType: NodeType;
     public name: string = '';
     public tagName: string = ''; // Tag name for elements
-    public data: string = '';
-    public value: string = ''; // Alternative text content property (used by some parsers)
-    public children: JqElement[] = [];
+    public textData: string = '';    public children: JqElement[] = [];
     public parent: JqElement | undefined;
     public prev: JqElement | null = null;
     public next: JqElement | null = null;
@@ -49,7 +47,7 @@ export class JqElement extends JqNode {
 
     constructor(type: NodeType = 'element', name: string = '') {
         super();
-        this.type = type;
+        this.internalType = type;
         this.name = name;
 
         // Set nodeType based on type
@@ -81,26 +79,26 @@ export class JqElement extends JqNode {
 
     // Node interface implementation
     override get nodeName(): string {
-        if (this.type === 'element') {
+        if (this.internalType === 'element') {
             return this.tagName.toUpperCase();
-        } else if (this.type === 'text') {
+        } else if (this.internalType === 'text') {
             return '#text';
-        } else if (this.type === 'comment') {
+        } else if (this.internalType === 'comment') {
             return '#comment';
         }
         return '';
     }
 
     override get nodeValue(): string | null {
-        if (this.type === 'text' || this.type === 'comment') {
-            return this.data;
+        if (this.internalType === 'text' || this.internalType === 'comment') {
+            return this.textData;
         }
         return null;
     }
 
     override set nodeValue(value: string | null) {
-        if (this.type === 'text' || this.type === 'comment') {
-            this.data = value || '';
+        if (this.internalType === 'text' || this.internalType === 'comment') {
+            this.textData = value || '';
         }
     }
 
@@ -204,12 +202,9 @@ export class JqElement extends JqNode {
     }
 
     override cloneNode(deep?: boolean): JqElement {
-        const cloned = new JqElement(this.type, this.name);
+        const cloned = new JqElement(this.internalType, this.name);
         cloned.tagName = this.tagName;
-        cloned.data = this.data;
-        cloned.value = this.value;
-
-        // Clone attributes
+        cloned.textData = this.textData;        // Clone attributes
         const attrData = this._attributes._getData();
         cloned._attributes._setData(attrData);
 
@@ -226,19 +221,19 @@ export class JqElement extends JqNode {
     }
 
     override get textContent(): string | null {
-        if (this.type === 'text') return this.data;
-        if (this.type === 'comment') return this.data;
+        if (this.internalType === 'text') return this.textData;
+        if (this.internalType === 'comment') return this.textData;
         return this.children.map(c => c.textContent).join('');
     }
 
     override set textContent(value: string | null) {
-        if (this.type === 'text' || this.type === 'comment') {
-            this.data = value || '';
+        if (this.internalType === 'text' || this.internalType === 'comment') {
+            this.textData = value || '';
         } else {
             this.children = [];
             if (value) {
                 const textNode = new JqElement('text');
-                textNode.data = value;
+                textNode.textData = value;
                 textNode.parent = this;
                 this.children.push(textNode);
             }
@@ -256,7 +251,7 @@ export class JqElement extends JqNode {
 
         const traverse = (node: JqElement) => {
             for (const child of node.children) {
-                if (child.type === 'element') {
+                if (child.internalType === 'element') {
                     if (matchAll || child.tagName.toLowerCase() === search) {
                         results.push(child);
                     }
@@ -291,7 +286,7 @@ export class JqElement extends JqNode {
 
         const traverse = (node: JqElement) => {
             for (const child of node.children) {
-                if (child.type === 'element') {
+                if (child.internalType === 'element') {
                     const classList = (child.getAttribute('class') || '').trim().split(/\s+/);
                     const hasAllClasses = classes.every(cls => classList.includes(cls));
 
@@ -343,7 +338,7 @@ export class JqElement extends JqNode {
         this.children = [];
         if (_html) {
             const textNode = new JqElement('text');
-            textNode.data = _html;
+            textNode.textData = _html;
             textNode.parent = this;
             this.children.push(textNode);
         }
@@ -370,13 +365,13 @@ export class JqElement extends JqNode {
      * Helper method to serialize a node to HTML string
      */
     private serializeNode(node: JqElement): string {
-        if (node.type === 'text') {
-            return node.data || '';
+        if (node.internalType === 'text') {
+            return node.textData || '';
         }
-        if (node.type === 'comment') {
-            return `<!--${node.data || ''}-->`;
+        if (node.internalType === 'comment') {
+            return `<!--${node.textData || ''}-->`;
         }
-        if (node.type === 'element') {
+        if (node.internalType === 'element') {
             let html = `<${node.tagName}`;
 
             // Add attributes
@@ -428,14 +423,14 @@ export class JqElement extends JqNode {
      * Returns the number of child elements
      */
     get childElementCount(): number {
-        return this.children.filter(child => child.type === 'element').length;
+        return this.children.filter(child => child.internalType === 'element').length;
     }
 
     /**
      * Returns the first child element
      */
     get firstElementChild(): Element | null {
-        const firstElement = this.children.find(child => child.type === 'element');
+        const firstElement = this.children.find(child => child.internalType === 'element');
         return (firstElement as unknown as Element) || null;
     }
 
@@ -443,7 +438,7 @@ export class JqElement extends JqNode {
      * Returns the last child element
      */
     get lastElementChild(): Element | null {
-        const elementChildren = this.children.filter(child => child.type === 'element');
+        const elementChildren = this.children.filter(child => child.internalType === 'element');
         const lastElement = elementChildren[elementChildren.length - 1];
         return (lastElement as unknown as Element) || null;
     }
@@ -458,7 +453,7 @@ export class JqElement extends JqNode {
         if (index === -1) return null;
 
         for (let i = index + 1; i < siblings.length; i++) {
-            if (siblings[i].type === 'element') {
+            if (siblings[i].internalType === 'element') {
                 return siblings[i] as unknown as Element;
             }
         }
@@ -475,7 +470,7 @@ export class JqElement extends JqNode {
         if (index === -1) return null;
 
         for (let i = index - 1; i >= 0; i--) {
-            if (siblings[i].type === 'element') {
+            if (siblings[i].internalType === 'element') {
                 return siblings[i] as unknown as Element;
             }
         }
@@ -686,7 +681,7 @@ export class JqElement extends JqNode {
             const node = nodes[i];
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
-                textNode.data = node;
+                textNode.textData = node;
                 textNode.parent = this.parent;
                 siblings.splice(index + 1, 0, textNode);
             } else {
@@ -711,7 +706,7 @@ export class JqElement extends JqNode {
             const node = nodes[i];
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
-                textNode.data = node;
+                textNode.textData = node;
                 textNode.parent = this.parent;
                 siblings.splice(index + i, 0, textNode);
             } else {
@@ -729,7 +724,7 @@ export class JqElement extends JqNode {
         for (const node of nodes) {
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
-                textNode.data = node;
+                textNode.textData = node;
                 textNode.parent = this;
                 this.children.push(textNode);
             } else {
@@ -748,7 +743,7 @@ export class JqElement extends JqNode {
             const node = nodes[i];
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
-                textNode.data = node;
+                textNode.textData = node;
                 textNode.parent = this;
                 this.children.unshift(textNode);
             } else {
@@ -790,7 +785,7 @@ export class JqElement extends JqNode {
             const node = nodes[i];
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
-                textNode.data = node;
+                textNode.textData = node;
                 textNode.parent = parentRef;
                 siblings.splice(index + i, 0, textNode);
             } else {
@@ -903,7 +898,7 @@ export class JqElement extends JqNode {
     insertAdjacentHTML(position: InsertPosition, html: string): void {
         // Stub implementation - would need HTML parser
         const textNode = new JqElement('text');
-        textNode.data = html;
+        textNode.textData = html;
 
         switch (position) {
             case 'beforebegin':
@@ -933,7 +928,7 @@ export class JqElement extends JqNode {
      */
     insertAdjacentText(position: InsertPosition, text: string): void {
         const textNode = new JqElement('text');
-        textNode.data = text;
+        textNode.textData = text;
 
         switch (position) {
             case 'beforebegin':

@@ -32,7 +32,7 @@ function closest(this: JQ, selector?: CssSelector): JQ {
         // Walk up the tree including the current node
         while (current) {
             // Handle both internal nodes and DOM elements
-            const isElement = current.type === 'element' || current.nodeType === 1;
+            const isElement = current.internalType === 'element' || current.nodeType === 1;
             if (isElement) {
                 // Check if this node matches the selector
                 if (nodeMatchesSelector(current, parsedSelector)) {

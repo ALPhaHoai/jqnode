@@ -41,7 +41,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqContents.length).toBeGreaterThan(3);
 
         // Check for comment node
-        const nqHasComment = nqContents.nodes.some((node: HtmlNode) => node.type === 'comment');
+        const nqHasComment = nqContents.nodes.some((node: HtmlNode) => node.internalType === 'comment');
         const jqHasComment = jqContents.toArray().some((node: Node) => node.nodeType === 8); // COMMENT_NODE
 
         expect(nqHasComment).toBe(jqHasComment);
@@ -50,7 +50,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         // Check for element nodes
         const nqHasH1 = nqContents.nodes.some(
             (node: HtmlNode) =>
-                node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1',
+                node.internalType === 'element' && node.tagName && node.tagName.toLowerCase() === 'h1',
         );
         const jqHasH1 = jqContents
             .toArray()
@@ -75,7 +75,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqContents.length).toBeGreaterThan(3);
 
         // Check for text nodes
-        const nqHasText = nqContents.nodes.some((node: HtmlNode) => node.type === 'text');
+        const nqHasText = nqContents.nodes.some((node: HtmlNode) => node.internalType === 'text');
         const jqHasText = jqContents.toArray().some((node: Node) => node.nodeType === 3); // TEXT_NODE
 
         expect(nqHasText).toBe(jqHasText);
@@ -157,7 +157,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
             .contents()
             .filter((index: number, node: HtmlNode) => {
                 return !!(
-                    node.type === 'element' &&
+                    node.internalType === 'element' &&
                     node.tagName &&
                     node.tagName.toLowerCase() === 'div'
                 );
@@ -198,7 +198,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         const jqContents = jqMainDiv.contents();
 
         // Get the types of all child nodes
-        const nqTypes = nqContents.nodes.map((node: HtmlNode) => node.type);
+        const nqTypes = nqContents.nodes.map((node: HtmlNode) => node.internalType);
         const jqTypes = jqContents.toArray().map((node: Node) => {
             switch (node.nodeType) {
                 case 1:
@@ -234,7 +234,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Count text nodes
         const nqTextCount = nqContents.nodes.filter(
-            (node: HtmlNode) => node.type === 'text',
+            (node: HtmlNode) => node.internalType === 'text',
         ).length;
         const jqTextCount = jqContents.toArray().filter((node: Node) => node.nodeType === 3).length;
 
@@ -255,7 +255,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqContents.length).toBe(3);
 
         // All should be comment nodes
-        const nqAllComments = nqContents.nodes.every((node: HtmlNode) => node.type === 'comment');
+        const nqAllComments = nqContents.nodes.every((node: HtmlNode) => node.internalType === 'comment');
         const jqAllComments = jqContents.toArray().every((node: Node) => node.nodeType === 8);
 
         expect(nqAllComments).toBe(true);
@@ -285,7 +285,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Should include contents from both parents
         const nqElementCount = nqResult.nodes.filter(
-            (node: HtmlNode) => node.type === 'element',
+            (node: HtmlNode) => node.internalType === 'element',
         ).length;
         const jqElementCount = jqResult
             .toArray()
@@ -323,9 +323,9 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
 
         // Count each type
         const nqCounts = {
-            element: nqContents.nodes.filter((n: HtmlNode) => n.type === 'element').length,
-            text: nqContents.nodes.filter((n: HtmlNode) => n.type === 'text').length,
-            comment: nqContents.nodes.filter((n: HtmlNode) => n.type === 'comment').length,
+            element: nqContents.nodes.filter((n: HtmlNode) => n.internalType === 'element').length,
+            text: nqContents.nodes.filter((n: HtmlNode) => n.internalType === 'text').length,
+            comment: nqContents.nodes.filter((n: HtmlNode) => n.internalType === 'comment').length,
         };
 
         const jqCounts = {
@@ -359,7 +359,7 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
             .contents()
             .filter((index: number, node: HtmlNode) => {
                 return !!(
-                    node.type === 'element' &&
+                    node.internalType === 'element' &&
                     node.attribs &&
                     node.attribs.class &&
                     node.attribs.class.includes('keep')

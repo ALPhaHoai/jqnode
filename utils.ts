@@ -10,11 +10,11 @@ import type { HtmlNode } from './types';
  * @returns The concatenated text content
  */
 function getTextContent(node: HtmlNode): string {
-    if (node.type === 'text') {
-        return node.data || '';
+    if (node.internalType === 'text') {
+        return node.textData || '';
     }
 
-    if (node.type === 'element') {
+    if (node.internalType === 'element') {
         // For parsed HTML nodes, traverse children
         let result = '';
         if (node.children) {
@@ -51,11 +51,11 @@ function unescapeHtml(text: string): string {
  * @returns The HTML representation of the node
  */
 function nodeToHTML(node: HtmlNode): string {
-    if (node.type === 'text') {
-        return node.data || '';
+    if (node.internalType === 'text') {
+        return node.textData || '';
     }
 
-    if (node.type === 'element') {
+    if (node.internalType === 'element') {
         const attrPairs: string[] = [];
         for (let i = 0; i < node.attributes.length; i++) {
             const attr = node.attributes.item(i);

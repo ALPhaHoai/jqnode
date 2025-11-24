@@ -49,7 +49,7 @@ class JQ {
             (node) =>
                 node &&
                 typeof node === 'object' &&
-                (node.type === 'element' || node.type === 'text'),
+                (node.internalType === 'element' || node.internalType === 'text'),
         );
 
         if (hasDomNodes) {

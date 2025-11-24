@@ -61,7 +61,7 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
 
             for (let i = 0; i < nodeIndex; i++) {
                 const sibling = siblings[i];
-                if (sibling.type === 'element') {
+                if (sibling.internalType === 'element') {
                     let shouldInclude = true;
                     if (parsedSelector) {
                         if (!nodeMatchesSelector(sibling, parsedSelector)) {

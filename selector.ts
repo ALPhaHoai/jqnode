@@ -426,7 +426,7 @@ function nodeMatchesSelector(
     selector: ParsedSelector,
     context: SelectorContext = {},
 ): boolean {
-    // const isElement = node.type === 'element';
+    // const isElement = node.internalType === 'element';
 
     if ('type' in selector && selector.type === 'complex') {
         return false;
@@ -550,8 +550,8 @@ function isValidPseudoSelector(pseudoName: string): boolean {
  * Helper to get text content of a node
  */
 function getTextContent(node: HtmlNode): string {
-    if (node.type === 'text') {
-        return node.data || '';
+    if (node.internalType === 'text') {
+        return node.textData || '';
     }
     if (node.children) {
         return node.children.map(getTextContent).join('');
@@ -622,7 +622,7 @@ function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: Selector
             return (
                 !node.children ||
                 node.children.length === 0 ||
-                node.children.every((child) => child.type === 'text' && !child.data?.trim())
+                node.children.every((child) => child.internalType === 'text' && !child.textData?.trim())
             );
 
         case 'root':
@@ -769,7 +769,7 @@ function applyCombinatorLeftToRight(
                 if (candidate.children) {
                     for (const child of candidate.children) {
                         if (
-                            child.type === 'element' &&
+                            child.internalType === 'element' &&
                             nodeMatchesSelectorWithContext(child, secondSelector, rootNodes)
                         ) {
                             results.push(child);
@@ -786,7 +786,7 @@ function applyCombinatorLeftToRight(
                 if (index >= 0 && index < siblings.length - 1) {
                     const nextSibling = siblings[index + 1];
                     if (
-                        nextSibling.type === 'element' &&
+                        nextSibling.internalType === 'element' &&
                         nodeMatchesSelectorWithContext(nextSibling, secondSelector, rootNodes)
                     ) {
                         results.push(nextSibling);
@@ -803,7 +803,7 @@ function applyCombinatorLeftToRight(
                     for (let i = startIndex + 1; i < siblings.length; i++) {
                         const sibling = siblings[i];
                         if (
-                            sibling.type === 'element' &&
+                            sibling.internalType === 'element' &&
                             nodeMatchesSelectorWithContext(sibling, secondSelector, rootNodes)
                         ) {
                             results.push(sibling);
@@ -825,7 +825,7 @@ function getSiblings(node: HtmlNode): HtmlNode[] {
         return [node];
     }
 
-    return node.parent.children.filter((child) => child.type === 'element');
+    return node.parent.children.filter((child) => child.internalType === 'element');
 }
 
 /**
@@ -836,7 +836,7 @@ function selectAllDescendants(nodes: HtmlNode[], selector: SimpleSelector): Html
 
     function traverse(nodeList: HtmlNode[]): void {
         for (const node of nodeList) {
-            if (node.type === 'element') {
+            if (node.internalType === 'element') {
                 if (nodeMatchesSelectorWithContext(node, selector, nodes)) {
                     results.push(node);
                 }
@@ -867,7 +867,7 @@ function nodeMatchesSelectorWithContext(
     const parentNode = node.parent;
     if (parentNode) {
         if (parentNode.children) {
-            context.siblings = parentNode.children.filter((child) => child.type === 'element');
+            context.siblings = parentNode.children.filter((child) => child.internalType === 'element');
         } else {
             context.siblings = [];
         }

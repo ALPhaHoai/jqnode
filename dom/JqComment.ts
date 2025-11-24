@@ -26,7 +26,7 @@ export class JqComment extends JqCharacterData implements Comment {
      * Factory method to create a JqComment from a JqElement
      */
     static fromJqElement(node: JqElement): JqComment {
-        const comment = new JqComment(node.data);
+        const comment = new JqComment(node.textData);
         comment._jqElement = node;
         return comment;
     }

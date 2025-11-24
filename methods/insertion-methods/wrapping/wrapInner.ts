@@ -8,7 +8,7 @@ import type { HtmlNode, JQ } from '../../../types';
  */
 function wrapInner(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
     for (const element of this.nodes) {
-        if (element.type === 'element') {
+        if (element.internalType === 'element') {
             // 1. Create a deep clone of the wrapping structure
             let wrapperStructure: HtmlNode[];
 
@@ -35,7 +35,7 @@ function wrapInner(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
                 while (targetContainer.children && targetContainer.children.length > 0) {
                     let foundElement = false;
                     for (const child of targetContainer.children) {
-                        if (child.type === 'element') {
+                        if (child.internalType === 'element') {
                             targetContainer = child;
                             foundElement = true;
                             break; // Go down the first element branch

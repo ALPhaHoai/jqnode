@@ -114,7 +114,7 @@ function domElementToNode(element: any): HtmlNode {
             } else if (child.nodeType === 3) {
                 // Text node
                 const textNode = new HtmlNode('text');
-                textNode.data = child.textContent || '';
+                textNode.textData = child.textContent || '';
                 textNode.parent = node;
                 node.children.push(textNode);
             }
@@ -123,7 +123,7 @@ function domElementToNode(element: any): HtmlNode {
 
     // For text nodes
     if (element.nodeType === 3) {
-        node.data = element.textContent || '';
+        node.textData = element.textContent || '';
         // No need to delete attribs/children as they are class properties now
     }
 
@@ -145,7 +145,7 @@ function JQFactory(
             let nodes = parseHTML(htmlOrSelectorOrNodes);
             // Filter out pure whitespace text nodes at the top level
             nodes = nodes.filter((node) => {
-                return !(node.type === 'text' && node.data && node.data.trim() === '');
+                return !(node.internalType === 'text' && node.textData && node.textData.trim() === '');
             });
             return new JQ(nodes);
         } else if (

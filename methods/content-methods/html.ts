@@ -14,7 +14,7 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
         }
 
         const firstNode: HtmlNode = this.nodes[0];
-        if (firstNode.type === 'element') {
+        if (firstNode.internalType === 'element') {
             // Return the inner HTML (contents of the element)
             const result = (firstNode.children || [])
                 .map((child) => {
@@ -31,7 +31,7 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
 
     // Set inner HTML on all element nodes
     this.nodes.forEach((node: HtmlNode) => {
-        if (node.type === 'element') {
+        if (node.internalType === 'element') {
             // Parse the HTML string and set as children
             const parsedNodes = parseHTML(htmlString);
             node.children = parsedNodes;

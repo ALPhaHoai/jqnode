@@ -110,7 +110,7 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
 
         // Filter out script tags if keepScripts is false
         if (keepScripts === false) {
-            return nodes.filter((node) => !(node.type === 'element' && node.name === 'SCRIPT'));
+            return nodes.filter((node) => !(node.internalType === 'element' && node.name === 'SCRIPT'));
         }
 
         return nodes;

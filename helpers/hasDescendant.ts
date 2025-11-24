@@ -18,7 +18,7 @@ function _hasDescendant(element: HtmlNode, targetElement: HtmlNode): boolean {
         }
 
         // Recursive check for element children
-        if (child.type === 'element' && _hasDescendant(child, targetElement)) {
+        if (child.internalType === 'element' && _hasDescendant(child, targetElement)) {
             return true;
         }
     }

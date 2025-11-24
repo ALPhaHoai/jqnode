@@ -12,7 +12,7 @@ function next(this: JQ, selector?: CssSelector): JQ {
     for (const node of this.nodes) {
         if (node.parent && node.parent.children) {
             const siblings = node.parent.children.filter(
-                (child: HtmlNode) => child.type === 'element',
+                (child: HtmlNode) => child.internalType === 'element',
             );
             const currentIndex = siblings.indexOf(node);
 
@@ -49,7 +49,7 @@ function next(this: JQ, selector?: CssSelector): JQ {
                 let nextElementSibling = null;
                 for (let i = currentIndex + 1; i < rootNodes.length; i++) {
                     const sibling = rootNodes[i];
-                    if (sibling.type === 'element') {
+                    if (sibling.internalType === 'element') {
                         nextElementSibling = sibling;
                         break;
                     }

@@ -15,9 +15,9 @@ function _cloneNode(
     // Clone attributes using JqNamedNodeMap
     const clonedAttribs = node.attributes._getData();
 
-    const cloned = new HtmlNode(node.type, node.name);
+    const cloned = new HtmlNode(node.internalType, node.name);
     cloned.tagName = node.tagName || node.name;
-    cloned.data = node.data;
+    cloned.textData = node.textData;
     cloned.attributes._setData(clonedAttribs);
 
     // Copy other properties (but not _originalElement to ensure true clones)

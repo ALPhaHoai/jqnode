@@ -25,7 +25,7 @@ export class JqText extends JqCharacterData implements Text {
      * Factory method to create a JqText from a JqElement
      */
     static fromJqElement(node: JqElement): JqText {
-        const text = new JqText(node.data);
+        const text = new JqText(node.textData);
         text._jqElement = node;
         return text;
     }
@@ -134,13 +134,13 @@ export class JqText extends JqCharacterData implements Text {
     override set data(value: string) {
         super.data = value;
         if (this._jqElement) {
-            this._jqElement.data = value;
+            this._jqElement.textData = value;
         }
     }
 
     override get data(): string {
         if (this._jqElement) {
-            return this._jqElement.data;
+            return this._jqElement.textData;
         }
         return super.data;
     }

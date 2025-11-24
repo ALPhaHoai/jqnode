@@ -26,7 +26,7 @@ export class JqCDATASection extends JqText implements CDATASection {
      * Factory method to create a JqCDATASection from an HtmlNode
      */
     static fromHtmlNode(node: HtmlNode): JqCDATASection {
-        const cdataSection = new JqCDATASection(node.data);
+        const cdataSection = new JqCDATASection(node.textData);
         (cdataSection as any)._htmlNode = node;
         return cdataSection;
     }
