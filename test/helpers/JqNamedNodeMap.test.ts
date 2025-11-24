@@ -1,5 +1,5 @@
-import { JqNamedNodeMap } from '../../helpers/JqNamedNodeMap';
-import { JqAttr } from '../../helpers/JqAttr';
+import { JqNamedNodeMap } from '../../dom/JqNamedNodeMap';
+import { JqAttr } from '../../dom/JqAttr';
 import { HtmlNode } from '../../types';
 
 describe('JqNamedNodeMap', () => {
@@ -7,16 +7,11 @@ describe('JqNamedNodeMap', () => {
     let attributes: JqNamedNodeMap;
 
     beforeEach(() => {
-        node = {
-            type: 'element',
-            tagName: 'div',
-            attribs: {
-                'id': 'test-id',
-                'class': 'test-class',
-                'data-value': '123'
-            }
-        };
-        attributes = new JqNamedNodeMap(node);
+        node = new HtmlNode('element', 'div');
+        node.setAttribute('id', 'test-id');
+        node.setAttribute('class', 'test-class');
+        node.setAttribute('data-value', '123');
+        attributes = node.attributes;
     });
 
     it('should have correct length', () => {
@@ -59,7 +54,7 @@ describe('JqNamedNodeMap', () => {
         attributes.removeNamedItem('id');
         expect(attributes.length).toBe(2);
         expect(attributes.getNamedItem('id')).toBeNull();
-        expect(node.getAttribute('id')).toBeUndefined();
+        expect(node.getAttribute('id')).toBeNull();
     });
 
     it('should set named item', () => {
@@ -72,4 +67,5 @@ describe('JqNamedNodeMap', () => {
         expect(node.getAttribute('new-attr')).toBe('new-value');
     });
 });
+
 

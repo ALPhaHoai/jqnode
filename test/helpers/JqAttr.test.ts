@@ -1,32 +1,27 @@
-import { JqAttr } from '../../helpers/JqAttr';
+import { JqAttr } from '../../dom/JqAttr';
 import { HtmlNode } from '../../types';
 
 describe('JqAttr', () => {
     let node: HtmlNode;
 
     beforeEach(() => {
-        node = {
-            type: 'element',
-            tagName: 'div',
-            attribs: {
-                'id': 'test-id',
-                'class': 'test-class'
-            }
-        };
+        node = new HtmlNode('element', 'div');
+        node.setAttribute('id', 'test-id');
+        node.setAttribute('class', 'test-class');
     });
 
     it('should reflect node attributes', () => {
         const attr = new JqAttr(node, 'id');
         expect(attr.value).toBe('test-id');
 
-        node.attribs!['id'] = 'changed';
+        node.setAttribute('id', 'changed');
         expect(attr.value).toBe('changed');
     });
 
     it('should update node attributes', () => {
         const attr = new JqAttr(node, 'id');
         attr.value = 'updated';
-        expect(node.attribs!['id']).toBe('updated');
+        expect(node.getAttribute('id')).toBe('updated');
     });
 
     it('should implement basic Node properties', () => {
@@ -44,4 +39,5 @@ describe('JqAttr', () => {
         expect(clone.value).toBe(attr.value);
     });
 });
+
 

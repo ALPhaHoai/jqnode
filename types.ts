@@ -2,7 +2,7 @@
  * Core type definitions for jqnode
  */
 
-import { HtmlNode, NodeType } from './HtmlNode';
+import { HtmlNode, NodeType } from './dom/HtmlNode';
 
 // Re-export for convenience
 export { HtmlNode };
