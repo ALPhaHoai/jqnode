@@ -86,11 +86,11 @@ describe('attr() method - jQuery Comparison', () => {
         const nqImg = nqRoot.find('img');
         const jqImg = jqRoot.find('img');
 
-        nqImg.attr('alt', function (index: number, attr: string) {
-            return attr + ' - modified';
+        nqImg.attr('alt', function (index: number, attr: string | undefined) {
+            return (attr || '') + ' - modified';
         });
-        jqImg.attr('alt', function (index: number, attr: string) {
-            return attr + ' - modified';
+        jqImg.attr('alt', function (index: number, attr: string | undefined) {
+            return (attr || '') + ' - modified';
         });
 
         expect(nqImg.attr('alt')).toBe(jqImg.attr('alt'));

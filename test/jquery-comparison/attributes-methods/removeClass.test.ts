@@ -66,8 +66,8 @@ describe('removeClass() method - jQuery Comparison', () => {
         const nqDivs = nqRoot.find('.item');
         const jqDivs = jqRoot.find('.item');
 
-        nqDivs.removeClass(function (index: number, currentClass: string) {
-            const classes = currentClass.split(/\s+/).filter((cls: string) => cls.length > 0);
+        nqDivs.removeClass(function (index: number, currentClass: string | undefined) {
+            const classes = (currentClass || '').split(/\s+/).filter((cls: string) => cls.length > 0);
             return classes[0];
         });
         jqDivs.removeClass(function (index: number, currentClass: string | undefined) {
@@ -152,7 +152,7 @@ describe('removeClass() method - jQuery Comparison', () => {
         jqItems.removeClass('item');
 
         nqItems.nodes.forEach((node: JqElement, index: number) => {
-            const nqClass = node.attributes?.class;
+            const nqClass = node.getAttribute('class');
             const jqClass = jqItems.eq(index).attr('class');
             expect(nqClass).not.toContain('item');
             expect(jqClass).not.toContain('item');
