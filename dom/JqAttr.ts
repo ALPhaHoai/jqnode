@@ -7,12 +7,21 @@ import { JqElement } from './JqElement';
 import { JqNodeListOf } from './JqNodeList';
 
 export class JqAttr implements Attr {
-    private readonly _node: JqElement;
+    private readonly _node: JqElement | null;
     private readonly _name: string;
+    private _detachedValue?: string;
 
-    constructor(node: JqElement, name: string) {
-        this._node = node;
+    constructor(name: string, nodeOrValue?: JqElement | string) {
         this._name = name;
+        if (typeof nodeOrValue === 'string' || nodeOrValue === undefined) {
+            // Detached attribute
+            this._node = null;
+            this._detachedValue = nodeOrValue || '';
+        } else {
+            // Attached attribute
+            this._node = nodeOrValue;
+            this._detachedValue = undefined;
+        }
     }
 
     // Attr-specific properties
@@ -31,8 +40,8 @@ export class JqAttr implements Attr {
     }
 
     get ownerElement(): Element | null {
-        // Return the JqElement as the owner element
-        return this._node as unknown as Element;
+        // Return null if detached, otherwise return the JqElement
+        return this._node ? (this._node as unknown as Element) : null;
     }
 
     get prefix(): string | null {
@@ -46,13 +55,22 @@ export class JqAttr implements Attr {
     }
 
     get value(): string {
-        // Access internal data directly to avoid infinite recursion
+        if (this._node === null) {
+            // Detached attribute - use stored value
+            return this._detachedValue || '';
+        }
+        // Attached attribute - access internal data to avoid infinite recursion
         const data = this._node.attributes._getData();
         return data[this._name] || '';
     }
 
     set value(v: string) {
-        // Access internal data directly
+        if (this._node === null) {
+            // Detached attribute - update stored value
+            this._detachedValue = v;
+            return;
+        }
+        // Attached attribute - access internal data directly
         const data = this._node.attributes._getData();
         data[this._name] = v;
         this._node.attributes._setData(data);
@@ -85,17 +103,9 @@ export class JqAttr implements Attr {
 
     // Methods
     cloneNode(_deep?: boolean): Attr {
-        // Attr cloning is always shallow in effect (just name/value),
-        // but creating a new JqAttr on the same node would link it to the same live attribute.
-        // However, DOM cloneNode on Attr usually creates a standalone Attr.
-        // Since JqAttr is tied to a JqElement, we might need a detached node or just return a new instance
-        // that represents the same data but maybe isn't live if it's supposed to be a copy.
-        // But for this implementation, let's return a new JqAttr on the same node for now,
-        // or ideally, it should be a copy.
-        // Given the architecture, JqAttr is a view on the node's attribs.
-        // A true clone would need to be independent.
-        // For now, we'll return a new instance wrapper.
-        return new JqAttr(this._node, this._name);
+        // Per DOM spec, cloning an Attr creates a detached attribute (ownerElement = null)
+        // with the same name and value
+        return new JqAttr(this._name, this.value);
     }
 
     isEqualNode(otherNode: Node | null): boolean {

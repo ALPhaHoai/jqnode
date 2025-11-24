@@ -49,12 +49,12 @@ export class JqNamedNodeMap implements NamedNodeMap {
             return null;
         }
         const name = keys[index];
-        return new JqAttr(this._node, name);
+        return new JqAttr(name, this._node);
     }
 
     getNamedItem(qualifiedName: string): Attr | null {
         if (Object.prototype.hasOwnProperty.call(this._data, qualifiedName)) {
-            return new JqAttr(this._node, qualifiedName);
+            return new JqAttr(qualifiedName, this._node);
         }
         return null;
     }
@@ -75,7 +75,7 @@ export class JqNamedNodeMap implements NamedNodeMap {
 
     removeNamedItem(qualifiedName: string): Attr {
         if (Object.prototype.hasOwnProperty.call(this._data, qualifiedName)) {
-            const oldAttr = new JqAttr(this._node, qualifiedName);
+            const oldAttr = new JqAttr(qualifiedName, this._node);
             delete this._data[qualifiedName];
             return oldAttr;
         }

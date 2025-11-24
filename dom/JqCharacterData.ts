@@ -97,7 +97,10 @@ export abstract class JqCharacterData extends JqNode {
      */
     deleteData(offset: number, count: number): void {
         if (offset < 0 || offset > this._data.length) {
-            throw new DOMException('Index or size is negative or greater than the allowed amount', 'IndexSizeError');
+            throw new DOMException(
+                'Index or size is negative or greater than the allowed amount',
+                'IndexSizeError',
+            );
         }
 
         const before = this._data.substring(0, offset);
@@ -110,7 +113,10 @@ export abstract class JqCharacterData extends JqNode {
      */
     insertData(offset: number, data: string): void {
         if (offset < 0 || offset > this._data.length) {
-            throw new DOMException('Index or size is negative or greater than the allowed amount', 'IndexSizeError');
+            throw new DOMException(
+                'Index or size is negative or greater than the allowed amount',
+                'IndexSizeError',
+            );
         }
 
         const before = this._data.substring(0, offset);
@@ -124,7 +130,10 @@ export abstract class JqCharacterData extends JqNode {
      */
     replaceData(offset: number, count: number, data: string): void {
         if (offset < 0 || offset > this._data.length) {
-            throw new DOMException('Index or size is negative or greater than the allowed amount', 'IndexSizeError');
+            throw new DOMException(
+                'Index or size is negative or greater than the allowed amount',
+                'IndexSizeError',
+            );
         }
 
         const before = this._data.substring(0, offset);
@@ -138,7 +147,10 @@ export abstract class JqCharacterData extends JqNode {
      */
     substringData(offset: number, count: number): string {
         if (offset < 0 || offset > this._data.length) {
-            throw new DOMException('Index or size is negative or greater than the allowed amount', 'IndexSizeError');
+            throw new DOMException(
+                'Index or size is negative or greater than the allowed amount',
+                'IndexSizeError',
+            );
         }
 
         return this._data.substring(offset, offset + count);
@@ -156,9 +168,10 @@ export abstract class JqCharacterData extends JqNode {
 
         const nextSibling = this.nextSibling;
         for (const node of nodes) {
-            const nodeToInsert = typeof node === 'string'
-                ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
-                : node;
+            const nodeToInsert =
+                typeof node === 'string'
+                    ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
+                    : node;
 
             if (nextSibling) {
                 parent.insertBefore(nodeToInsert, nextSibling);
@@ -179,9 +192,10 @@ export abstract class JqCharacterData extends JqNode {
         }
 
         for (const node of nodes) {
-            const nodeToInsert = typeof node === 'string'
-                ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
-                : node;
+            const nodeToInsert =
+                typeof node === 'string'
+                    ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
+                    : node;
 
             parent.insertBefore(nodeToInsert, this);
         }
@@ -210,9 +224,10 @@ export abstract class JqCharacterData extends JqNode {
         this.remove();
 
         for (const node of nodes) {
-            const nodeToInsert = typeof node === 'string'
-                ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
-                : node;
+            const nodeToInsert =
+                typeof node === 'string'
+                    ? this.ownerDocument?.createTextNode(node) || this._createTextNode(node)
+                    : node;
 
             if (nextSibling) {
                 parent.insertBefore(nodeToInsert, nextSibling);

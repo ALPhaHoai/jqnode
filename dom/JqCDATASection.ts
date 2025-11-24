@@ -5,6 +5,7 @@
 
 import { JqText } from './JqText';
 import { JqElement } from './JqElement';
+import type { HtmlNode } from '../types';
 
 /**
  * JqCDATASection implements the DOM CDATASection interface.
@@ -36,7 +37,7 @@ export class JqCDATASection extends JqText implements CDATASection {
     /**
      * Clones this CDATA section node
      */
-    override cloneNode(): CDATASection {
+    override cloneNode(deep?: boolean): CDATASection {
         const cloned = new JqCDATASection(this._data);
 
         // CDATA section nodes don't have children, so deep parameter doesn't matter

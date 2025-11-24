@@ -58,7 +58,7 @@ describe('JqNamedNodeMap', () => {
     });
 
     it('should set named item', () => {
-        const newAttr = new JqAttr(node, 'new-attr');
+        const newAttr = new JqAttr('new-attr', node);
         newAttr.value = 'new-value';
         attributes.setNamedItem(newAttr);
 
