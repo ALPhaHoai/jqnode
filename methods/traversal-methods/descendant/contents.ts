@@ -1,5 +1,5 @@
-import type { JQ } from '../../../types';
-import { HtmlNode } from '../../../types';
+﻿import type { JQ } from '../../../types';
+import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,13 +7,13 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/contents/
  */
 function contents(this: JQ): JQ {
-    const contents: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const contents: JqElement[] = [];
+    const seen = new Set<JqElement>();
 
     // Helper function to convert DOM node to internal format
-    function convertDomNode(domNode: HtmlNode | ChildNode): HtmlNode | null {
+    function convertDomNode(domNode: JqElement | ChildNode): JqElement | null {
         if (domNode.nodeType === 1) {
-            // Element node - need to check if it's a DOM Element or HtmlNode
+            // Element node - need to check if it's a DOM Element or JqElement
             const tagName =
                 'tagName' in domNode
                     ? typeof domNode.tagName === 'string'
@@ -24,7 +24,7 @@ function contents(this: JQ): JQ {
             // Create attributes object
             const attributes: Record<string, string> = {};
 
-            // Handle attributes - check if it's a NamedNodeMap (DOM) or plain object (HtmlNode)
+            // Handle attributes - check if it's a NamedNodeMap (DOM) or plain object (JqElement)
             if ('attributes' in domNode && domNode.attributes) {
                 // Type guard: check if it's a NamedNodeMap by checking for length property
                 if (
@@ -40,13 +40,13 @@ function contents(this: JQ): JQ {
                         }
                     }
                 } else {
-                    // HtmlNode attribs object
+                    // JqElement attribs object
                     const attrs = domNode.attributes as Record<string, unknown>;
                     Object.assign(attributes, attrs);
                 }
             }
 
-            const node = new HtmlNode('element', tagName);
+            const node = new JqElement('element', tagName);
             node.tagName = tagName;
             node.attributes._setData(attributes);
             node._originalElement = ('nodeType' in domNode && domNode.nodeType === 1
@@ -80,9 +80,9 @@ function contents(this: JQ): JQ {
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                        ? (domNode as HtmlNode).textData
+                        ? (domNode as JqElement).textData
                         : null;
-            const textNode = new HtmlNode('text');
+            const textNode = new JqElement('text');
             textNode.textData = textContent || '';
             textNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
             return textNode;
@@ -92,9 +92,9 @@ function contents(this: JQ): JQ {
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                        ? (domNode as HtmlNode).textData
+                        ? (domNode as JqElement).textData
                         : null;
-            const commentNode = new HtmlNode('comment');
+            const commentNode = new JqElement('comment');
             commentNode.textData = textContent || '';
             commentNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
             return commentNode;

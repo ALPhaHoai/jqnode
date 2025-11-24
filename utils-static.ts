@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Static utility methods for jQuery compatibility
  * These are utility functions that are attached to the jQuery/$ object itself
  */
 
-import type { HtmlNode } from './types';
+import type { JqElement } from './types';
 
 /**
  * Return a number representing the current time.
@@ -57,7 +57,7 @@ function param(obj: any, traditional: boolean = false): string {
     // Check if it's a jQuery object with nodes
     if (obj && obj.nodes && Array.isArray(obj.nodes)) {
         // Serialize form elements
-        obj.nodes.forEach((node: HtmlNode) => {
+        obj.nodes.forEach((node: JqElement) => {
             if (node.name === 'INPUT' || node.name === 'SELECT' || node.name === 'TEXTAREA') {
                 const name = node.getAttribute('name');
                 const value = node.getAttribute('value');
@@ -90,7 +90,7 @@ function param(obj: any, traditional: boolean = false): string {
 }
 
 /**
- * Parses a string into an array of DOM nodes or HtmlNodes.
+ * Parses a string into an array of DOM nodes or JqElements.
  */
 function parseHTML(data: string, context?: Document | boolean, keepScripts?: boolean): any[] {
     if (!data || typeof data !== 'string') {
@@ -106,7 +106,7 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
     // Use the html-parser for server-side
     if (typeof document === 'undefined') {
         const { parseHTML: parseHTMLInternal } = require('./html-parser');
-        const nodes: HtmlNode[] = parseHTMLInternal(data);
+        const nodes: JqElement[] = parseHTMLInternal(data);
 
         // Filter out script tags if keepScripts is false
         if (keepScripts === false) {
@@ -307,7 +307,7 @@ function inArray<T>(value: T, array: T[], fromIndex: number = 0): number {
 /**
  * Determine whether an element has any data associated with it.
  */
-function hasData(element: HtmlNode): boolean {
+function hasData(element: JqElement): boolean {
     return !!(element && (element as any).data);
 }
 

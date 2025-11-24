@@ -1,23 +1,23 @@
-import { HtmlNode } from '../../types';
+﻿import { JqElement } from '../../types';
 import type { JQ, FormValueInput, GetterSetterReturn } from '../../types';
 
 // ============================================================================
 // Helper Functions: Element Type Checks
 // ============================================================================
 
-function isInputElement(element: HtmlNode): boolean {
+function isInputElement(element: JqElement): boolean {
     return element.tagName?.toLowerCase() === 'input';
 }
 
-function isSelectElement(element: HtmlNode): boolean {
+function isSelectElement(element: JqElement): boolean {
     return element.tagName?.toLowerCase() === 'select';
 }
 
-function isTextareaElement(element: HtmlNode): boolean {
+function isTextareaElement(element: JqElement): boolean {
     return element.tagName?.toLowerCase() === 'textarea';
 }
 
-function isOptionElement(element: HtmlNode): boolean {
+function isOptionElement(element: JqElement): boolean {
     return element.internalType === 'element' && element.tagName?.toLowerCase() === 'option';
 }
 
@@ -25,13 +25,13 @@ function isOptionElement(element: HtmlNode): boolean {
 // Helper Functions: Text Content Extraction
 // ============================================================================
 
-function getTextContentFromChildren(element: HtmlNode): string {
+function getTextContentFromChildren(element: JqElement): string {
     if (!element.children || element.children.length === 0) {
         return '';
     }
     return element.children
-        .filter((child: HtmlNode) => child.internalType === 'text')
-        .map((child: HtmlNode) => child.textData || '')
+        .filter((child: JqElement) => child.internalType === 'text')
+        .map((child: JqElement) => child.textData || '')
         .join('');
 }
 
@@ -39,7 +39,7 @@ function getTextContentFromChildren(element: HtmlNode): string {
 // Helper Functions: Option Value Extraction
 // ============================================================================
 
-function getOptionValue(option: HtmlNode): string {
+function getOptionValue(option: JqElement): string {
     const value = option.getAttribute('value');
     if (value !== null) {
         return value;
@@ -51,14 +51,14 @@ function getOptionValue(option: HtmlNode): string {
 // Helper Functions: Selection State
 // ============================================================================
 
-function isOptionSelected(option: HtmlNode): boolean {
+function isOptionSelected(option: JqElement): boolean {
     const hasProp = option.properties?.selected !== undefined;
     const isPropSelected = hasProp && option.properties?.selected === true;
     const isAttrSelected = option.getAttribute('selected') !== null;
     return hasProp ? isPropSelected : isAttrSelected;
 }
 
-function isPropSelected(option: HtmlNode): boolean {
+function isPropSelected(option: JqElement): boolean {
     return option.properties?.selected === true;
 }
 
@@ -66,7 +66,7 @@ function isPropSelected(option: HtmlNode): boolean {
 // Helper Functions: Get Value Operations
 // ============================================================================
 
-function getInputValue(element: HtmlNode): string {
+function getInputValue(element: JqElement): string {
     if (element.properties?.value !== undefined) {
         return String(element.properties.value);
     }
@@ -77,7 +77,7 @@ function getInputValue(element: HtmlNode): string {
     return getTextContentFromChildren(element);
 }
 
-function getTextareaValue(element: HtmlNode): string {
+function getTextareaValue(element: JqElement): string {
     if (element.properties?.value !== undefined) {
         return String(element.properties.value);
     }
@@ -90,7 +90,7 @@ interface SelectInfo {
     firstOptionValue: string | null;
 }
 
-function collectSelectInfo(element: HtmlNode): SelectInfo {
+function collectSelectInfo(element: JqElement): SelectInfo {
     const selectedValues: string[] = [];
     let prioritySelectedValue: string | null = null;
     let foundPropSelected = false;
@@ -124,7 +124,7 @@ function collectSelectInfo(element: HtmlNode): SelectInfo {
     return { selectedValues, prioritySelectedValue, firstOptionValue };
 }
 
-function getSelectValue(element: HtmlNode): string | string[] {
+function getSelectValue(element: JqElement): string | string[] {
     const info = collectSelectInfo(element);
     const isMultiple = element.getAttribute('multiple') !== null;
 
@@ -142,7 +142,7 @@ function getSelectValue(element: HtmlNode): string | string[] {
     return info.firstOptionValue ?? '';
 }
 
-function getElementValue(element: HtmlNode): string | string[] | undefined {
+function getElementValue(element: JqElement): string | string[] | undefined {
     if (!element) return undefined;
 
     if (isInputElement(element)) {
@@ -161,13 +161,13 @@ function getElementValue(element: HtmlNode): string | string[] | undefined {
 // Helper Functions: Set Value Operations
 // ============================================================================
 
-function ensureProperties(element: HtmlNode): void {
+function ensureProperties(element: JqElement): void {
     if (!element.properties) {
         element.properties = {};
     }
 }
 
-function setInputValue(element: HtmlNode, value: string): void {
+function setInputValue(element: JqElement, value: string): void {
     ensureProperties(element);
     element.properties!.value = value;
 
@@ -176,10 +176,10 @@ function setInputValue(element: HtmlNode, value: string): void {
     }
 }
 
-function setTextareaValue(element: HtmlNode, value: string): void {
+function setTextareaValue(element: JqElement, value: string): void {
     ensureProperties(element);
     element.properties!.value = value;
-    const textNode = new HtmlNode('text');
+    const textNode = new JqElement('text');
     textNode.textData = value;
     element.children = [textNode];
 
@@ -188,7 +188,7 @@ function setTextareaValue(element: HtmlNode, value: string): void {
     }
 }
 
-function setOptionSelected(option: HtmlNode, selected: boolean): void {
+function setOptionSelected(option: JqElement, selected: boolean): void {
     ensureProperties(option);
     option.properties!.selected = selected;
 
@@ -197,10 +197,10 @@ function setOptionSelected(option: HtmlNode, selected: boolean): void {
     }
 }
 
-function setSelectMultipleValue(element: HtmlNode, values: string[]): void {
+function setSelectMultipleValue(element: JqElement, values: string[]): void {
     if (!element.children) return;
 
-    element.children.forEach((child: HtmlNode) => {
+    element.children.forEach((child: JqElement) => {
         if (isOptionElement(child)) {
             const optionValue = getOptionValue(child);
             const shouldBeSelected = values.includes(optionValue);
@@ -209,7 +209,7 @@ function setSelectMultipleValue(element: HtmlNode, values: string[]): void {
     });
 }
 
-function setSelectSingleValue(element: HtmlNode, value: string): void {
+function setSelectSingleValue(element: JqElement, value: string): void {
     ensureProperties(element);
     element.properties!.value = value;
 
@@ -219,7 +219,7 @@ function setSelectSingleValue(element: HtmlNode, value: string): void {
 
     if (!element.children) return;
 
-    element.children.forEach((child: HtmlNode) => {
+    element.children.forEach((child: JqElement) => {
         if (isOptionElement(child)) {
             const optionValue = getOptionValue(child);
             const shouldBeSelected = optionValue === value;
@@ -228,7 +228,7 @@ function setSelectSingleValue(element: HtmlNode, value: string): void {
     });
 }
 
-function setSelectValue(element: HtmlNode, value: FormValueInput): void {
+function setSelectValue(element: JqElement, value: FormValueInput): void {
     const isMultiple = element.getAttribute('multiple') !== null;
 
     if (isMultiple && Array.isArray(value)) {
@@ -239,7 +239,7 @@ function setSelectValue(element: HtmlNode, value: FormValueInput): void {
     }
 }
 
-function setElementValue(element: HtmlNode, value: FormValueInput): void {
+function setElementValue(element: JqElement, value: FormValueInput): void {
     const stringValue = value === null || value === undefined ? '' : String(value);
 
     if (isInputElement(element)) {
@@ -255,7 +255,7 @@ function setElementValue(element: HtmlNode, value: FormValueInput): void {
 // Helper Functions: Function Value Handling
 // ============================================================================
 
-function getCurrentValueForCallback(element: HtmlNode): string | string[] {
+function getCurrentValueForCallback(element: JqElement): string | string[] {
     if (isInputElement(element) || isSelectElement(element)) {
         if (element.properties?.value !== undefined) {
             return String(element.properties.value);
@@ -278,7 +278,7 @@ function getCurrentValueForCallback(element: HtmlNode): string | string[] {
 }
 
 function setValueFromCallback(
-    element: HtmlNode,
+    element: JqElement,
     callback: (index: number, value: string | string[]) => any,
     index: number,
 ): void {
@@ -292,7 +292,7 @@ function setValueFromCallback(
     } else if (isTextareaElement(element)) {
         ensureProperties(element);
         element.properties!.value = stringResult;
-        const textNode = new HtmlNode('text');
+        const textNode = new JqElement('text');
         textNode.textData = stringResult;
         element.children = [textNode];
     }
@@ -316,7 +316,7 @@ function val(this: JQ, value?: FormValueInput): GetterSetterReturn<string | stri
 
     // Function setter: Call function for each element
     if (typeof value === 'function') {
-        this.nodes.forEach((element: HtmlNode, index: number) => {
+        this.nodes.forEach((element: JqElement, index: number) => {
             if (element) {
                 setValueFromCallback(element, value, index);
             }
@@ -325,7 +325,7 @@ function val(this: JQ, value?: FormValueInput): GetterSetterReturn<string | stri
     }
 
     // Direct setter: Set value on all elements
-    this.nodes.forEach((element: HtmlNode) => {
+    this.nodes.forEach((element: JqElement) => {
         if (element) {
             setElementValue(element, value);
         }

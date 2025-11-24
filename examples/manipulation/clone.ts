@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Example demonstrating the .clone() method
  * Based on jQuery API documentation: https://api.jquery.com/clone/
  */

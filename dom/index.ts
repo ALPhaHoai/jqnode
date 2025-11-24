@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Barrel export file for all HTML element classes
  * Provides convenient imports for all jqnode DOM elements
  */

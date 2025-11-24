@@ -1,8 +1,8 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 import { JQ } from '../../../index';
 
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 describe('Factory function with CSS selectors - Node-Query vs jQuery Comparison', () => {
   let nqRoot: JQ;
@@ -69,7 +69,7 @@ describe('Factory function with CSS selectors - Node-Query vs jQuery Comparison'
 
     // Verify all have post class
     // Verify all have post class
-    nqPosts.each((index: number, element: HtmlNode) => {
+    nqPosts.each((index: number, element: JqElement) => {
       const nqElement = $(element);
       const jqElement = jqPosts.eq(index);
       expect(nqElement.hasClass('post')).toBe(true);

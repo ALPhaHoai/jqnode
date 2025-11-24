@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqText - Implementation of the DOM Text interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Text
  */
@@ -116,7 +116,7 @@ export class JqText extends JqCharacterData implements Text {
     /**
      * Clones this text node
      */
-    override cloneNode(): Text {
+    override cloneNode(_deep?: boolean): Text {
         const cloned = new JqText(this._data);
 
         // Text nodes don't have children, so deep parameter doesn't matter

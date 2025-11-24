@@ -1,4 +1,4 @@
-import type { JQ } from '../../types';
+﻿import type { JQ } from '../../types';
 
 /**
  * Gets the document title by finding the <title> element within <head>.

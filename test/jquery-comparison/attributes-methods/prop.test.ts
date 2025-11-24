@@ -1,7 +1,7 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 describe('prop() method - Query Comparison', () => {
     const html = `
@@ -37,7 +37,7 @@ describe('prop() method - Query Comparison', () => {
         nqInputs.prop('sharedProp', 'sharedValue');
         jqInputs.prop('sharedProp', 'sharedValue');
 
-        nqInputs.each((index: number, element: HtmlNode) => {
+        nqInputs.each((index: number, element: JqElement) => {
             const nqVal = $(element).prop('sharedProp');
             const jqVal = jqInputs.eq(index).prop('sharedProp');
             expect(nqVal).toBe(jqVal);

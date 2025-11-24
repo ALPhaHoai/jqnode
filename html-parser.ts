@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Minimal HTML parser that converts HTML strings to a node tree structure.
  */
 
 import { decodeHTMLEntities } from './helpers/html-entities';
-import { HtmlNode } from './types';
+import { JqElement } from './types';
 
 /**
  * HTML5 void elements that are always self-closing
@@ -92,7 +92,7 @@ const MAX_ATTRIBUTE_VALUE_LENGTH = 100000;
  * @param html - The HTML string to parse
  * @returns Array of parsed nodes
  */
-function parseHTML(html: string): HtmlNode[] {
+function parseHTML(html: string): JqElement[] {
     if (typeof html !== 'string') {
         throw new TypeError('parseHTML expects a string');
     }
@@ -178,8 +178,8 @@ function parseHTML(html: string): HtmlNode[] {
      * @param openTags - Stack of currently open tag names for auto-closing
      * @returns Array of parsed nodes
      */
-    function parseNodes(expectedClosingTag?: string, openTags: string[] = []): HtmlNode[] {
-        const nodes: HtmlNode[] = [];
+    function parseNodes(expectedClosingTag?: string, openTags: string[] = []): JqElement[] {
+        const nodes: JqElement[] = [];
 
         while (index < length) {
             if (html[index] === '<') {
@@ -199,7 +199,7 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html[index] === '>') {
                         index++;
                     }
-                    const doctypeNode = new HtmlNode('text');
+                    const doctypeNode = new JqElement('text');
                     doctypeNode.name = '!DOCTYPE';
                     doctypeNode.data = doctypeText.trim();
                     nodes.push(doctypeNode);
@@ -213,7 +213,7 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 3) === ']]>') {
                         index += 3;
                     }
-                    const cdataNode = new HtmlNode('text');
+                    const cdataNode = new JqElement('text');
                     cdataNode.data = cdataText;
                     nodes.push(cdataNode);
                 } else if (html.substr(index, 4) === '<!--') {
@@ -226,7 +226,7 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 3) === '-->') {
                         index += 3;
                     }
-                    const commentNode = new HtmlNode('comment');
+                    const commentNode = new JqElement('comment');
                     commentNode.data = commentText;
                     nodes.push(commentNode);
                 } else if (html[index + 1] === '?') {
@@ -243,7 +243,7 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 2) === '?>') {
                         index += 2;
                     }
-                    const piNode = new HtmlNode('text');
+                    const piNode = new JqElement('text');
                     piNode.name = `?${name}`;
                     piNode.data = piText.trim();
                     nodes.push(piNode);
@@ -326,7 +326,7 @@ function parseHTML(html: string): HtmlNode[] {
                     }
 
                     if (selfClosing) {
-                        const element = new HtmlNode('element', tagName);
+                        const element = new JqElement('element', tagName);
                         element.attributes._setData(attributes);
                         nodes.push(element);
                     } else {
@@ -356,10 +356,10 @@ function parseHTML(html: string): HtmlNode[] {
                                 index = length;
                             }
 
-                            const element = new HtmlNode('element', tagName);
+                            const element = new JqElement('element', tagName);
                             element.attributes._setData(attributes);
                             if (rawText) {
-                                const textNode = new HtmlNode('text');
+                                const textNode = new JqElement('text');
                                 textNode.textData = rawText;
                                 element.children = [textNode];
                             }
@@ -367,7 +367,7 @@ function parseHTML(html: string): HtmlNode[] {
                         } else {
                             // Parse children normally, expecting this tag's closing tag
                             const children = parseNodes(tagName, openTags);
-                            const element = new HtmlNode('element', tagName);
+                            const element = new JqElement('element', tagName);
                             element.attributes._setData(attributes);
                             element.children = children;
                             nodes.push(element);
@@ -384,7 +384,7 @@ function parseHTML(html: string): HtmlNode[] {
                 // Only create text node if there's actual text content
                 // Don't trim whitespace as it may be significant in HTML
                 if (text) {
-                    const textNode = new HtmlNode('text');
+                    const textNode = new JqElement('text');
                     textNode.textData = decodeHTMLEntities(text);
                     nodes.push(textNode);
                 }

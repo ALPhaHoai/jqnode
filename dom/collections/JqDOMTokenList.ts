@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqDOMTokenList - Implementation of the DOM DOMTokenList interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList
  */

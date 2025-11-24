@@ -1,4 +1,4 @@
-import jq from '../index';
+﻿import jq from '../index';
 
 console.log('=== siblings(), next(), prev(), eq(), first(), last() Examples ===\n');
 

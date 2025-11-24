@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, ContentInput } from '../../../types';
+﻿import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -9,7 +9,7 @@ import JQClass from '../../../jq';
  */
 function append(this: JQ, ...content: ContentInput[]): JQ {
     // 1. Collect all nodes to be appended
-    const nodesToAppend: HtmlNode[] = [];
+    const nodesToAppend: JqElement[] = [];
     for (const item of content) {
         // Check if this is a JQ object containing existing elements
         if (
@@ -33,7 +33,7 @@ function append(this: JQ, ...content: ContentInput[]): JQ {
         const isLast = i === lastIndex;
 
         for (const node of nodesToAppend) {
-            let nodeToAdd: HtmlNode;
+            let nodeToAdd: JqElement;
 
             if (isLast) {
                 // For the last target, we move the original node

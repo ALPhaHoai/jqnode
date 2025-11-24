@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Represents HTML heading elements <h1> through <h6>
  * Based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
  */

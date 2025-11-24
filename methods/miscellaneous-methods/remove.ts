@@ -1,11 +1,11 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Remove the set of matched elements from the DOM.
  * @see https://api.jquery.com/remove/
  */
 function remove(this: JQ, selector?: string): JQ {
-    let nodesToRemove: HtmlNode[] = this.nodes;
+    let nodesToRemove: JqElement[] = this.nodes;
 
     // If selector is provided, filter nodes
     if (selector) {
@@ -16,7 +16,7 @@ function remove(this: JQ, selector?: string): JQ {
     }
 
     // Remove each node from its parent
-    nodesToRemove.forEach((node: HtmlNode) => {
+    nodesToRemove.forEach((node: JqElement) => {
         if (!node) return;
 
         const parent = node.parent || node.parentNode;

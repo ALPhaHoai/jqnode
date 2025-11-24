@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqAttr - Implementation of the DOM Attr interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Attr
  */

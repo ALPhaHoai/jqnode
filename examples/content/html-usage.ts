@@ -1,4 +1,4 @@
-import jq from '../index';
+﻿import jq from '../index';
 
 console.log('=== html() Method Examples ===\n');
 

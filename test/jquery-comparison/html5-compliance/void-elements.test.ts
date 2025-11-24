@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('HTML5 Void Elements - jQuery Comparison', () => {
     test('should parse br as self-closing - jquery-comparison', () => {

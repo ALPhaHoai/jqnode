@@ -1,5 +1,5 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
-import type { HtmlNode, JQ } from '../../../../types';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+import type { JqElement, JQ } from '../../../../types';
 
 describe('siblings() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -34,7 +34,7 @@ describe('siblings() method - Node-Query vs jQuery Comparison', () => {
         expect(jqSiblings.length).toBe(5);
 
         // Check that all expected siblings are present
-        const nqClasses = nqSiblings.nodes.map((node: HtmlNode) => node.getAttribute('class')).sort();
+        const nqClasses = nqSiblings.nodes.map((node: JqElement) => node.getAttribute('class')).sort();
         const jqClasses: string[] = [];
         jqSiblings.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);

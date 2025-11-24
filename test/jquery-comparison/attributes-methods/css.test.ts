@@ -1,11 +1,11 @@
-// Note: This is a placeholder comparison test for css() method
+﻿// Note: This is a placeholder comparison test for css() method
 // The original css() test is complex (268 lines) with many edge cases
 // This conversion includes key test cases to ensure jQuery compatibility
 
 import $ from '../../../index';
 
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 describe('css() method - jQuery Comparison (Key Tests)', () => {
     test('should get and set inline style - jquery-comparison', () => {
@@ -91,7 +91,7 @@ describe('css() method - jQuery Comparison (Key Tests)', () => {
         nqItems.css('color', 'blue');
         jqItems.css('color', 'blue');
 
-        nqItems.nodes.forEach((node: HtmlNode, index: number) => {
+        nqItems.nodes.forEach((node: JqElement, index: number) => {
             expect($(node).css('color')).toBe(jqItems.eq(index).css('color'));
         });
     });

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqNodeList - Implementation of the DOM NodeList interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  */

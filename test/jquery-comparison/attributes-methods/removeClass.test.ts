@@ -1,5 +1,5 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JqElement } from '../../../types';
 
 describe('removeClass() method - jQuery Comparison', () => {
     const html = `
@@ -151,7 +151,7 @@ describe('removeClass() method - jQuery Comparison', () => {
         nqItems.removeClass('item');
         jqItems.removeClass('item');
 
-        nqItems.nodes.forEach((node: HtmlNode, index: number) => {
+        nqItems.nodes.forEach((node: JqElement, index: number) => {
             const nqClass = node.attributes?.class;
             const jqClass = jqItems.eq(index).attr('class');
             expect(nqClass).not.toContain('item');

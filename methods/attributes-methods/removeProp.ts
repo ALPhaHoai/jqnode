@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Removes a property set by the .prop() method.
@@ -20,7 +20,7 @@ function removeProp(this: JQ, name: string): JQ {
     }
 
     if (name === 'value') {
-        this.nodes.forEach((element: HtmlNode) => {
+        this.nodes.forEach((element: JqElement) => {
             if (element && element._originalElement && name === 'value') {
                 // For real DOM elements, don't change anything
             } else if (element && element.properties && name === 'value') {
@@ -30,7 +30,7 @@ function removeProp(this: JQ, name: string): JQ {
         return this;
     }
 
-    this.nodes.forEach((element: HtmlNode) => {
+    this.nodes.forEach((element: JqElement) => {
         if (element && element.properties) {
             delete element.properties[name];
 

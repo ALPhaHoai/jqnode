@@ -1,7 +1,7 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 import JQ from '../../../jq';
 
@@ -35,7 +35,7 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(nqText).toBe('Inactive ItemInactive Item 2');
 
         // Verify all remaining elements are inactive
-        nqResult.each((index: number, element: HtmlNode) => {
+        nqResult.each((index: number, element: JqElement) => {
             const nqElement = $(element);
             const jqElement = jqResult.eq(index);
             expect(nqElement.hasClass('active')).toBe(false);
@@ -51,7 +51,7 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(4);
 
         // Verify no elements have the special class
-        nqResult.each((index: number, element: HtmlNode) => {
+        nqResult.each((index: number, element: JqElement) => {
             const nqElement = $(element);
             expect(nqElement.hasClass('special')).toBe(false);
         });
@@ -63,7 +63,7 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('not() should exclude elements using function that returns true/false - jquery-comparison', () => {
-        const nqResult = elements.not(function (index: number, _element: HtmlNode) {
+        const nqResult = elements.not(function (index: number, _element: JqElement) {
             return index % 2 === 0; // Exclude even indices (0, 2, 4)
         });
         const jqResult = jqElements.not(function (index: number, _element: HTMLElement) {
@@ -128,7 +128,7 @@ describe('not() method - Node-Query vs jQuery Comparison', () => {
         expect(nqText).toBe('Span 1Span 2');
 
         // Verify all remaining elements are spans
-        nqResult.each((index: number, element: HtmlNode) => {
+        nqResult.each((index: number, element: JqElement) => {
             expect(element.tagName && element.tagName.toLowerCase()).toBe('span');
         });
 

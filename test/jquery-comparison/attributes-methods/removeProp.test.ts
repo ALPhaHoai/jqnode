@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('removeProp() method - jQuery Comparison', () => {
     const html = `

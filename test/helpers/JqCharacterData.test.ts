@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Tests for JqCharacterData class
  */
 
-import { JqCharacterData } from '../../dom/JqCharacterData';
-import { JqText } from '../../dom/JqText';
+import { JqCharacterData } from '../../dom/core/JqCharacterData';
+import { JqText } from '../../dom/core/JqText';
 
 // Use JqText as concrete implementation for testing abstract JqCharacterData
 describe('JqCharacterData', () => {
@@ -198,7 +198,7 @@ describe('JqCharacterData', () => {
             expect(text.previousElementSibling).toBeNull();
         });
 
-        // Note: More comprehensive sibling tests would require integration with HtmlNode
+        // Note: More comprehensive sibling tests would require integration with JqElement
         // and are better suited for integration tests
     });
 

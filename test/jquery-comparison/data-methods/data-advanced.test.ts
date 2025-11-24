@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('data() advanced behavior', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

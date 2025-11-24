@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Represents an HTML <li> element
  * Based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li
  */

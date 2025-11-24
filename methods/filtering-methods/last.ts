@@ -1,4 +1,4 @@
-import type { JQ } from '../../types';
+﻿import type { JQ } from '../../types';
 
 /**
  * Selects the last matched element.

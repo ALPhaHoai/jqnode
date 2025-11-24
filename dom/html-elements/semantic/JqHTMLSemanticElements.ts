@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Generic HTML element classes for semantic elements
  * These extend JqElement but don't have specific additional properties
  * Based on MDN HTML Element Reference

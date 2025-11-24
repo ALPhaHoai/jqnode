@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, CssSelector } from '../../../types';
+﻿import type { JqElement, JQ, CssSelector } from '../../../types';
 import { selectNodes } from '../../../selector';
 import JQClass from '../../../jq';
 
@@ -8,7 +8,7 @@ import JQClass from '../../../jq';
  * @returns The JQ instance for chaining
  * @see https://api.jquery.com/appendTo/
  */
-function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | string): JQ {
+function appendTo(this: JQ, target: CssSelector | JQ | JqElement | JqElement[] | string): JQ {
     let targetJQ: JQ;
     let isDynamicTarget = false;
 
@@ -35,7 +35,7 @@ function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | s
         isDynamicTarget = true;
     }
 
-    const newNodes: HtmlNode[] = [];
+    const newNodes: JqElement[] = [];
     const lastIndex = targetJQ.nodes.length - 1;
 
     for (let i = 0; i < targetJQ.nodes.length; i++) {
@@ -44,7 +44,7 @@ function appendTo(this: JQ, target: CssSelector | JQ | HtmlNode | HtmlNode[] | s
             const isLast = i === lastIndex;
 
             for (const node of this.nodes) {
-                let nodeToAdd: HtmlNode;
+                let nodeToAdd: JqElement;
 
                 if (isLast) {
                     // For the last target, we move the original node

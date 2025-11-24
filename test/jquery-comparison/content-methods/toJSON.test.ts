@@ -1,4 +1,4 @@
-// Note: toJSON() is a jqnode-specific feature for converting HTML tables to JSON
+﻿// Note: toJSON() is a jqnode-specific feature for converting HTML tables to JSON
 // jQuery does not have this method, so this test only validates the jqnode implementation
 import $ from '../../../index';
 

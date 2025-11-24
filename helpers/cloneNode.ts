@@ -1,4 +1,4 @@
-import { HtmlNode } from '../types';
+﻿import { JqElement } from '../types';
 
 /**
  * Helper method to deep clone a node.
@@ -7,15 +7,15 @@ import { HtmlNode } from '../types';
  * @returns Cloned node
  */
 function _cloneNode(
-    node: HtmlNode | null | undefined,
+    node: JqElement | null | undefined,
     deep: boolean = true,
-): HtmlNode | null | undefined {
+): JqElement | null | undefined {
     if (!node) return node;
 
     // Clone attributes using JqNamedNodeMap
     const clonedAttribs = node.attributes._getData();
 
-    const cloned = new HtmlNode(node.internalType, node.name);
+    const cloned = new JqElement(node.internalType, node.name);
     cloned.tagName = node.tagName || node.name;
     cloned.textData = node.textData;
     cloned.attributes._setData(clonedAttribs);
@@ -25,7 +25,7 @@ function _cloneNode(
     cloned.nodeType = node.nodeType;
 
     if (deep && node.children) {
-        cloned.children = node.children.map((child) => _cloneNode(child, deep) as HtmlNode);
+        cloned.children = node.children.map((child) => _cloneNode(child, deep) as JqElement);
 
         // Set parent references for cloned children
         for (const child of cloned.children) {

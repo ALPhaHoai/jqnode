@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
@@ -40,12 +40,12 @@ function eq(this: JQ, index: number | string | undefined): JQ {
 
     // Check bounds
     if (numericIndex >= 0 && numericIndex < this.nodes.length) {
-        let selectedNode: HtmlNode | undefined = this.nodes[numericIndex];
+        let selectedNode: JqElement | undefined = this.nodes[numericIndex];
 
         // For fractional indices, create a detached copy to match jQuery behavior
         // jQuery returns an element but with empty text() for fractional indices
         if (typeof originalIndex === 'number' && originalIndex % 1 !== 0) {
-            selectedNode = { ...selectedNode, _detached: true } as HtmlNode;
+            selectedNode = { ...selectedNode, _detached: true } as JqElement;
         }
 
         const result = Object.create(Object.getPrototypeOf(this));

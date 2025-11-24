@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { JQ } from '../../../index';
 
 describe('Basic selector functionality - Node-Query vs jQuery Comparison', () => {

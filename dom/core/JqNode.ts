@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqNode - Implementation of the DOM Node interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
@@ -35,18 +35,22 @@ export class JqNode implements Node {
     // Node properties - to be implemented by subclasses
     baseURI: string = '';
 
+    // Protected storage for child nodes
+    protected _children: JqNode[] = [];
+    protected _parentNode: JqNode | null = null;
+
     get childNodes(): NodeListOf<ChildNode> {
-        return new JqNodeListOf<ChildNode>([]) as unknown as NodeListOf<ChildNode>;
+        return new JqNodeListOf<ChildNode>(this._children as unknown as ChildNode[]) as unknown as NodeListOf<ChildNode>;
     }
 
     get firstChild(): ChildNode | null {
-        return null;
+        return (this._children[0] as unknown as ChildNode) || null;
     }
 
     isConnected: boolean = false;
 
     get lastChild(): ChildNode | null {
-        return null;
+        return (this._children[this._children.length - 1] as unknown as ChildNode) || null;
     }
 
     get nextSibling(): ChildNode | null {
@@ -78,7 +82,7 @@ export class JqNode implements Node {
     }
 
     get parentNode(): ParentNode | null {
-        return null;
+        return this._parentNode as unknown as ParentNode;
     }
 
     parentElement: HTMLElement | null = null;
@@ -101,15 +105,41 @@ export class JqNode implements Node {
     /**
      * Adds a node to the end of the list of children of this node
      */
-    appendChild<T extends Node>(_node: T): T {
-        throw new Error('appendChild not implemented');
+    appendChild<T extends Node>(node: T): T {
+        const jqNode = node as unknown as JqNode;
+
+        // Remove from previous parent if it exists
+        if (jqNode._parentNode) {
+            jqNode._parentNode.removeChild(node);
+        }
+
+        this._children.push(jqNode);
+        jqNode._parentNode = this;
+        return node;
     }
 
     /**
      * Clones a node, and optionally, all of its contents
      */
-    cloneNode(_deep?: boolean): Node {
-        throw new Error('cloneNode not implemented');
+    cloneNode(deep?: boolean): Node {
+        // This is a basic implementation - subclasses should override for proper cloning
+        const cloned = new (this.constructor as any)();
+
+        // Copy nodeType if it's set
+        if (this.nodeType) {
+            cloned.nodeType = this.nodeType;
+        }
+
+        // Deep clone children if requested
+        if (deep) {
+            for (const child of this._children) {
+                const clonedChild = child.cloneNode(true) as unknown as JqNode;
+                cloned._children.push(clonedChild);
+                clonedChild._parentNode = cloned;
+            }
+        }
+
+        return cloned as Node;
     }
 
     /**
@@ -127,13 +157,16 @@ export class JqNode implements Node {
      * Returns true or false indicating whether a node is a descendant of the calling node
      */
     contains(other: Node | null): boolean {
-        if (!other || other === this) {
+        if (!other) {
             return false;
+        }
+        if (other === this) {
+            return true;
         }
 
         let node: Node | null = other.parentNode;
         while (node) {
-            if (node === (this as Node)) {
+            if (node === (this as unknown as Node)) {
                 return true;
             }
             node = node.parentNode;
@@ -156,14 +189,34 @@ export class JqNode implements Node {
      * Returns a boolean indicating whether the element has any child nodes
      */
     hasChildNodes(): boolean {
-        return this.childNodes.length > 0;
+        return this._children.length > 0;
     }
 
     /**
      * Inserts a node before a reference node as a child of this node
      */
-    insertBefore<T extends Node>(_node: T, _child: Node | null): T {
-        throw new Error('insertBefore not implemented');
+    insertBefore<T extends Node>(node: T, child: Node | null): T {
+        const jqNode = node as unknown as JqNode;
+
+        // If child is null, append to the end
+        if (child === null) {
+            return this.appendChild(node);
+        }
+
+        // Find the index of the reference child
+        const index = this._children.findIndex(c => (c as unknown as Node) === child);
+        if (index === -1) {
+            throw new Error('Reference node was not found');
+        }
+
+        // Remove from previous parent if it exists
+        if (jqNode._parentNode) {
+            jqNode._parentNode.removeChild(node);
+        }
+
+        this._children.splice(index, 0, jqNode);
+        jqNode._parentNode = this;
+        return node;
     }
 
     /**
@@ -239,15 +292,39 @@ export class JqNode implements Node {
     /**
      * Removes a child node from the current node
      */
-    removeChild<T extends Node>(_child: T): T {
-        throw new Error('removeChild not implemented');
+    removeChild<T extends Node>(child: T): T {
+        const index = this._children.findIndex(c => (c as unknown as Node) === child);
+        if (index === -1) {
+            throw new Error('Node was not found');
+        }
+
+        const removed = this._children.splice(index, 1)[0];
+        removed._parentNode = null;
+        return child;
     }
 
     /**
      * Replaces a child node within the current node
      */
-    replaceChild<T extends Node>(_node: Node, _child: T): T {
-        throw new Error('replaceChild not implemented');
+    replaceChild<T extends Node>(node: Node, child: T): T {
+        const jqNode = node as unknown as JqNode;
+        const index = this._children.findIndex(c => (c as unknown as Node) === child);
+
+        if (index === -1) {
+            throw new Error('Node was not found');
+        }
+
+        // Remove from previous parent if it exists
+        if (jqNode._parentNode) {
+            jqNode._parentNode.removeChild(node);
+        }
+
+        const removed = this._children[index];
+        this._children[index] = jqNode;
+        jqNode._parentNode = this;
+        removed._parentNode = null;
+
+        return child;
     }
 
     // EventTarget methods (Node extends EventTarget)

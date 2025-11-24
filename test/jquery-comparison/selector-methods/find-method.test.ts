@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { JQ } from '../../../index';
 
 describe('JQ find() method with CSS selectors - Node-Query vs jQuery Comparison', () => {

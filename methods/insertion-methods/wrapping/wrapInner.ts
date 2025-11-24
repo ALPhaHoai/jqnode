@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../../types';
+﻿import type { JqElement, JQ } from '../../../types';
 
 /**
  * Wrap an HTML structure around the content of each element in the set of matched elements.
@@ -6,11 +6,11 @@ import type { HtmlNode, JQ } from '../../../types';
  * @returns The JQ instance for chaining
  * @see https://api.jquery.com/wrapInner/
  */
-function wrapInner(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
+function wrapInner(this: JQ, wrappingElement: string | JqElement | JQ): JQ {
     for (const element of this.nodes) {
         if (element.internalType === 'element') {
             // 1. Create a deep clone of the wrapping structure
-            let wrapperStructure: HtmlNode[];
+            let wrapperStructure: JqElement[];
 
             if (typeof wrappingElement === 'string') {
                 wrapperStructure = this._normalizeContent(wrappingElement).map((n) =>
@@ -22,7 +22,7 @@ function wrapInner(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
             ) {
                 wrapperStructure = (wrappingElement as JQ).nodes.map((n) => this._cloneNode(n));
             } else {
-                wrapperStructure = this._normalizeContent(wrappingElement as HtmlNode).map((n) =>
+                wrapperStructure = this._normalizeContent(wrappingElement as JqElement).map((n) =>
                     this._cloneNode(n),
                 );
             }

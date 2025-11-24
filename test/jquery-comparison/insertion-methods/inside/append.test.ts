@@ -1,4 +1,4 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 
 describe('append() method - Node-Query vs jQuery Comparison', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

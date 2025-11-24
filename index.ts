@@ -1,4 +1,4 @@
-/**
+﻿/**
  * jQuery-like HTML selector and manipulation library.
  *
  * This module provides a simple implementation of jQuery-style DOM manipulation
@@ -8,7 +8,7 @@
 import { parseHTML } from './html-parser';
 import JQ from './jq';
 import { selectNodes } from './selector';
-import { HtmlNode } from './types';
+import { JqElement } from './types';
 import type { CssSelector, JQStatic } from './types';
 import {
     now,
@@ -38,7 +38,7 @@ import {
 /**
  * Converts a DOM element to the internal node format used by jqnode.
  */
-function domElementToNode(element: any): HtmlNode {
+function domElementToNode(element: any): JqElement {
     if (!element || typeof element !== 'object' || !element.nodeType) {
         throw new Error('Invalid DOM element provided');
     }
@@ -47,7 +47,7 @@ function domElementToNode(element: any): HtmlNode {
     const attrs: Record<string, string> = {};
 
     const type = element.nodeType === 1 ? 'element' : 'text';
-    const node = new HtmlNode(type, nodeName);
+    const node = new JqElement(type, nodeName);
 
     node.tagName = nodeName; // Expose tagName for compatibility
     node.children = [];
@@ -113,7 +113,7 @@ function domElementToNode(element: any): HtmlNode {
                 node.children.push(childNode);
             } else if (child.nodeType === 3) {
                 // Text node
-                const textNode = new HtmlNode('text');
+                const textNode = new JqElement('text');
                 textNode.textData = child.textContent || '';
                 textNode.parent = node;
                 node.children.push(textNode);
@@ -135,8 +135,8 @@ function domElementToNode(element: any): HtmlNode {
  * Similar to jQuery's $ function.
  */
 function JQFactory(
-    htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any,
-    context?: HtmlNode[] | null,
+    htmlOrSelectorOrNodes: string | JqElement[] | JqElement | any,
+    context?: JqElement[] | null,
 ): JQ {
     if (typeof htmlOrSelectorOrNodes === 'string') {
         const trimmed = htmlOrSelectorOrNodes.trim();

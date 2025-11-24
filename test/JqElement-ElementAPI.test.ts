@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for Element API features in JqElement
  * Tests core properties, selector methods, DOM manipulation, and attributes
  */

@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Get the current coordinates of the first element in the set of matched elements, relative to the offset parent.
@@ -9,7 +9,7 @@ function position(this: JQ): { top: number; left: number } | undefined {
         return undefined;
     }
 
-    const node: HtmlNode = this.nodes[0];
+    const node: JqElement = this.nodes[0];
 
     // For browser DOM elements
     if (typeof document !== 'undefined' && node.nodeType === 1) {

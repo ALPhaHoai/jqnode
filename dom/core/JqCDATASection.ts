@@ -1,10 +1,10 @@
-/**
+﻿/**
  * JqCDATASection - Implementation of the DOM CDATASection interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/CDATASection
  */
 
 import { JqText } from './JqText';
-import type { HtmlNode } from '../../types';
+import type { JqElement } from '../../types';
 
 /**
  * JqCDATASection implements the DOM CDATASection interface.
@@ -23,11 +23,11 @@ export class JqCDATASection extends JqText implements CDATASection {
     }
 
     /**
-     * Factory method to create a JqCDATASection from an HtmlNode
+     * Factory method to create a JqCDATASection from a JqElement
      */
-    static fromHtmlNode(node: HtmlNode): JqCDATASection {
+    static override fromJqElement(node: JqElement): JqCDATASection {
         const cdataSection = new JqCDATASection(node.textData);
-        (cdataSection as any)._htmlNode = node;
+        (cdataSection as any)._jqElement = node;
         return cdataSection;
     }
 

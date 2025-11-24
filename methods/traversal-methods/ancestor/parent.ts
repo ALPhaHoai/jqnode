@@ -1,5 +1,5 @@
-import { selectNodes } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+﻿import { selectNodes } from '../../../selector';
+import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,8 +7,8 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/parent/
  */
 function parent(this: JQ, selector?: CssSelector): JQ {
-    const parents: HtmlNode[] = [];
-    const seen = new Set<HtmlNode | ParentNode>(); // Avoid duplicates
+    const parents: JqElement[] = [];
+    const seen = new Set<JqElement | ParentNode>(); // Avoid duplicates
 
     for (const node of this.nodes) {
         // Handle both internal nodes and DOM elements
@@ -29,8 +29,8 @@ function parent(this: JQ, selector?: CssSelector): JQ {
             }
 
             if (isElement && !isHtml) {
-                // Type guard: ensure it's an HtmlNode
-                const htmlParent = parentNode as HtmlNode;
+                // Type guard: ensure it's an JqElement
+                const htmlParent = parentNode as JqElement;
                 seen.add(htmlParent);
                 parents.push(htmlParent);
             }
@@ -44,7 +44,7 @@ function parent(this: JQ, selector?: CssSelector): JQ {
         const rootNodes = this._findCommonRoots(this.nodes);
         const matchingParents = selectNodes(rootNodes, selector);
 
-        resultNodes = parents.filter((p: HtmlNode) => matchingParents.includes(p));
+        resultNodes = parents.filter((p: JqElement) => matchingParents.includes(p));
     }
     const result = new JQClass(resultNodes) as JQ;
     result._prevObject = this;

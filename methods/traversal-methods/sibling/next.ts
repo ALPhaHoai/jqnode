@@ -1,5 +1,5 @@
-import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,12 +7,12 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/next/
  */
 function next(this: JQ, selector?: CssSelector): JQ {
-    const nextSiblings: HtmlNode[] = [];
+    const nextSiblings: JqElement[] = [];
 
     for (const node of this.nodes) {
         if (node.parent && node.parent.children) {
             const siblings = node.parent.children.filter(
-                (child: HtmlNode) => child.internalType === 'element',
+                (child: JqElement) => child.internalType === 'element',
             );
             const currentIndex = siblings.indexOf(node);
 

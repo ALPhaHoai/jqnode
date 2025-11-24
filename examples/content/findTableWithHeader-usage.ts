@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Example usage of the .findTableWithHeader() method
  * This method finds tables that contain specific headers
  */

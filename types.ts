@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Core type definitions for jqnode
  */
 
@@ -7,16 +7,13 @@ import { JqAttr } from './dom/core/JqAttr';
 import { JqNamedNodeMap } from './dom/collections/JqNamedNodeMap';
 import { JqHTMLCollection } from './dom/collections/JqHTMLCollection';
 import { JqNode } from './dom/core/JqNode';
-import { JqElement as HtmlNodeClass } from './dom/core/JqElement';
 import { JqCharacterData } from './dom/core/JqCharacterData';
 import { JqText } from './dom/core/JqText';
 import { JqComment } from './dom/core/JqComment';
 import { JqCDATASection } from './dom/core/JqCDATASection';
 import { JqDOMTokenList } from './dom/collections/JqDOMTokenList';
 
-// Export JqElement under both names for backwards compatibility
-export { HtmlNodeClass as HtmlNode, HtmlNodeClass as JqElement };
-export { JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection, JqDOMTokenList };
+export { JqElement, JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection, JqDOMTokenList };
 
 export type { NodeType };
 

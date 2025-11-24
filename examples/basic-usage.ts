@@ -1,4 +1,4 @@
-import $ from '../index';
+﻿import $ from '../index';
 
 console.log('=== jqnode Debug Logging Example ===\n');
 

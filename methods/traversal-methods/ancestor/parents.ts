@@ -1,6 +1,6 @@
-import { parseSelector, nodeMatchesSelector } from '../../../selector';
+﻿import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { CssSelector, JQ } from '../../../types';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
 
 // Use ReturnType to infer ParsedSelector from parseSelector function
@@ -29,18 +29,18 @@ function _createUniqueKey(tagName: string, attributes: Record<string, unknown>):
 }
 
 /**
- * Converts a DOM element to internal HtmlNode format.
+ * Converts a DOM element to internal JqElement format.
  * @param domElement - The DOM element to convert
- * @returns The converted HtmlNode
+ * @returns The converted JqElement
  */
-function _convertDomToNode(domElement: Element): HtmlNode {
+function _convertDomToNode(domElement: Element): JqElement {
     const attributes: Record<string, string> = {};
     for (let i = 0; i < domElement.attributes.length; i++) {
         const attr = domElement.attributes[i];
         attributes[attr.name] = attr.value;
     }
 
-    const node = new HtmlNode('element', domElement.tagName.toLowerCase());
+    const node = new JqElement('element', domElement.tagName.toLowerCase());
     node.tagName = domElement.tagName.toLowerCase();
     node.attributes._setData(attributes);
     node._originalElement = domElement;
@@ -55,9 +55,9 @@ function _convertDomToNode(domElement: Element): HtmlNode {
  * @param seen - Set to track already processed elements
  */
 function _traverseDomParents(
-    node: HtmlNode,
+    node: JqElement,
     parsedSelector: ParsedSelector | null,
-    ancestors: HtmlNode[],
+    ancestors: JqElement[],
     seen: Set<string>,
 ): void {
     let domCurrent = node._originalElement?.parentElement;
@@ -88,12 +88,12 @@ function _traverseDomParents(
  * @param seen - Set to track already processed elements
  */
 function _traverseInternalParents(
-    node: HtmlNode,
+    node: JqElement,
     parsedSelector: ParsedSelector | null,
-    ancestors: HtmlNode[],
+    ancestors: JqElement[],
     seen: Set<string>,
 ): void {
-    let current: HtmlNode | undefined = node.parent;
+    let current: JqElement | undefined = node.parent;
 
     while (current) {
         if (current.internalType === 'element') {
@@ -119,8 +119,8 @@ function _traverseInternalParents(
  * @param parsedSelector - The parsed selector to filter by (or null for all)
  * @returns Array of ancestor nodes
  */
-function _collectParents(nodes: HtmlNode[], parsedSelector: ParsedSelector | null): HtmlNode[] {
-    const ancestors: HtmlNode[] = [];
+function _collectParents(nodes: JqElement[], parsedSelector: ParsedSelector | null): JqElement[] {
+    const ancestors: JqElement[] = [];
     const seen = new Set<string>();
 
     for (const node of nodes) {

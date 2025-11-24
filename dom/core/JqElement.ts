@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Core HTML element class for jqnode
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Element
  * and https://developer.mozilla.org/en-US/docs/Web/API/Node
@@ -10,7 +10,6 @@ import { JqHTMLCollection } from '../collections/JqHTMLCollection';
 import { JqNodeListOf } from '../collections/JqNodeList';
 import { JqDOMTokenList } from '../collections/JqDOMTokenList';
 import { selectNodes, nodeMatchesSelector, parseSelector } from '../../selector';
-import type { HtmlNode } from '../../types';
 
 /**
  * Node type identifier
@@ -29,9 +28,6 @@ export class JqElement extends JqNode {
     public parent: JqElement | undefined;
     public prev: JqElement | null = null;
     public next: JqElement | null = null;
-
-    // Internal tracking for data storage
-    public __jqdata__: Record<string, unknown> = {};
 
     // Extended properties for DOM integration
     public _originalElement: Element | null = null; // DOM element reference
@@ -484,7 +480,7 @@ export class JqElement extends JqNode {
      */
     querySelector<E extends Element = Element>(selectors: string): E | null {
         try {
-            const results = selectNodes(this.children as unknown as HtmlNode[], selectors);
+            const results = selectNodes(this.children as unknown as JqElement[], selectors);
             return results.length > 0 ? (results[0] as unknown as E) : null;
         } catch {
             return null;
@@ -496,7 +492,7 @@ export class JqElement extends JqNode {
      */
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E> {
         try {
-            const results = selectNodes(this.children as unknown as HtmlNode[], selectors);
+            const results = selectNodes(this.children as unknown as JqElement[], selectors);
             return new JqNodeListOf(results) as unknown as NodeListOf<E>;
         } catch {
             return new JqNodeListOf([]) as unknown as NodeListOf<E>;
@@ -510,7 +506,7 @@ export class JqElement extends JqNode {
         try {
             const parsed = parseSelector(selectors);
             if (!parsed) return false;
-            return nodeMatchesSelector(this as unknown as HtmlNode, parsed);
+            return nodeMatchesSelector(this as unknown as JqElement, parsed);
         } catch {
             return false;
         }
@@ -526,7 +522,7 @@ export class JqElement extends JqNode {
 
             let current: JqElement | undefined = this;
             while (current) {
-                if (nodeMatchesSelector(current as unknown as HtmlNode, parsed)) {
+                if (nodeMatchesSelector(current as unknown as JqElement, parsed)) {
                     return current as unknown as E;
                 }
                 current = current.parent;

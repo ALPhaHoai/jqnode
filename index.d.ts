@@ -1,14 +1,14 @@
-/**
+﻿/**
  * Type definitions for jqnode module
  * This augments the auto-generated types to include static methods on the factory function
  */
 
 import JQ from './jq';
-import type { HtmlNode } from './types';
+import type { JqElement } from './types';
 
 declare function JQFactory(
-    htmlOrSelectorOrNodes: string | HtmlNode[] | HtmlNode | any,
-    context?: HtmlNode[] | null,
+    htmlOrSelectorOrNodes: string | JqElement[] | JqElement | any,
+    context?: JqElement[] | null,
 ): JQ;
 
 declare namespace JQFactory {
@@ -31,7 +31,7 @@ declare namespace JQFactory {
     function now(): number;
     function noop(): void;
     function param(obj: any): string;
-    function parseHTML(html: string): HtmlNode[];
+    function parseHTML(html: string): JqElement[];
     function parseJSON(json: string): any;
     function parseXML(xml: string): any;
     function trim(str: string): string;

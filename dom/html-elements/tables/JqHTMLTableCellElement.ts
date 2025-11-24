@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Represents an HTML <td> or <th> element
  * Based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td
  * and https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th

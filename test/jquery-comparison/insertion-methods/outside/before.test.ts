@@ -1,4 +1,4 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 
 describe('before() method - Node-Query vs jQuery Comparison', () => {
     test('before() should insert content before elements - jquery-comparison', () => {

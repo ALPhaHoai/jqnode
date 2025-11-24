@@ -1,5 +1,5 @@
-import { getTextContent } from '../../utils';
-import type { HtmlNode, JQ } from '../../types';
+﻿import { getTextContent } from '../../utils';
+import type { JqElement, JQ } from '../../types';
 import JQClass from '../../jq';
 
 /**
@@ -20,10 +20,10 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
     }
 
     // 1. Identify all candidate tables (current nodes + descendants)
-    const candidateTables: HtmlNode[] = [];
+    const candidateTables: JqElement[] = [];
 
     // Check current nodes
-    this.nodes.forEach((node: HtmlNode) => {
+    this.nodes.forEach((node: JqElement) => {
         if (node.internalType === 'element' && node.name && node.name.toLowerCase() === 'table') {
             candidateTables.push(node);
         }
@@ -31,7 +31,7 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
 
     // Check descendants
     const descendantTables = this.find('table');
-    descendantTables.nodes.forEach((node: HtmlNode) => {
+    descendantTables.nodes.forEach((node: JqElement) => {
         candidateTables.push(node);
     });
 
@@ -40,7 +40,7 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
 
     const matchingTables = uniqueTables.filter((tableNode) => {
         // Extract headers from this table
-        let headerCells: HtmlNode[] = [];
+        let headerCells: JqElement[] = [];
 
         // Try to find headers in <thead>
         const thead = tableNode.children?.find(

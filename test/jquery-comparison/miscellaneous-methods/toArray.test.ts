@@ -1,5 +1,5 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode, JQ } from '../../../types';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JqElement, JQ } from '../../../types';
 
 describe('toArray() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -48,7 +48,7 @@ describe('toArray() method - Node-Query vs jQuery Comparison', () => {
         const jqArray = jqItems.toArray();
 
         // Each element should be a DOM node
-        nqArray.forEach((elem: HtmlNode, index: number) => {
+        nqArray.forEach((elem: JqElement, index: number) => {
             expect(elem.tagName).toBe(jqArray[index].tagName);
             expect(elem.id).toBe(jqArray[index].id);
         });
@@ -85,7 +85,7 @@ describe('toArray() method - Node-Query vs jQuery Comparison', () => {
         const jqArray = jqItems.toArray();
 
         // Should support array methods like map
-        const nqIds = nqArray.map((el: HtmlNode) => el.id);
+        const nqIds = nqArray.map((el: JqElement) => el.id);
         const jqIds = jqArray.map((el: HTMLElement) => el.id);
 
         expect(nqIds).toEqual(jqIds);
@@ -137,7 +137,7 @@ describe('toArray() method - Node-Query vs jQuery Comparison', () => {
         const nqArray = nqItems.toArray();
         const jqArray = jqItems.toArray();
 
-        const nqFiltered = nqArray.filter((el: HtmlNode) => el.id === 'item2');
+        const nqFiltered = nqArray.filter((el: JqElement) => el.id === 'item2');
         const jqFiltered = jqArray.filter((el: HTMLElement) => el.id === 'item2');
 
         expect(nqFiltered.length).toBe(jqFiltered.length);

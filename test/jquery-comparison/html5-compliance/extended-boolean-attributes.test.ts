@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('HTML5 Extended Boolean Attributes - jQuery Comparison', () => {
     test('should handle readonly attribute - jquery-comparison', () => {

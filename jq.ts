@@ -1,16 +1,16 @@
-/**
+﻿/**
  * jQuery-style wrapper class for working with HTML node trees.
  * Provides methods similar to jQuery for DOM manipulation and traversal.
  */
 
 import { setupParentReferences } from './selector';
-import type { HtmlNode } from './types';
+import type { JqElement } from './types';
 
 class JQ {
     /**
      * Global registry of all root nodes for selector searches
      */
-    static allRootNodes: HtmlNode[] = [];
+    static allRootNodes: JqElement[] = [];
 
     /**
      * Static property to preserve the class name in browser environments
@@ -28,8 +28,8 @@ class JQ {
     /**
      * Array of HTML nodes wrapped by this instance
      */
-    nodes: HtmlNode[];
-    [index: number]: HtmlNode | undefined;
+    nodes: JqElement[];
+    [index: number]: JqElement | undefined;
 
     /**
      * Length of the nodes array (jQuery compatibility)
@@ -41,7 +41,7 @@ class JQ {
     /**
      * Creates a new JQ instance.
      */
-    constructor(nodes?: HtmlNode[]) {
+    constructor(nodes?: JqElement[]) {
         this.nodes = nodes || [];
 
         // Set up parent references for the node tree only if nodes are DOM elements
@@ -93,7 +93,7 @@ class JQ {
     /**
      * Array-like access to nodes (jQuery compatibility)
      */
-    [Symbol.iterator](): Iterator<HtmlNode> {
+    [Symbol.iterator](): Iterator<JqElement> {
         return this.nodes[Symbol.iterator]();
     }
 

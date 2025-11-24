@@ -1,5 +1,5 @@
-import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { JqElement, CssSelector, JQ, UntilSelector } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,7 +7,7 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/nextUntil/
  */
 function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
-    const followingSiblings: HtmlNode[] = [];
+    const followingSiblings: JqElement[] = [];
     const parsedStopSelector =
         selector && typeof selector === 'string' ? parseSelector(selector) : null;
     const parsedFilterSelector = filter ? parseSelector(filter) : null;

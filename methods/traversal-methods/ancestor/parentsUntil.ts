@@ -1,5 +1,5 @@
-import { selectNodes } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+﻿import { selectNodes } from '../../../selector';
+import type { JqElement, CssSelector, JQ, UntilSelector } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,16 +7,16 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/parentsUntil/
  */
 function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
-    const ancestors: HtmlNode[] = [];
+    const ancestors: JqElement[] = [];
     const seen = new Set<string>();
-    const stopElements = new Set<HtmlNode>();
+    const stopElements = new Set<JqElement>();
 
     // Find stop elements if selector provided
     if (selector) {
         if (typeof selector === 'string') {
             const rootNodes = this._findCommonRoots(this.nodes);
             const stopNodes = selectNodes(rootNodes, selector);
-            stopNodes.forEach((node: HtmlNode) => stopElements.add(node));
+            stopNodes.forEach((node: JqElement) => stopElements.add(node));
         }
     }
 
@@ -25,7 +25,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
             let domCurrent = node._originalElement.parentElement;
             while (domCurrent && domCurrent.nodeType === 1) {
                 // Stop if we reach a stop element
-                const shouldStop = Array.from(stopElements).some((stopNode: HtmlNode) => {
+                const shouldStop = Array.from(stopElements).some((stopNode: JqElement) => {
                     if (stopNode._originalElement === domCurrent) return true;
                     if (stopNode.tagName === domCurrent!.tagName.toLowerCase()) {
                         const stopAttrs = stopNode.attributes || {};
@@ -52,7 +52,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
 
                 if (!seen.has(key)) {
                     seen.add(key);
-                    const domNode: HtmlNode = {
+                    const domNode: JqElement = {
                         type: 'element',
                         tagName: domCurrent.tagName.toLowerCase(),
                         attributes: attributes,
@@ -66,7 +66,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
                 domCurrent = domCurrent.parentElement;
             }
         } else {
-            let current: HtmlNode | undefined = node.parent;
+            let current: JqElement | undefined = node.parent;
             while (current) {
                 if (stopElements.has(current)) break;
 
@@ -85,7 +85,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
     if (filter) {
         const rootNodes = this._findCommonRoots(this.nodes);
         const matchingAncestors = selectNodes(rootNodes, filter);
-        resultNodes = ancestors.filter((ancestor: HtmlNode) =>
+        resultNodes = ancestors.filter((ancestor: JqElement) =>
             matchingAncestors.includes(ancestor),
         );
     }

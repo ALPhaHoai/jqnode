@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, IndexTarget } from '../../types';
+﻿import type { JqElement, JQ, IndexTarget } from '../../types';
 
 /**
  * Search for a given element from among the matched elements.
@@ -7,24 +7,24 @@ import type { HtmlNode, JQ, IndexTarget } from '../../types';
 function index(this: JQ, arg?: IndexTarget): number {
     // Case 1: No argument - return index of first element among its siblings
     if (arg === undefined) {
-        const first: HtmlNode = this.nodes[0];
+        const first: JqElement = this.nodes[0];
         if (!first) return -1;
 
         const parent = first.parent || first.parentNode;
         if (!parent) return -1;
 
         // Get siblings based on node type
-        let siblings: HtmlNode[] = [];
+        let siblings: JqElement[] = [];
         if (parent.children) {
             // Internal nodes or DOM Element.children (HTMLCollection or array-like)
-            siblings = Array.from(parent.children as unknown as ArrayLike<HtmlNode>) as HtmlNode[];
+            siblings = Array.from(parent.children as unknown as ArrayLike<JqElement>) as JqElement[];
             // Filter to ensure only elements are counted
-            siblings = siblings.filter((n: HtmlNode) => n.nodeType === 1 || n.internalType === 'element');
+            siblings = siblings.filter((n: JqElement) => n.nodeType === 1 || n.internalType === 'element');
         } else if (parent.childNodes) {
             // DOM nodes fallback
             siblings = (Array.from(parent.childNodes) as Node[]).filter(
                 (n: Node) => n.nodeType === 1,
-            ) as unknown as HtmlNode[];
+            ) as unknown as JqElement[];
         } else {
             return -1;
         }
@@ -34,19 +34,19 @@ function index(this: JQ, arg?: IndexTarget): number {
 
     // Case 2: Argument is a string (selector)
     if (typeof arg === 'string') {
-        const first: HtmlNode = this.nodes[0];
+        const first: JqElement = this.nodes[0];
         if (!first) return -1;
 
         try {
-            let allMatches: HtmlNode[] = [];
+            let allMatches: JqElement[] = [];
 
             // Try to use internal selector engine first
-            const roots = (this.constructor as { allRootNodes?: HtmlNode[] }).allRootNodes || [];
+            const roots = (this.constructor as { allRootNodes?: JqElement[] }).allRootNodes || [];
 
             if (roots.length > 0) {
                 // eslint-disable-next-line @typescript-eslint/no-require-imports
                 const { selectNodes } = require('../../selector');
-                roots.forEach((root: HtmlNode) => {
+                roots.forEach((root: JqElement) => {
                     const matches = selectNodes([root], arg);
                     allMatches = allMatches.concat(matches);
                 });
@@ -55,7 +55,7 @@ function index(this: JQ, arg?: IndexTarget): number {
             // If no matches found and we're in browser, try document.querySelectorAll
             if (allMatches.length === 0 && typeof document !== 'undefined') {
                 const matches = document.querySelectorAll(arg);
-                allMatches = Array.from(matches) as unknown as HtmlNode[];
+                allMatches = Array.from(matches) as unknown as JqElement[];
             }
 
             const target = first._originalElement || first;
@@ -72,15 +72,15 @@ function index(this: JQ, arg?: IndexTarget): number {
     }
 
     // Case 3: Argument is a DOM element or JQ object
-    let target: HtmlNode | JQ = arg as any;
+    let target: JqElement | JQ = arg as any;
     if (target instanceof this.constructor) {
         target = (target as JQ).nodes[0];
     }
 
     // If target is a JQ node, it might have _originalElement
-    const targetElem = (target as HtmlNode)._originalElement || target;
+    const targetElem = (target as JqElement)._originalElement || target;
 
-    return this.nodes.findIndex((node: HtmlNode) => {
+    return this.nodes.findIndex((node: JqElement) => {
         return (
             node === target ||
             node === targetElem ||

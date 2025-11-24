@@ -1,5 +1,5 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JqElement } from '../../../types';
 
 describe('addClass() method - jQuery Comparison', () => {
     const html = `
@@ -150,7 +150,7 @@ describe('addClass() method - jQuery Comparison', () => {
         jqDivs.addClass('bulk-add');
 
         // Check each element has the new class
-        nqDivs.nodes.forEach((node: HtmlNode, index: number) => {
+        nqDivs.nodes.forEach((node: JqElement, index: number) => {
             const nqClass = node.getAttribute('class');
             const jqClass = jqDivs.eq(index).attr('class');
             expect(nqClass).toContain('bulk-add');

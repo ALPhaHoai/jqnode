@@ -1,4 +1,4 @@
-import type { HtmlNode } from '../types';
+﻿import type { JqElement } from '../types';
 
 /**
  * Helper method to check if an element has a specific descendant.
@@ -6,7 +6,7 @@ import type { HtmlNode } from '../types';
  * @param targetElement - The target descendant element
  * @returns True if the element contains the target as a descendant
  */
-function _hasDescendant(element: HtmlNode, targetElement: HtmlNode): boolean {
+function _hasDescendant(element: JqElement, targetElement: JqElement): boolean {
     if (!element.children) {
         return false;
     }

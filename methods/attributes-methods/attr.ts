@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, AttributeValue, GetterSetterReturn } from '../../types';
+﻿import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets an attribute on the first element in the collection.
@@ -72,7 +72,7 @@ function attr(
     }
 
     // Setter: attr(name, value) or attr(name, function)
-    this.nodes.forEach((element: HtmlNode, index: number) => {
+    this.nodes.forEach((element: JqElement, index: number) => {
         if (!element) return;
 
         let valToSet: AttributeValue | undefined;

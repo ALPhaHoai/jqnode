@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Tests for the .load() static method
  */
 
 import $ from '../../../index';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 describe('$.load()', () => {
     beforeEach(() => {
@@ -206,7 +206,7 @@ describe('$.load()', () => {
             const table = root('.data-table');
             const headers = table
                 .find('th')
-                .map((i: number, th: HtmlNode) => $(th).text())
+                .map((i: number, th: JqElement) => $(th).text())
                 .get();
             const rows = table.find('tr:not(:first-child)');
 
@@ -228,7 +228,7 @@ describe('$.load()', () => {
 
             const root = $.load(html);
             const products = root('.product')
-                .map(function (i: number, el: HtmlNode) {
+                .map(function (i: number, el: JqElement) {
                     const $el = $(el);
                     return {
                         id: $el.attr('data-id'),

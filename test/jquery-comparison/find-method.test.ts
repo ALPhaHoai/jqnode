@@ -1,7 +1,7 @@
-import $ from '../../index';
+﻿import $ from '../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../types';
+import { JqElement } from '../../types';
 
 import JQ from '../../jq';
 
@@ -54,7 +54,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         expect(nqPElements.nodes).toHaveLength(2);
         expect(
             nqPElements.nodes.every(
-                (node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'p',
+                (node: JqElement) => node.tagName && node.tagName.toLowerCase() === 'p',
             ),
         ).toBe(true);
         expect(jqPElements.length).toBe(2);
@@ -68,7 +68,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         expect(nqSpanElements.nodes).toHaveLength(2);
         expect(
             nqSpanElements.nodes.every(
-                (node: HtmlNode) => node.tagName && node.tagName.toLowerCase() === 'span',
+                (node: JqElement) => node.tagName && node.tagName.toLowerCase() === 'span',
             ),
         ).toBe(true);
         expect(jqSpanElements.length).toBe(2);
@@ -127,7 +127,7 @@ describe('find() method - Node-Query vs jQuery Comparison', () => {
         expect(nqAllItems.nodes).toHaveLength(3);
         expect(
             nqAllItems.nodes.every(
-                (node: HtmlNode) =>
+                (node: JqElement) =>
                     node.getAttribute('class') && (node.getAttribute('class') as string).includes('item'),
             ),
         ).toBe(true);

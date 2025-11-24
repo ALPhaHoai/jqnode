@@ -1,4 +1,4 @@
-import jq from '../index';
+﻿import jq from '../index';
 
 // ============================================
 // EXACTLY the syntax you requested:

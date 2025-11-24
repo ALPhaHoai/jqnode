@@ -1,5 +1,5 @@
-import { parseSelector, nodeMatchesSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+﻿import { parseSelector, nodeMatchesSelector } from '../../../selector';
+import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -23,11 +23,11 @@ function closest(this: JQ, selector?: CssSelector): JQ {
         return result;
     }
 
-    const results: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const results: JqElement[] = [];
+    const seen = new Set<JqElement>();
 
     for (const node of this.nodes) {
-        let current: HtmlNode | undefined = node;
+        let current: JqElement | undefined = node;
 
         // Walk up the tree including the current node
         while (current) {
@@ -45,7 +45,7 @@ function closest(this: JQ, selector?: CssSelector): JQ {
                 }
             }
             // Handle both internal nodes and DOM elements for parent traversal
-            current = (current.parent || current.parentNode) as HtmlNode | undefined;
+            current = (current.parent || current.parentNode) as JqElement | undefined;
         }
     }
     return new JQClass(results);

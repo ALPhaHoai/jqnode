@@ -1,4 +1,4 @@
-import $ from '../../index';
+﻿import $ from '../../index';
 import jQuery from 'jquery';
 
 describe('HTML Parsing - Node-Query vs jQuery Comparison', () => {

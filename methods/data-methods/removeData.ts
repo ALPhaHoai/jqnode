@@ -1,4 +1,4 @@
-import type { JQ } from '../../types';
+﻿import type { JQ } from '../../types';
 import { initDataAttributes, toCamelCase, NodeWithData } from '../../helpers/dataHelper';
 
 /**

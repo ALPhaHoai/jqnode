@@ -1,6 +1,6 @@
-import type { HtmlNode } from '../types';
+﻿import type { JqElement } from '../types';
 
-export interface NodeWithData extends HtmlNode {
+export interface NodeWithData extends JqElement {
     _jqData?: Record<string, unknown>;
     _jqDataParsed?: boolean;
 }

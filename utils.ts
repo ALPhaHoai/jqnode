@@ -1,4 +1,4 @@
-import type { HtmlNode } from './types';
+﻿import type { JqElement } from './types';
 
 /**
  * Utility functions for working with the HTML node tree.
@@ -9,7 +9,7 @@ import type { HtmlNode } from './types';
  * @param node - The node to get text content from
  * @returns The concatenated text content
  */
-function getTextContent(node: HtmlNode): string {
+function getTextContent(node: JqElement): string {
     if (node.internalType === 'text') {
         return node.textData || '';
     }
@@ -50,7 +50,7 @@ function unescapeHtml(text: string): string {
  * @param node - The node to convert to HTML
  * @returns The HTML representation of the node
  */
-function nodeToHTML(node: HtmlNode): string {
+function nodeToHTML(node: JqElement): string {
     if (node.internalType === 'text') {
         return node.textData || '';
     }

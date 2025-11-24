@@ -1,4 +1,4 @@
-import type { HtmlNode } from './types';
+﻿import type { JqElement } from './types';
 
 /**
  * CSS utility functions shared across CSS-related methods.
@@ -67,12 +67,12 @@ export function needsPxUnit(prop: string): boolean {
 /**
  * Get computed style from an element.
  */
-export function getComputedStyleValue(element: HtmlNode, property: string): string | undefined {
+export function getComputedStyleValue(element: JqElement, property: string): string | undefined {
     const camelProp = camelCase(property);
     const hyphenProp = hyphenate(property);
 
     // Get the actual DOM element from internal node structure if needed
-    let domElement: Element | HtmlNode = element;
+    let domElement: Element | JqElement = element;
     if (element._originalElement) {
         domElement = element._originalElement as Element;
     }
@@ -141,7 +141,7 @@ export function getComputedStyleValue(element: HtmlNode, property: string): stri
 /**
  * Set style on an element.
  */
-export function setStyleValue(element: HtmlNode, property: string, val: string | number): void {
+export function setStyleValue(element: JqElement, property: string, val: string | number): void {
     const camelProp = camelCase(property);
     let finalValue = val;
 
@@ -151,7 +151,7 @@ export function setStyleValue(element: HtmlNode, property: string, val: string |
     }
 
     // Get actual DOM element
-    let domElement: Element | HtmlNode = element;
+    let domElement: Element | JqElement = element;
     if (element._originalElement) {
         domElement = element._originalElement as Element;
     }

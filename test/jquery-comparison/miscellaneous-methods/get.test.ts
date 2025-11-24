@@ -1,5 +1,5 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode, JQ } from '../../../types';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
+import { JqElement, JQ } from '../../../types';
 
 describe('get() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -103,7 +103,7 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqArray = nqItems.get();
         const jqArray = jqItems.get();
 
-        const nqIds = nqArray.map((el: HtmlNode) => el.id);
+        const nqIds = nqArray.map((el: JqElement) => el.id);
         const jqIds = jqArray.map((el: HTMLElement) => el.id);
 
         expect(nqIds).toEqual(jqIds);

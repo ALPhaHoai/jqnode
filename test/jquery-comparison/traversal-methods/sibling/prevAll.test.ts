@@ -1,6 +1,6 @@
-import jQuery from 'jquery';
+﻿import jQuery from 'jquery';
 import { createTestDom } from '../../../utils/jquery-comparison-helpers';
-import type { HtmlNode, JQ } from '../../../../types';
+import type { JqElement, JQ } from '../../../../types';
 
 describe('prevAll() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -29,7 +29,7 @@ describe('prevAll() method - Node-Query vs jQuery Comparison', () => {
         expect(nqPrevAll.nodes).toHaveLength(3);
         expect(jqPrevAll.length).toBe(3);
 
-        const nqTexts = nqPrevAll.nodes.map((node: HtmlNode) => {
+        const nqTexts = nqPrevAll.nodes.map((node: JqElement) => {
             if (node._originalElement) {
                 return node._originalElement.textContent;
             }

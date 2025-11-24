@@ -1,5 +1,5 @@
-import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,8 +7,8 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/siblings/
  */
 function siblings(this: JQ, selector?: CssSelector): JQ {
-    const allSiblings: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const allSiblings: JqElement[] = [];
+    const seen = new Set<JqElement>();
 
     // Parse selector if provided
     let parsedSelector = null;
@@ -18,7 +18,7 @@ function siblings(this: JQ, selector?: CssSelector): JQ {
 
     for (const node of this.nodes) {
         if (node.parent && node.parent.children) {
-            node.parent.children.forEach((sibling: HtmlNode) => {
+            node.parent.children.forEach((sibling: JqElement) => {
                 // Exclude the node itself and text nodes
                 if (sibling !== node && sibling.internalType === 'element' && !seen.has(sibling)) {
                     seen.add(sibling);

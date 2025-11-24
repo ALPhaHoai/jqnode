@@ -1,7 +1,7 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode, JQ } from '../../../types';
+import { JqElement, JQ } from '../../../types';
 
 describe('map() method - Node-Query vs jQuery Comparison', () => {
     let elements: JQ, jqElements: JQuery<HTMLElement>;
@@ -20,7 +20,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should transform elements into new values - jquery-comparison', () => {
-        const nqResult = elements.map((index: number, element: HtmlNode) => {
+        const nqResult = elements.map((index: number, element: JqElement) => {
             return `Item ${index + 1}: ${$(element).text()}`;
         });
         const jqResult = jqElements.map((index: number, element: HTMLElement) => {
@@ -40,7 +40,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should filter out null values - jquery-comparison', () => {
-        const nqResult = elements.map((index: number, element: HtmlNode) => {
+        const nqResult = elements.map((index: number, element: JqElement) => {
             return index % 2 === 0 ? $(element).text() : null;
         });
         const jqResult = jqElements.map((index: number, element: HTMLElement) => {
@@ -55,7 +55,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should filter out undefined values - jquery-comparison', () => {
-        const nqResult = elements.map((index: number, element: HtmlNode) => {
+        const nqResult = elements.map((index: number, element: JqElement) => {
             return index % 2 === 0 ? $(element).text() : undefined;
         });
         const jqResult = jqElements.map((index: number, element: HTMLElement) => {
@@ -94,7 +94,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqTypeElements = nqTypes.find('.test');
         const jqTypeElements = jqTypes.find('.test');
 
-        const nqResult = nqTypeElements.map((index: number, element: HtmlNode) => {
+        const nqResult = nqTypeElements.map((index: number, element: JqElement) => {
             if (index === 0) return $(element).attr('data-value'); // string
             if (index === 1) return parseInt($(element).attr('data-value')); // number
         });
@@ -112,7 +112,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle object returns - jquery-comparison', () => {
-        const nqResult = elements.map((index: number, element: HtmlNode) => {
+        const nqResult = elements.map((index: number, element: JqElement) => {
             return {
                 index: index,
                 text: $(element).text(),
@@ -136,7 +136,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     });
 
     test('map() should handle array returns - jquery-comparison', () => {
-        const nqResult = elements.map((index: number, element: HtmlNode) => {
+        const nqResult = elements.map((index: number, element: JqElement) => {
             return [index, $(element).text()];
         });
         const jqResult = jqElements.map((index: number, element: HTMLElement) => {
@@ -185,7 +185,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqFiltered = elements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
         const jqFiltered = jqElements.filter((index: number) => index % 2 === 0); // indices 0, 2, 4
 
-        const nqResult = nqFiltered.map((index: number, element: HtmlNode) =>
+        const nqResult = nqFiltered.map((index: number, element: JqElement) =>
             $(element).text().toUpperCase(),
         );
         const jqResult = jqFiltered.map((index: number, element: HTMLElement) =>
@@ -203,7 +203,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
         const nqSliced = elements.slice(1, 4); // Second, Third, Fourth
         const jqSliced = jqElements.slice(1, 4); // Second, Third, Fourth
 
-        const nqResult = nqSliced.map((index: number, element: HtmlNode) =>
+        const nqResult = nqSliced.map((index: number, element: JqElement) =>
             $(element).attr('data-id'),
         );
         const jqResult = jqSliced.map((index: number, element: HTMLElement) =>
@@ -220,7 +220,7 @@ describe('map() method - Node-Query vs jQuery Comparison', () => {
     test('map() should support chaining - map() results can be chained further - jquery-comparison', () => {
         // Note: This test is tricky because jQuery's map() returns a regular array, not a jQuery object
         // So we'll test the mapping behavior directly
-        const nqMapped = elements.map((index: number, element: HtmlNode) => $(element).text());
+        const nqMapped = elements.map((index: number, element: JqElement) => $(element).text());
         const jqMapped = jqElements
             .map((index: number, element: HTMLElement) => jQuery(element).text())
             .get();

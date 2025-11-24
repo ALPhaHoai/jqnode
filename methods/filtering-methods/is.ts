@@ -1,5 +1,5 @@
-import { selectNodes } from '../../selector';
-import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
+﻿import { selectNodes } from '../../selector';
+import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 
 /**
  * Checks the current matched set of elements against a selector, element, function, or JQ object and returns true if at least one matches.
@@ -8,19 +8,19 @@ import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
  */
 function is(
     this: JQ,
-    selectorOrFunctionOrElement: CssSelector | FilterCallback | HtmlNode | JQ,
+    selectorOrFunctionOrElement: CssSelector | FilterCallback | JqElement | JQ,
 ): boolean {
     if (typeof selectorOrFunctionOrElement === 'string') {
         // CSS selector
         const rootNodes = this._findCommonRoots(this.nodes);
         const allMatches = selectNodes(rootNodes, selectorOrFunctionOrElement);
 
-        const result = this.nodes.some((node: HtmlNode) => allMatches.includes(node));
+        const result = this.nodes.some((node: JqElement) => allMatches.includes(node));
         return result;
     } else if (typeof selectorOrFunctionOrElement === 'function') {
         // Function test
         for (let i = 0; i < this.nodes.length; i++) {
-            const node: HtmlNode = this.nodes[i];
+            const node: JqElement = this.nodes[i];
             try {
                 const result = selectorOrFunctionOrElement.call(node, i, node);
                 if (result) {
@@ -44,7 +44,7 @@ function is(
             Array.isArray(selectorOrFunctionOrElement.nodes)
         ) {
             // JQ object - check if any of our nodes are in the other JQ object
-            const result = this.nodes.some((node: HtmlNode) =>
+            const result = this.nodes.some((node: JqElement) =>
                 selectorOrFunctionOrElement.nodes.includes(node),
             );
             return result;

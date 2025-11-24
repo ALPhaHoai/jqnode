@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for jQuery static utility methods
  */
 

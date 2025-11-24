@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for $.title() static method and .title() instance method
  */
 

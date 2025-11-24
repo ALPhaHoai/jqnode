@@ -1,4 +1,4 @@
-import type { JQ } from '../../types';
+﻿import type { JQ } from '../../types';
 
 /**
  * Checks if the first element has the specified class.

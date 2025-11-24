@@ -1,10 +1,10 @@
-import { HtmlNode } from '../../dom/HtmlNode';
+﻿import { JqElement } from '../../types';
 import { JqNode } from '../../dom/JqNode';
 
 describe('JqNode', () => {
     describe('Node Type Constants', () => {
         it('should have correct node type constants', () => {
-            const node = new HtmlNode('element', 'div');
+            const node = new JqElement('element', 'div');
 
             expect(node.ELEMENT_NODE).toBe(1);
             expect(node.ATTRIBUTE_NODE).toBe(2);
@@ -18,7 +18,7 @@ describe('JqNode', () => {
         });
 
         it('should have correct document position constants', () => {
-            const node = new HtmlNode('element', 'div');
+            const node = new JqElement('element', 'div');
 
             expect(node.DOCUMENT_POSITION_DISCONNECTED).toBe(1);
             expect(node.DOCUMENT_POSITION_PRECEDING).toBe(2);
@@ -31,54 +31,54 @@ describe('JqNode', () => {
 
     describe('Node Properties', () => {
         it('should set correct nodeType for element nodes', () => {
-            const element = new HtmlNode('element', 'div');
+            const element = new JqElement('element', 'div');
             expect(element.nodeType).toBe(1); // ELEMENT_NODE
         });
 
         it('should set correct nodeType for text nodes', () => {
-            const text = new HtmlNode('text');
+            const text = new JqElement('text');
             expect(text.nodeType).toBe(3); // TEXT_NODE
         });
 
         it('should set correct nodeType for comment nodes', () => {
-            const comment = new HtmlNode('comment');
+            const comment = new JqElement('comment');
             expect(comment.nodeType).toBe(8); // COMMENT_NODE
         });
 
         it('should return correct nodeName for element nodes', () => {
-            const element = new HtmlNode('element', 'div');
+            const element = new JqElement('element', 'div');
             expect(element.nodeName).toBe('DIV');
         });
 
         it('should return correct nodeName for text nodes', () => {
-            const text = new HtmlNode('text');
+            const text = new JqElement('text');
             expect(text.nodeName).toBe('#text');
         });
 
         it('should return correct nodeName for comment nodes', () => {
-            const comment = new HtmlNode('comment');
+            const comment = new JqElement('comment');
             expect(comment.nodeName).toBe('#comment');
         });
 
         it('should return nodeValue for text nodes', () => {
-            const text = new HtmlNode('text');
+            const text = new JqElement('text');
             text.data = 'Hello World';
             expect(text.nodeValue).toBe('Hello World');
         });
 
         it('should return nodeValue for comment nodes', () => {
-            const comment = new HtmlNode('comment');
+            const comment = new JqElement('comment');
             comment.data = 'This is a comment';
             expect(comment.nodeValue).toBe('This is a comment');
         });
 
         it('should return null nodeValue for element nodes', () => {
-            const element = new HtmlNode('element', 'div');
+            const element = new JqElement('element', 'div');
             expect(element.nodeValue).toBe(null);
         });
 
         it('should set nodeValue for text nodes', () => {
-            const text = new HtmlNode('text');
+            const text = new JqElement('text');
             text.nodeValue = 'New value';
             expect(text.data).toBe('New value');
         });
@@ -86,9 +86,9 @@ describe('JqNode', () => {
 
     describe('Tree Traversal Properties', () => {
         it('should have correct firstChild property', () => {
-            const parent = new HtmlNode('element', 'div');
-            const child1 = new HtmlNode('element', 'span');
-            const child2 = new HtmlNode('element', 'p');
+            const parent = new JqElement('element', 'div');
+            const child1 = new JqElement('element', 'span');
+            const child2 = new JqElement('element', 'p');
 
             parent.appendChild(child1 as unknown as Node);
             parent.appendChild(child2 as unknown as Node);
@@ -97,9 +97,9 @@ describe('JqNode', () => {
         });
 
         it('should have correct lastChild property', () => {
-            const parent = new HtmlNode('element', 'div');
-            const child1 = new HtmlNode('element', 'span');
-            const child2 = new HtmlNode('element', 'p');
+            const parent = new JqElement('element', 'div');
+            const child1 = new JqElement('element', 'span');
+            const child2 = new JqElement('element', 'p');
 
             parent.appendChild(child1 as unknown as Node);
             parent.appendChild(child2 as unknown as Node);
@@ -108,19 +108,19 @@ describe('JqNode', () => {
         });
 
         it('should return null for firstChild when no children', () => {
-            const parent = new HtmlNode('element', 'div');
+            const parent = new JqElement('element', 'div');
             expect(parent.firstChild).toBe(null);
         });
 
         it('should return null for lastChild when no children', () => {
-            const parent = new HtmlNode('element', 'div');
+            const parent = new JqElement('element', 'div');
             expect(parent.lastChild).toBe(null);
         });
 
         it('should have correct nextSibling property', () => {
-            const parent = new HtmlNode('element', 'div');
-            const child1 = new HtmlNode('element', 'span');
-            const child2 = new HtmlNode('element', 'p');
+            const parent = new JqElement('element', 'div');
+            const child1 = new JqElement('element', 'span');
+            const child2 = new JqElement('element', 'p');
 
             child1.next = child2;
 
@@ -128,9 +128,9 @@ describe('JqNode', () => {
         });
 
         it('should have correct previousSibling property', () => {
-            const parent = new HtmlNode('element', 'div');
-            const child1 = new HtmlNode('element', 'span');
-            const child2 = new HtmlNode('element', 'p');
+            const parent = new JqElement('element', 'div');
+            const child1 = new JqElement('element', 'span');
+            const child2 = new JqElement('element', 'p');
 
             child2.prev = child1;
 
@@ -138,8 +138,8 @@ describe('JqNode', () => {
         });
 
         it('should have correct parentNode property', () => {
-            const parent = new HtmlNode('element', 'div');
-            const child = new HtmlNode('element', 'span');
+            const parent = new JqElement('element', 'div');
+            const child = new JqElement('element', 'span');
 
             child.parent = parent;
 
@@ -150,8 +150,8 @@ describe('JqNode', () => {
     describe('Node Methods', () => {
         describe('appendChild', () => {
             it('should append child to parent', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
 
                 parent.appendChild(child as unknown as Node);
 
@@ -160,9 +160,9 @@ describe('JqNode', () => {
             });
 
             it('should append multiple children in order', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child1 = new HtmlNode('element', 'span');
-                const child2 = new HtmlNode('element', 'p');
+                const parent = new JqElement('element', 'div');
+                const child1 = new JqElement('element', 'span');
+                const child2 = new JqElement('element', 'p');
 
                 parent.appendChild(child1 as unknown as Node);
                 parent.appendChild(child2 as unknown as Node);
@@ -174,8 +174,8 @@ describe('JqNode', () => {
 
         describe('removeChild', () => {
             it('should remove child from parent', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
 
                 parent.appendChild(child as unknown as Node);
                 parent.removeChild(child as unknown as Node);
@@ -185,8 +185,8 @@ describe('JqNode', () => {
             });
 
             it('should throw error when removing non-existent child', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
 
                 expect(() => {
                     parent.removeChild(child as unknown as Node);
@@ -196,10 +196,10 @@ describe('JqNode', () => {
 
         describe('insertBefore', () => {
             it('should insert node before reference child', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child1 = new HtmlNode('element', 'span');
-                const child2 = new HtmlNode('element', 'p');
-                const newChild = new HtmlNode('element', 'a');
+                const parent = new JqElement('element', 'div');
+                const child1 = new JqElement('element', 'span');
+                const child2 = new JqElement('element', 'p');
+                const newChild = new JqElement('element', 'a');
 
                 parent.appendChild(child1 as unknown as Node);
                 parent.appendChild(child2 as unknown as Node);
@@ -211,8 +211,8 @@ describe('JqNode', () => {
             });
 
             it('should append when reference child is null', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
 
                 parent.insertBefore(child as unknown as Node, null);
 
@@ -220,9 +220,9 @@ describe('JqNode', () => {
             });
 
             it('should throw error when reference child not found', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
-                const ref = new HtmlNode('element', 'p');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
+                const ref = new JqElement('element', 'p');
 
                 expect(() => {
                     parent.insertBefore(child as unknown as Node, ref as unknown as Node);
@@ -232,9 +232,9 @@ describe('JqNode', () => {
 
         describe('replaceChild', () => {
             it('should replace old child with new child', () => {
-                const parent = new HtmlNode('element', 'div');
-                const oldChild = new HtmlNode('element', 'span');
-                const newChild = new HtmlNode('element', 'p');
+                const parent = new JqElement('element', 'div');
+                const oldChild = new JqElement('element', 'span');
+                const newChild = new JqElement('element', 'p');
 
                 parent.appendChild(oldChild as unknown as Node);
                 parent.replaceChild(newChild as unknown as Node, oldChild as unknown as Node);
@@ -246,9 +246,9 @@ describe('JqNode', () => {
             });
 
             it('should throw error when child to replace not found', () => {
-                const parent = new HtmlNode('element', 'div');
-                const oldChild = new HtmlNode('element', 'span');
-                const newChild = new HtmlNode('element', 'p');
+                const parent = new JqElement('element', 'div');
+                const oldChild = new JqElement('element', 'span');
+                const newChild = new JqElement('element', 'p');
 
                 expect(() => {
                     parent.replaceChild(newChild as unknown as Node, oldChild as unknown as Node);
@@ -258,8 +258,8 @@ describe('JqNode', () => {
 
         describe('hasChildNodes', () => {
             it('should return true when node has children', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
 
                 parent.appendChild(child as unknown as Node);
 
@@ -267,16 +267,16 @@ describe('JqNode', () => {
             });
 
             it('should return false when node has no children', () => {
-                const parent = new HtmlNode('element', 'div');
+                const parent = new JqElement('element', 'div');
                 expect(parent.hasChildNodes()).toBe(false);
             });
         });
 
         describe('cloneNode', () => {
             it('should create shallow clone by default', () => {
-                const node = new HtmlNode('element', 'div');
+                const node = new JqElement('element', 'div');
                 node.setAttribute('class', 'test');
-                const child = new HtmlNode('element', 'span');
+                const child = new JqElement('element', 'span');
                 node.appendChild(child as unknown as Node);
 
                 const clone = node.cloneNode();
@@ -288,9 +288,9 @@ describe('JqNode', () => {
             });
 
             it('should create deep clone when deep=true', () => {
-                const node = new HtmlNode('element', 'div');
+                const node = new JqElement('element', 'div');
                 node.setAttribute('class', 'test');
-                const child = new HtmlNode('element', 'span');
+                const child = new JqElement('element', 'span');
                 child.setAttribute('id', 'child');
                 node.appendChild(child as unknown as Node);
 
@@ -306,9 +306,9 @@ describe('JqNode', () => {
 
         describe('contains', () => {
             it('should return true when node contains descendant', () => {
-                const parent = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
-                const grandchild = new HtmlNode('element', 'a');
+                const parent = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
+                const grandchild = new JqElement('element', 'a');
 
                 parent.appendChild(child as unknown as Node);
                 child.appendChild(grandchild as unknown as Node);
@@ -317,39 +317,39 @@ describe('JqNode', () => {
             });
 
             it('should return false when node does not contain target', () => {
-                const node1 = new HtmlNode('element', 'div');
-                const node2 = new HtmlNode('element', 'span');
+                const node1 = new JqElement('element', 'div');
+                const node2 = new JqElement('element', 'span');
 
                 expect(node1.contains(node2 as unknown as Node)).toBe(false);
             });
 
             it('should return false when comparing with self', () => {
-                const node = new HtmlNode('element', 'div');
+                const node = new JqElement('element', 'div');
                 expect(node.contains(node as unknown as Node)).toBe(false);
             });
         });
 
         describe('isEqualNode', () => {
             it('should return true for equal nodes', () => {
-                const node1 = new HtmlNode('element', 'div');
+                const node1 = new JqElement('element', 'div');
                 node1.setAttribute('class', 'test');
 
-                const node2 = new HtmlNode('element', 'div');
+                const node2 = new JqElement('element', 'div');
                 node2.setAttribute('class', 'test');
 
                 expect(node1.isEqualNode(node2 as unknown as Node)).toBe(true);
             });
 
             it('should return false for different node types', () => {
-                const element = new HtmlNode('element', 'div');
-                const text = new HtmlNode('text');
+                const element = new JqElement('element', 'div');
+                const text = new JqElement('text');
 
                 expect(element.isEqualNode(text as unknown as Node)).toBe(false);
             });
 
             it('should return false for different tag names', () => {
-                const node1 = new HtmlNode('element', 'div');
-                const node2 = new HtmlNode('element', 'span');
+                const node1 = new JqElement('element', 'div');
+                const node2 = new JqElement('element', 'span');
 
                 expect(node1.isEqualNode(node2 as unknown as Node)).toBe(false);
             });
@@ -357,13 +357,13 @@ describe('JqNode', () => {
 
         describe('isSameNode', () => {
             it('should return true for same node reference', () => {
-                const node = new HtmlNode('element', 'div');
+                const node = new JqElement('element', 'div');
                 expect(node.isSameNode(node as unknown as Node)).toBe(true);
             });
 
             it('should return false for different nodes', () => {
-                const node1 = new HtmlNode('element', 'div');
-                const node2 = new HtmlNode('element', 'div');
+                const node1 = new JqElement('element', 'div');
+                const node2 = new JqElement('element', 'div');
 
                 expect(node1.isSameNode(node2 as unknown as Node)).toBe(false);
             });
@@ -371,16 +371,16 @@ describe('JqNode', () => {
 
         describe('textContent', () => {
             it('should get textContent for text node', () => {
-                const text = new HtmlNode('text');
+                const text = new JqElement('text');
                 text.data = 'Hello';
                 expect(text.textContent).toBe('Hello');
             });
 
             it('should get textContent for element with text children', () => {
-                const parent = new HtmlNode('element', 'div');
-                const text1 = new HtmlNode('text');
+                const parent = new JqElement('element', 'div');
+                const text1 = new JqElement('text');
                 text1.data = 'Hello ';
-                const text2 = new HtmlNode('text');
+                const text2 = new JqElement('text');
                 text2.data = 'World';
 
                 parent.appendChild(text1 as unknown as Node);
@@ -390,7 +390,7 @@ describe('JqNode', () => {
             });
 
             it('should set textContent on element', () => {
-                const element = new HtmlNode('element', 'div');
+                const element = new JqElement('element', 'div');
                 element.textContent = 'Test content';
 
                 expect(element.children.length).toBe(1);
@@ -399,8 +399,8 @@ describe('JqNode', () => {
             });
 
             it('should replace existing children when setting textContent', () => {
-                const element = new HtmlNode('element', 'div');
-                const child = new HtmlNode('element', 'span');
+                const element = new JqElement('element', 'div');
+                const child = new JqElement('element', 'span');
                 element.appendChild(child as unknown as Node);
 
                 element.textContent = 'New content';

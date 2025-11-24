@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../../types';
+﻿import type { JqElement, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,20 +7,20 @@ import JQClass from '../../../jq';
  * @returns The JQ instance for chaining
  * @see https://api.jquery.com/wrapAll/
  */
-function wrapAll(this: JQ, wrappingElement: string | HtmlNode | JQ): JQ {
+function wrapAll(this: JQ, wrappingElement: string | JqElement | JQ): JQ {
     if (this.nodes.length === 0) {
         return this;
     }
 
     // 1. Create a deep clone of the wrapping structure
-    let wrapperStructure: HtmlNode[];
+    let wrapperStructure: JqElement[];
 
     if (typeof wrappingElement === 'string') {
         wrapperStructure = this._normalizeContent(wrappingElement).map((n) => this._cloneNode(n));
     } else if ((wrappingElement as any).nodes && Array.isArray((wrappingElement as any).nodes)) {
         wrapperStructure = (wrappingElement as JQ).nodes.map((n) => this._cloneNode(n));
     } else {
-        wrapperStructure = this._normalizeContent(wrappingElement as HtmlNode).map((n) =>
+        wrapperStructure = this._normalizeContent(wrappingElement as JqElement).map((n) =>
             this._cloneNode(n),
         );
     }

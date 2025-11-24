@@ -1,4 +1,4 @@
-// Note: fn-extension tests validate adding custom methods to $.fn (or jQuery.fn)
+﻿// Note: fn-extension tests validate adding custom methods to $.fn (or jQuery.fn)
 // jQuery supports this pattern, so we compare both libraries
 import $ from '../../index';
 import jQuery from 'jquery';

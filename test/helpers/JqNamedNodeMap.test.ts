@@ -1,13 +1,13 @@
-import { JqNamedNodeMap } from '../../dom/JqNamedNodeMap';
+﻿import { JqNamedNodeMap } from '../../dom/JqNamedNodeMap';
 import { JqAttr } from '../../dom/JqAttr';
-import { HtmlNode } from '../../types';
+import { JqElement } from '../../types';
 
 describe('JqNamedNodeMap', () => {
-    let node: HtmlNode;
+    let node: JqElement;
     let attributes: JqNamedNodeMap;
 
     beforeEach(() => {
-        node = new HtmlNode('element', 'div');
+        node = new JqElement('element', 'div');
         node.setAttribute('id', 'test-id');
         node.setAttribute('class', 'test-class');
         node.setAttribute('data-value', '123');

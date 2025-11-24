@@ -1,4 +1,4 @@
-/**
+﻿/**
  * HTML entity decoding utilities.
  * Complete HTML5 entity map with all 2231 entities from the WHATWG specification.
  */

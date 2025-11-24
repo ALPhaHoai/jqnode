@@ -1,4 +1,4 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 
 describe('wrapInner() method - Node-Query vs jQuery Comparison', () => {
     test('wrapInner() should wrap inner content - jquery-comparison', () => {

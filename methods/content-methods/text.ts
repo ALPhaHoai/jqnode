@@ -1,5 +1,5 @@
-import { getTextContent, unescapeHtml } from '../../utils';
-import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
+﻿import { getTextContent, unescapeHtml } from '../../utils';
+import type { JqElement, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the text content of elements.
@@ -9,11 +9,11 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
     if (value === undefined) {
         // Get text content from element nodes only
         const elementNodes = this.nodes.filter(
-            (node: HtmlNode) => node.internalType === 'element' || node.nodeType === 1,
+            (node: JqElement) => node.internalType === 'element' || node.nodeType === 1,
         );
 
         // Check if any element is detached (from fractional eq() indices)
-        if (elementNodes.some((node: HtmlNode) => node._detached)) {
+        if (elementNodes.some((node: JqElement) => node._detached)) {
             return '';
         }
 
@@ -22,7 +22,7 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
         }
 
         const result = elementNodes
-            .map((node: HtmlNode) => {
+            .map((node: JqElement) => {
                 // Use HTML5 textContent property as single source of truth
                 if ('textContent' in node) {
                     return node.textContent || '';
@@ -37,7 +37,7 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
     }
 
     // Set text content on all elements
-    this.nodes.forEach((node: HtmlNode) => {
+    this.nodes.forEach((node: JqElement) => {
         // Use HTML5 textContent property as single source of truth
         if ('textContent' in node) {
             node.textContent = value;

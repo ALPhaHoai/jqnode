@@ -1,25 +1,25 @@
-import { JqHTMLCollection } from '../../dom/JqHTMLCollection';
-import { HtmlNode } from '../../types';
+﻿import { JqHTMLCollection } from '../../dom/JqHTMLCollection';
+import { JqElement } from '../../types';
 
 describe('JqHTMLCollection', () => {
-    let elements: HtmlNode[];
+    let elements: JqElement[];
     let collection: JqHTMLCollection;
 
     beforeEach(() => {
         // Create test elements
         elements = [];
 
-        const div1 = new HtmlNode('element', 'div');
+        const div1 = new JqElement('element', 'div');
         div1.setAttribute('id', 'first');
         div1.setAttribute('name', 'div-one');
         elements.push(div1);
 
-        const div2 = new HtmlNode('element', 'div');
+        const div2 = new JqElement('element', 'div');
         div2.setAttribute('id', 'second');
         div2.setAttribute('name', 'div-two');
         elements.push(div2);
 
-        const span = new HtmlNode('element', 'span');
+        const span = new JqElement('element', 'span');
         span.setAttribute('id', 'third');
         elements.push(span);
 
@@ -81,11 +81,11 @@ describe('JqHTMLCollection', () => {
     });
 
     it('should prioritize ID over name in namedItem', () => {
-        const div = new HtmlNode('element', 'div');
+        const div = new JqElement('element', 'div');
         div.setAttribute('id', 'priority-test');
         div.setAttribute('name', 'priority-test');
 
-        const div2 = new HtmlNode('element', 'div');
+        const div2 = new JqElement('element', 'div');
         div2.setAttribute('name', 'priority-test');
 
         const testCollection = new JqHTMLCollection([div2, div]);
@@ -103,7 +103,7 @@ describe('JqHTMLCollection', () => {
     });
 
     it('should update elements using _setElements', () => {
-        const newElement = new HtmlNode('element', 'p');
+        const newElement = new JqElement('element', 'p');
         newElement.setAttribute('id', 'new');
 
         collection._setElements([newElement]);

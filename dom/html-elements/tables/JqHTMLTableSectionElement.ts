@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Represents an HTML <thead>, <tbody>, or <tfoot> element
  * Based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element/thead
  */

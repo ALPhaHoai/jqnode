@@ -2,8 +2,8 @@
  * Tests for JqComment class
  */
 
-import { JqComment } from '../../dom/JqComment';
-import { HtmlNode } from '../../dom/HtmlNode';
+import { JqComment } from '../../dom/core/JqComment';
+import { JqElement } from '../../types';
 
 describe('JqComment', () => {
     describe('Constructor', () => {
@@ -26,33 +26,33 @@ describe('JqComment', () => {
         });
     });
 
-    describe('fromHtmlNode', () => {
-        it('should create JqComment from HtmlNode', () => {
-            const htmlNode = new HtmlNode('comment');
-            htmlNode.data = 'Test comment content';
+    describe('fromJqElement', () => {
+        it('should create JqComment from JqElement', () => {
+            const jqElement = new JqElement('comment');
+            jqElement.textData = 'Test comment content';
 
-            const comment = JqComment.fromHtmlNode(htmlNode);
+            const comment = JqComment.fromJqElement(jqElement);
             expect(comment.data).toBe('Test comment content');
-            expect(comment.getHtmlNode()).toBe(htmlNode);
+            expect(comment.getJqElement()).toBe(jqElement);
         });
 
-        it('should sync data changes with HtmlNode', () => {
-            const htmlNode = new HtmlNode('comment');
-            htmlNode.data = 'Initial comment';
+        it('should sync data changes with JqElement', () => {
+            const jqElement = new JqElement('comment');
+            jqElement.textData = 'Initial comment';
 
-            const comment = JqComment.fromHtmlNode(htmlNode);
+            const comment = JqComment.fromJqElement(jqElement);
             comment.data = 'Updated comment';
 
-            expect(htmlNode.data).toBe('Updated comment');
+            expect(jqElement.textData).toBe('Updated comment');
             expect(comment.data).toBe('Updated comment');
         });
 
-        it('should read data from HtmlNode', () => {
-            const htmlNode = new HtmlNode('comment');
-            htmlNode.data = 'From HtmlNode';
+        it('should read data from JqElement', () => {
+            const jqElement = new JqElement('comment');
+            jqElement.textData = 'From JqElement';
 
-            const comment = JqComment.fromHtmlNode(htmlNode);
-            htmlNode.data = 'Changed externally';
+            const comment = JqComment.fromJqElement(jqElement);
+            jqElement.textData = 'Changed externally';
 
             expect(comment.data).toBe('Changed externally');
         });
@@ -173,17 +173,17 @@ describe('JqComment', () => {
         });
     });
 
-    describe('Integration with HtmlNode', () => {
-        it('should not have HtmlNode reference by default', () => {
+    describe('Integration with JqElement', () => {
+        it('should not have JqElement reference by default', () => {
             const comment = new JqComment('test');
-            expect(comment.getHtmlNode()).toBeNull();
+            expect(comment.getJqElement()).toBeNull();
         });
 
-        it('should maintain HtmlNode reference when created via fromHtmlNode', () => {
-            const htmlNode = new HtmlNode('comment');
-            const comment = JqComment.fromHtmlNode(htmlNode);
+        it('should maintain JqElement reference when created via fromJqElement', () => {
+            const jqElement = new JqElement('comment');
+            const comment = JqComment.fromJqElement(jqElement);
 
-            expect(comment.getHtmlNode()).toBe(htmlNode);
+            expect(comment.getJqElement()).toBe(jqElement);
         });
     });
 

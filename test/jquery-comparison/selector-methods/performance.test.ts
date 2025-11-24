@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('Performance and large document handling - Node-Query vs jQuery Comparison', () => {
     test('should handle deeply nested structures - jquery-comparison', () => {

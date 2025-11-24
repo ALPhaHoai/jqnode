@@ -1,14 +1,14 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Retrieve the DOM elements matched by the jQuery object.
  * @see https://api.jquery.com/get/
  */
-function get(this: JQ, index?: number): (HtmlNode | Element)[] | HtmlNode | Element | undefined {
+function get(this: JQ, index?: number): (JqElement | Element)[] | JqElement | Element | undefined {
     if (index === undefined) {
-        return this.nodes.map((node: HtmlNode) => node._originalElement || node);
+        return this.nodes.map((node: JqElement) => node._originalElement || node);
     }
-    let node: HtmlNode | undefined;
+    let node: JqElement | undefined;
     if (index < 0) {
         node = this.nodes[this.nodes.length + index];
     } else {

@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, ClassNameInput } from '../../types';
+﻿import type { JqElement, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds one or more classes to each element.
@@ -6,7 +6,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
  */
 function addClass(this: JQ, className: ClassNameInput): JQ {
     if (typeof className === 'function') {
-        this.nodes.forEach((element: HtmlNode, index: number) => {
+        this.nodes.forEach((element: JqElement, index: number) => {
             const originalClass = element.getAttribute('class') || '';
             const result = className.call(element, index, originalClass);
             if (typeof result === 'string') {
@@ -16,11 +16,11 @@ function addClass(this: JQ, className: ClassNameInput): JQ {
         return this;
     }
 
-    this.nodes.forEach((element: HtmlNode) => {
+    this.nodes.forEach((element: JqElement) => {
         applyClassToElement(element, className as string);
     });
 
-    function applyClassToElement(element: HtmlNode, className: string) {
+    function applyClassToElement(element: JqElement, className: string) {
         if (!element) return;
 
         const currentClass = element.getAttribute('class') || '';

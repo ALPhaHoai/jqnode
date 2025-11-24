@@ -1,4 +1,4 @@
-import { JqNode } from './JqNode';
+﻿import { JqNode } from './JqNode';
 import { JqElement } from './JqElement';
 import { JqText } from './JqText';
 import { JqComment } from './JqComment';

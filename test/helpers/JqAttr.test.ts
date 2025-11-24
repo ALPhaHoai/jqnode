@@ -1,11 +1,11 @@
-import { JqAttr } from '../../dom/JqAttr';
-import { HtmlNode } from '../../types';
+﻿import { JqAttr } from '../../dom/JqAttr';
+import { JqElement } from '../../types';
 
 describe('JqAttr', () => {
-    let node: HtmlNode;
+    let node: JqElement;
 
     beforeEach(() => {
-        node = new HtmlNode('element', 'div');
+        node = new JqElement('element', 'div');
         node.setAttribute('id', 'test-id');
         node.setAttribute('class', 'test-class');
     });

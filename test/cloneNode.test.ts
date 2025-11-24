@@ -1,9 +1,9 @@
 import _cloneNode from '../helpers/cloneNode';
-import { HtmlNode } from '../types';
+import { JqElement } from '../types';
 
 describe('_cloneNode Helper', () => {
     test('should not share attributes reference between original and clone', () => {
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'element',
             name: 'div',
             attribs: { id: 'original' },
@@ -25,7 +25,7 @@ describe('_cloneNode Helper', () => {
     });
 
     test('should not share attribs reference between original and clone', () => {
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'element',
             name: 'div',
             attribs: { id: 'original' },
@@ -47,12 +47,12 @@ describe('_cloneNode Helper', () => {
     });
 
     test('should deep clone children by default', () => {
-        const child: HtmlNode = {
+        const child: JqElement = {
             type: 'element',
             name: 'span',
             attribs: { class: 'child' },
         };
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'element',
             name: 'div',
             children: [child],
@@ -69,11 +69,11 @@ describe('_cloneNode Helper', () => {
     });
 
     test('should shallow clone when deep is false', () => {
-        const child: HtmlNode = {
+        const child: JqElement = {
             type: 'element',
             name: 'span',
         };
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'element',
             name: 'div',
             children: [child],
@@ -86,7 +86,7 @@ describe('_cloneNode Helper', () => {
     });
 
     test('should clone text nodes', () => {
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'text',
             data: 'Hello World',
         };
@@ -99,7 +99,7 @@ describe('_cloneNode Helper', () => {
     });
 
     test('should clone comment nodes', () => {
-        const original: HtmlNode = {
+        const original: JqElement = {
             type: 'comment',
             data: ' This is a comment ',
         };

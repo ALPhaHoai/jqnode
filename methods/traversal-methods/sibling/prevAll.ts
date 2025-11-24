@@ -1,6 +1,6 @@
-import { nodeMatchesSelector, parseSelector } from '../../../selector';
+﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ } from '../../../types';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -8,7 +8,7 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/prevAll/
  */
 function prevAll(this: JQ, selector?: CssSelector): JQ {
-    const allPrecedingSiblings: HtmlNode[] = [];
+    const allPrecedingSiblings: JqElement[] = [];
 
     // Parse selector if provided
     let parsedSelector = null;
@@ -28,7 +28,7 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
                         'type' in parsedSelector && parsedSelector.type === 'compound'
                             ? parsedSelector.selectors
                             : [parsedSelector];
-                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const tempNode = new JqElement('element', sibling.tagName.toLowerCase());
                     const attrs: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
@@ -42,7 +42,7 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
                 }
 
                 if (shouldInclude) {
-                    const internalNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const internalNode = new JqElement('element', sibling.tagName.toLowerCase());
                     const attrs: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
@@ -77,8 +77,8 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
     }
 
     // Remove duplicates while preserving order
-    const uniqueSiblings: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const uniqueSiblings: JqElement[] = [];
+    const seen = new Set<JqElement>();
     for (const sibling of allPrecedingSiblings) {
         if (!seen.has(sibling)) {
             seen.add(sibling);

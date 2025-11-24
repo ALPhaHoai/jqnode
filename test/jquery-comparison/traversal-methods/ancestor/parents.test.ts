@@ -1,5 +1,5 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
-import type { HtmlNode, JQ } from '../../../../types';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+import type { JqElement, JQ } from '../../../../types';
 
 describe('parents() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -60,7 +60,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
 
         // Check the chain of parent tags
         const nqTags = nqParents.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqParents.each((index: number, element: HTMLElement) => {
@@ -81,7 +81,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqParents.nodes).toHaveLength(2); // nested div and content div
         expect(jqParents.length).toBe(2);
 
-        const nqClasses = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
+        const nqClasses = nqParents.nodes.map((node: JqElement) => node.attributes.class);
         const jqClasses: string[] = [];
         jqParents.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
@@ -102,7 +102,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
         expect(jqParents.length).toBe(1);
 
         // Should get unique parents (no duplicates)
-        const nqIds = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
+        const nqIds = nqParents.nodes.map((node: JqElement) => node.attributes.class);
         const jqIds: string[] = [];
         jqParents.each((index: number, element: HTMLElement) => {
             jqIds.push(element.className);
@@ -161,7 +161,7 @@ describe('parents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqParents.nodes).toHaveLength(1); // content div
         expect(jqParents.length).toBe(1);
 
-        const nqClasses = nqParents.nodes.map((node: HtmlNode) => node.attributes.class);
+        const nqClasses = nqParents.nodes.map((node: JqElement) => node.attributes.class);
         const jqClasses: string[] = [];
         jqParents.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);

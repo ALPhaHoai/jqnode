@@ -1,5 +1,5 @@
-import { getTextContent } from '../../utils';
-import type { HtmlNode, JQ } from '../../types';
+﻿import { getTextContent } from '../../utils';
+import type { JqElement, JQ } from '../../types';
 
 interface ToJSONOptions {
     ignoreColumns?: number[];
@@ -18,14 +18,14 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
     const { ignoreColumns = [], onlyColumns = null, normalizeKeys = false } = options;
     const results: Array<Record<string, string>> = [];
 
-    this.nodes.forEach((tableNode: HtmlNode) => {
+    this.nodes.forEach((tableNode: JqElement) => {
         const tagName = tableNode.name?.toLowerCase();
         if (tableNode.internalType !== 'element' || tagName !== 'table') {
             return;
         }
 
         // Find headers
-        let headerCells: HtmlNode[] = [];
+        let headerCells: JqElement[] = [];
 
         // Try to find headers in <thead>
         const thead = tableNode.children?.find(
@@ -70,7 +70,7 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
         });
 
         // Find data rows
-        let dataRows: HtmlNode[] = [];
+        let dataRows: JqElement[] = [];
         const tbody = tableNode.children?.find(
             (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tbody',
         );

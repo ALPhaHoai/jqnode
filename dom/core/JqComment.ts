@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqComment - Implementation of the DOM Comment interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Comment
  */
@@ -54,7 +54,7 @@ export class JqComment extends JqCharacterData implements Comment {
     /**
      * Clones this comment node
      */
-    override cloneNode(): Comment {
+    override cloneNode(_deep?: boolean): Comment {
         const cloned = new JqComment(this._data);
 
         // Comment nodes don't have children, so deep parameter doesn't matter
@@ -81,13 +81,13 @@ export class JqComment extends JqCharacterData implements Comment {
     override set data(value: string) {
         super.data = value;
         if (this._jqElement) {
-            this._jqElement.data = value;
+            this._jqElement.textData = value;
         }
     }
 
     override get data(): string {
         if (this._jqElement) {
-            return this._jqElement.data;
+            return this._jqElement.textData;
         }
         return super.data;
     }

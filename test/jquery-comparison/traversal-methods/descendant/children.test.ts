@@ -1,6 +1,6 @@
-import jQuery from 'jquery';
+﻿import jQuery from 'jquery';
 import { createTestDom } from '../../../utils/jquery-comparison-helpers';
-import type { HtmlNode, JQ } from '../../../../types';
+import type { JqElement, JQ } from '../../../../types';
 
 describe('children() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -42,7 +42,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
@@ -52,7 +52,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTags).toEqual(jqTags);
         expect(nqTags).toEqual(['h1', 'div', 'ul']);
 
-        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.getAttribute('class'));
+        const nqClasses = nqChildren.nodes.map((node: JqElement) => node.getAttribute('class'));
         const jqClasses: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
@@ -74,7 +74,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
@@ -112,7 +112,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqChildren.nodes).toHaveLength(2);
         expect(jqChildren.length).toBe(2);
 
-        const nqTexts = nqChildren.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const nqTexts = nqChildren.nodes.map((node: JqElement) => node.children?.[0]?.data || '');
         const jqTexts: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
@@ -133,7 +133,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(3);
 
         const nqTags = nqChildren.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
@@ -179,7 +179,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const nqTexts = nqResult.nodes.map((node: JqElement) => node.children?.[0]?.data || '');
         const jqTexts: string[] = [];
         jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
@@ -221,7 +221,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(4); // 2 children from each parent
         expect(jqResult.length).toBe(4);
 
-        const nqTexts = nqResult.nodes.map((node: HtmlNode) => node.children?.[0]?.data || '');
+        const nqTexts = nqResult.nodes.map((node: JqElement) => node.children?.[0]?.data || '');
         const jqTexts: string[] = [];
         jqResult.each((index: number, element: HTMLElement) => {
             jqTexts.push(jQuery(element).text());
@@ -311,7 +311,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqChildren.length).toBe(2);
 
         const nqTags = nqChildren.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
@@ -346,7 +346,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqClasses = nqResult.nodes.map((node: HtmlNode) => node.getAttribute('class'));
+        const nqClasses = nqResult.nodes.map((node: JqElement) => node.getAttribute('class'));
         const jqClasses: string[] = [];
         jqResult.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
@@ -375,7 +375,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(jqAll.length).toBe(5);
 
         const nqTags = nqAll.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTags: string[] = [];
         jqAll.each((index: number, element: HTMLElement) => {

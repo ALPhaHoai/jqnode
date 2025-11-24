@@ -1,6 +1,6 @@
-import { getTextContent, unescapeHtml } from '../../utils';
+﻿import { getTextContent, unescapeHtml } from '../../utils';
 import { normalizeHTML } from '../../utils-static';
-import type { HtmlNode, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Gets or sets the text content of elements with HTML normalization.
@@ -13,11 +13,11 @@ function normalizedText(this: JQ, value?: string): string | JQ {
     if (value === undefined) {
         // Get text content from element nodes only
         const elementNodes = this.nodes.filter(
-            (node: HtmlNode) => node.internalType === 'element' || node.nodeType === 1,
+            (node: JqElement) => node.internalType === 'element' || node.nodeType === 1,
         );
 
         // Check if any element is detached (from fractional eq() indices)
-        if (elementNodes.some((node: HtmlNode) => node._detached)) {
+        if (elementNodes.some((node: JqElement) => node._detached)) {
             return '';
         }
 
@@ -26,7 +26,7 @@ function normalizedText(this: JQ, value?: string): string | JQ {
         }
 
         const result = elementNodes
-            .map((node: HtmlNode) => {
+            .map((node: JqElement) => {
                 // Use HTML5 textContent property as single source of truth
                 if ('textContent' in node) {
                     return node.textContent || '';
@@ -43,7 +43,7 @@ function normalizedText(this: JQ, value?: string): string | JQ {
     }
 
     // Set text content on all elements
-    this.nodes.forEach((node: HtmlNode) => {
+    this.nodes.forEach((node: JqElement) => {
         // Use HTML5 textContent property as single source of truth
         if ('textContent' in node) {
             node.textContent = value;

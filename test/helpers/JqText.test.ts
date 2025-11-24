@@ -2,8 +2,8 @@
  * Tests for JqText class
  */
 
-import { JqText } from '../../dom/JqText';
-import { HtmlNode } from '../../dom/HtmlNode';
+import { JqText } from '../../dom/core/JqText';
+import { JqElement } from '../../types';
 
 describe('JqText', () => {
     describe('Constructor', () => {
@@ -26,33 +26,33 @@ describe('JqText', () => {
         });
     });
 
-    describe('fromHtmlNode', () => {
-        it('should create JqText from HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'Test content';
+    describe('fromJqElement', () => {
+        it('should create JqText from JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'Test content';
 
-            const text = JqText.fromHtmlNode(htmlNode);
+            const text = JqText.fromJqElement(jqElement);
             expect(text.data).toBe('Test content');
-            expect(text.getHtmlNode()).toBe(htmlNode);
+            expect(text.getJqElement()).toBe(jqElement);
         });
 
-        it('should sync data changes with HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'Initial';
+        it('should sync data changes with JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'Initial';
 
-            const text = JqText.fromHtmlNode(htmlNode);
+            const text = JqText.fromJqElement(jqElement);
             text.data = 'Updated';
 
-            expect(htmlNode.data).toBe('Updated');
+            expect(jqElement.textData).toBe('Updated');
             expect(text.data).toBe('Updated');
         });
 
-        it('should read data from HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'From HtmlNode';
+        it('should read data from JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'From JqElement';
 
-            const text = JqText.fromHtmlNode(htmlNode);
-            htmlNode.data = 'Changed externally';
+            const text = JqText.fromJqElement(jqElement);
+            jqElement.textData = 'Changed externally';
 
             expect(text.data).toBe('Changed externally');
         });
@@ -71,7 +71,7 @@ describe('JqText', () => {
             expect(text.wholeText).toBe('Hello');
         });
 
-        // Note: wholeText tests with siblings would require HtmlNode integration
+        // Note: wholeText tests with siblings would require JqElement integration
         // and parent/sibling relationships to be set up properly
         // Those tests are better in integration tests
     });
@@ -228,17 +228,17 @@ describe('JqText', () => {
         });
     });
 
-    describe('Integration with HtmlNode', () => {
-        it('should not have HtmlNode reference by default', () => {
+    describe('Integration with JqElement', () => {
+        it('should not have JqElement reference by default', () => {
             const text = new JqText('test');
-            expect(text.getHtmlNode()).toBeNull();
+            expect(text.getJqElement()).toBeNull();
         });
 
-        it('should maintain HtmlNode reference when created via fromHtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            const text = JqText.fromHtmlNode(htmlNode);
+        it('should maintain JqElement reference when created via fromJqElement', () => {
+            const jqElement = new JqElement('text');
+            const text = JqText.fromJqElement(jqElement);
 
-            expect(text.getHtmlNode()).toBe(htmlNode);
+            expect(text.getJqElement()).toBe(jqElement);
         });
     });
 });

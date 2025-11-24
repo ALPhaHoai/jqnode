@@ -1,5 +1,5 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
-import type { HtmlNode, JQ } from '../../../../types';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+import type { JqElement, JQ } from '../../../../types';
 
 describe('parentsUntil() method - Node-Query vs jQuery Comparison', () => {
     let nqRoot: JQ, jqRoot: JQuery<Document>;
@@ -42,7 +42,7 @@ describe('parentsUntil() method - Node-Query vs jQuery Comparison', () => {
         expect(jqParents.length).toBe(3);
 
         const nqTags = nqParents.nodes.map(
-            (node: HtmlNode) => node.tagName && node.tagName.toLowerCase(),
+            (node: JqElement) => node.tagName && node.tagName.toLowerCase(),
         );
         const jqTagsResult: string[] = [];
         jqParents.each((index: number, element: HTMLElement) => {

@@ -1,4 +1,4 @@
-import jq from '../index';
+﻿import jq from '../index';
 
 console.log('=== jqnode .load() Method Demo ===\n');
 

@@ -1,20 +1,20 @@
-import { selectNodes } from '../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../types';
+﻿import { selectNodes } from '../../selector';
+import type { JqElement, CssSelector, JQ } from '../../types';
 import JQClass from '../../jq';
 
 /**
  * Reduces the set of matched elements to those that have a descendant that matches the selector or element.
  * @see https://api.jquery.com/has/
  */
-function has(this: JQ, selectorOrElement: CssSelector | HtmlNode): JQ {
-    const matchingElements: HtmlNode[] = [];
+function has(this: JQ, selectorOrElement: CssSelector | JqElement): JQ {
+    const matchingElements: JqElement[] = [];
 
     if (typeof selectorOrElement === 'string') {
         for (const element of this.nodes) {
             if (element.internalType === 'element' && element.children) {
                 // Search only among element children, not including the element itself
                 const elementChildren = element.children.filter(
-                    (child: HtmlNode) => child.internalType === 'element',
+                    (child: JqElement) => child.internalType === 'element',
                 );
                 try {
                     const descendants = selectNodes(elementChildren, selectorOrElement);

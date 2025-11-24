@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
@@ -40,7 +40,7 @@ function cssCamel(
     // SETTER CASES
     // Case 1: Set object of properties
     if (typeof prop === 'object' && !Array.isArray(prop)) {
-        this.nodes.forEach(function (element: HtmlNode) {
+        this.nodes.forEach(function (element: JqElement) {
             if (!element) return;
 
             Object.keys(prop).forEach(function (property: string) {
@@ -52,7 +52,7 @@ function cssCamel(
 
     // Case 2: Set single property with function
     if (typeof value === 'function') {
-        this.nodes.forEach(function (element: HtmlNode, index: number) {
+        this.nodes.forEach(function (element: JqElement, index: number) {
             if (!element) return;
 
             const currentValue = getComputedStyleValue(element, prop as string) || '';
@@ -63,7 +63,7 @@ function cssCamel(
     }
 
     // Case 3: Set single property with value
-    this.nodes.forEach(function (element: HtmlNode) {
+    this.nodes.forEach(function (element: JqElement) {
         if (!element) return;
         setStyleValue(element, prop as string, value!);
     });

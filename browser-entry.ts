@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Browser entry point for jqnode library
  * Handles browser-specific adaptations of Node.js code
  */

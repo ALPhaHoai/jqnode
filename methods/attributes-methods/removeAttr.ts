@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 
 /**
  * Removes an attribute from each element in the set of matched elements.
@@ -28,7 +28,7 @@ function removeAttr(this: JQ, name: string): JQ {
         'defer',
     ];
 
-    this.nodes.forEach((element: HtmlNode) => {
+    this.nodes.forEach((element: JqElement) => {
         if (element) {
             attrNames.forEach((attrName) => {
                 // Remove from internal attributes

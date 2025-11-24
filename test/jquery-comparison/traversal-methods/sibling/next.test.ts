@@ -1,4 +1,4 @@
-import { createTestDom } from '../../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 import type { JQ } from '../../../../types';
 
 describe('next() method - Node-Query vs jQuery Comparison', () => {

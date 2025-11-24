@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqCharacterData - Implementation of the DOM CharacterData interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/CharacterData
  */

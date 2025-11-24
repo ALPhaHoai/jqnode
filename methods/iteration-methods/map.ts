@@ -1,10 +1,10 @@
-import type { HtmlNode, JQ, MapCallback } from '../../types';
+﻿import type { JqElement, JQ, MapCallback } from '../../types';
 
 /**
  * Translate a set of elements into a new jQuery set or array.
  * @see https://api.jquery.com/map/
  */
-function map<R = HtmlNode>(this: JQ, callback: MapCallback<HtmlNode, R>): R[] {
+function map<R = JqElement>(this: JQ, callback: MapCallback<JqElement, R>): R[] {
     const results: R[] = [];
 
     for (let i = 0; i < this.nodes.length; i++) {

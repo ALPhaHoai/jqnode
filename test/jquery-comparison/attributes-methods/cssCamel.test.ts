@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('cssCamel() method - jQuery Comparison', () => {
     test('should convert CSS property names to camelCase - jquery-comparison', () => {

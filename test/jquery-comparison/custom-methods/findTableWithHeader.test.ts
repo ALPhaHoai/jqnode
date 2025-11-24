@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for .findTableWithHeader() instance method
  */
 

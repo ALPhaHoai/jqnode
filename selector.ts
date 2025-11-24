@@ -1,10 +1,10 @@
-/**
+﻿/**
  * CSS Selector engine for node tree queries.
  * Supports comprehensive CSS selectors including attribute selectors, pseudo-selectors, combinators, etc.
  */
 
 import { decodeHTMLEntities } from './helpers/html-entities';
-import type { HtmlNode, CssSelector } from './types';
+import type { JqElement, CssSelector } from './types';
 
 /**
  * Token types for CSS selector tokenization
@@ -68,7 +68,7 @@ type ParsedSelector = SimpleSelector | ComplexSelector | CompoundSelector;
  * Context for pseudo-selector matching
  */
 interface SelectorContext {
-    siblings?: HtmlNode[];
+    siblings?: JqElement[];
     isRoot?: boolean;
 }
 
@@ -422,7 +422,7 @@ function parsePseudoSelector(pseudo: string): PseudoSelector {
  * Checks if a node matches a simple selector (without combinators).
  */
 function nodeMatchesSelector(
-    node: HtmlNode,
+    node: JqElement,
     selector: ParsedSelector,
     context: SelectorContext = {},
 ): boolean {
@@ -489,7 +489,7 @@ function nodeMatchesSelector(
 /**
  * Checks if a node matches an attribute selector.
  */
-function matchesAttribute(node: HtmlNode, attr: AttributeSelector): boolean {
+function matchesAttribute(node: JqElement, attr: AttributeSelector): boolean {
     const nodeValue = node.getAttribute(attr.name);
 
     if (attr.operator === null) {
@@ -549,7 +549,7 @@ function isValidPseudoSelector(pseudoName: string): boolean {
 /**
  * Helper to get text content of a node
  */
-function getTextContent(node: HtmlNode): string {
+function getTextContent(node: JqElement): string {
     if (node.internalType === 'text') {
         return node.textData || '';
     }
@@ -562,7 +562,7 @@ function getTextContent(node: HtmlNode): string {
 /**
  * Checks if a node matches a pseudo-selector.
  */
-function matchesPseudo(node: HtmlNode, pseudo: PseudoSelector, context: SelectorContext): boolean {
+function matchesPseudo(node: JqElement, pseudo: PseudoSelector, context: SelectorContext): boolean {
     const siblings = context.siblings || [];
     const nodeIndex = siblings.indexOf(node);
 
@@ -666,7 +666,7 @@ function matchesNth(expr: string, n: number): boolean {
 /**
  * Finds all nodes in the tree that match the selector (internal implementation).
  */
-function selectNodesInternal(nodes: HtmlNode[], selector: CssSelector): HtmlNode[] {
+function selectNodesInternal(nodes: JqElement[], selector: CssSelector): JqElement[] {
     let parsedSelector: ParsedSelector | null;
     try {
         parsedSelector = parseSelector(selector);
@@ -682,7 +682,7 @@ function selectNodesInternal(nodes: HtmlNode[], selector: CssSelector): HtmlNode
     }
 
     if ('type' in parsedSelector && parsedSelector.type === 'compound') {
-        const results = new Set<HtmlNode>();
+        const results = new Set<JqElement>();
         for (const sel of parsedSelector.selectors) {
             const matches = selectWithSelector(nodes, sel);
             matches.forEach((node) => results.add(node));
@@ -696,7 +696,7 @@ function selectNodesInternal(nodes: HtmlNode[], selector: CssSelector): HtmlNode
 /**
  * Selects nodes matching a single selector (may be complex with combinators).
  */
-function selectWithSelector(nodes: HtmlNode[], selector: ParsedSelector): HtmlNode[] {
+function selectWithSelector(nodes: JqElement[], selector: ParsedSelector): JqElement[] {
     if ('type' in selector && selector.type === 'complex') {
         return selectWithComplexSelector(nodes, selector.parts);
     } else {
@@ -708,10 +708,10 @@ function selectWithSelector(nodes: HtmlNode[], selector: ParsedSelector): HtmlNo
  * Selects nodes matching a complex selector with combinators.
  */
 function selectWithComplexSelector(
-    nodes: HtmlNode[],
+    nodes: JqElement[],
     parts: (SimpleSelector | { type: 'combinator'; combinator: string })[],
-): HtmlNode[] {
-    let candidates: HtmlNode[] = [];
+): JqElement[] {
+    let candidates: JqElement[] = [];
 
     const firstPart = parts[0];
     if ('type' in firstPart && firstPart.type === 'combinator') {
@@ -748,13 +748,13 @@ function selectWithComplexSelector(
  * Applies a combinator to find next matches (left to right processing).
  */
 function applyCombinatorLeftToRight(
-    candidates: HtmlNode[],
+    candidates: JqElement[],
     combinator: string,
     _firstSelector: SimpleSelector,
     secondSelector: SimpleSelector,
-    rootNodes: HtmlNode[],
-): HtmlNode[] {
-    const results: HtmlNode[] = [];
+    rootNodes: JqElement[],
+): JqElement[] {
+    const results: JqElement[] = [];
 
     switch (combinator) {
         case ' ':
@@ -820,7 +820,7 @@ function applyCombinatorLeftToRight(
 /**
  * Gets all siblings of a node.
  */
-function getSiblings(node: HtmlNode): HtmlNode[] {
+function getSiblings(node: JqElement): JqElement[] {
     if (!node.parent || !node.parent.children) {
         return [node];
     }
@@ -831,10 +831,10 @@ function getSiblings(node: HtmlNode): HtmlNode[] {
 /**
  * Selects all descendants matching a selector.
  */
-function selectAllDescendants(nodes: HtmlNode[], selector: SimpleSelector): HtmlNode[] {
-    const results: HtmlNode[] = [];
+function selectAllDescendants(nodes: JqElement[], selector: SimpleSelector): JqElement[] {
+    const results: JqElement[] = [];
 
-    function traverse(nodeList: HtmlNode[]): void {
+    function traverse(nodeList: JqElement[]): void {
         for (const node of nodeList) {
             if (node.internalType === 'element') {
                 if (nodeMatchesSelectorWithContext(node, selector, nodes)) {
@@ -856,9 +856,9 @@ function selectAllDescendants(nodes: HtmlNode[], selector: SimpleSelector): Html
  * Checks if a node matches a selector with proper context for pseudo-selectors.
  */
 function nodeMatchesSelectorWithContext(
-    node: HtmlNode,
+    node: JqElement,
     selector: ParsedSelector,
-    rootNodes: HtmlNode[],
+    rootNodes: JqElement[],
 ): boolean {
     const context: SelectorContext = {};
 
@@ -881,7 +881,7 @@ function nodeMatchesSelectorWithContext(
 /**
  * Sets up parent references for nodes in the tree.
  */
-function setupParentReferences(nodes: HtmlNode[], parent: HtmlNode | null = null): void {
+function setupParentReferences(nodes: JqElement[], parent: JqElement | null = null): void {
     for (const node of nodes) {
         if (node.parent === undefined) {
             node.parent = parent || undefined;
@@ -907,7 +907,7 @@ function isCSSSelector(str: string): boolean {
 /**
  * Finds all nodes in the tree that match the selector (public interface).
  */
-function selectNodes(nodes: HtmlNode[], selector: CssSelector): HtmlNode[] {
+function selectNodes(nodes: JqElement[], selector: CssSelector): JqElement[] {
     setupParentReferences(nodes);
     return selectNodesInternal(nodes, selector);
 }

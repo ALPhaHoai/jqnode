@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('removeData() advanced behavior', () => {
     it('should remove multiple keys using space-separated string', () => {

@@ -1,6 +1,6 @@
-import { nodeMatchesSelector, parseSelector } from '../../../selector';
+﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ, UntilSelector } from '../../../types';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -8,16 +8,16 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/prevUntil/
  */
 function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ {
-    const precedingSiblings: HtmlNode[] = [];
+    const precedingSiblings: JqElement[] = [];
     let parsedStopSelector = null;
-    let stopElement: HtmlNode | Element | null = null;
+    let stopElement: JqElement | Element | null = null;
 
     if (selector) {
         if (typeof selector === 'string') {
             parsedStopSelector = parseSelector(selector);
         } else {
-            // Selector is HtmlNode or JQ - use type guard to check structure
-            const selectorObj = selector as HtmlNode | JQ;
+            // Selector is JqElement or JQ - use type guard to check structure
+            const selectorObj = selector as JqElement | JQ;
             if (
                 'nodes' in selectorObj &&
                 Array.isArray(selectorObj.nodes) &&
@@ -26,10 +26,10 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                 // It's a JQ object
                 stopElement = selectorObj.nodes[0]._originalElement || selectorObj.nodes[0];
             } else if ('_originalElement' in selectorObj && selectorObj._originalElement) {
-                // It's an HtmlNode with DOM reference
+                // It's an JqElement with DOM reference
                 stopElement = selectorObj._originalElement;
             } else if ('nodeType' in selectorObj && selectorObj.nodeType !== undefined) {
-                // It's an HtmlNode
+                // It's an JqElement
                 stopElement = selectorObj;
             }
         }
@@ -54,7 +54,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const tempNode = new JqElement('element', sibling.tagName.toLowerCase());
                     tempNode.attributes._setData(attributes);
                     tempNode._originalElement = sibling;
                     if (selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
@@ -81,7 +81,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const tempNode = new JqElement('element', sibling.tagName.toLowerCase());
                     tempNode.attributes._setData(attributes);
                     tempNode._originalElement = sibling;
                     if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
@@ -95,7 +95,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const internalNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const internalNode = new JqElement('element', sibling.tagName.toLowerCase());
                     internalNode.attributes._setData(attributes);
                     internalNode._originalElement = sibling;
                     precedingSiblings.push(internalNode);
@@ -105,7 +105,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
             }
         } else if (node.parent && node.parent.children) {
             const siblings = node.parent.children.filter(
-                (child: HtmlNode) => child.internalType === 'element',
+                (child: JqElement) => child.internalType === 'element',
             );
             const currentIndex = siblings.indexOf(node);
 
@@ -124,7 +124,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         }
                     } else if (stopElement) {
                         // Type-safe comparison - check both _originalElement and direct reference
-                        const stopAsElement = stopElement as HtmlNode | Element;
+                        const stopAsElement = stopElement as JqElement | Element;
                         const isSameElement =
                             sibling._originalElement === stopAsElement || sibling === stopAsElement;
                         if (isSameElement) {
@@ -152,8 +152,8 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
     }
 
     // Remove duplicates
-    const uniqueSiblings: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const uniqueSiblings: JqElement[] = [];
+    const seen = new Set<JqElement>();
     for (const sibling of precedingSiblings) {
         if (!seen.has(sibling)) {
             seen.add(sibling);

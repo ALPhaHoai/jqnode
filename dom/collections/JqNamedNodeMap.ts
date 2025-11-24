@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JqNamedNodeMap - Implementation of the DOM NamedNodeMap interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap
  */

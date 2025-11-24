@@ -1,5 +1,5 @@
-import { selectNodes } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+﻿import { selectNodes } from '../../../selector';
+import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -7,8 +7,8 @@ import JQClass from '../../../jq';
  * @see https://api.jquery.com/children/
  */
 function children(this: JQ, selector?: CssSelector): JQ {
-    const children: HtmlNode[] = [];
-    const seen = new Set<HtmlNode>();
+    const children: JqElement[] = [];
+    const seen = new Set<JqElement>();
 
     for (const node of this.nodes) {
         // Handle both internal nodes and DOM elements
@@ -22,9 +22,9 @@ function children(this: JQ, selector?: CssSelector): JQ {
             const isElement =
                 ('type' in child && child.internalType === 'element') ||
                 ('nodeType' in child && child.nodeType === 1);
-            if (isElement && !seen.has(child as HtmlNode)) {
-                seen.add(child as HtmlNode);
-                children.push(child as HtmlNode);
+            if (isElement && !seen.has(child as JqElement)) {
+                seen.add(child as JqElement);
+                children.push(child as JqElement);
             }
         }
     }
@@ -34,7 +34,7 @@ function children(this: JQ, selector?: CssSelector): JQ {
     if (selector) {
         const rootNodes = this._findCommonRoots(this.nodes);
         const matchingChildren = selectNodes(rootNodes, selector);
-        resultNodes = children.filter((child: HtmlNode) => matchingChildren.includes(child));
+        resultNodes = children.filter((child: JqElement) => matchingChildren.includes(child));
     }
     const result = new JQClass(resultNodes) as JQ;
     result._prevObject = this;

@@ -1,4 +1,4 @@
-import { JqDocument } from '../../dom/JqDocument';
+﻿import { JqDocument } from '../../dom/JqDocument';
 import { JqElement } from '../../dom/JqElement';
 import { JqText } from '../../dom/JqText';
 import { JqComment } from '../../dom/JqComment';

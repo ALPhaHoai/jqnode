@@ -1,4 +1,4 @@
-import type { HtmlNode, JQ, ContentInput } from '../../../types';
+﻿import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -9,7 +9,7 @@ import JQClass from '../../../jq';
  */
 function prepend(this: JQ, ...content: ContentInput[]): JQ {
     // 1. Collect all nodes to be prepended
-    const nodesToPrepend: HtmlNode[] = [];
+    const nodesToPrepend: JqElement[] = [];
     for (const item of content) {
         // Check if this is a JQ object containing existing elements
         if (
@@ -31,10 +31,10 @@ function prepend(this: JQ, ...content: ContentInput[]): JQ {
         if (target.internalType !== 'element' || !target.children) continue;
 
         const isLast = i === lastIndex;
-        const nodesToAddForTarget: HtmlNode[] = [];
+        const nodesToAddForTarget: JqElement[] = [];
 
         for (const node of nodesToPrepend) {
-            let nodeToAdd: HtmlNode;
+            let nodeToAdd: JqElement;
 
             if (isLast) {
                 // For the last target, we move the original node

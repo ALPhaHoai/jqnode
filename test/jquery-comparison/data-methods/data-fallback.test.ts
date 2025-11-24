@@ -1,4 +1,4 @@
-import { createTestDom } from '../../utils/jquery-comparison-helpers';
+﻿import { createTestDom } from '../../utils/jquery-comparison-helpers';
 
 describe('data() fallback behavior', () => {
     test('should fall back to data-* attribute after removeData()', () => {

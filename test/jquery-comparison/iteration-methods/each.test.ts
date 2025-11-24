@@ -1,7 +1,7 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 import jQuery from 'jquery';
 import { createTestDom } from '../../utils/jquery-comparison-helpers';
-import { HtmlNode } from '../../../types';
+import { JqElement } from '../../../types';
 
 import JQ from '../../../jq';
 
@@ -32,7 +32,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const nqIndices = [];
         const jqIndices = [];
 
-        nqElements.each(function (index: number, element: HtmlNode) {
+        nqElements.each(function (index: number, element: JqElement) {
             nqCount++;
             nqIndices.push(index);
             expect(element).toBe(this); // 'this' should be the element
@@ -117,7 +117,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const nqTags = [];
         const jqTags = [];
 
-        nqElements.each(function (index: number, element: HtmlNode) {
+        nqElements.each(function (index: number, element: JqElement) {
             nqTags.push(element.tagName && element.tagName.toLowerCase());
         });
 
@@ -133,7 +133,7 @@ describe('each() method - Node-Query vs jQuery Comparison', () => {
         const nqElements = nqRoot.find('h1, p');
         const jqElements = jqRoot.find('h1, p');
 
-        nqElements.each(function (index: number, element: HtmlNode) {
+        nqElements.each(function (index: number, element: JqElement) {
             $(element).attr('data-index', index.toString());
         });
 

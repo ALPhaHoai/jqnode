@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Example demonstrating the $.title() static method and .title() instance method
  *
  * This example shows how to get the document title using jqnode in two ways:

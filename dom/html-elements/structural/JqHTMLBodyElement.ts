@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Represents an HTML <body> element
  * Based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body
  */

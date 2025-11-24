@@ -1,4 +1,4 @@
-import $ from '../../../index';
+﻿import $ from '../../../index';
 
 describe('normalizedText() - jqnode specific method', () => {
     test('should normalize whitespace in text output', () => {

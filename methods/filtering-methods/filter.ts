@@ -1,5 +1,5 @@
-import { nodeMatchesSelector, parseSelector } from '../../selector';
-import type { HtmlNode, CssSelector, JQ, FilterCallback } from '../../types';
+﻿import { nodeMatchesSelector, parseSelector } from '../../selector';
+import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 import JQClass from '../../jq';
 
 /**
@@ -9,7 +9,7 @@ import JQClass from '../../jq';
 function filter(
     this: JQ,
     selectorOrFunction: CssSelector | FilterCallback,
-    context?: HtmlNode,
+    context?: JqElement,
 ): JQ {
     if (typeof selectorOrFunction === 'string') {
         // CSS selector filter
@@ -21,12 +21,12 @@ function filter(
             return result;
         }
 
-        const filtered = this.nodes.filter((node: HtmlNode) => {
+        const filtered = this.nodes.filter((node: JqElement) => {
             // Build context for pseudo-selectors
-            const selectorContext: { siblings?: HtmlNode[] } = {};
+            const selectorContext: { siblings?: JqElement[] } = {};
             if (node.parent && node.parent.children) {
                 selectorContext.siblings = node.parent.children.filter(
-                    (child: HtmlNode) => child.internalType === 'element',
+                    (child: JqElement) => child.internalType === 'element',
                 );
             } else {
                 selectorContext.siblings = [];
@@ -39,9 +39,9 @@ function filter(
         return result;
     } else if (typeof selectorOrFunction === 'function') {
         // Function filter
-        const filtered: HtmlNode[] = [];
+        const filtered: JqElement[] = [];
         for (let i = 0; i < this.nodes.length; i++) {
-            const node: HtmlNode = this.nodes[i];
+            const node: JqElement = this.nodes[i];
 
             try {
                 const result = selectorOrFunction.call(context || node, i, node);

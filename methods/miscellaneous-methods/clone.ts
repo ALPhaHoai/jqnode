@@ -1,11 +1,11 @@
-import type { HtmlNode, JQ } from '../../types';
+﻿import type { JqElement, JQ } from '../../types';
 import JQClass from '../../jq';
 import _cloneNode from '../../helpers/cloneNode';
 
 /**
  * Recursively copy data from source node tree to cloned node tree.
  */
-function copyDataRecursive(sourceNode: HtmlNode, clonedNode: HtmlNode): void {
+function copyDataRecursive(sourceNode: JqElement, clonedNode: JqElement): void {
     // Copy data from source children to cloned children
     if (
         sourceNode.children &&
@@ -37,7 +37,7 @@ function clone(
     deepWithDataAndEvents: boolean = withDataAndEvents,
 ): JQ {
     // Clone all matched elements
-    const clonedNodes = this.nodes.map((node: HtmlNode) => {
+    const clonedNodes = this.nodes.map((node: JqElement) => {
         // Use the helper to perform deep clone
         const clonedNode = _cloneNode(node);
 
@@ -54,7 +54,7 @@ function clone(
         }
 
         return clonedNode;
-    }).filter((node): node is HtmlNode => node !== null);
+    }).filter((node): node is JqElement => node !== null);
 
     // Return a new JQ instance with the cloned nodes
     return new JQClass(clonedNodes);

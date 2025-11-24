@@ -1,4 +1,4 @@
-/**
+﻿/**
  * HTML metadata and special elements
  * Based on MDN HTML Element Reference
  */

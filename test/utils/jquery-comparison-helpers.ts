@@ -1,6 +1,6 @@
-import $ from '../../index';
+﻿import $ from '../../index';
 import jQuery from 'jquery';
-import { HtmlNode } from '../../types';
+import { JqElement } from '../../types';
 
 /**
  * Creates a DOM environment for testing node-query vs jQuery comparisons
@@ -166,8 +166,8 @@ function extractTextContent(element: any): string {
     // Handle node-query node structures
     if (element.nodes && Array.isArray(element.nodes)) {
         return element.nodes
-            .filter((node: HtmlNode) => node.internalType === 'text')
-            .map((node: HtmlNode) => node.textData || '')
+            .filter((node: JqElement) => node.internalType === 'text')
+            .map((node: JqElement) => node.textData || '')
             .join('');
     }
 

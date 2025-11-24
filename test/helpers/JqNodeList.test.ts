@@ -1,23 +1,23 @@
 import { JqNodeList, JqNodeListOf } from '../../dom/JqNodeList';
-import { HtmlNode } from '../../dom/HtmlNode';
+import { JqElement } from '../../types';
 
 describe('JqNodeList', () => {
-    let nodes: HtmlNode[];
+    let nodes: JqElement[];
     let nodeList: JqNodeList;
 
     beforeEach(() => {
         // Create test nodes
         nodes = [];
 
-        const div1 = new HtmlNode('element', 'div');
+        const div1 = new JqElement('element', 'div');
         div1.setAttribute('id', 'first');
         nodes.push(div1);
 
-        const div2 = new HtmlNode('element', 'div');
+        const div2 = new JqElement('element', 'div');
         div2.setAttribute('id', 'second');
         nodes.push(div2);
 
-        const text = new HtmlNode('text');
+        const text = new JqElement('text');
         text.data = 'some text';
         nodes.push(text);
 
@@ -94,7 +94,7 @@ describe('JqNodeList', () => {
     });
 
     it('should update nodes using _setNodes', () => {
-        const newNode = new HtmlNode('element', 'p');
+        const newNode = new JqElement('element', 'p');
         nodeList._setNodes([newNode]);
         expect(nodeList.length).toBe(1);
         expect(nodeList.item(0)).toBe(newNode as unknown as Node);
@@ -109,7 +109,7 @@ describe('JqNodeList', () => {
 
 describe('JqNodeListOf', () => {
     it('should work with specific node types', () => {
-        const div = new HtmlNode('element', 'div');
+        const div = new JqElement('element', 'div');
         const list = new JqNodeListOf<HTMLElement>([div]);
 
         const item = list.item(0);
@@ -119,7 +119,7 @@ describe('JqNodeListOf', () => {
     });
 
     it('should support typed forEach', () => {
-        const div = new HtmlNode('element', 'div');
+        const div = new JqElement('element', 'div');
         const list = new JqNodeListOf<HTMLElement>([div]);
 
         list.forEach((node) => {

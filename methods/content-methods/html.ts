@@ -1,6 +1,6 @@
-import { nodeToHTML } from '../../utils';
+﻿import { nodeToHTML } from '../../utils';
 import { parseHTML } from '../../html-parser';
-import type { HtmlNode, JQ, GetterSetterReturn } from '../../types';
+import type { JqElement, JQ, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets the inner HTML of elements in the collection.
@@ -13,7 +13,7 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
             return undefined;
         }
 
-        const firstNode: HtmlNode = this.nodes[0];
+        const firstNode: JqElement = this.nodes[0];
         if (firstNode.internalType === 'element') {
             // Return the inner HTML (contents of the element)
             const result = (firstNode.children || [])
@@ -30,7 +30,7 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
     }
 
     // Set inner HTML on all element nodes
-    this.nodes.forEach((node: HtmlNode) => {
+    this.nodes.forEach((node: JqElement) => {
         if (node.internalType === 'element') {
             // Parse the HTML string and set as children
             const parsedNodes = parseHTML(htmlString);

@@ -2,8 +2,8 @@
  * Tests for JqCDATASection class
  */
 
-import { JqCDATASection } from '../../dom/JqCDATASection';
-import { HtmlNode } from '../../dom/HtmlNode';
+import { JqCDATASection } from '../../dom/core/JqCDATASection';
+import { JqElement } from '../../types';
 
 describe('JqCDATASection', () => {
     describe('Constructor', () => {
@@ -26,33 +26,33 @@ describe('JqCDATASection', () => {
         });
     });
 
-    describe('fromHtmlNode', () => {
-        it('should create JqCDATASection from HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'Test CDATA content';
+    describe('fromJqElement', () => {
+        it('should create JqCDATASection from JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'Test CDATA content';
 
-            const cdataSection = JqCDATASection.fromHtmlNode(htmlNode);
+            const cdataSection = JqCDATASection.fromJqElement(jqElement);
             expect(cdataSection.data).toBe('Test CDATA content');
-            expect(cdataSection.getHtmlNode()).toBe(htmlNode);
+            expect(cdataSection.getJqElement()).toBe(jqElement);
         });
 
-        it('should sync data changes with HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'Initial CDATA';
+        it('should sync data changes with JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'Initial CDATA';
 
-            const cdataSection = JqCDATASection.fromHtmlNode(htmlNode);
+            const cdataSection = JqCDATASection.fromJqElement(jqElement);
             cdataSection.data = 'Updated CDATA';
 
-            expect(htmlNode.data).toBe('Updated CDATA');
+            expect(jqElement.textData).toBe('Updated CDATA');
             expect(cdataSection.data).toBe('Updated CDATA');
         });
 
-        it('should read data from HtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            htmlNode.data = 'From HtmlNode';
+        it('should read data from JqElement', () => {
+            const jqElement = new JqElement('text');
+            jqElement.textData = 'From JqElement';
 
-            const cdataSection = JqCDATASection.fromHtmlNode(htmlNode);
-            htmlNode.data = 'Changed externally';
+            const cdataSection = JqCDATASection.fromJqElement(jqElement);
+            jqElement.textData = 'Changed externally';
 
             expect(cdataSection.data).toBe('Changed externally');
         });
@@ -207,17 +207,17 @@ describe('JqCDATASection', () => {
         });
     });
 
-    describe('Integration with HtmlNode', () => {
-        it('should not have HtmlNode reference by default', () => {
+    describe('Integration with JqElement', () => {
+        it('should not have JqElement reference by default', () => {
             const cdataSection = new JqCDATASection('test');
-            expect(cdataSection.getHtmlNode()).toBeNull();
+            expect(cdataSection.getJqElement()).toBeNull();
         });
 
-        it('should maintain HtmlNode reference when created via fromHtmlNode', () => {
-            const htmlNode = new HtmlNode('text');
-            const cdataSection = JqCDATASection.fromHtmlNode(htmlNode);
+        it('should maintain JqElement reference when created via fromJqElement', () => {
+            const jqElement = new JqElement('text');
+            const cdataSection = JqCDATASection.fromJqElement(jqElement);
 
-            expect(cdataSection.getHtmlNode()).toBe(htmlNode);
+            expect(cdataSection.getJqElement()).toBe(jqElement);
         });
     });
 
