@@ -64,7 +64,11 @@ function next(this: JQ, selector?: CssSelector): JQ {
                                 'type' in parsedSelector && parsedSelector.type === 'compound'
                                     ? parsedSelector.selectors
                                     : [parsedSelector];
-                            if (selectorList.some((sel) => nodeMatchesSelector(nextElementSibling, sel))) {
+                            if (
+                                selectorList.some((sel) =>
+                                    nodeMatchesSelector(nextElementSibling, sel),
+                                )
+                            ) {
                                 nextSiblings.push(nextElementSibling);
                             }
                         }

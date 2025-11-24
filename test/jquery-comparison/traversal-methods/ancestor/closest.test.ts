@@ -2,10 +2,10 @@ import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 import type { HtmlNode, JQ } from '../../../../types';
 
 describe('closest() method - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: JQ, jqRoot: JQuery<Document>;
+  let nqRoot: JQ, jqRoot: JQuery<Document>;
 
-    beforeEach(() => {
-        const html = `
+  beforeEach(() => {
+    const html = `
       <html>
         <head>
           <title>Test Page</title>
@@ -43,145 +43,146 @@ describe('closest() method - Node-Query vs jQuery Comparison', () => {
         </body>
       </html>
     `;
-        const { jquery, nodeQuery } = createTestDom(html);
-        jqRoot = jquery;
-        nqRoot = nodeQuery;
+    const { jquery, nodeQuery } = createTestDom(html);
+    jqRoot = jquery;
+    nqRoot = nodeQuery;
+  });
+
+  test('closest() should find element itself if it matches - jquery-comparison', () => {
+    const nqArticles = nqRoot.find('article');
+    const jqArticles = jqRoot.find('article');
+
+    const nqClosest = nqArticles.closest('article');
+    const jqClosest = jqArticles.closest('article');
+
+    expect(nqClosest.nodes).toHaveLength(2);
+    expect(jqClosest.length).toBe(2);
+
+    // Should return the articles themselves
+    const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.getAttribute('class'));
+    const jqClasses: string[] = [];
+    jqClosest.each((index: number, element: HTMLElement) => {
+      jqClasses.push(element.className);
     });
 
-    test('closest() should find element itself if it matches - jquery-comparison', () => {
-        const nqArticles = nqRoot.find('article');
-        const jqArticles = jqRoot.find('article');
+    expect(nqClasses.sort()).toEqual(jqClasses.sort());
+    expect(nqClasses).toEqual(['article', 'article']);
+  });
 
-        const nqClosest = nqArticles.closest('article');
-        const jqClosest = jqArticles.closest('article');
+  test('closest() should find closest ancestor matching selector - jquery-comparison', () => {
+    const nqSpans = nqRoot.find('span');
+    const jqSpans = jqRoot.find('span');
 
-        expect(nqClosest.nodes).toHaveLength(2);
-        expect(jqClosest.length).toBe(2);
+    const nqClosest = nqSpans.closest('.article');
+    const jqClosest = jqSpans.closest('.article');
 
-        // Should return the articles themselves
-        const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.attributes.class);
-        const jqClasses: string[] = [];
-        jqClosest.each((index: number, element: HTMLElement) => {
-            jqClasses.push(element.className);
-        });
+    expect(nqClosest.nodes).toHaveLength(1); // Both spans are in the same article, so 1 unique ancestor
+    expect(jqClosest.length).toBe(1);
 
-        expect(nqClasses.sort()).toEqual(jqClasses.sort());
-        expect(nqClasses).toEqual(['article', 'article']);
+    const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.getAttribute('class'));
+    const jqClasses: string[] = [];
+    jqClosest.each((index: number, element: HTMLElement) => {
+      jqClasses.push(element.className);
     });
 
-    test('closest() should find closest ancestor matching selector - jquery-comparison', () => {
-        const nqSpans = nqRoot.find('span');
-        const jqSpans = jqRoot.find('span');
+    expect(nqClasses.sort()).toEqual(jqClasses.sort());
+    expect(nqClasses).toEqual(['article']);
+  });
 
-        const nqClosest = nqSpans.closest('.article');
-        const jqClosest = jqSpans.closest('.article');
+  test('closest() should return empty for elements with no matching ancestors - jquery-comparison', () => {
+    const nqBody = nqRoot.find('body');
+    const jqBody = jqRoot.find('body');
 
-        expect(nqClosest.nodes).toHaveLength(1); // Both spans are in the same article, so 1 unique ancestor
-        expect(jqClosest.length).toBe(1);
+    const nqClosest = nqBody.closest('.nonexistent');
+    const jqClosest = jqBody.closest('.nonexistent');
 
-        const nqClasses = nqClosest.nodes.map((node: HtmlNode) => node.attributes.class);
-        const jqClasses: string[] = [];
-        jqClosest.each((index: number, element: HTMLElement) => {
-            jqClasses.push(element.className);
-        });
+    expect(nqClosest.nodes).toHaveLength(0);
+    expect(jqClosest.length).toBe(0);
+  });
 
-        expect(nqClasses.sort()).toEqual(jqClasses.sort());
-        expect(nqClasses).toEqual(['article']);
+  test('closest() should work with complex selectors - jquery-comparison', () => {
+    const nqInnerSpan = nqRoot.find('.inner-span');
+    const jqInnerSpan = jqRoot.find('.inner-span');
+
+    const nqClosest = nqInnerSpan.closest('article.article');
+    const jqClosest = jqInnerSpan.closest('article.article');
+
+    expect(nqClosest.nodes).toHaveLength(1);
+    expect(jqClosest.length).toBe(1);
+
+    const nqClass = nqClosest.attr('class');
+    const jqClass = jqClosest.attr('class');
+
+    expect(nqClass).toBe(jqClass);
+    expect(nqClass).toBe('article');
+  });
+
+  test('closest() should find closest ancestor with ID - jquery-comparison', () => {
+    const nqHighlightSpan = nqRoot.find('.highlight');
+    const jqHighlightSpan = jqRoot.find('.highlight');
+
+    const nqClosest = nqHighlightSpan.closest('[id]');
+    const jqClosest = jqHighlightSpan.closest('[id]');
+
+    expect(nqClosest.nodes).toHaveLength(1);
+    expect(jqClosest.length).toBe(1);
+
+    const nqId = nqClosest.attr('id');
+    const jqId = jqClosest.attr('id');
+
+    expect(nqId).toBe(jqId);
+    expect(nqId).toBe('content');
+  });
+
+  test('closest() should work with multiple elements - jquery-comparison', () => {
+    const nqAllSpans = nqRoot.find('span');
+    const jqAllSpans = jqRoot.find('span');
+
+    const nqClosest = nqAllSpans.closest('.content, .sidebar');
+    const jqClosest = jqAllSpans.closest('.content, .sidebar');
+
+    expect(nqClosest.nodes).toHaveLength(1); // All spans are inside content, so only 1 unique ancestor
+    expect(jqClosest.length).toBe(1);
+
+    // Check that we get the content ancestor
+    const nqIds = nqClosest.nodes
+      .map((node: HtmlNode) => node.getAttribute('id'))
+      .filter((id) => id);
+    const jqIds: string[] = [];
+    jqClosest.each((index: number, element: HTMLElement) => {
+      if (element.id) jqIds.push(element.id);
     });
 
-    test('closest() should return empty for elements with no matching ancestors - jquery-comparison', () => {
-        const nqBody = nqRoot.find('body');
-        const jqBody = jqRoot.find('body');
+    expect(nqIds.sort()).toEqual(jqIds.sort());
+    expect(nqIds).toEqual(['content']);
+  });
 
-        const nqClosest = nqBody.closest('.nonexistent');
-        const jqClosest = jqBody.closest('.nonexistent');
+  test('closest() should handle empty collections - jquery-comparison', () => {
+    const nqEmpty = nqRoot.find('.nonexistent');
+    const jqEmpty = jqRoot.find('.nonexistent');
 
-        expect(nqClosest.nodes).toHaveLength(0);
-        expect(jqClosest.length).toBe(0);
-    });
+    const nqClosest = nqEmpty.closest('div');
+    const jqClosest = jqEmpty.closest('div');
 
-    test('closest() should work with complex selectors - jquery-comparison', () => {
-        const nqInnerSpan = nqRoot.find('.inner-span');
-        const jqInnerSpan = jqRoot.find('.inner-span');
+    expect(nqClosest.nodes).toHaveLength(0);
+    expect(jqClosest.length).toBe(0);
+  });
 
-        const nqClosest = nqInnerSpan.closest('article.article');
-        const jqClosest = jqInnerSpan.closest('article.article');
+  test('closest() should work with tag selectors - jquery-comparison', () => {
+    const nqTitle = nqRoot.find('.title');
+    const jqTitle = jqRoot.find('.title');
 
-        expect(nqClosest.nodes).toHaveLength(1);
-        expect(jqClosest.length).toBe(1);
+    const nqClosest = nqTitle.closest('div');
+    const jqClosest = jqTitle.closest('div');
 
-        const nqClass = nqClosest.attr('class');
-        const jqClass = jqClosest.attr('class');
+    expect(nqClosest.nodes).toHaveLength(1);
+    expect(jqClosest.length).toBe(1);
 
-        expect(nqClass).toBe(jqClass);
-        expect(nqClass).toBe('article');
-    });
+    const nqId = nqClosest.attr('id');
+    const jqId = jqClosest.attr('id');
 
-    test('closest() should find closest ancestor with ID - jquery-comparison', () => {
-        const nqHighlightSpan = nqRoot.find('.highlight');
-        const jqHighlightSpan = jqRoot.find('.highlight');
-
-        const nqClosest = nqHighlightSpan.closest('[id]');
-        const jqClosest = jqHighlightSpan.closest('[id]');
-
-        expect(nqClosest.nodes).toHaveLength(1);
-        expect(jqClosest.length).toBe(1);
-
-        const nqId = nqClosest.attr('id');
-        const jqId = jqClosest.attr('id');
-
-        expect(nqId).toBe(jqId);
-        expect(nqId).toBe('content');
-    });
-
-    test('closest() should work with multiple elements - jquery-comparison', () => {
-        const nqAllSpans = nqRoot.find('span');
-        const jqAllSpans = jqRoot.find('span');
-
-        const nqClosest = nqAllSpans.closest('.content, .sidebar');
-        const jqClosest = jqAllSpans.closest('.content, .sidebar');
-
-        expect(nqClosest.nodes).toHaveLength(1); // All spans are inside content, so only 1 unique ancestor
-        expect(jqClosest.length).toBe(1);
-
-        // Check that we get the content ancestor
-        const nqIds = nqClosest.nodes
-            .map((node: HtmlNode) => node.attributes.id)
-            .filter((id) => id);
-        const jqIds: string[] = [];
-        jqClosest.each((index: number, element: HTMLElement) => {
-            if (element.id) jqIds.push(element.id);
-        });
-
-        expect(nqIds.sort()).toEqual(jqIds.sort());
-        expect(nqIds).toEqual(['content']);
-    });
-
-    test('closest() should handle empty collections - jquery-comparison', () => {
-        const nqEmpty = nqRoot.find('.nonexistent');
-        const jqEmpty = jqRoot.find('.nonexistent');
-
-        const nqClosest = nqEmpty.closest('div');
-        const jqClosest = jqEmpty.closest('div');
-
-        expect(nqClosest.nodes).toHaveLength(0);
-        expect(jqClosest.length).toBe(0);
-    });
-
-    test('closest() should work with tag selectors - jquery-comparison', () => {
-        const nqTitle = nqRoot.find('.title');
-        const jqTitle = jqRoot.find('.title');
-
-        const nqClosest = nqTitle.closest('div');
-        const jqClosest = jqTitle.closest('div');
-
-        expect(nqClosest.nodes).toHaveLength(1);
-        expect(jqClosest.length).toBe(1);
-
-        const nqId = nqClosest.attr('id');
-        const jqId = jqClosest.attr('id');
-
-        expect(nqId).toBe(jqId);
-        expect(nqId).toBe('header');
-    });
+    expect(nqId).toBe(jqId);
+    expect(nqId).toBe('header');
+  });
 });
+

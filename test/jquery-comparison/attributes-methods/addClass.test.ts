@@ -151,7 +151,7 @@ describe('addClass() method - jQuery Comparison', () => {
 
         // Check each element has the new class
         nqDivs.nodes.forEach((node: HtmlNode, index: number) => {
-            const nqClass = node.attributes?.class;
+            const nqClass = node.getAttribute('class');
             const jqClass = jqDivs.eq(index).attr('class');
             expect(nqClass).toContain('bulk-add');
             expect(jqClass).toContain('bulk-add');
@@ -193,3 +193,4 @@ describe('addClass() method - jQuery Comparison', () => {
         expect(nqClass).toBe('item special-class_123');
     });
 });
+

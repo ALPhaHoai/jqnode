@@ -8,7 +8,8 @@
 import { parseHTML } from './html-parser';
 import JQ from './jq';
 import { selectNodes } from './selector';
-import type { HtmlNode, CssSelector, JQStatic } from './types';
+import { HtmlNode } from './types';
+import type { CssSelector, JQStatic } from './types';
 import {
     now,
     noop,
@@ -43,17 +44,15 @@ function domElementToNode(element: any): HtmlNode {
     }
 
     const nodeName = element.nodeName ? element.nodeName.toUpperCase() : undefined;
-    const attrs: Record<string, string> = {}; // Single source of truth for attributes
-    const node: HtmlNode = {
-        type: element.nodeType === 1 ? 'element' : 'text',
-        name: nodeName,
-        tagName: nodeName, // Expose tagName for compatibility
-        attribs: attrs,
-        attributes: attrs, // Point to the same object
-        children: [],
-        parent: undefined,
-        _originalElement: element,
-    };
+    const attrs: Record<string, string> = {};
+
+    const type = element.nodeType === 1 ? 'element' : 'text';
+    const node = new HtmlNode(type, nodeName);
+
+    node.tagName = nodeName; // Expose tagName for compatibility
+    node.children = [];
+    node.parent = undefined;
+    node._originalElement = element;
 
     // Copy attributes
     if (element.attributes) {
@@ -88,8 +87,9 @@ function domElementToNode(element: any): HtmlNode {
                 // Ensure we get the string value, not the Attr object
                 value = typeof attr.value === 'string' ? attr.value : String(attr.value);
             }
-            attrs[attr.name] = value; // Populate the single attrs object
+            attrs[attr.name] = value;
         }
+        node.attributes._setData(attrs);
     }
 
     // Copy properties for form elements
@@ -110,16 +110,12 @@ function domElementToNode(element: any): HtmlNode {
                 // Element node
                 const childNode = domElementToNode(child);
                 childNode.parent = node;
-                if (!node.children) node.children = [];
                 node.children.push(childNode);
             } else if (child.nodeType === 3) {
                 // Text node
-                const textNode: HtmlNode = {
-                    type: 'text',
-                    data: child.textContent || '',
-                    parent: node,
-                };
-                if (!node.children) node.children = [];
+                const textNode = new HtmlNode('text');
+                textNode.data = child.textContent || '';
+                textNode.parent = node;
                 node.children.push(textNode);
             }
         }
@@ -128,8 +124,7 @@ function domElementToNode(element: any): HtmlNode {
     // For text nodes
     if (element.nodeType === 3) {
         node.data = element.textContent || '';
-        delete node.attribs;
-        delete node.children;
+        // No need to delete attribs/children as they are class properties now
     }
 
     return node;
@@ -254,9 +249,7 @@ function JQFactory(
 (JQFactory as any).fn.yourFunctionName = function (this: JQ): JQ {
     console.log('Called yourFunctionName on ' + this.nodes.length + ' elements.');
     this.nodes.forEach((element) => {
-        if (element.attribs) {
-            element.attribs['data-custom-method-called'] = 'true';
-        }
+        element.setAttribute('data-custom-method-called', 'true');
     });
     return this;
 };

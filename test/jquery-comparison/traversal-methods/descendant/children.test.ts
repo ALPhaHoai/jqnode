@@ -52,7 +52,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTags).toEqual(jqTags);
         expect(nqTags).toEqual(['h1', 'div', 'ul']);
 
-        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.attributes?.class);
+        const nqClasses = nqChildren.nodes.map((node: HtmlNode) => node.getAttribute('class'));
         const jqClasses: string[] = [];
         jqChildren.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
@@ -346,7 +346,7 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
 
-        const nqClasses = nqResult.nodes.map((node: HtmlNode) => node.attributes?.class);
+        const nqClasses = nqResult.nodes.map((node: HtmlNode) => node.getAttribute('class'));
         const jqClasses: string[] = [];
         jqResult.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
@@ -386,3 +386,4 @@ describe('children() method - Node-Query vs jQuery Comparison', () => {
         expect(nqTags).toEqual(['button', 'input', 'textarea', 'select', 'a']);
     });
 });
+

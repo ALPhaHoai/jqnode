@@ -964,7 +964,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
         const jqControls = jqHeader.find('.widget-controls');
 
         // Chain attribute and content operations - identical operations
-        nqTitle.attr('data-original-title', nqTitle.text()).text('Updated Widget Title');
+        nqTitle.attr('data-original-title', nqTitle.text() as string).text('Updated Widget Title');
         jqTitle.attr('data-original-title', jqTitle.text()).text('Updated Widget Title');
 
         nqControls
@@ -1144,7 +1144,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
         expect(nqFeaturedPrices.nodes.length).toBe(2);
 
         // Check that all featured prices got the discount attribute identically
-        nqFeaturedPrices.each((index: number, element: HTMLElement) => {
+        nqFeaturedPrices.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             const jqElement = jqFeaturedPrices.eq(index);
             expect(nqElement.attr('data-discount')).toBe(jqElement.attr('data-discount'));
@@ -1158,7 +1158,7 @@ describe('jQuery method chaining patterns - Node-Query vs jQuery Comparison', ()
         expect(nqFeaturedStatuses.nodes.length).toBe(2);
 
         // Check that all featured statuses got the priority attribute identically
-        nqFeaturedStatuses.each((index: number, element: HTMLElement) => {
+        nqFeaturedStatuses.each((index: number, element: HtmlNode) => {
             const nqElement = $(element);
             const jqElement = jqFeaturedStatuses.eq(index);
             expect(nqElement.attr('data-priority')).toBe(jqElement.attr('data-priority'));

@@ -3,7 +3,7 @@
  */
 
 import { decodeHTMLEntities } from './helpers/html-entities';
-import type { HtmlNode } from './types';
+import { HtmlNode } from './types';
 
 /**
  * HTML5 void elements that are always self-closing
@@ -199,11 +199,9 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html[index] === '>') {
                         index++;
                     }
-                    const doctypeNode: HtmlNode = {
-                        type: 'text',
-                        name: '!DOCTYPE',
-                        data: doctypeText.trim(),
-                    };
+                    const doctypeNode = new HtmlNode('text');
+                    doctypeNode.name = '!DOCTYPE';
+                    doctypeNode.data = doctypeText.trim();
                     nodes.push(doctypeNode);
                 } else if (html.substr(index, 9) === '<![CDATA[') {
                     // CDATA section
@@ -215,10 +213,8 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 3) === ']]>') {
                         index += 3;
                     }
-                    const cdataNode: HtmlNode = {
-                        type: 'text',
-                        data: cdataText,
-                    };
+                    const cdataNode = new HtmlNode('text');
+                    cdataNode.data = cdataText;
                     nodes.push(cdataNode);
                 } else if (html.substr(index, 4) === '<!--') {
                     // Comment
@@ -230,10 +226,8 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 3) === '-->') {
                         index += 3;
                     }
-                    const commentNode: HtmlNode = {
-                        type: 'comment',
-                        data: commentText,
-                    };
+                    const commentNode = new HtmlNode('comment');
+                    commentNode.data = commentText;
                     nodes.push(commentNode);
                 } else if (html[index + 1] === '?') {
                     // Processing instruction (e.g., <?xml version="1.0"?>)
@@ -249,11 +243,9 @@ function parseHTML(html: string): HtmlNode[] {
                     if (html.substr(index, 2) === '?>') {
                         index += 2;
                     }
-                    const piNode: HtmlNode = {
-                        type: 'text',
-                        name: `?${name}`,
-                        data: piText.trim(),
-                    };
+                    const piNode = new HtmlNode('text');
+                    piNode.name = `?${name}`;
+                    piNode.data = piText.trim();
                     nodes.push(piNode);
                 } else if (html[index + 1] === '/') {
                     // Closing tag
@@ -334,14 +326,8 @@ function parseHTML(html: string): HtmlNode[] {
                     }
 
                     if (selfClosing) {
-                        const element: HtmlNode = {
-                            type: 'element',
-                            name: tagName,
-                            tagName: tagName,
-                            attribs: attributes,
-                            attributes: attributes,
-                            children: [],
-                        };
+                        const element = new HtmlNode('element', tagName);
+                        element.attributes._setData(attributes);
                         nodes.push(element);
                     } else {
                         // Check if this is a raw text element (script/style)
@@ -370,26 +356,20 @@ function parseHTML(html: string): HtmlNode[] {
                                 index = length;
                             }
 
-                            const element: HtmlNode = {
-                                type: 'element',
-                                name: tagName,
-                                tagName: tagName,
-                                attribs: attributes,
-                                attributes: attributes,
-                                children: rawText ? [{ type: 'text', data: rawText }] : [],
-                            };
+                            const element = new HtmlNode('element', tagName);
+                            element.attributes._setData(attributes);
+                            if (rawText) {
+                                const textNode = new HtmlNode('text');
+                                textNode.data = rawText;
+                                element.children = [textNode];
+                            }
                             nodes.push(element);
                         } else {
                             // Parse children normally, expecting this tag's closing tag
                             const children = parseNodes(tagName, openTags);
-                            const element: HtmlNode = {
-                                type: 'element',
-                                name: tagName,
-                                tagName: tagName,
-                                attribs: attributes,
-                                attributes: attributes,
-                                children,
-                            };
+                            const element = new HtmlNode('element', tagName);
+                            element.attributes._setData(attributes);
+                            element.children = children;
                             nodes.push(element);
                         }
                     }
@@ -404,10 +384,8 @@ function parseHTML(html: string): HtmlNode[] {
                 // Only create text node if there's actual text content
                 // Don't trim whitespace as it may be significant in HTML
                 if (text) {
-                    const textNode: HtmlNode = {
-                        type: 'text',
-                        data: decodeHTMLEntities(text),
-                    };
+                    const textNode = new HtmlNode('text');
+                    textNode.data = decodeHTMLEntities(text);
                     nodes.push(textNode);
                 }
             }

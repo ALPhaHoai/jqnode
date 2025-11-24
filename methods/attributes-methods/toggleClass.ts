@@ -6,17 +6,10 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
  */
 function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
     this.nodes.forEach((element: HtmlNode) => {
-        if (!element || !element.attributes) return;
+        if (!element) return;
 
-        const originalClass = (element.attributes.class as string) || '';
-
-        if (!element.attributes.class) {
-            element.attributes.class = '';
-        }
-
-        const currentClasses = ((element.attributes.class as string) || '')
-            .split(/\s+/)
-            .filter((cls: string) => cls.length > 0);
+        const originalClass = element.getAttribute('class') || '';
+        const currentClasses = originalClass.split(/\s+/).filter((cls: string) => cls.length > 0);
         let classNameStr = className;
 
         if (typeof className === 'function') {
@@ -53,10 +46,11 @@ function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
             }
         });
 
-        element.attributes.class = currentClasses.join(' ');
+        const newClass = currentClasses.join(' ');
+        element.setAttribute('class', newClass);
 
         if (element._originalElement) {
-            element._originalElement.className = element.attributes.class as string;
+            element._originalElement.className = newClass;
         }
     });
 

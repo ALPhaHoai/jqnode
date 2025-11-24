@@ -82,10 +82,10 @@ describe('Additional selector tests - Node-Query vs jQuery Comparison', () => {
       expect(nqRequiredTexts.nodes).toHaveLength(2);
       expect(jqRequiredTexts.length).toBe(2);
 
-      const nqNames = nqRequiredTexts.nodes.map((node) => node.attributes.name);
-      const jqNames = [];
+      const nqNames = nqRequiredTexts.nodes.map((node) => node.getAttribute('name'));
+      const jqNames: string[] = [];
       jqRequiredTexts.each((index: number, element: HTMLElement) => {
-        jqNames.push(element.name);
+        jqNames.push((element as HTMLInputElement).name);
       });
 
       expect(nqNames.sort()).toEqual(jqNames.sort());
@@ -156,3 +156,4 @@ describe('Additional selector tests - Node-Query vs jQuery Comparison', () => {
     });
   });
 });
+

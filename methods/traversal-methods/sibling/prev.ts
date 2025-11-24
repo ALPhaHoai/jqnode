@@ -29,7 +29,10 @@ function prev(this: JQ, selector?: CssSelector): JQ {
                     if (selector) {
                         // With selector: only return if immediate prev sibling matches
                         const parsedSelector = parseSelector(selector);
-                        if (parsedSelector && nodeMatchesSelector(prevElementSibling, parsedSelector)) {
+                        if (
+                            parsedSelector &&
+                            nodeMatchesSelector(prevElementSibling, parsedSelector)
+                        ) {
                             prevSiblings.push(prevElementSibling);
                         }
                     } else {

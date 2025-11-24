@@ -1,5 +1,6 @@
 import { parseSelector, nodeMatchesSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import type { CssSelector, JQ } from '../../../types';
+import { HtmlNode } from '../../../types';
 import JQClass from '../../../jq';
 
 // Use ReturnType to infer ParsedSelector from parseSelector function
@@ -39,17 +40,11 @@ function _convertDomToNode(domElement: Element): HtmlNode {
         attributes[attr.name] = attr.value;
     }
 
-    return {
-        type: 'element' as const,
-        name: domElement.tagName.toLowerCase(),
-        tagName: domElement.tagName.toLowerCase(),
-        attributes: attributes,
-        attribs: attributes,
-        properties: {},
-        children: [],
-        parent: undefined,
-        _originalElement: domElement,
-    };
+    const node = new HtmlNode('element', domElement.tagName.toLowerCase());
+    node.tagName = domElement.tagName.toLowerCase();
+    node.attributes._setData(attributes);
+    node._originalElement = domElement;
+    return node;
 }
 
 /**
@@ -69,7 +64,8 @@ function _traverseDomParents(
 
     while (domCurrent && domCurrent.nodeType === 1) {
         const domNode = _convertDomToNode(domCurrent);
-        const key = _createUniqueKey(domNode.tagName || '', domNode.attributes!); // attributes is always set by _convertDomToNode
+        const attrData = domNode.attributes._getData();
+        const key = _createUniqueKey(domNode.tagName || '', attrData);
 
         if (!seen.has(key)) {
             seen.add(key);
@@ -101,7 +97,8 @@ function _traverseInternalParents(
 
     while (current) {
         if (current.type === 'element') {
-            const key = _createUniqueKey(current.tagName || '', current.attributes || {});
+            const attrData = current.attributes._getData();
+            const key = _createUniqueKey(current.tagName || '', attrData);
 
             if (!seen.has(key)) {
                 seen.add(key);

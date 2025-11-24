@@ -90,10 +90,10 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
     describe('$.each() static method - identical behavior', () => {
         test('$.each() should iterate over arrays - identical results', () => {
             const array = [1, 2, 3, 4];
-            const nqResult = [];
-            const jqResult = [];
-            const nqIndices = [];
-            const jqIndices = [];
+            const nqResult: number[] = [];
+            const jqResult: number[] = [];
+            const nqIndices: number[] = [];
+            const jqIndices: number[] = [];
 
             // Node-query each
             $.each(array, function (index: number, value: number) {
@@ -116,10 +116,10 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
 
         test('$.each() should iterate over objects - identical results', () => {
             const obj = { a: 1, b: 2, c: 3 };
-            const nqKeys = [];
-            const jqKeys = [];
-            const nqValues = [];
-            const jqValues = [];
+            const nqKeys: string[] = [];
+            const jqKeys: string[] = [];
+            const nqValues: number[] = [];
+            const jqValues: number[] = [];
 
             // Node-query each
             $.each(obj, function (key: string, value: number) {
@@ -148,8 +148,8 @@ describe('JQ Factory Function - Node-Query vs jQuery Comparison', () => {
 
         test('$.each() should break iteration when callback returns false - identical behavior', () => {
             const array = [1, 2, 3, 4];
-            const nqResult = [];
-            const jqResult = [];
+            const nqResult: number[] = [];
+            const jqResult: number[] = [];
 
             // Node-query each with break
             $.each(array, function (index: number, value: number) {

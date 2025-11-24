@@ -17,11 +17,12 @@ function hasClass(this: JQ, className: string): boolean {
         return classes.includes(className);
     }
 
-    if (!element.attributes || !element.attributes.class) {
+    const classValue = element.getAttribute('class');
+    if (!classValue) {
         return false;
     }
 
-    const classes = (element.attributes.class as string).split(/\s+/);
+    const classes = classValue.split(/\s+/);
     return classes.includes(className);
 }
 

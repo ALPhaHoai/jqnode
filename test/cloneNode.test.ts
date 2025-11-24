@@ -82,7 +82,7 @@ describe('_cloneNode Helper', () => {
         const clone = _cloneNode(original, false);
 
         expect(clone).toBeDefined();
-        expect(clone!.children).toBeUndefined();
+        expect(clone?.children).toEqual([]);
     });
 
     test('should clone text nodes', () => {
@@ -116,3 +116,4 @@ describe('_cloneNode Helper', () => {
         expect(_cloneNode(null)).toBeNull();
     });
 });
+

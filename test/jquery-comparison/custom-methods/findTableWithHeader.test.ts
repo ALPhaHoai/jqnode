@@ -151,7 +151,7 @@ describe('.findTableWithHeader()', () => {
             // Check that we got users and orders tables
             const ids: string[] = [];
             $tables.each((i, node) => {
-                ids.push(node.attributes!.id as string);
+                ids.push(node.attribs!['id'] as string);
             });
             expect(ids.sort()).toEqual(['orders', 'users']);
         });
@@ -401,3 +401,4 @@ describe('.findTableWithHeader()', () => {
         });
     });
 });
+

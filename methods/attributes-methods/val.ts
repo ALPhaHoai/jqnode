@@ -1,4 +1,5 @@
-import type { HtmlNode, JQ, FormValueInput, GetterSetterReturn } from '../../types';
+import { HtmlNode } from '../../types';
+import type { JQ, FormValueInput, GetterSetterReturn } from '../../types';
 
 // ============================================================================
 // Helper Functions: Element Type Checks
@@ -39,8 +40,9 @@ function getTextContentFromChildren(element: HtmlNode): string {
 // ============================================================================
 
 function getOptionValue(option: HtmlNode): string {
-    if (option.attributes?.value !== undefined) {
-        return String(option.attributes.value);
+    const value = option.getAttribute('value');
+    if (value !== null) {
+        return value;
     }
     return option.children?.[0]?.data || '';
 }
@@ -52,7 +54,7 @@ function getOptionValue(option: HtmlNode): string {
 function isOptionSelected(option: HtmlNode): boolean {
     const hasProp = option.properties?.selected !== undefined;
     const isPropSelected = hasProp && option.properties?.selected === true;
-    const isAttrSelected = option.attributes?.selected !== undefined;
+    const isAttrSelected = option.getAttribute('selected') !== null;
     return hasProp ? isPropSelected : isAttrSelected;
 }
 
@@ -68,8 +70,9 @@ function getInputValue(element: HtmlNode): string {
     if (element.properties?.value !== undefined) {
         return String(element.properties.value);
     }
-    if (element.attributes?.value !== undefined) {
-        return String(element.attributes.value);
+    const attrValue = element.getAttribute('value');
+    if (attrValue !== null) {
+        return attrValue;
     }
     return getTextContentFromChildren(element);
 }
@@ -123,7 +126,7 @@ function collectSelectInfo(element: HtmlNode): SelectInfo {
 
 function getSelectValue(element: HtmlNode): string | string[] {
     const info = collectSelectInfo(element);
-    const isMultiple = element.attributes?.multiple;
+    const isMultiple = element.getAttribute('multiple') !== null;
 
     if (isMultiple) {
         return info.selectedValues;
@@ -176,7 +179,9 @@ function setInputValue(element: HtmlNode, value: string): void {
 function setTextareaValue(element: HtmlNode, value: string): void {
     ensureProperties(element);
     element.properties!.value = value;
-    element.children = [{ type: 'text', data: value }];
+    const textNode = new HtmlNode('text');
+    textNode.data = value;
+    element.children = [textNode];
 
     if (element._originalElement) {
         (element._originalElement as unknown as HTMLTextAreaElement).value = value;
@@ -224,7 +229,7 @@ function setSelectSingleValue(element: HtmlNode, value: string): void {
 }
 
 function setSelectValue(element: HtmlNode, value: FormValueInput): void {
-    const isMultiple = element.attributes?.multiple;
+    const isMultiple = element.getAttribute('multiple') !== null;
 
     if (isMultiple && Array.isArray(value)) {
         setSelectMultipleValue(element, value);
@@ -255,8 +260,9 @@ function getCurrentValueForCallback(element: HtmlNode): string | string[] {
         if (element.properties?.value !== undefined) {
             return String(element.properties.value);
         }
-        if (element.attributes?.value !== undefined) {
-            return String(element.attributes.value);
+        const attrValue = element.getAttribute('value');
+        if (attrValue !== null) {
+            return attrValue;
         }
         return '';
     }
@@ -286,7 +292,9 @@ function setValueFromCallback(
     } else if (isTextareaElement(element)) {
         ensureProperties(element);
         element.properties!.value = stringResult;
-        element.children = [{ type: 'text', data: stringResult }];
+        const textNode = new HtmlNode('text');
+        textNode.data = stringResult;
+        element.children = [textNode];
     }
 }
 

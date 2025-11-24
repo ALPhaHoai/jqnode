@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import type { CssSelector, JQ } from '../../../types';
+import { HtmlNode } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -30,36 +31,21 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
                         const child = sibling.childNodes[i];
                         if (child.nodeType === 3) {
                             // Text node
-                            children.push({
-                                type: 'text',
-                                value: child.textContent || undefined,
-                                data: child.textContent || undefined,
-                            });
+                            const textNode = new HtmlNode('text');
+                            textNode.data = child.textContent || '';
+                            children.push(textNode);
                         } else if (child.nodeType === 1) {
                             // Element node - add placeholder, will be processed if needed
-                            children.push({
-                                type: 'element',
-                                name: (child as Element).tagName.toLowerCase(),
-                                tagName: (child as Element).tagName.toLowerCase(),
-                                attributes: {},
-                                attribs: {},
-                                children: [],
-                                _originalElement: child as Element,
-                            });
+                            const elemNode = new HtmlNode('element', (child as Element).tagName.toLowerCase());
+                            elemNode._originalElement = child as Element;
+                            children.push(elemNode);
                         }
                     }
 
-                    const internalNode: HtmlNode = {
-                        type: 'element',
-                        name: sibling.tagName.toLowerCase(),
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: attributes,
-                        attribs: attributes,
-                        properties: {},
-                        children: children,
-                        parent: undefined,
-                        _originalElement: sibling,
-                    };
+                    const internalNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    internalNode.attributes._setData(attributes);
+                    internalNode.children = children;
+                    internalNode._originalElement = sibling;
                     followingSiblings.push(internalNode);
                 }
                 sibling = sibling.nextElementSibling;

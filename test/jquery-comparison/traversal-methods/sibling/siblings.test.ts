@@ -34,8 +34,8 @@ describe('siblings() method - Node-Query vs jQuery Comparison', () => {
         expect(jqSiblings.length).toBe(5);
 
         // Check that all expected siblings are present
-        const nqClasses = nqSiblings.nodes.map((node: HtmlNode) => node.attributes.class).sort();
-        const jqClasses = [];
+        const nqClasses = nqSiblings.nodes.map((node: HtmlNode) => node.getAttribute('class')).sort();
+        const jqClasses: string[] = [];
         jqSiblings.each((index: number, element: HTMLElement) => {
             jqClasses.push(element.className);
         });
@@ -126,3 +126,4 @@ describe('siblings() method - Node-Query vs jQuery Comparison', () => {
         expect(nqText).toBe('First');
     });
 });
+

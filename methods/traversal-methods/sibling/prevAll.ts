@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ } from '../../../types';
+import type { CssSelector, JQ } from '../../../types';
+import { HtmlNode } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -27,41 +28,28 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
                         'type' in parsedSelector && parsedSelector.type === 'compound'
                             ? parsedSelector.selectors
                             : [parsedSelector];
-                    const tempNode: HtmlNode = {
-                        type: 'element',
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: {},
-                        _originalElement: sibling,
-                    };
+                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const attrs: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
-                        if (tempNode.attributes) {
-                            tempNode.attributes[attr.name] = attr.value;
-                        }
+                        attrs[attr.name] = attr.value;
                     }
+                    tempNode.attributes._setData(attrs);
+                    tempNode._originalElement = sibling;
                     if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldInclude = false;
                     }
                 }
 
                 if (shouldInclude) {
-                    const internalNode: HtmlNode = {
-                        type: 'element',
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: {},
-                        properties: {},
-                        children: [],
-                        parent: undefined,
-                        _originalElement: sibling,
-                    };
-
+                    const internalNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    const attrs: Record<string, string> = {};
                     for (let i = 0; i < sibling.attributes.length; i++) {
                         const attr = sibling.attributes[i];
-                        if (internalNode.attributes) {
-                            internalNode.attributes[attr.name] = attr.value;
-                        }
+                        attrs[attr.name] = attr.value;
                     }
-
+                    internalNode.attributes._setData(attrs);
+                    internalNode._originalElement = sibling;
                     allPrecedingSiblings.push(internalNode);
                 }
 
@@ -101,3 +89,4 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
 }
 
 export = prevAll;
+

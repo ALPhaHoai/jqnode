@@ -448,14 +448,14 @@ function nodeMatchesSelector(
         if (simpleSelector.id === '') {
             return false;
         }
-        const nodeId = node.attribs?.id;
+        const nodeId = node.getAttribute('id');
         if (nodeId !== simpleSelector.id) {
             return false;
         }
     }
 
     if (simpleSelector.classes && simpleSelector.classes.length > 0) {
-        const nodeClass = node.attribs?.class;
+        const nodeClass = node.getAttribute('class');
         if (!nodeClass) {
             return false;
         }
@@ -490,7 +490,7 @@ function nodeMatchesSelector(
  * Checks if a node matches an attribute selector.
  */
 function matchesAttribute(node: HtmlNode, attr: AttributeSelector): boolean {
-    const nodeValue = node.attribs?.[attr.name];
+    const nodeValue = node.getAttribute(attr.name);
 
     if (attr.operator === null) {
         return nodeValue !== undefined;

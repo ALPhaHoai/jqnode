@@ -1,4 +1,5 @@
-import type { HtmlNode, JQ } from '../../../types';
+import type { JQ } from '../../../types';
+import { HtmlNode } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -45,19 +46,12 @@ function contents(this: JQ): JQ {
                 }
             }
 
-            const node: HtmlNode = {
-                type: 'element',
-                name: tagName,
-                tagName: tagName,
-                attributes: attributes,
-                attribs: attributes,
-                properties: {},
-                children: [],
-                parent: undefined,
-                _originalElement: ('nodeType' in domNode && domNode.nodeType === 1
-                    ? (domNode as Element)
-                    : undefined) as Element | undefined,
-            };
+            const node = new HtmlNode('element', tagName);
+            node.tagName = tagName;
+            node.attributes._setData(attributes);
+            node._originalElement = ('nodeType' in domNode && domNode.nodeType === 1
+                ? (domNode as Element)
+                : undefined);
 
             // Copy properties from DOM element
             if ('nodeType' in domNode && domNode.nodeType === 1) {
@@ -86,28 +80,24 @@ function contents(this: JQ): JQ {
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                      ? (domNode as HtmlNode).data
-                      : null;
-            return {
-                type: 'text',
-                value: textContent || undefined,
-                data: textContent || undefined,
-                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null,
-            };
+                        ? (domNode as HtmlNode).data
+                        : null;
+            const textNode = new HtmlNode('text');
+            textNode.data = textContent || '';
+            textNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
+            return textNode;
         } else if (domNode.nodeType === 8) {
             // Comment node
             const textContent =
                 'textContent' in domNode
                     ? domNode.textContent
                     : 'data' in domNode
-                      ? (domNode as HtmlNode).data
-                      : null;
-            return {
-                type: 'comment',
-                value: textContent || undefined,
-                data: textContent || undefined,
-                _originalElement: 'nodeType' in domNode ? (domNode as Element) : null,
-            };
+                        ? (domNode as HtmlNode).data
+                        : null;
+            const commentNode = new HtmlNode('comment');
+            commentNode.data = textContent || '';
+            commentNode._originalElement = 'nodeType' in domNode ? (domNode as Element) : null;
+            return commentNode;
         }
         return null;
     }

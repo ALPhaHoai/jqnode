@@ -2,11 +2,11 @@ import { createTestDom } from '../../utils/jquery-comparison-helpers';
 import { JQ } from '../../../index';
 
 describe('JQ find() method with CSS selectors - Node-Query vs jQuery Comparison', () => {
-  let nqRoot: JQ;
-  let jqRoot: any;
+    let nqRoot: JQ;
+    let jqRoot: any;
 
-  beforeEach(() => {
-    const html = `
+    beforeEach(() => {
+        const html = `
       <div id="main" class="container">
         <header class="header">
           <h1 id="title" class="title">Welcome</h1>
@@ -32,107 +32,107 @@ describe('JQ find() method with CSS selectors - Node-Query vs jQuery Comparison'
         </footer>
       </div>
     `;
-    const { jquery, nodeQuery } = createTestDom(html);
-    jqRoot = jquery;
-    nqRoot = nodeQuery;
-  });
+        const { jquery, nodeQuery } = createTestDom(html);
+        jqRoot = jquery;
+        nqRoot = nodeQuery;
+    });
 
-  test('should find elements by tag name - jquery-comparison', () => {
-    const nqArticles = nqRoot.find('article');
-    const jqArticles = jqRoot.find('article');
+    test('should find elements by tag name - jquery-comparison', () => {
+        const nqArticles = nqRoot.find('article');
+        const jqArticles = jqRoot.find('article');
 
-    expect(nqArticles.nodes).toHaveLength(2);
-    expect(jqArticles.length).toBe(2);
-  });
+        expect(nqArticles.nodes).toHaveLength(2);
+        expect(jqArticles.length).toBe(2);
+    });
 
-  test('should find elements by ID - jquery-comparison', () => {
-    const nqTitle = nqRoot.find('#title');
-    const jqTitle = jqRoot.find('#title');
+    test('should find elements by ID - jquery-comparison', () => {
+        const nqTitle = nqRoot.find('#title');
+        const jqTitle = jqRoot.find('#title');
 
-    expect(nqTitle.nodes).toHaveLength(1);
-    expect(jqTitle.length).toBe(1);
+        expect(nqTitle.nodes).toHaveLength(1);
+        expect(jqTitle.length).toBe(1);
 
-    const nqTitleId = nqTitle.attr('id');
-    const jqTitleId = jqTitle.attr('id');
+        const nqTitleId = nqTitle.attr('id');
+        const jqTitleId = jqTitle.attr('id');
 
-    expect(nqTitleId).toBe(jqTitleId);
-    expect(nqTitleId).toBe('title');
-  });
+        expect(nqTitleId).toBe(jqTitleId);
+        expect(nqTitleId).toBe('title');
+    });
 
-  test('should find elements by class - jquery-comparison', () => {
-    const nqNavItems = nqRoot.find('.nav-item');
-    const jqNavItems = jqRoot.find('.nav-item');
+    test('should find elements by class - jquery-comparison', () => {
+        const nqNavItems = nqRoot.find('.nav-item');
+        const jqNavItems = jqRoot.find('.nav-item');
 
-    expect(nqNavItems.nodes).toHaveLength(2);
-    expect(jqNavItems.length).toBe(2);
+        expect(nqNavItems.nodes).toHaveLength(2);
+        expect(jqNavItems.length).toBe(2);
 
-    // Compare class attributes
-    for (let i = 0; i < nqNavItems.nodes.length; i++) {
-      const nqClass = nqNavItems.eq(i).attr('class');
-      const jqClass = jqNavItems.eq(i).attr('class');
-      expect(nqClass).toBe(jqClass);
-      expect(nqClass).toContain('nav-item');
-    }
-  });
+        // Compare class attributes
+        for (let i = 0; i < nqNavItems.nodes.length; i++) {
+            const nqClass = nqNavItems.eq(i).attr('class');
+            const jqClass = jqNavItems.eq(i).attr('class');
+            expect(nqClass).toBe(jqClass);
+            expect(nqClass).toContain('nav-item');
+        }
+    });
 
-  test('should find elements by attribute presence - jquery-comparison', () => {
-    const nqIdElements = nqRoot.find('[id]');
-    const jqIdElements = jqRoot.find('[id]');
+    test('should find elements by attribute presence - jquery-comparison', () => {
+        const nqIdElements = nqRoot.find('[id]');
+        const jqIdElements = jqRoot.find('[id]');
 
-    expect(nqIdElements.nodes).toHaveLength(4); // main, title, post-1, post-2
-    expect(jqIdElements.length).toBe(4);
-  });
+        expect(nqIdElements.nodes).toHaveLength(4); // main, title, post-1, post-2
+        expect(jqIdElements.length).toBe(4);
+    });
 
-  test('should find elements by attribute value - jquery-comparison', () => {
-    const nqTitleElement = nqRoot.find('[id="title"]');
-    const jqTitleElement = jqRoot.find('[id="title"]');
+    test('should find elements by attribute value - jquery-comparison', () => {
+        const nqTitleElement = nqRoot.find('[id="title"]');
+        const jqTitleElement = jqRoot.find('[id="title"]');
 
-    expect(nqTitleElement.nodes).toHaveLength(1);
-    expect(jqTitleElement.length).toBe(1);
-  });
+        expect(nqTitleElement.nodes).toHaveLength(1);
+        expect(jqTitleElement.length).toBe(1);
+    });
 
-  test('should find elements by complex selectors - jquery-comparison', () => {
-    const nqComplex = nqRoot.find('.post.featured');
-    const jqComplex = jqRoot.find('.post.featured');
+    test('should find elements by complex selectors - jquery-comparison', () => {
+        const nqComplex = nqRoot.find('.post.featured');
+        const jqComplex = jqRoot.find('.post.featured');
 
-    expect(nqComplex.nodes).toHaveLength(1);
-    expect(jqComplex.length).toBe(1);
+        expect(nqComplex.nodes).toHaveLength(1);
+        expect(jqComplex.length).toBe(1);
 
-    const nqText = nqComplex.text();
-    const jqText = jqComplex.text();
+        const nqText = nqComplex.text();
+        const jqText = jqComplex.text();
 
-    expect(nqText).toBe(jqText);
-  });
+        expect(nqText).toBe(jqText);
+    });
 
-  test('should find elements using descendant combinators - jquery-comparison', () => {
-    const nqDescendants = nqRoot.find('.container h1');
-    const jqDescendants = jqRoot.find('.container h1');
+    test('should find elements using descendant combinators - jquery-comparison', () => {
+        const nqDescendants = nqRoot.find('.container h1');
+        const jqDescendants = jqRoot.find('.container h1');
 
-    expect(nqDescendants.nodes).toHaveLength(1);
-    expect(jqDescendants.length).toBe(1);
-  });
+        expect(nqDescendants.nodes).toHaveLength(1);
+        expect(jqDescendants.length).toBe(1);
+    });
 
-  test('should find elements using child combinators - jquery-comparison', () => {
-    const nqChildren = nqRoot.find('main > article');
-    const jqChildren = jqRoot.find('main > article');
+    test('should find elements using child combinators - jquery-comparison', () => {
+        const nqChildren = nqRoot.find('main > article');
+        const jqChildren = jqRoot.find('main > article');
 
-    expect(nqChildren.nodes).toHaveLength(2);
-    expect(jqChildren.length).toBe(2);
-  });
+        expect(nqChildren.nodes).toHaveLength(2);
+        expect(jqChildren.length).toBe(2);
+    });
 
-  test('should find elements using adjacent sibling combinators - jquery-comparison', () => {
-    const nqAdjacent = nqRoot.find('h1 + nav');
-    const jqAdjacent = jqRoot.find('h1 + nav');
+    test('should find elements using adjacent sibling combinators - jquery-comparison', () => {
+        const nqAdjacent = nqRoot.find('h1 + nav');
+        const jqAdjacent = jqRoot.find('h1 + nav');
 
-    expect(nqAdjacent.nodes).toHaveLength(1);
-    expect(jqAdjacent.length).toBe(1);
-  });
+        expect(nqAdjacent.nodes).toHaveLength(1);
+        expect(jqAdjacent.length).toBe(1);
+    });
 
-  test('should find elements using general sibling combinators - jquery-comparison', () => {
-    const nqGeneralSiblings = nqRoot.find('h1 ~ nav');
-    const jqGeneralSiblings = jqRoot.find('h1 ~ nav');
+    test('should find elements using general sibling combinators - jquery-comparison', () => {
+        const nqGeneralSiblings = nqRoot.find('h1 ~ nav');
+        const jqGeneralSiblings = jqRoot.find('h1 ~ nav');
 
-    expect(nqGeneralSiblings.nodes).toHaveLength(1);
-    expect(jqGeneralSiblings.length).toBe(1);
-  });
+        expect(nqGeneralSiblings.nodes).toHaveLength(1);
+        expect(jqGeneralSiblings.length).toBe(1);
+    });
 });

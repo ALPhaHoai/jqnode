@@ -2,44 +2,11 @@
  * Core type definitions for jqnode
  */
 
-/**
- * Node type identifier
- */
-export type NodeType = 'element' | 'text' | 'comment';
+import { HtmlNode, NodeType } from './HtmlNode';
 
-/**
- * Internal HTML node structure
- */
-export interface HtmlNode {
-    type: NodeType;
-    name?: string;
-    tagName?: string; // Tag name for elements
-    data?: string;
-    value?: string; // Alternative text content property (used by some parsers)
-    attribs?: Record<string, string>;
-    children?: HtmlNode[];
-    parent?: HtmlNode;
-    parentNode?: ParentNode | null; // DOM parentNode reference
-    prev?: HtmlNode | null;
-    next?: HtmlNode | null;
-    // Internal tracking for data storage
-    __jqdata__?: Record<string, unknown>;
-    // Extended properties for DOM integration
-    _originalElement?: Element | null; // DOM element reference
-    _jqData?: Record<string, unknown>; // jQuery-style data storage
-    _detached?: boolean; // Marks nodes from fractional eq() indices as detached
-    properties?: Record<string, unknown>; // Custom properties storage
-    nodeType?: number; // DOM node type
-    childNodes?: ChildNode[]; // DOM childNodes
-    attributes?: Record<string, unknown>; // Attributes as plain object (cheerio-style)
-    getAttribute?: (name: string) => string | null;
-    setAttribute?: (name: string, value: string | number) => void;
-    removeAttribute?: (name: string) => void;
-    removeChild?: (child: Node) => Node | null; // DOM removeChild method
-    textContent?: string | null; // DOM text content
-    offsetTop?: number; // DOM offset properties
-    offsetLeft?: number;
-}
+// Re-export for convenience
+export { HtmlNode };
+export type { NodeType };
 
 /**
  * CSS selector pattern

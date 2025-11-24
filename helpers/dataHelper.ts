@@ -24,7 +24,7 @@ export const parseDataValue = (val: string): unknown => {
         if (val === 'null') return null;
         if (val === +val + '') return +val;
         if (/^[\[\{]/.test(val)) return JSON.parse(val);
-    } catch (e) { }
+    } catch (e) {}
     return val;
 };
 

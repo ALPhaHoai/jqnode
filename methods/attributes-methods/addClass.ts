@@ -7,9 +7,7 @@ import type { HtmlNode, JQ, ClassNameInput } from '../../types';
 function addClass(this: JQ, className: ClassNameInput): JQ {
     if (typeof className === 'function') {
         this.nodes.forEach((element: HtmlNode, index: number) => {
-            if (!element || !element.attributes) return;
-
-            const originalClass = (element.attributes.class as string) || '';
+            const originalClass = element.getAttribute('class') || '';
             const result = className.call(element, index, originalClass);
             if (typeof result === 'string') {
                 applyClassToElement(element, result);
@@ -23,15 +21,10 @@ function addClass(this: JQ, className: ClassNameInput): JQ {
     });
 
     function applyClassToElement(element: HtmlNode, className: string) {
-        if (!element || !element.attributes) return;
+        if (!element) return;
 
-        if (!element.attributes.class) {
-            element.attributes.class = '';
-        }
-
-        const currentClasses = ((element.attributes.class as string) || '')
-            .split(/\s+/)
-            .filter((cls: string) => cls.length > 0);
+        const currentClass = element.getAttribute('class') || '';
+        const currentClasses = currentClass.split(/\s+/).filter((cls: string) => cls.length > 0);
         const classesToAdd = className.split(/\s+/).filter((cls: string) => cls.length > 0);
 
         classesToAdd.forEach((cls: string) => {
@@ -40,10 +33,11 @@ function addClass(this: JQ, className: ClassNameInput): JQ {
             }
         });
 
-        element.attributes.class = currentClasses.join(' ');
+        const newClass = currentClasses.join(' ');
+        element.setAttribute('class', newClass);
 
         if (element._originalElement) {
-            element._originalElement.className = element.attributes.class as string;
+            element._originalElement.className = newClass;
         }
     }
 

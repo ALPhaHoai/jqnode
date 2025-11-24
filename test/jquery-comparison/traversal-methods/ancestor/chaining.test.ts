@@ -2,7 +2,7 @@ import { createTestDom } from '../../../utils/jquery-comparison-helpers';
 import JQ from '../../../../jq';
 
 describe('Ancestor traversal chaining - Node-Query vs jQuery Comparison', () => {
-    let nqRoot: JQ, jqRoot: JQuery;
+    let nqRoot: JQ, jqRoot: JQuery<any>;
 
     beforeEach(() => {
         const html = `

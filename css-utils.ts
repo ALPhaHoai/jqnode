@@ -114,11 +114,11 @@ export function getComputedStyleValue(element: HtmlNode, property: string): stri
     }
 
     // For internal nodes without _originalElement, parse style attribute
-    if (element.attribs && element.attribs.style) {
-        const styleStr = element.attribs.style;
+    const styleAttr = element.getAttribute('style');
+    if (styleAttr) {
         // Parse style string like "color: red; width: 100px"
         const styles: Record<string, string> = {};
-        styleStr.split(';').forEach((decl: string) => {
+        styleAttr.split(';').forEach((decl: string) => {
             const colonIndex = decl.indexOf(':');
             if (colonIndex > 0) {
                 const prop = decl.substring(0, colonIndex).trim();
@@ -162,31 +162,30 @@ export function setStyleValue(element: HtmlNode, property: string, val: string |
     }
 
     // Also update the internal node's style attribute string
-    if (element.attribs) {
-        const styleStr = element.attribs.style || '';
-        const hyphenProp = hyphenate(property);
+    const styleStr = element.getAttribute('style') || '';
+    const hyphenProp = hyphenate(property);
 
-        // Parse existing styles
-        const styles: Record<string, string | number> = {};
-        if (styleStr) {
-            styleStr.split(';').forEach((decl: string) => {
-                const colonIndex = decl.indexOf(':');
-                if (colonIndex > 0) {
-                    const prop = decl.substring(0, colonIndex).trim();
-                    const value = decl.substring(colonIndex + 1).trim();
-                    if (prop && value) {
-                        styles[prop] = value;
-                    }
+    // Parse existing styles
+    const styles: Record<string, string | number> = {};
+    if (styleStr) {
+        styleStr.split(';').forEach((decl: string) => {
+            const colonIndex = decl.indexOf(':');
+            if (colonIndex > 0) {
+                const prop = decl.substring(0, colonIndex).trim();
+                const value = decl.substring(colonIndex + 1).trim();
+                if (prop && value) {
+                    styles[prop] = value;
                 }
-            });
-        }
-
-        // Update or add the property
-        styles[hyphenProp] = finalValue;
-
-        // Rebuild style string
-        element.attribs.style = Object.keys(styles)
-            .map((k: string) => `${k}: ${styles[k]}`)
-            .join('; ');
+            }
+        });
     }
+
+    // Update or add the property
+    styles[hyphenProp] = finalValue;
+
+    // Rebuild style string
+    const newStyleStr = Object.keys(styles)
+        .map((k: string) => `${k}: ${styles[k]}`)
+        .join('; ');
+    element.setAttribute('style', newStyleStr);
 }

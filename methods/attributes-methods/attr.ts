@@ -55,12 +55,12 @@ function attr(
         }
 
         // Fallback to internal attributes
-        if (element.attributes && element.attributes[name] !== undefined) {
-            const attrValue = element.attributes[name];
+        const attrValue = element.getAttribute(name);
+        if (attrValue !== null) {
             if (booleanAttributes.includes(name)) {
                 return name;
             }
-            return String(attrValue);
+            return attrValue;
         }
 
         // Check boolean properties if not found in attributes (for consistency)
@@ -78,10 +78,7 @@ function attr(
         let valToSet: AttributeValue | undefined;
 
         if (typeof value === 'function') {
-            const currentAttr =
-                element.attributes && element.attributes[name] !== undefined
-                    ? String(element.attributes[name])
-                    : '';
+            const currentAttr = element.getAttribute(name) || '';
             const result = value.call(element, index, currentAttr);
             if (result === undefined) return; // Don't change if undefined returned
             valToSet = result as AttributeValue;
@@ -93,16 +90,13 @@ function attr(
         if (booleanAttributes.includes(name)) {
             if (valToSet === false || valToSet === null || valToSet === undefined) {
                 // Remove attribute
-                if (element.attributes) {
-                    delete element.attributes[name];
-                }
+                element.removeAttribute(name);
                 if (element._originalElement) {
                     element._originalElement.removeAttribute(name);
                 }
             } else {
                 // Set attribute to name (standard HTML5 boolean attribute behavior)
-                if (!element.attributes) element.attributes = {};
-                element.attributes[name] = name;
+                element.setAttribute(name, name);
                 if (element._originalElement) {
                     element._originalElement.setAttribute(name, name);
                 }
@@ -111,17 +105,14 @@ function attr(
             // Handle normal attributes
             if (valToSet === null || valToSet === undefined) {
                 // Remove attribute
-                if (element.attributes) {
-                    delete element.attributes[name];
-                }
+                element.removeAttribute(name);
                 if (element._originalElement) {
                     element._originalElement.removeAttribute(name);
                 }
             } else {
                 // Set attribute
                 const stringValue = String(valToSet);
-                if (!element.attributes) element.attributes = {};
-                element.attributes[name] = stringValue;
+                element.setAttribute(name, stringValue);
                 if (element._originalElement) {
                     element._originalElement.setAttribute(name, stringValue);
                 }

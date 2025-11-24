@@ -74,7 +74,7 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
     test('filter() should filter elements using function that checks element properties - jquery-comparison', () => {
         const nqResult = elements.filter(function (index: number, element: HtmlNode) {
-            return (element.attributes?.class as string | undefined)?.includes('special') ?? false;
+            return (element.getAttribute('class'] as string | undefined)?.includes('special') ?? false;
         });
         const jqResult = jqElements.filter(function (index: number, element: HTMLElement) {
             return $(element).hasClass('special');
@@ -141,11 +141,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(jqResult.length).toBe(3);
 
         // Check that order is preserved
-        const nqTexts = [];
-        const jqTexts = [];
+        const nqTexts: string[] = [];
+        const jqTexts: string[] = [];
 
         nqResult.each((index: number, element: HtmlNode) => {
-            nqTexts.push($(element).text());
+            nqTexts.push($(element).text() as string);
         });
 
         jqResult.each((index: number, element: HTMLElement) => {
@@ -207,11 +207,11 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes).toHaveLength(3);
         expect(jqResult.length).toBe(3);
 
-        const nqTexts = [];
-        const jqTexts = [];
+        const nqTexts: string[] = [];
+        const jqTexts: string[] = [];
 
         nqResult.each((index: number, element: HtmlNode) => {
-            nqTexts.push($(element).text());
+            nqTexts.push($(element).text() as string);
         });
 
         jqResult.each((index: number, element: HTMLElement) => {
@@ -236,15 +236,15 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
 
     test('filter() should handle null and undefined parameters - jquery-comparison', () => {
         // Filter with null should return empty collection
-        const nqNullResult = elements.filter(null);
-        const jqNullResult = jqElements.filter(null);
+        const nqNullResult = elements.filter(null as any);
+        const jqNullResult = jqElements.filter(null as any);
 
         expect(nqNullResult.nodes).toHaveLength(0);
         expect(jqNullResult.length).toBe(0);
 
         // Filter with undefined should return empty collection
-        const nqUndefinedResult = elements.filter(undefined);
-        const jqUndefinedResult = jqElements.filter(undefined);
+        const nqUndefinedResult = elements.filter(undefined as any);
+        const jqUndefinedResult = jqElements.filter(undefined as any);
 
         expect(nqUndefinedResult.nodes).toHaveLength(0);
         expect(jqUndefinedResult.length).toBe(0);
@@ -305,3 +305,4 @@ describe('filter() method - Node-Query vs jQuery Comparison', () => {
         });
     });
 });
+

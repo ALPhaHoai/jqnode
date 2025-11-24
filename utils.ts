@@ -56,15 +56,19 @@ function nodeToHTML(node: HtmlNode): string {
     }
 
     if (node.type === 'element') {
-        const attrs = Object.entries(node.attribs || {})
-            .map(([key, value]) => {
+        const attrPairs: string[] = [];
+        for (let i = 0; i < node.attributes.length; i++) {
+            const attr = node.attributes.item(i);
+            if (attr) {
                 // Boolean attributes or empty values render as just the key
-                if (value === 'true' || value === '') {
-                    return key;
+                if (attr.value === 'true' || attr.value === '') {
+                    attrPairs.push(attr.name);
+                } else {
+                    attrPairs.push(`${attr.name}="${attr.value}"`);
                 }
-                return `${key}="${value}"`;
-            })
-            .join(' ');
+            }
+        }
+        const attrs = attrPairs.join(' ');
 
         const tagNameLower = node.name ? node.name.toLowerCase() : '';
         const tagOpen = attrs ? `<${tagNameLower} ${attrs}>` : `<${tagNameLower}>`;

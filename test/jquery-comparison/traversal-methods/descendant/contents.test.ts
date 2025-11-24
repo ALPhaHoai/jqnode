@@ -54,7 +54,10 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         );
         const jqHasH1 = jqContents
             .toArray()
-            .some((node: Node) => node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'h1');
+            .some(
+                (node: Node) =>
+                    node.nodeType === 1 && (node as Element).tagName.toLowerCase() === 'h1',
+            );
 
         expect(nqHasH1).toBe(jqHasH1);
         expect(nqHasH1).toBe(true);
@@ -154,7 +157,9 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
             .contents()
             .filter((index: number, node: HtmlNode) => {
                 return !!(
-                    node.type === 'element' && node.tagName && node.tagName.toLowerCase() === 'div'
+                    node.type === 'element' &&
+                    node.tagName &&
+                    node.tagName.toLowerCase() === 'div'
                 );
             });
         const jqResult = jqRoot
@@ -228,7 +233,9 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqContents.nodes.length).toBe(jqContents.length);
 
         // Count text nodes
-        const nqTextCount = nqContents.nodes.filter((node: HtmlNode) => node.type === 'text').length;
+        const nqTextCount = nqContents.nodes.filter(
+            (node: HtmlNode) => node.type === 'text',
+        ).length;
         const jqTextCount = jqContents.toArray().filter((node: Node) => node.nodeType === 3).length;
 
         expect(nqTextCount).toBe(jqTextCount);
@@ -277,8 +284,12 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
         expect(nqResult.nodes.length).toBe(jqResult.length);
 
         // Should include contents from both parents
-        const nqElementCount = nqResult.nodes.filter((node: HtmlNode) => node.type === 'element').length;
-        const jqElementCount = jqResult.toArray().filter((node: Node) => node.nodeType === 1).length;
+        const nqElementCount = nqResult.nodes.filter(
+            (node: HtmlNode) => node.type === 'element',
+        ).length;
+        const jqElementCount = jqResult
+            .toArray()
+            .filter((node: Node) => node.nodeType === 1).length;
 
         expect(nqElementCount).toBe(jqElementCount);
         expect(nqElementCount).toBe(2); // 2 span elements total
@@ -358,13 +369,11 @@ describe('contents() method - Node-Query vs jQuery Comparison', () => {
             .find('#filter-test')
             .contents()
             .filter((index: number, node: Node) => {
-                return (
-                    node.nodeType === 1 &&
-                    (node as Element).classList.contains('keep')
-                );
+                return node.nodeType === 1 && (node as Element).classList.contains('keep');
             });
 
         expect(nqResult.nodes).toHaveLength(2);
         expect(jqResult.length).toBe(2);
     });
 });
+

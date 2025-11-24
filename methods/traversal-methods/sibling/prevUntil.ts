@@ -1,5 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
-import type { HtmlNode, CssSelector, JQ, UntilSelector } from '../../../types';
+import type { CssSelector, JQ, UntilSelector } from '../../../types';
+import { HtmlNode } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -53,14 +54,9 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const tempNode: HtmlNode = {
-                        type: 'element',
-                        name: sibling.tagName.toLowerCase(),
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: attributes,
-                        attribs: attributes,
-                        _originalElement: sibling,
-                    };
+                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    tempNode.attributes._setData(attributes);
+                    tempNode._originalElement = sibling;
                     if (selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldStop = true;
                     }
@@ -85,14 +81,9 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const tempNode: HtmlNode = {
-                        type: 'element',
-                        name: sibling.tagName.toLowerCase(),
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: attributes,
-                        attribs: attributes,
-                        _originalElement: sibling,
-                    };
+                    const tempNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    tempNode.attributes._setData(attributes);
+                    tempNode._originalElement = sibling;
                     if (!selectorList.some((sel) => nodeMatchesSelector(tempNode, sel))) {
                         shouldInclude = false;
                     }
@@ -104,17 +95,9 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                         const attr = sibling.attributes[i];
                         attributes[attr.name] = attr.value;
                     }
-                    const internalNode: HtmlNode = {
-                        type: 'element',
-                        name: sibling.tagName.toLowerCase(),
-                        tagName: sibling.tagName.toLowerCase(),
-                        attributes: attributes,
-                        attribs: attributes,
-                        properties: {},
-                        children: [],
-                        parent: undefined,
-                        _originalElement: sibling,
-                    };
+                    const internalNode = new HtmlNode('element', sibling.tagName.toLowerCase());
+                    internalNode.attributes._setData(attributes);
+                    internalNode._originalElement = sibling;
                     precedingSiblings.push(internalNode);
                 }
 
@@ -154,7 +137,7 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
                     if (parsedFilterSelector) {
                         const selectorList =
                             'type' in parsedFilterSelector &&
-                            parsedFilterSelector.type === 'compound'
+                                parsedFilterSelector.type === 'compound'
                                 ? parsedFilterSelector.selectors
                                 : [parsedFilterSelector];
                         if (!selectorList.some((sel) => nodeMatchesSelector(sibling, sel))) {

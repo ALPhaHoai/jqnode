@@ -59,8 +59,8 @@ function param(obj: any, traditional: boolean = false): string {
         // Serialize form elements
         obj.nodes.forEach((node: HtmlNode) => {
             if (node.name === 'INPUT' || node.name === 'SELECT' || node.name === 'TEXTAREA') {
-                const name = node.attribs?.name;
-                const value = node.attribs?.value;
+                const name = node.getAttribute('name');
+                const value = node.getAttribute('value');
                 if (name) {
                     add(name, value || '');
                 }
