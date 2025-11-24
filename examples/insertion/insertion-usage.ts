@@ -1,4 +1,5 @@
-﻿import jq from '../../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== DOM Insertion Methods Examples ===\n');
 
@@ -12,14 +13,14 @@ const html1 = `
         <li>Task 2</li>
     </ul>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 $1('#tasks').append('<li>Task 3</li>');
 $1('#tasks').append('<li>Task 4</li>');
 console.log('Tasks after append:', $1('#tasks li').length);
 
 console.log('\nExample 2: appendTo()');
 const html2 = `<ul id="list"></ul>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 jq('<li>Item A</li>').appendTo($2('#list'));
 jq('<li>Item B</li>').appendTo($2('#list'));
 console.log('Items in list:', $2('#list li').length);
@@ -34,7 +35,7 @@ const html3 = `
         <li>Third</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 $3('ul').prepend('<li>First</li>');
 console.log('First item:', $3('li').first().text());
 
@@ -47,11 +48,11 @@ const html4 = `
         <p id="middle">Middle paragraph</p>
     </div>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 $4('#middle').before('<p>Before paragraph</p>');
 $4('#middle').after('<p>After paragraph</p>');
 console.log('Total paragraphs:', $4('p').length);
-$4('p').each(function (i) {
+$4('p').each(function (this: JqElement, i: number) {
     console.log(`  ${i + 1}:`, jq(this).text());
 });
 
@@ -66,13 +67,13 @@ const html5 = `
         <span>C</span>
     </div>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 $5('span').wrap('<div class="wrapper"></div>');
 console.log('Wrappers created:', $5('.wrapper').length);
 
 console.log('\nExample 6: wrapInner() - Wrap Content');
 const html6 = `<p>Hello World</p>`;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 $6('p').wrapInner('<strong></strong>');
 console.log('Wrapped content:', $6('p').html());
 
@@ -88,7 +89,7 @@ const html7 = `
         <li class="remove">Delete</li>
     </ul>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 console.log('Before remove:', $7('li').length);
 $7('.remove').remove();
 console.log('After remove:', $7('li').length);
@@ -98,7 +99,7 @@ console.log('\n--- Practical: Building Dynamic Menu ---\n');
 
 console.log('Example 8: Create Navigation Menu');
 const html8 = `<nav id="menu"></nav>`;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
 const menuItems = [
     { text: 'Home', href: '/', active: true },
@@ -127,7 +128,7 @@ console.log('\n--- Practical: Dynamic Form Building ---\n');
 
 console.log('Example 9: Build Contact Form');
 const html9 = `<div id="form-container"></div>`;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 
 const $form = jq('<form id="contact-form"></form>');
 
@@ -155,7 +156,7 @@ console.log('\n--- Practical: Dynamic Table ---\n');
 
 console.log('Example 10: Build Data Table');
 const html10 = `<div id="table-container"></div>`;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 
 const data = [
     { name: 'Alice', role: 'Developer', dept: 'Engineering' },

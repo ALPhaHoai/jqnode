@@ -1,4 +1,5 @@
 ﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== Miscellaneous Methods Examples ===\n');
 
@@ -7,7 +8,7 @@ console.log('--- get() ---\n');
 
 console.log('Example 1: Get DOM Elements');
 const html1 = `<div><span>A</span><span>B</span><span>C</span></div>`;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 
 const firstSpan = $1('span').get(0);
 console.log('First span (DOM element):', firstSpan.type, '-', firstSpan.children[0].data);
@@ -21,7 +22,7 @@ console.log('\n--- toArray() ---\n');
 
 console.log('Example 2: Convert to Plain Array');
 const html2 = `<ul><li>1</li><li>2</li><li>3</li></ul>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 
 const itemsArray = $2('li').toArray();
 console.log('Converted to array:', itemsArray.length);
@@ -36,7 +37,7 @@ console.log('\n--- size() ---\n');
 
 console.log('Example 3: Get Element Count');
 const html3 = `<div><p>A</p><p>B</p><p>C</p><p>D</p></div>`;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
 console.log('Size:', $3('p').size());
 console.log('Length:', $3('p').length);
@@ -53,10 +54,10 @@ const html4 = `
         <li>Item 2</li>
     </ul>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 console.log('Index of #target:', $4('#target').index());
 
-$4('li').each(function (i) {
+$4('li').each(function (this: JqElement, i: number) {
     console.log(`  ${jq(this).text()} is at index:`, jq(this).index());
 });
 
@@ -69,7 +70,7 @@ const html5 = `
         <div id="child" style="position: absolute; top: 10px; left: 20px">Child</div>
     </div>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 // Note: position() in jqnode returns { top: 0, left: 0 } for parsed HTML
 // In real browser, would return actual position
 const pos = $5('#child').position();
@@ -87,14 +88,14 @@ const html6 = `
         <p class="text">Para 4</p>
     </div>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 const $paragraphs = $6('p');
 
 console.log('Total paragraphs:', $paragraphs.size());
 console.log('Type check:', Array.isArray($paragraphs.get()));
 
 // Find highlighted paragraph
-$paragraphs.each(function (i) {
+$paragraphs.each(function (this: JqElement, i: number) {
     const $p = jq(this);
     if ($p.hasClass('highlight')) {
         console.log('Highlighted paragraph at index:', $p.index());
@@ -114,7 +115,7 @@ const html7 = `
         <li data-score="88">Student E</li>
     </ul>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 const $students = $7('#scores li');
 
 console.log('Total students:', $students.size());
@@ -138,7 +139,7 @@ const html8 = `
         <a href="/contact">Contact</a>
     </nav>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 const $activeLink = $8('.active');
 
 console.log('Active page:', $activeLink.text());

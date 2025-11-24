@@ -1,4 +1,5 @@
-﻿import jq from '../../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== Filtering Methods Examples ===\n');
 
@@ -14,10 +15,10 @@ const html1 = `
         <li class="vegetable">Broccoli</li>
     </ul>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 const fruits = $1('li').filter('.fruit');
 console.log('Fruits:', fruits.length);
-fruits.each(function () {
+fruits.each(function (this: JqElement) {
     console.log('  ', jq(this).text());
 });
 
@@ -30,12 +31,12 @@ const html2 = `
         <span data-score="95">Diana</span>
     </div>
 `;
-const $2 = jq(html2);
-const highScores = $2('span').filter(function () {
+const $2 = jq.load(html2);
+const highScores = $2('span').filter(function (this: JqElement): boolean {
     return parseInt(jq(this).attr('data-score')) >= 90;
 });
 console.log('High scorers:');
-highScores.each(function () {
+highScores.each(function (this: JqElement) {
     console.log('  ', jq(this).text(), '-', jq(this).attr('data-score'));
 });
 
@@ -55,17 +56,17 @@ const html3 = `
         </div>
     </div>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
 // Filter electronics under $200
 const affordableElectronics = $3('.product')
     .filter('[data-category="electronics"]')
-    .filter(function () {
+    .filter(function (this: JqElement): boolean {
         return parseInt(jq(this).attr('data-price')) < 200;
     });
 
 console.log('Affordable electronics:');
-affordableElectronics.each(function () {
+affordableElectronics.each(function (this: JqElement) {
     const $product = jq(this);
     console.log('  ', $product.find('.name').text(), '-', '$' + $product.attr('data-price'));
 });

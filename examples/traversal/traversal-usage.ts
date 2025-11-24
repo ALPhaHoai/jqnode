@@ -1,4 +1,5 @@
-﻿import jq from '../index';
+﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== find(), filter(), children(), parent() Examples ===\n');
 
@@ -15,7 +16,7 @@ const html1 = `
         </div>
     </div>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 const paragraphs = $1('#container').find('p');
 console.log('Found paragraphs:', paragraphs.length);
 const textElements = $1('#container').find('.text');
@@ -32,7 +33,7 @@ const html2 = `
         <span class="active">Active 2</span>
     </div>
 `;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 const activeSpans = $2('span').filter('.active');
 console.log('Active spans:', activeSpans.length);
 
@@ -45,12 +46,12 @@ const html3 = `
         <li data-value="30">Item 4</li>
     </ul>
 `;
-const $3 = jq(html3);
-const highValue = $3('li').filter(function () {
+const $3 = jq.load(html3);
+const highValue = $3('li').filter(function (this: JqElement): boolean {
     return parseInt(jq(this).attr('data-value')) > 15;
 });
 console.log('High value items:', highValue.length);
-highValue.each(function () {
+highValue.each(function (this: JqElement) {
     console.log('  ', jq(this).text(), '=', jq(this).attr('data-value'));
 });
 
@@ -65,7 +66,7 @@ const html4 = `
         <li>Item 3</li>
     </ul>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 const children = $4('#list').children();
 console.log('Direct children:', children.length);
 
@@ -78,7 +79,7 @@ const html5 = `
         <div>Remove</div>
     </div>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 const spanChildren = $5('#container').children('span');
 console.log('Span children:', spanChildren.length);
 const keepChildren = $5('#container').children('.keep');
@@ -93,7 +94,7 @@ const html6 = `
         <span id="child">Text</span>
     </div>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 const parent = $6('#child').parent();
 console.log('Parent ID:', parent.attr('id'));
 
@@ -105,7 +106,7 @@ const html7 = `
         </div>
     </div>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 const innerParent = $7('#target').parent('.inner');
 console.log('Parent with .inner:', innerParent.length);
 const containerParent = $7('#target').parent('.container');
@@ -126,7 +127,7 @@ const html8 = `
         </nav>
     </div>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
 // Find all links
 const allLinks = $8('.app').find('a');

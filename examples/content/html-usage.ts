@@ -1,17 +1,18 @@
-﻿import jq from '../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== html() Method Examples ===\n');
 
 // Example 1: Get HTML content
 console.log('Example 1: Get HTML Content');
 const html1 = `<div id="container"><p>Hello <strong>World</strong></p></div>`;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 console.log('HTML content:', $1('#container').html());
 
 // Example 2: Set HTML content
 console.log('\n\nExample 2: Set HTML Content');
 const html2 = `<div id="box">Old content</div>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 $2('#box').html('<p>New <em>HTML</em> content</p>');
 console.log('After setting:', $2('#box').html());
 
@@ -23,14 +24,14 @@ const html3 = `
         <li>Old item 2</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 $3('#list').html('<li>New item 1</li><li>New item 2</li><li>New item 3</li>');
 console.log('Items after replacement:', $3('#list').children().length);
 
 // Example 4: Build dynamic content
 console.log('\n\nExample 4: Dynamic Content Building');
 const html4 = `<div id="app"></div>`;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 const dynamicContent = `
     <header>
         <h1>My Application</h1>
@@ -57,7 +58,7 @@ const html5 = `
         <div class="box"><span>Second box</span></div>
     </div>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 console.log('HTML from first .box:', $5('.box').html());
 
 // Example 6: Set on multiple elements
@@ -69,17 +70,17 @@ const html6 = `
         <div class="card">Card 3</div>
     </div>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 $6('.card').html('<h3>New Card Title</h3><p>Card content</p>');
 console.log('Each card now contains:');
-$6('.card').each(function (i) {
+$6('.card').each(function (this: JqElement, i: number) {
     console.log(`  Card ${i + 1}:`, jq(this).html());
 });
 
 // Example 7: Template rendering
 console.log('\n\nExample 7: Template Rendering');
 const html7 = `<div id="user-profile"></div>`;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 const userData = {
     name: 'Jane Doe',
     email: 'jane@example.com',

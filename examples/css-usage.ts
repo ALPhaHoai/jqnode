@@ -1,4 +1,5 @@
 ﻿import $ from '../index';
+import type { JqElement } from '../types';
 
 console.log('=== jqnode CSS Method Examples ===\n');
 
@@ -58,7 +59,7 @@ console.log('Paragraph styles:', pStyles);
 console.log('\n=== Example 6: Setting with Callback Function ===');
 const boxes = root.find('.box');
 console.log('Original box widths:');
-boxes.each(function (i, box) {
+boxes.each(function (this: JqElement, i: number, box: JqElement) {
     console.log(`  Box ${i + 1}:`, $(box).css('width'));
 });
 
@@ -69,7 +70,7 @@ boxes.css('width', function (index, currentValue) {
 });
 
 console.log('New box widths (after +50px):');
-boxes.each(function (i, box) {
+boxes.each(function (this: JqElement, i: number, box: JqElement) {
     console.log(`  Box ${i + 1}:`, $(box).css('width'));
 });
 
@@ -175,7 +176,7 @@ boxes.css('opacity', function (index) {
     return 1 - index * 0.2; // Gradually fade boxes
 });
 
-boxes.each(function (i, box) {
+boxes.each(function (this: JqElement, i: number, box: JqElement) {
     console.log(`  Box ${i + 1} opacity:`, $(box).css('opacity'));
 });
 

@@ -1,9 +1,9 @@
-﻿/**
+/**
  * Example usage of the .findTableWithHeader() method
  * This method finds tables that contain specific headers
  */
 
-import jq from '../index';
+import jq from '../../index';
 
 console.log('=== findTableWithHeader() Method Examples ===\n');
 

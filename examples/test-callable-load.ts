@@ -1,4 +1,5 @@
 ﻿import jq from '../index';
+import type { JqElement } from '../types';
 
 console.log('=== Testing Callable .load() Syntax ===\n');
 
@@ -47,7 +48,7 @@ console.log('✅ Array-like access [0]:', $4[0] ? 'works' : 'failed');
 console.log('\nTest 5: Iteration with each()');
 const $5 = jq.load('<ul><li>A</li><li>B</li><li>C</li></ul>');
 const items = $5('li');
-items.each(function (index, item) {
+items.each(function (this: JqElement, index: number, item: JqElement) {
     console.log(`  Item ${index}:`, jq(item).text());
 });
 

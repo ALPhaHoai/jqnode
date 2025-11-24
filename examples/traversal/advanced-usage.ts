@@ -1,4 +1,5 @@
-﻿import jq from '../index';
+﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== map(), closest(), Comprehensive Methods Examples ===\n');
 
@@ -13,9 +14,9 @@ const html1 = `
         <li>Cherry</li>
     </ul>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 const fruits = $1('li')
-    .map(function () {
+    .map(function (this: JqElement): string {
         return jq(this).text();
     })
     .get();
@@ -29,9 +30,9 @@ const html2 = `
         <span data-price="15">Item 3</span>
     </div>
 `;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 const prices = $2('span')
-    .map(function () {
+    .map(function (this: JqElement): number {
         return parseFloat(jq(this).attr('data-price'));
     })
     .get();
@@ -49,9 +50,9 @@ const html3 = `
         <li>Third</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 const indexed = $3('li')
-    .map(function (index) {
+    .map(function (this: JqElement, index: number): string {
         return `${index + 1}. ${jq(this).text()}`;
     })
     .get();
@@ -73,7 +74,7 @@ const html4 = `
         </div>
     </div>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 console.log('Closest .content:', $4('#deep').closest('.content').attr('class'));
 console.log('Closest .section:', $4('#deep').closest('.section').attr('class'));
 console.log('Closest .container:', $4('#deep').closest('.container').attr('class'));
@@ -89,7 +90,7 @@ const html5 = `
         </li>
     </ul>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 const clickedSpan = $5('#clicked');
 const menuItem = clickedSpan.closest('li');
 const link = clickedSpan.closest('a');
@@ -107,7 +108,7 @@ const html6 = `
         </div>
     </form>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 const emailInput = $6('#email');
 const fieldGroup = emailInput.closest('.field-group');
 const form = emailInput.closest('form');
@@ -141,9 +142,9 @@ const html7 = `
         </tbody>
     </table>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 const products = $7('#products tbody tr')
-    .map(function () {
+    .map(function (this: JqElement) {
         const $row = jq(this);
         const cells = $row.find('td');
         return {
@@ -172,7 +173,7 @@ const html8 = `
         </ul>
     </nav>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 const currentLink = $8('#current-link');
 const parentMenuItem = currentLink.closest('.menu-item');
 const mainNav = currentLink.closest('.main-nav');
@@ -192,10 +193,10 @@ const html9 = `
         </select>
     </form>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 const formData = $9('#registration')
     .find('input, select')
-    .map(function () {
+    .map(function (this: JqElement) {
         const $field = jq(this);
         return {
             name: $field.attr('name'),
@@ -214,9 +215,9 @@ const html10 = `
     </div>
     <select id="target-select"></select>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 const options = $10('.option')
-    .map(function () {
+    .map(function (this: JqElement): string {
         const $opt = jq(this);
         return `<option value="${$opt.attr('data-value')}">${$opt.text()}</option>`;
     })

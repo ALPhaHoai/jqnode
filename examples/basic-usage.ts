@@ -1,4 +1,5 @@
 ﻿import $ from '../index';
+import type { JqElement } from '../types';
 
 console.log('=== jqnode Debug Logging Example ===\n');
 
@@ -34,13 +35,13 @@ console.log('First feature:', firstFeature.text());
 
 // Iterate through elements
 console.log('\n=== Iteration Examples ===');
-features.each(function (index, elem) {
+features.each(function (this: JqElement, index: number, elem: JqElement) {
     console.log(`Feature ${index + 1}:`, $(elem).text());
 });
 
 // Map elements
 const featureTexts = features
-    .map(function (index, elem) {
+    .map(function (this: JqElement, index: number, elem: JqElement): string {
         return $(elem).text().toUpperCase();
     })
     .get();

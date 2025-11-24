@@ -1,4 +1,5 @@
 ﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== map() Method Examples ===\n');
 
@@ -11,9 +12,9 @@ const html1 = `
         <li>Date</li>
     </ul>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 const fruits = $1('#fruits li')
-    .map(function () {
+    .map(function (this: JqElement): string {
         return jq(this).text();
     })
     .get();
@@ -27,9 +28,9 @@ const html2 = `
         <span data-value="30">Thirty</span>
     </div>
 `;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 const values = $2('span')
-    .map(function () {
+    .map(function (this: JqElement): number {
         return parseInt(jq(this).attr('data-value'));
     })
     .get();
@@ -47,9 +48,9 @@ const html3 = `
         <li>Third</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 const indexed = $3('li')
-    .map(function (index) {
+    .map(function (this: JqElement, index: number): string {
         return `${index + 1}. ${jq(this).text()}`;
     })
     .get();
@@ -64,9 +65,9 @@ const html4 = `
         <a href="/page3">Link 3</a>
     </div>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 const urls = $4('a')
-    .map(function () {
+    .map(function (this: JqElement): string | undefined {
         return jq(this).attr('href');
     })
     .get();
@@ -92,9 +93,9 @@ const html5 = `
         </tr>
     </table>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 const products = $5('#products tr')
-    .map(function () {
+    .map(function (this: JqElement) {
         const $row = jq(this);
         const cells = $row.find('td');
         if (cells.length === 0) return null;
@@ -121,9 +122,9 @@ const html6 = `
         <input type="number" name="age" value="30">
     </form>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 const formData = $6('input')
-    .map(function () {
+    .map(function (this: JqElement) {
         const $input = jq(this);
         return {
             name: $input.attr('name'),

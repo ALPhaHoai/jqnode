@@ -1,4 +1,5 @@
 ﻿import jq from '../index';
+import type { JqElement } from '../types';
 
 // ============================================
 // EXACTLY the syntax you requested:
@@ -68,7 +69,7 @@ console.log('📊 Number of tables found:', tables.length);
 console.log('');
 
 // Working with each table
-tables.each(function (index, table) {
+tables.each(function (this: JqElement, index: number, table: JqElement) {
     const $table = jq(table);
     const tableId = $table.attr('id');
     const headers = $table.find('th');
@@ -78,7 +79,7 @@ tables.each(function (index, table) {
     console.log(
         '  Headers:',
         headers
-            .map((i, th) => jq(th).text())
+            .map((i: number, th: JqElement) => jq(th).text())
             .get()
             .join(', '),
     );
@@ -91,7 +92,7 @@ console.log('=== Extract Users Table Data ===');
 const usersTable = $.find('#users');
 const userData = usersTable
     .find('tbody tr')
-    .map(function (i, tr) {
+    .map(function (this: JqElement, i: number, tr: JqElement) {
         const $tr = jq(tr);
         const cells = $tr.find('td');
         return {

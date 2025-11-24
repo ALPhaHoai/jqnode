@@ -1,4 +1,5 @@
-﻿import jq from '../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== val(), prop(), append(), remove() Examples ===\n');
 
@@ -7,14 +8,14 @@ console.log('--- val() ---\n');
 
 console.log('Example 1: Text Input');
 const html1 = `<input type="text" id="username" value="johndoe">`;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 console.log('Current value:', $1('#username').val());
 $1('#username').val('janedoe');
 console.log('After change:', $1('#username').val());
 
 console.log('\nExample 2: Textarea');
 const html2 = `<textarea id="message">Hello World</textarea>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 console.log('Textarea value:', $2('#message').val());
 $2('#message').val('Updated message');
 console.log('After update:', $2('#message').val());
@@ -27,7 +28,7 @@ const html3 = `
         <option value="ca">Canada</option>
     </select>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 console.log('Selected value:', $3('#country').val());
 $3('#country').val('ca');
 console.log('After change:', $3('#country').val());
@@ -37,7 +38,7 @@ console.log('\n--- prop() ---\n');
 
 console.log('Example 4: Checkbox');
 const html4 = `<input type="checkbox" id="agree" checked>`;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 console.log('Checked (prop):', $4('#agree').prop('checked'));
 console.log('Checked (attr):', $4('#agree').attr('checked'));
 $4('#agree').prop('checked', false);
@@ -45,7 +46,7 @@ console.log('After unchecking:', $4('#agree').prop('checked'));
 
 console.log('\nExample 5: Disabled');
 const html5 = `<button id="submit">Submit</button>`;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 $5('#submit').prop('disabled', true);
 console.log('Disabled:', $5('#submit').prop('disabled'));
 $5('#submit').prop('disabled', false);
@@ -61,14 +62,14 @@ const html6 = `
         <li>Task 2</li>
     </ul>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 $6('#tasks').append('<li>Task 3</li>');
 $6('#tasks').append('<li>Task 4</li>');
 console.log('Tasks after append:', $6('#tasks').children().length);
 
 console.log('\nExample 7: Append Multiple');
 const html7 = `<div id="container"></div>`;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 $7('#container')
     .append('<p>Paragraph 1</p>')
     .append('<p>Paragraph 2</p>')
@@ -82,10 +83,10 @@ const html8 = `
         <div class="box">Box 2</div>
     </div>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 $8('.box').append('<span class="badge">New</span>');
 console.log('Each box now has badge:');
-$8('.box').each(function (i) {
+$8('.box').each(function (this: JqElement, i: number) {
     console.log(`  Box ${i + 1} children:`, jq(this).children().length);
 });
 
@@ -101,7 +102,7 @@ const html9 = `
         <li class="delete">Item 4</li>
     </ul>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 console.log('Items before remove:', $9('li').length);
 $9('.delete').remove();
 console.log('Items after remove:', $9('li').length);
@@ -114,16 +115,16 @@ const html10 = `
         <p class="keep">Keep 2</p>
     </div>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 $10('p').remove('.remove');
 console.log('Paragraphs after filtered remove:', $10('p').length);
-$10('p').each(function () {
+$10('p').each(function (this: JqElement) {
     console.log('  Remaining:', jq(this).attr('class'));
 });
 
 console.log('\nExample 11: Build Form Dynamically');
 const html11 = `<form id="dynamic-form"></form>`;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 $11('#dynamic-form')
     .append('<input type="text" name="name" placeholder="Name">')
     .append('<input type="email" name="email" placeholder="Email">')

@@ -1,4 +1,5 @@
 ﻿import jq from '../index';
+import type { JqElement } from '../types';
 
 console.log('=== jqnode .load() Method Demo ===\n');
 
@@ -49,7 +50,7 @@ const tables = $2.find('table');
 
 console.log('Number of tables:', tables.length);
 
-tables.each(function (index, table) {
+tables.each(function (this: JqElement, index: number, table: JqElement) {
     const $table = jq(table);
     console.log(`\nTable ${index + 1}:`);
     console.log('  ID:', $table.attr('id'));
@@ -76,7 +77,7 @@ const html3 = `
 
 const products = jq.load(html3).find('.product');
 console.log('Products found:', products.length);
-products.each(function (index, product) {
+products.each(function (this: JqElement, index: number, product: JqElement) {
     const $prod = jq(product);
     console.log(`  ${$prod.attr('data-id')}: ${$prod.text()}`);
 });
@@ -122,7 +123,7 @@ const headers = $table
     .get();
 const rows = $table
     .find('tbody tr, tr:not(:first-child)')
-    .map(function (i, tr) {
+    .map(function (this: JqElement, i: number, tr: JqElement) {
         const $tr = jq(tr);
         const cells = $tr
             .find('td')

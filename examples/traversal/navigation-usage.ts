@@ -1,4 +1,5 @@
-﻿import jq from '../index';
+﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== siblings(), next(), prev(), eq(), first(), last() Examples ===\n');
 
@@ -14,10 +15,10 @@ const html1 = `
         <span>D</span>
     </div>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 const siblings = $1('#target').siblings();
 console.log('Siblings of B:', siblings.length);
-siblings.each(function () {
+siblings.each(function (this: JqElement) {
     console.log('  ', jq(this).text());
 });
 
@@ -30,7 +31,7 @@ const html2 = `
         <li class="item">Item 2</li>
     </ul>
 `;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 const itemSiblings = $2('#target').siblings('.item');
 console.log('Siblings with .item class:', itemSiblings.length);
 
@@ -45,7 +46,7 @@ const html3 = `
         <p>Next</p>
     </div>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 console.log('Next sibling:', $3('#current').next().text());
 
 console.log('\nExample 4: Previous Sibling');
@@ -59,7 +60,7 @@ const html5 = `
         <a href="/contact">Contact</a>
     </nav>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 const prevPage = $5('#current-page').prev();
 const nextPage = $5('#current-page').next();
 console.log('Previous page:', prevPage.text());
@@ -77,7 +78,7 @@ const html6 = `
         <li>Index 3</li>
     </ul>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 console.log('Element at index 0:', $6('li').eq(0).text());
 console.log('Element at index 2:', $6('li').eq(2).text());
 
@@ -96,7 +97,7 @@ const html8 = `
         <p>Last paragraph</p>
     </div>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 console.log('First:', $8('p').first().text());
 console.log('Last:', $8('p').last().text());
 
@@ -108,10 +109,10 @@ const html9 = `
         <li>Item 3</li>
     </ul>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 $9('#menu li').first().addClass('first-item');
 $9('#menu li').last().addClass('last-item');
-$9('#menu li').each(function () {
+$9('#menu li').each(function (this: JqElement) {
     const classes = jq(this).attr('class');
     console.log('  ', jq(this).text(), ':', classes || '(no class)');
 });
@@ -129,12 +130,12 @@ const html10 = `
         <a href="/subcategory" id="current">Subcategory</a>
     </nav>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 console.log('Current page:', $10('#current').text());
 console.log('All previous links:');
 $10('#current')
     .prevAll('a')
-    .each(function () {
+    .each(function (this: JqElement) {
         console.log('  ', jq(this).text());
     });
 
@@ -146,7 +147,7 @@ const html11 = `
         <tr><td>Row 3</td></tr>
     </table>
 `;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 const $selectedRow = $11('#selected');
 console.log('Selected row:', $selectedRow.find('td').text());
 console.log('Row above:', $selectedRow.prev().find('td').text());
@@ -162,14 +163,14 @@ const html12 = `
         <li>Menu 5</li>
     </ul>
 `;
-const $12 = jq(html12);
+const $12 = jq.load(html12);
 // Select third item (index 2)
 const selectedItem = $12('.menu li').eq(2);
 selectedItem.addClass('active');
 // Style siblings
 selectedItem.siblings().addClass('inactive');
 console.log('Menu items:');
-$12('.menu li').each(function (i) {
+$12('.menu li').each(function (this: JqElement, i: number) {
     console.log(`  Item ${i + 1}:`, jq(this).attr('class') || '(no class)');
 });
 

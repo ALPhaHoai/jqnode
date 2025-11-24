@@ -1,4 +1,5 @@
-﻿import jq from '../index';
+﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== each() Method Examples ===\n');
 
@@ -12,10 +13,10 @@ const html1 = `
         <li>Date</li>
     </ul>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 
 console.log('Iterating over list items:');
-$1('li').each(function (index, element) {
+$1('li').each(function (this: JqElement, index: number, element: JqElement) {
     console.log(`  ${index}: ${jq(element).text()}`);
 });
 
@@ -28,9 +29,9 @@ const html2 = `
         <p>Third paragraph</p>
     </div>
 `;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 
-$2('p').each(function (index) {
+$2('p').each(function (this: JqElement, index: number) {
     const $this = jq(this);
     const text = $this.text();
     console.log(`${index + 1}. ${text}`);
@@ -46,9 +47,9 @@ const html3 = `
         <div class="box">Box 4</div>
     </div>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
-$3('.box').each(function (index) {
+$3('.box').each(function (this: JqElement, index: number) {
     jq(this)
         .attr('data-index', index)
         .attr('id', `box-${index}`)
@@ -56,7 +57,7 @@ $3('.box').each(function (index) {
 });
 
 console.log('Modified elements:');
-$3('.box').each(function () {
+$3('.box').each(function (this: JqElement) {
     const $box = jq(this);
     console.log(
         'ID:',
@@ -79,11 +80,11 @@ const html4 = `
         <li>Don't process me either</li>
     </ul>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 
 console.log('Processing until we hit .stop:');
 let count = 0;
-$4('li').each(function (index) {
+$4('li').each(function (this: JqElement, index: number) {
     const $li = jq(this);
     count++;
     console.log(`  Processing item ${index}: ${$li.text()}`);
@@ -109,10 +110,10 @@ const html5 = `
         </tbody>
     </table>
 `;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 
 const employees = [];
-$5('tbody tr').each(function () {
+$5('tbody tr').each(function (this: JqElement) {
     const $row = jq(this);
     const cells = $row.find('td');
 
@@ -129,17 +130,17 @@ console.log(JSON.stringify(employees, null, 2));
 // Example 6: Method chaining
 console.log('\n\nExample 6: Method Chaining');
 const html6 = `<div><span>A</span><span>B</span><span>C</span></div>`;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 
 $6('span')
-    .each(function (i) {
+    .each(function (this: JqElement, i: number) {
         jq(this).attr('data-letter', jq(this).text().toLowerCase());
     })
     .addClass('letter')
     .attr('data-type', 'character');
 
 console.log('After chaining:');
-$6('span').each(function () {
+$6('span').each(function (this: JqElement) {
     const $span = jq(this);
     console.log(
         'Text:',
@@ -162,12 +163,12 @@ const html7 = `
         <li class="completed">Send email</li>
     </ul>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 
 let completedCount = 0;
 let pendingCount = 0;
 
-$7('.tasks li').each(function (index) {
+$7('.tasks li').each(function (this: JqElement, index: number) {
     const $task = jq(this);
 
     if ($task.hasClass('completed')) {
@@ -193,10 +194,10 @@ const html8 = `
         <input type="tel" name="phone" value="555-1234">
     </form>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
 const formData = {};
-$8('#userForm input').each(function () {
+$8('#userForm input').each(function (this: JqElement) {
     const $input = jq(this);
     const name = $input.attr('name');
     const value = $input.attr('value');
@@ -215,9 +216,9 @@ const html9 = `
         <article>Article about HTML</article>
     </div>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 
-$9('article').each(function (index) {
+$9('article').each(function (this: JqElement, index: number) {
     const $article = jq(this);
     const articleId = `ART-${String(index + 1).padStart(4, '0')}`;
     $article.attr('id', articleId);
@@ -225,7 +226,7 @@ $9('article').each(function (index) {
 });
 
 console.log('Articles with IDs:');
-$9('article').each(function () {
+$9('article').each(function (this: JqElement) {
     const $article = jq(this);
     console.log(`${$article.attr('id')}: ${$article.text()}`);
 });
@@ -247,15 +248,15 @@ const html10 = `
         </section>
     </div>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 
-$10('.category').each(function (catIndex) {
+$10('.category').each(function (this: JqElement, catIndex: number) {
     const $category = jq(this);
     const categoryName = $category.find('h3').text();
 
     console.log(`\nCategory ${catIndex + 1}: ${categoryName}`);
 
-    $category.find('.product').each(function (prodIndex) {
+    $category.find('.product').each(function (this: JqElement, prodIndex: number) {
         const $product = jq(this);
         const productName = $product.text();
         console.log(`  ${prodIndex + 1}. ${productName}`);
@@ -273,13 +274,13 @@ const html11 = `
         <li data-user-id="105">Eve</li>
     </ul>
 `;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 
 const targetUserId = '103';
 let foundUser = null;
 
 console.log(`Searching for user ID: ${targetUserId}`);
-$11('.users li').each(function () {
+$11('.users li').each(function (this: JqElement) {
     const $user = jq(this);
     const userId = $user.attr('data-user-id');
 
@@ -310,14 +311,14 @@ const html12 = `
         <div class="score" data-points="95">Test 5</div>
     </div>
 `;
-const $12 = jq(html12);
+const $12 = jq.load(html12);
 
 let total = 0;
 let count = 0;
 let highest = -Infinity;
 let lowest = Infinity;
 
-$12('.score').each(function () {
+$12('.score').each(function (this: JqElement) {
     const $score = jq(this);
     const points = parseInt($score.attr('data-points'));
 

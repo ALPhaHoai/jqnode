@@ -1,4 +1,5 @@
-﻿import jq from '../../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== addClass() Method Examples ===\n');
 
@@ -11,18 +12,18 @@ const html1 = `
         <p>Paragraph 3</p>
     </div>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 
-$1('p').addClass('paragraph');
-console.log('All paragraphs have class:', $1('p').first().attr('class'));
+$1.find('p').addClass('paragraph');
+console.log('All paragraphs have class:', $1.find('p').first().attr('class'));
 
 // Example 2: Multiple classes at once
 console.log('\n\nExample 2: Adding Multiple Classes');
 const html2 = `<div id="box">Content</div>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 
-$2('#box').addClass('highlighted bordered rounded shadow');
-console.log('Box classes:', $2('#box').attr('class'));
+$2.find('#box').addClass('highlighted bordered rounded shadow');
+console.log('Box classes:', $2.find('#box').attr('class'));
 
 // Example 3: Using function with index
 console.log('\n\nExample 3: Using Function with Index');
@@ -35,37 +36,37 @@ const html3 = `
         <li>Item 5</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
-$3('li').addClass(function (index) {
+$3.find('li').addClass(function (this: JqElement, index: number): string {
     return index % 2 === 0 ? 'even' : 'odd';
 });
 
 console.log('List item classes:');
-$3('li').each(function (i) {
+$3.find('li').each(function (this: JqElement, i: number) {
     console.log(`  Item ${i + 1}: ${jq(this).attr('class')}`);
 });
 
 // Example 4: Preserving existing classes
 console.log('\n\nExample 4: Preserving Existing Classes');
 const html4 = `<div class="existing-class">Content</div>`;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 
-$4('div').addClass('new-class another-class');
-console.log('Combined classes:', $4('div').attr('class'));
+$4.find('div').addClass('new-class another-class');
+console.log('Combined classes:', $4.find('div').attr('class'));
 
 // Example 5: Method chaining
 console.log('\n\nExample 5: Method Chaining');
 const html5 = `<div id="element">Text</div>`;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 
-$5('#element')
+$5.find('#element')
     .addClass('primary')
     .addClass('active')
     .addClass('highlighted')
     .attr('data-status', 'ready');
 
-console.log('Chained classes:', $5('#element').attr('class'));
+console.log('Chained classes:', $5.find('#element').attr('class'));
 
 // Example 6: Conditional classes based on data
 console.log('\n\nExample 6: Conditional Classes');
@@ -77,9 +78,9 @@ const html6 = `
         <span data-priority="high">High Priority 2</span>
     </div>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 
-$6('span').addClass(function () {
+$6.find('span').addClass(function (this: JqElement): string {
     const priority = jq(this).attr('data-priority');
     const classMap: Record<string, string> = {
         high: 'text-danger font-bold',
@@ -90,7 +91,7 @@ $6('span').addClass(function () {
 });
 
 console.log('Priority-based classes:');
-$6('span').each(function () {
+$6.find('span').each(function (this: JqElement) {
     const $span = jq(this);
     console.log(`  ${$span.attr('data-priority')}: ${$span.attr('class')}`);
 });
@@ -105,17 +106,17 @@ const html7 = `
         <input type="tel" id="phone" value="">
     </form>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 
-$7('input')
+$7.find('input')
     .addClass('form-control')
-    .addClass(function () {
+    .addClass(function (this: JqElement): string {
         const value = jq(this).attr('value');
         return value ? 'has-value' : 'is-empty';
     });
 
 console.log('Form field classes:');
-$7('input').each(function () {
+$7.find('input').each(function (this: JqElement) {
     const $input = jq(this);
     console.log(`  ${$input.attr('id')}: ${$input.attr('class')}`);
 });
@@ -130,16 +131,16 @@ const html8 = `
         <tr><td>Diana</td><td>Analyst</td></tr>
     </table>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
-$8('tr').addClass(function (index) {
+$8.find('tr').addClass(function (this: JqElement, index: number): string {
     return `row row-${index % 2 === 0 ? 'even' : 'odd'}`;
 });
 
-$8('td').addClass('cell');
+$8.find('td').addClass('cell');
 
 console.log('Table structure:');
-$8('tr').each(function (i) {
+$8.find('tr').each(function (this: JqElement, i: number) {
     const $row = jq(this);
     console.log(`  Row ${i + 1}: ${$row.attr('class')}`);
 });
@@ -154,18 +155,18 @@ const html9 = `
         <a href="/contact">Contact</a>
     </nav>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 const currentPath = '/products';
 
-$9('a')
+$9.find('a')
     .addClass('nav-link')
-    .addClass(function () {
+    .addClass(function (this: JqElement): string {
         const href = jq(this).attr('href');
         return href === currentPath ? 'active' : '';
     });
 
 console.log('Navigation links:');
-$9('a').each(function () {
+$9.find('a').each(function (this: JqElement) {
     const $link = jq(this);
     console.log(`  ${$link.text()}: ${$link.attr('class')}`);
 });
@@ -180,17 +181,17 @@ const html10 = `
         <button data-variant="success">Confirm</button>
     </div>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 
-$10('button')
+$10.find('button')
     .addClass('btn')
-    .addClass(function () {
+    .addClass(function (this: JqElement): string {
         const variant = jq(this).attr('data-variant');
         return `btn-${variant}`;
     });
 
 console.log('Button classes:');
-$10('button').each(function () {
+$10.find('button').each(function (this: JqElement) {
     const $btn = jq(this);
     console.log(`  ${$btn.text()}: ${$btn.attr('class')}`);
 });
@@ -204,14 +205,14 @@ const html11 = `
         <li>Third task</li>
     </ol>
 `;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 
-$11('li').addClass(function (index) {
+$11.find('li').addClass(function (this: JqElement, index: number): string {
     return `task task-${index + 1}`;
 });
 
 console.log('Task classes:');
-$11('li').each(function () {
+$11.find('li').each(function (this: JqElement) {
     console.log(`  ${jq(this).text()}: ${jq(this).attr('class')}`);
 });
 
@@ -225,9 +226,9 @@ const html12 = `
         <div class="widget" data-status="online">Server D</div>
     </div>
 `;
-const $12 = jq(html12);
+const $12 = jq.load(html12);
 
-$12('.widget').addClass(function (index, currentClass) {
+$12.find('.widget').addClass(function (this: JqElement, index: number, currentClass: string): string {
     const status = jq(this).attr('data-status');
     const statusClasses: Record<string, string> = {
         online: 'status-success',
@@ -238,7 +239,7 @@ $12('.widget').addClass(function (index, currentClass) {
 });
 
 console.log('Widget statuses:');
-$12('.widget').each(function () {
+$12.find('.widget').each(function (this: JqElement) {
     const $widget = jq(this);
     console.log(`  ${$widget.text()}: ${$widget.attr('class')}`);
 });

@@ -1,11 +1,12 @@
-﻿import jq from '../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== data() Method Examples ===\n');
 
 // Example 1: Setting and getting single values
 console.log('Example 1: Setting and Getting Data');
 const html1 = `<div id="user">John Doe</div>`;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 
 $1('#user').data('userId', 12345);
 $1('#user').data('role', 'admin');
@@ -20,7 +21,7 @@ console.log('Login Count:', $1('#user').data('loginCount'));
 // Example 2: Setting multiple values at once
 console.log('\n\nExample 2: Setting Multiple Values');
 const html2 = `<div id="product"></div>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 
 $2('#product').data({
     sku: 'PROD-12345',
@@ -39,7 +40,7 @@ console.log('In Stock:', $2('#product').data('inStock'));
 // Example 3: Getting all data
 console.log('\n\nExample 3: Getting All Data');
 const html3 = `<div id="widget" data-widget-type="calendar" data-theme="dark"></div>`;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
 $3('#widget').data('initialized', true);
 $3('#widget').data('version', '2.0.1');
@@ -58,7 +59,7 @@ const html4 = `
          data-options='{"debug":false,"verbose":true}'>
     </div>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 
 console.log(
     'Enabled (boolean):',
@@ -81,7 +82,7 @@ console.log('Options (object):', $4('#config').data('options'));
 // Example 5: Storing complex objects
 console.log('\n\nExample 5: Storing Complex Objects and Arrays');
 const html5 = `<div id="app"></div>`;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 
 $5('#app').data('user', {
     id: 1001,
@@ -118,20 +119,20 @@ const html6 = `
         <div class="card">Card 3</div>
     </div>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 
 // Set same data on all cards
 $6('.card').data('type', 'info-card');
 $6('.card').data('clickable', true);
 
 // Set unique data per card
-$6('.card').each(function (index) {
+$6('.card').each(function (this: JqElement, index: number) {
     jq(this).data('cardId', `CARD-${index + 1}`);
     jq(this).data('position', index);
 });
 
 console.log('Card data:');
-$6('.card').each(function (index) {
+$6('.card').each(function (this: JqElement, index: number) {
     const $card = jq(this);
     console.log(`  Card ${index + 1}:`, {
         id: $card.data('cardId'),
@@ -144,7 +145,7 @@ $6('.card').each(function (index) {
 // Example 7: Method chaining
 console.log('\n\nExample 7: Method Chaining');
 const html7 = `<div id="panel"></div>`;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 
 $7('#panel')
     .data('status', 'active')
@@ -160,7 +161,7 @@ console.log('Panel count:', $7('#panel').data('count'));
 // Example 8: Caching computed results
 console.log('\n\nExample 8: Caching Expensive Computations');
 const html8 = `<div id="stats"></div>`;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
 function expensiveCalculation() {
     // Simulate expensive operation
@@ -183,7 +184,7 @@ console.log('Calculated at:', cached.calculated.toISOString());
 // Example 9: Event tracking
 console.log('\n\nExample 9: Event Tracking');
 const html9 = `<button id="action-btn">Click Me</button>`;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 
 // Initialize counters
 $9('#action-btn').data('clicks', 0);
@@ -215,7 +216,7 @@ console.log('Click history length:', $9('#action-btn').data('clickHistory').leng
 // Example 10: State management
 console.log('\n\nExample 10: Component State Management');
 const html10 = `<div id="dropdown"></div>`;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 
 // Initialize state
 $10('#dropdown').data('state', {
@@ -255,7 +256,7 @@ const html11 = `
         <input type="text" id="username" name="username" value="validuser123">
     </form>
 `;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 
 function validateEmail($field) {
     const value = $field.attr('value');
@@ -297,7 +298,7 @@ validateUsername($11('#username'));
 
 // Display validation results
 console.log('Validation Results:');
-$11('input').each(function () {
+$11('input').each(function (this: JqElement) {
     const $input = jq(this);
     const name = $input.attr('name');
     const isValid = $input.data('isValid');
@@ -309,7 +310,7 @@ $11('input').each(function () {
 // Example 12: API response caching
 console.log('\n\nExample 12: API Response Caching');
 const html12 = `<div id="user-profile" data-user-id="12345"></div>`;
-const $12 = jq(html12);
+const $12 = jq.load(html12);
 
 function fetchUserData(useCache = true) {
     const $profile = $12('#user-profile');

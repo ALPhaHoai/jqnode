@@ -1,4 +1,5 @@
-﻿import jq from '../../index';
+import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== normalizedText() Method Examples ===\n');
 
@@ -121,7 +122,7 @@ const html9 = `
     </table>
 `;
 const $9 = jq.load(html9);
-$9('td').each(function (i) {
+$9('td').each(function (this: JqElement, i: number) {
     console.log(`Cell ${i + 1} (normalized):`, jq(this).normalizedText());
 });
 

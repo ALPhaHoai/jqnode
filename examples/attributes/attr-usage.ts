@@ -1,4 +1,5 @@
 ﻿import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('=== attr() Method Examples ===\n');
 
@@ -10,7 +11,7 @@ const html1 = `
         <img src="logo.png" alt="Company Logo" width="300" height="100">
     </div>
 `;
-const $1 = jq(html1);
+const $1 = jq.load(html1);
 
 console.log('Container class:', $1('#container').attr('class'));
 console.log('Container data-role:', $1('#container').attr('data-role'));
@@ -24,7 +25,7 @@ console.log('Image width:', $1('img').attr('width'));
 // Example 2: Setting attributes
 console.log('\n\nExample 2: Setting Attributes');
 const html2 = `<div id="box">Content</div>`;
-const $2 = jq(html2);
+const $2 = jq.load(html2);
 
 $2('#box').attr('class', 'highlighted');
 $2('#box').attr('data-status', 'active');
@@ -44,14 +45,14 @@ const html3 = `
         <li>Item 4</li>
     </ul>
 `;
-const $3 = jq(html3);
+const $3 = jq.load(html3);
 
 // Set class on all items
 $3('li').attr('class', 'list-item');
 $3('li').attr('data-type', 'task');
 
 // Verify each item has the attributes
-$3('li').each(function (index) {
+$3('li').each(function (this: JqElement, index: number) {
     const $item = jq(this);
     console.log(
         `Item ${index + 1} - class: ${$item.attr('class')}, type: ${$item.attr('data-type')}`,
@@ -68,7 +69,7 @@ const html4 = `
         <button type="submit" id="submit-btn">Submit</button>
     </form>
 `;
-const $4 = jq(html4);
+const $4 = jq.load(html4);
 
 // Set boolean attributes
 $4('#newsletter').attr('checked', true);
@@ -88,7 +89,7 @@ console.log('Submit button disabled after removal:', $4('#submit-btn').attr('dis
 // Example 5: Chaining
 console.log('\n\nExample 5: Method Chaining');
 const html5 = `<div id="profile"></div>`;
-const $5 = jq(html5);
+const $5 = jq.load(html5);
 
 $5('#profile')
     .attr('class', 'user-profile')
@@ -114,7 +115,7 @@ const html6 = `
         </ul>
     </nav>
 `;
-const $6 = jq(html6);
+const $6 = jq.load(html6);
 
 $6('#menu-toggle')
     .attr('aria-label', 'Toggle navigation menu')
@@ -136,13 +137,13 @@ const html7 = `
         <a href="https://external.com" class="external-link">External</a>
     </div>
 `;
-const $7 = jq(html7);
+const $7 = jq.load(html7);
 
 // Make external links open in new tab
 $7('a.external-link').attr('target', '_blank').attr('rel', 'noopener noreferrer');
 
 // Add title to internal links
-$7('a.internal-link').each(function () {
+$7('a.internal-link').each(function (this: JqElement) {
     const $link = jq(this);
     const href = $link.attr('href');
     $link.attr('title', `Navigate to ${href}`);
@@ -161,7 +162,7 @@ const html8 = `
         <input type="tel" name="phone">
     </form>
 `;
-const $8 = jq(html8);
+const $8 = jq.load(html8);
 
 $8('input[name="username"]')
     .attr('placeholder', 'Enter your username')
@@ -199,9 +200,9 @@ const html9 = `
         <img src="thumb3.jpg" data-full="full3.jpg">
     </div>
 `;
-const $9 = jq(html9);
+const $9 = jq.load(html9);
 
-$9('img').each(function (index) {
+$9('img').each(function (this: JqElement, index: number) {
     const $img = jq(this);
     $img.attr('alt', `Gallery image ${index + 1}`)
         .attr('loading', 'lazy')
@@ -224,7 +225,7 @@ const html10 = `
         <span class="message">Processing...</span>
     </div>
 `;
-const $10 = jq(html10);
+const $10 = jq.load(html10);
 
 function updateWidgetStatus(status: string) {
     const $widget = $10('#widget');
@@ -258,7 +259,7 @@ console.log('Success state - completed:', $10('#widget').attr('data-completed'))
 // Example 11: Getting non-existent attributes
 console.log('\n\nExample 11: Non-Existent Attributes');
 const html11 = `<div id="test">Content</div>`;
-const $11 = jq(html11);
+const $11 = jq.load(html11);
 
 console.log('Missing class:', $11('#test').attr('class')); // undefined
 console.log('Missing data-id:', $11('#test').attr('data-id')); // undefined

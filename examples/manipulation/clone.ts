@@ -4,6 +4,7 @@
  */
 
 import jq from '../../index';
+import type { JqElement } from '../../types';
 
 console.log('jQuery .clone() Method Examples\n');
 console.log('='.repeat(60));
@@ -61,7 +62,7 @@ console.log('\n📝 Example 3: Cloning Preserves Structure and Attributes');
 console.log('-'.repeat(60));
 
 const $complex = jq(
-    '<div id="main" class="wrapper"><h1>Title</h1><p class="text">Content</p></div>',
+  '<div id="main" class="wrapper"><h1>Title</h1><p class="text">Content</p></div>',
 );
 const $copy = $complex.clone();
 
@@ -127,13 +128,13 @@ console.log('Original items count:', $items.length);
 console.log('Cloned items count:', $itemsClone.length);
 
 console.log('\nOriginal items text:');
-$items.each(function (i) {
-    console.log(`  ${i + 1}. ${jq(this).text()}`);
+$items.each(function (this: JqElement, i: number) {
+  console.log(`  ${i + 1}. ${jq(this).text()}`);
 });
 
 console.log('\nCloned items text:');
-$itemsClone.each(function (i) {
-    console.log(`  ${i + 1}. ${jq(this).text()}`);
+$itemsClone.each(function (this: JqElement, i: number) {
+  console.log(`  ${i + 1}. ${jq(this).text()}`);
 });
 
 console.log('\n' + '='.repeat(60));
