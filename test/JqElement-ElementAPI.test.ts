@@ -3,7 +3,7 @@
  * Tests core properties, selector methods, DOM manipulation, and attributes
  */
 
-import { JqElement } from '../dom/JqElement';
+import { JqElement } from '../dom/core/JqElement';
 
 describe('JqElement - Element API', () => {
     // ==================== Core Properties ====================

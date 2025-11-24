@@ -4,77 +4,77 @@
  */
 
 // Core Element Classes
-export { JqElement, NodeType } from './JqElement';
-export { JqNode } from './JqNode';
-export { JqDocument } from './JqDocument';
-export { JqAttr } from './JqAttr';
-export { JqCharacterData } from './JqCharacterData';
-export { JqText } from './JqText';
-export { JqComment } from './JqComment';
-export { JqCDATASection } from './JqCDATASection';
-export { JqHTMLCollection } from './JqHTMLCollection';
-export { JqNodeListOf } from './JqNodeList';
-export { JqNamedNodeMap } from './JqNamedNodeMap';
-export { JqDOMTokenList } from './JqDOMTokenList';
+export { JqElement, NodeType } from './core/JqElement';
+export { JqNode } from './core/JqNode';
+export { JqDocument } from './core/JqDocument';
+export { JqAttr } from './core/JqAttr';
+export { JqCharacterData } from './core/JqCharacterData';
+export { JqText } from './core/JqText';
+export { JqComment } from './core/JqComment';
+export { JqCDATASection } from './core/JqCDATASection';
+export { JqHTMLCollection } from './collections/JqHTMLCollection';
+export { JqNodeListOf } from './collections/JqNodeList';
+export { JqNamedNodeMap } from './collections/JqNamedNodeMap';
+export { JqDOMTokenList } from './collections/JqDOMTokenList';
 
 // Structural Elements
-export { JqHTMLHtmlElement } from './JqHTMLHtmlElement';
-export { JqHTMLHeadElement } from './JqHTMLHeadElement';
-export { JqHTMLBodyElement } from './JqHTMLBodyElement';
+export { JqHTMLHtmlElement } from './html-elements/structural/JqHTMLHtmlElement';
+export { JqHTMLHeadElement } from './html-elements/structural/JqHTMLHeadElement';
+export { JqHTMLBodyElement } from './html-elements/structural/JqHTMLBodyElement';
 
 // Container Elements
-export { JqHTMLDivElement } from './JqHTMLDivElement';
-export { JqHTMLSpanElement } from './JqHTMLSpanElement';
+export { JqHTMLDivElement } from './html-elements/text/JqHTMLDivElement';
+export { JqHTMLSpanElement } from './html-elements/text/JqHTMLSpanElement';
 
 // Text Content Elements
-export { JqHTMLParagraphElement } from './JqHTMLParagraphElement';
-export { JqHTMLHeadingElement } from './JqHTMLHeadingElement';
-export { JqHTMLBRElement } from './JqHTMLBRElement';
-export { JqHTMLHRElement } from './JqHTMLHRElement';
-export { JqHTMLPreElement } from './JqHTMLPreElement';
+export { JqHTMLParagraphElement } from './html-elements/text/JqHTMLParagraphElement';
+export { JqHTMLHeadingElement } from './html-elements/text/JqHTMLHeadingElement';
+export { JqHTMLBRElement } from './html-elements/text/JqHTMLBRElement';
+export { JqHTMLHRElement } from './html-elements/text/JqHTMLHRElement';
+export { JqHTMLPreElement } from './html-elements/text/JqHTMLPreElement';
 
 // Hyperlink Elements
-export { JqHTMLAnchorElement } from './JqHTMLAnchorElement';
+export { JqHTMLAnchorElement } from './html-elements/links/JqHTMLAnchorElement';
 
 // List Elements
-export { JqHTMLUListElement } from './JqHTMLUListElement';
-export { JqHTMLOListElement } from './JqHTMLOListElement';
-export { JqHTMLLIElement } from './JqHTMLLIElement';
-export { JqHTMLDListElement } from './JqHTMLDListElement';
+export { JqHTMLUListElement } from './html-elements/lists/JqHTMLUListElement';
+export { JqHTMLOListElement } from './html-elements/lists/JqHTMLOListElement';
+export { JqHTMLLIElement } from './html-elements/lists/JqHTMLLIElement';
+export { JqHTMLDListElement } from './html-elements/lists/JqHTMLDListElement';
 
 // Media Elements
-export { JqHTMLImageElement } from './JqHTMLImageElement';
-export { JqHTMLAudioElement } from './JqHTMLAudioElement';
-export { JqHTMLVideoElement } from './JqHTMLVideoElement';
+export { JqHTMLImageElement } from './html-elements/media/JqHTMLImageElement';
+export { JqHTMLAudioElement } from './html-elements/media/JqHTMLAudioElement';
+export { JqHTMLVideoElement } from './html-elements/media/JqHTMLVideoElement';
 
 // Form Elements
-export { JqHTMLFormElement } from './JqHTMLFormElement';
-export { JqHTMLInputElement } from './JqHTMLInputElement';
-export { JqHTMLButtonElement } from './JqHTMLButtonElement';
-export { JqHTMLSelectElement } from './JqHTMLSelectElement';
-export { JqHTMLOptionElement } from './JqHTMLOptionElement';
-export { JqHTMLTextAreaElement } from './JqHTMLTextAreaElement';
-export { JqHTMLLabelElement } from './JqHTMLLabelElement';
-export { JqHTMLFieldSetElement } from './JqHTMLFieldSetElement';
-export { JqHTMLLegendElement } from './JqHTMLLegendElement';
+export { JqHTMLFormElement } from './html-elements/forms/JqHTMLFormElement';
+export { JqHTMLInputElement } from './html-elements/forms/JqHTMLInputElement';
+export { JqHTMLButtonElement } from './html-elements/forms/JqHTMLButtonElement';
+export { JqHTMLSelectElement } from './html-elements/forms/JqHTMLSelectElement';
+export { JqHTMLOptionElement } from './html-elements/forms/JqHTMLOptionElement';
+export { JqHTMLTextAreaElement } from './html-elements/forms/JqHTMLTextAreaElement';
+export { JqHTMLLabelElement } from './html-elements/forms/JqHTMLLabelElement';
+export { JqHTMLFieldSetElement } from './html-elements/forms/JqHTMLFieldSetElement';
+export { JqHTMLLegendElement } from './html-elements/forms/JqHTMLLegendElement';
 
 // Table Elements
-export { JqHTMLTableElement } from './JqHTMLTableElement';
-export { JqHTMLTableRowElement } from './JqHTMLTableRowElement';
-export { JqHTMLTableCellElement } from './JqHTMLTableCellElement';
-export { JqHTMLTableSectionElement } from './JqHTMLTableSectionElement';
-export { JqHTMLTableCaptionElement } from './JqHTMLTableCaptionElement';
-export { JqHTMLTableColElement } from './JqHTMLTableColElement';
+export { JqHTMLTableElement } from './html-elements/tables/JqHTMLTableElement';
+export { JqHTMLTableRowElement } from './html-elements/tables/JqHTMLTableRowElement';
+export { JqHTMLTableCellElement } from './html-elements/tables/JqHTMLTableCellElement';
+export { JqHTMLTableSectionElement } from './html-elements/tables/JqHTMLTableSectionElement';
+export { JqHTMLTableCaptionElement } from './html-elements/tables/JqHTMLTableCaptionElement';
+export { JqHTMLTableColElement } from './html-elements/tables/JqHTMLTableColElement';
 
 // Metadata Elements
-export { JqHTMLMetaElement } from './JqHTMLMetaElement';
-export { JqHTMLLinkElement } from './JqHTMLLinkElement';
-export { JqHTMLScriptElement } from './JqHTMLScriptElement';
-export { JqHTMLStyleElement } from './JqHTMLStyleElement';
+export { JqHTMLMetaElement } from './html-elements/metadata/JqHTMLMetaElement';
+export { JqHTMLLinkElement } from './html-elements/metadata/JqHTMLLinkElement';
+export { JqHTMLScriptElement } from './html-elements/metadata/JqHTMLScriptElement';
+export { JqHTMLStyleElement } from './html-elements/metadata/JqHTMLStyleElement';
 
 // Embedded Content
-export { JqHTMLIFrameElement } from './JqHTMLIFrameElement';
-export { JqHTMLCanvasElement } from './JqHTMLCanvasElement';
+export { JqHTMLIFrameElement } from './html-elements/embedded/JqHTMLIFrameElement';
+export { JqHTMLCanvasElement } from './html-elements/embedded/JqHTMLCanvasElement';
 
 // Semantic Elements (from grouped file)
 export {
@@ -125,7 +125,7 @@ export {
     JqHTMLUElement,
     JqHTMLVarElement,
     JqHTMLWbrElement,
-} from './JqHTMLSemanticElements';
+} from './html-elements/semantic/JqHTMLSemanticElements';
 
 // Media and Interactive Elements (from grouped file)
 export {
@@ -161,7 +161,7 @@ export {
     // Web Components
     JqHTMLSlotElement,
     JqHTMLTemplateElement,
-} from './JqHTMLMediaElements';
+} from './html-elements/semantic/JqHTMLMediaElements';
 
 // Metadata and Special Elements (from grouped file)
 export {
@@ -171,4 +171,4 @@ export {
     JqMathMLElement,
     JqHTMLFencedFrameElement,
     JqHTMLSelectedContentElement,
-} from './JqHTMLMetadataElements';
+} from './html-elements/semantic/JqHTMLMetadataElements';

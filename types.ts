@@ -2,17 +2,17 @@
  * Core type definitions for jqnode
  */
 
-import { JqElement, NodeType } from './dom/JqElement';
-import { JqAttr } from './dom/JqAttr';
-import { JqNamedNodeMap } from './dom/JqNamedNodeMap';
-import { JqHTMLCollection } from './dom/JqHTMLCollection';
-import { JqNode } from './dom/JqNode';
-import { JqElement as HtmlNodeClass } from './dom/JqElement';
-import { JqCharacterData } from './dom/JqCharacterData';
-import { JqText } from './dom/JqText';
-import { JqComment } from './dom/JqComment';
-import { JqCDATASection } from './dom/JqCDATASection';
-import { JqDOMTokenList } from './dom/JqDOMTokenList';
+import { JqElement, NodeType } from './dom/core/JqElement';
+import { JqAttr } from './dom/core/JqAttr';
+import { JqNamedNodeMap } from './dom/collections/JqNamedNodeMap';
+import { JqHTMLCollection } from './dom/collections/JqHTMLCollection';
+import { JqNode } from './dom/core/JqNode';
+import { JqElement as HtmlNodeClass } from './dom/core/JqElement';
+import { JqCharacterData } from './dom/core/JqCharacterData';
+import { JqText } from './dom/core/JqText';
+import { JqComment } from './dom/core/JqComment';
+import { JqCDATASection } from './dom/core/JqCDATASection';
+import { JqDOMTokenList } from './dom/collections/JqDOMTokenList';
 
 // Export JqElement under both names for backwards compatibility
 export { HtmlNodeClass as HtmlNode, HtmlNodeClass as JqElement };
