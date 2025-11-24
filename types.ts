@@ -3,9 +3,14 @@
  */
 
 import { HtmlNode, NodeType } from './dom/HtmlNode';
+import { JqNode } from './dom/JqNode';
+import { JqCharacterData } from './dom/JqCharacterData';
+import { JqText } from './dom/JqText';
+import { JqAttr } from './dom/JqAttr';
+import { JqNamedNodeMap } from './dom/JqNamedNodeMap';
 
 // Re-export for convenience
-export { HtmlNode };
+export { HtmlNode, JqNode, JqCharacterData, JqText, JqAttr, JqNamedNodeMap };
 export type { NodeType };
 
 /**
