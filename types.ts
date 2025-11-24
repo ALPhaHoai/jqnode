@@ -6,11 +6,13 @@ import { HtmlNode, NodeType } from './dom/HtmlNode';
 import { JqNode } from './dom/JqNode';
 import { JqCharacterData } from './dom/JqCharacterData';
 import { JqText } from './dom/JqText';
+import { JqComment } from './dom/JqComment';
 import { JqAttr } from './dom/JqAttr';
 import { JqNamedNodeMap } from './dom/JqNamedNodeMap';
 
 // Re-export for convenience
-export { HtmlNode, JqNode, JqCharacterData, JqText, JqAttr, JqNamedNodeMap };
+export { HtmlNode, JqNode, JqCharacterData, JqText, JqComment, JqAttr, JqNamedNodeMap };
+
 export type { NodeType };
 
 /**
