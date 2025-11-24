@@ -22,8 +22,8 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqItems = nqRoot.find('.item');
         const jqItems = jqRoot.find('.item');
 
-        const nqFirst = nqItems.get(0);
-        const jqFirst = jqItems.get(0);
+        const nqFirst = nqItems.get(0)!;
+        const jqFirst = jqItems.get(0)!;
 
         expect(nqFirst.tagName).toBe(jqFirst.tagName);
         expect(nqFirst.id).toBe(jqFirst.id);
@@ -34,8 +34,8 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqItems = nqRoot.find('.item');
         const jqItems = jqRoot.find('.item');
 
-        const nqLast = nqItems.get(-1);
-        const jqLast = jqItems.get(-1);
+        const nqLast = nqItems.get(-1)!;
+        const jqLast = jqItems.get(-1)!;
 
         expect(nqLast.id).toBe(jqLast.id);
         expect(nqLast.id).toBe('item3');
@@ -58,12 +58,12 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqItems = nqRoot.find('.item');
         const jqItems = jqRoot.find('.item');
 
-        const nqElem = nqItems.get(0);
-        const jqElem = jqItems.get(0);
+        const nqElem = nqItems.get(0)!;
+        const jqElem = jqItems.get(0)!;
 
         // Should not have jQuery/JQ methods
-        expect(typeof nqElem.find).toBe('undefined');
-        expect(typeof jqElem.find).toBe('undefined');
+        expect(typeof (nqElem as any).find).toBe('undefined');
+        expect(typeof (jqElem as any).find).toBe('undefined');
     });
 
     test('get() with out-of-bounds index should return undefined - jquery-comparison', () => {
@@ -89,8 +89,8 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqSingle = nqRoot.find('#item1');
         const jqSingle = jqRoot.find('#item1');
 
-        const nqElem = nqSingle.get(0);
-        const jqElem = jqSingle.get(0);
+        const nqElem = nqSingle.get(0)!;
+        const jqElem = jqSingle.get(0)!;
 
         expect(nqElem.id).toBe(jqElem.id);
         expect(nqElem.id).toBe('item1');
@@ -114,9 +114,9 @@ describe('get() method - Node-Query vs jQuery Comparison', () => {
         const nqItems = nqRoot.find('.item');
         const jqItems = jqRoot.find('.item');
 
-        expect(nqItems.get(-2).id).toBe(jqItems.get(-2).id);
-        expect(nqItems.get(-3).id).toBe(jqItems.get(-3).id);
-        expect(nqItems.get(-2).id).toBe('item2');
-        expect(nqItems.get(-3).id).toBe('item1');
+        expect(nqItems.get(-2)!.id).toBe(jqItems.get(-2)!.id);
+        expect(nqItems.get(-3)!.id).toBe(jqItems.get(-3)!.id);
+        expect(nqItems.get(-2)!.id).toBe('item2');
+        expect(nqItems.get(-3)!.id).toBe('item1');
     });
 });
