@@ -1,5 +1,6 @@
 import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
+import { isJQObject } from '../../../helpers/type-guards';
 
 /**
  * Insert content after each element in the set of matched elements.
@@ -11,14 +12,8 @@ function after(this: JQ, ...content: ContentInput[]): JQ {
     // 1. Collect all nodes to be inserted
     const nodesToInsert: JqElement[] = [];
     for (const item of content) {
-        // Check if this is a JQ object containing existing elements
-        if (
-            item &&
-            typeof item === 'object' &&
-            (((item as any).constructor && (item as any).constructor.name === 'JQ') ||
-                ((item as any).nodes && Array.isArray((item as any).nodes)))
-        ) {
-            nodesToInsert.push(...(item as any).nodes);
+        if (isJQObject(item)) {
+            nodesToInsert.push(...item.nodes);
         } else {
             nodesToInsert.push(...this._normalizeContent(item));
         }

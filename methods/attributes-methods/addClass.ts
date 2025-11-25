@@ -1,4 +1,5 @@
 import type { JqElement, JQ, ClassNameInput } from '../../types';
+import { parseClassString, addClassesToElement } from '../../helpers/class-utils';
 
 /**
  * Adds one or more classes to each element.
@@ -22,23 +23,8 @@ function addClass(this: JQ, className: ClassNameInput): JQ {
 
     function applyClassToElement(element: JqElement, className: string) {
         if (!element) return;
-
-        const currentClass = element.getAttribute('class') || '';
-        const currentClasses = currentClass.split(/\s+/).filter((cls: string) => cls.length > 0);
-        const classesToAdd = className.split(/\s+/).filter((cls: string) => cls.length > 0);
-
-        classesToAdd.forEach((cls: string) => {
-            if (!currentClasses.includes(cls)) {
-                currentClasses.push(cls);
-            }
-        });
-
-        const newClass = currentClasses.join(' ');
-        element.setAttribute('class', newClass);
-
-        if (element._originalElement) {
-            element._originalElement.className = newClass;
-        }
+        const classesToAdd = parseClassString(className);
+        addClassesToElement(element, classesToAdd);
     }
 
     return this;

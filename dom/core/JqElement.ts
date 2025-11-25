@@ -11,6 +11,8 @@ import { JqNodeListOf } from '../collections/JqNodeList';
 import { JqDOMTokenList } from '../collections/JqDOMTokenList';
 import { nodeMatchesSelector, parseSelector, selectNodes } from '../../selector';
 import { parseHTML } from '../../html-parser';
+import { VOID_ELEMENTS } from '../../helpers/html-constants';
+import { escapeText, escapeAttribute, escapeComment } from '../../helpers/html-escape';
 
 /**
  * Node type identifier
@@ -489,54 +491,19 @@ export class JqElement extends JqNode {
         parentRef.updateSiblingPointers();
     }
 
-    /**
-     * HTML void elements that should not have closing tags
-     * @see https://developer.mozilla.org/en-US/docs/Glossary/Void_element
-     */
-    private static readonly VOID_ELEMENTS = new Set([
-        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-        'link', 'meta', 'param', 'source', 'track', 'wbr'
-    ]);
 
-    /**
-     * Escapes special characters in text content for HTML
-     */
-    private static escapeText(text: string): string {
-        return text
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-    }
 
-    /**
-     * Escapes special characters in attribute values for HTML
-     */
-    private static escapeAttribute(value: string): string {
-        return value
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
 
-    /**
-     * Escapes special characters in comment content
-     * Note: Comments cannot contain -- so we replace it
-     */
-    private static escapeComment(text: string): string {
-        return text.replace(/--/g, '- -');
-    }
 
     /**
      * Helper method to serialize a node to HTML string
      */
     private serializeNode(node: JqElement): string {
         if (node.internalType === 'text') {
-            return JqElement.escapeText(node.textData || '');
+            return escapeText(node.textData || '');
         }
         if (node.internalType === 'comment') {
-            return `<!--${JqElement.escapeComment(node.textData || '')}-->`;
+            return `<!--${escapeComment(node.textData || '')}-->`;
         }
         if (node.internalType === 'element') {
             const tagNameLower = node.tagName.toLowerCase();
@@ -547,12 +514,12 @@ export class JqElement extends JqNode {
             for (let i = 0; i < attrs.length; i++) {
                 const attr = attrs.item(i);
                 if (attr) {
-                    html += ` ${attr.name}="${JqElement.escapeAttribute(attr.value)}"`;
+                    html += ` ${attr.name}="${escapeAttribute(attr.value)}"`;
                 }
             }
 
             // Check if this is a void element
-            if (JqElement.VOID_ELEMENTS.has(tagNameLower)) {
+            if (VOID_ELEMENTS.has(tagNameLower)) {
                 html += ' />';
                 return html;
             }

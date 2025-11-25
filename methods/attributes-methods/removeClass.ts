@@ -1,4 +1,5 @@
 import type { JqElement, JQ, ClassNameInput } from '../../types';
+import { parseClassString, removeClassesFromElement, setClassAttribute } from '../../helpers/class-utils';
 
 /**
  * Removes one or more classes from each element.
@@ -36,27 +37,11 @@ function removeClass(this: JQ, className?: ClassNameInput): JQ {
     ) {
         if (!element) return;
 
-        const currentClass = element.getAttribute('class') || '';
-        let currentClasses = currentClass.split(/\s+/).filter((cls: string) => cls.length > 0);
-
         if (className === undefined || className === null) {
-            currentClasses = [];
+            setClassAttribute(element, [], syncToDOM);
         } else {
-            const classesToRemove = className.split(/\s+/).filter((cls: string) => cls.length > 0);
-
-            classesToRemove.forEach((cls: string) => {
-                const classIndex = currentClasses.indexOf(cls);
-                if (classIndex !== -1) {
-                    currentClasses.splice(classIndex, 1);
-                }
-            });
-        }
-
-        const newClass = currentClasses.join(' ');
-        element.setAttribute('class', newClass);
-
-        if (syncToDOM && element._originalElement) {
-            element._originalElement.className = newClass;
+            const classesToRemove = parseClassString(className);
+            removeClassesFromElement(element, classesToRemove, syncToDOM);
         }
     }
 

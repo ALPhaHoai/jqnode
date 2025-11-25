@@ -1,4 +1,5 @@
 import type { JqElement, JQ, ClassNameInput } from '../../types';
+import { parseClassString, getClassAttribute, setClassAttribute } from '../../helpers/class-utils';
 
 /**
  * Adds or removes one or more classes from each element, depending on the class's presence or the state argument.
@@ -8,8 +9,8 @@ function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
     this.nodes.forEach((element: JqElement) => {
         if (!element) return;
 
-        const originalClass = element.getAttribute('class') || '';
-        const currentClasses = originalClass.split(/\s+/).filter((cls: string) => cls.length > 0);
+        const originalClass = getClassAttribute(element);
+        const currentClasses = parseClassString(originalClass);
         let classNameStr = className;
 
         if (typeof className === 'function') {
@@ -22,9 +23,7 @@ function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
             }
         }
 
-        const classesToToggle = (classNameStr as string)
-            .split(/\s+/)
-            .filter((cls: string) => cls.length > 0);
+        const classesToToggle = parseClassString(classNameStr as string);
 
         classesToToggle.forEach((cls: string) => {
             const classIndex = currentClasses.indexOf(cls);
@@ -46,12 +45,7 @@ function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
             }
         });
 
-        const newClass = currentClasses.join(' ');
-        element.setAttribute('class', newClass);
-
-        if (element._originalElement) {
-            element._originalElement.className = newClass;
-        }
+        setClassAttribute(element, currentClasses);
     });
 
     return this;
