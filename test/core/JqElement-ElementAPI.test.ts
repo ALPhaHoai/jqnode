@@ -46,11 +46,14 @@ describe('JqElement - Element API', () => {
             expect(html).toContain('Hello');
         });
 
-        test('innerHTML setter creates text node (stub)', () => {
+        test('innerHTML setter parses HTML', () => {
             element.innerHTML = '<p>Test</p>';
             expect(element.children.length).toBe(1);
-            expect(element.children[0].type).toBe('text');
-            expect(element.children[0].data).toBe('<p>Test</p>');
+            expect(element.children[0].type).toBe('element');
+            expect(element.children[0].tagName).toBe('p');
+            expect(element.children[0].children.length).toBe(1);
+            expect(element.children[0].children[0].type).toBe('text');
+            expect(element.children[0].children[0].data).toBe('Test');
         });
 
         test('outerHTML serializes element with attributes', () => {

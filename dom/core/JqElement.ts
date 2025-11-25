@@ -10,6 +10,7 @@ import { JqHTMLCollection } from '../collections/JqHTMLCollection';
 import { JqNodeListOf } from '../collections/JqNodeList';
 import { JqDOMTokenList } from '../collections/JqDOMTokenList';
 import { selectNodes, nodeMatchesSelector, parseSelector } from '../../selector';
+import { parseHTML } from '../../html-parser';
 
 /**
  * Node type identifier
@@ -22,12 +23,28 @@ export type NodeType = 'element' | 'text' | 'comment';
  */
 export class JqElement extends JqNode {
     public internalType: NodeType;
-    private _name: string = ''; // Internal storage for name/tag
+
     public tagName: string = ''; // Tag name for elements
-    public textData: string = ''; public children: JqElement[] = [];
-    public parent: JqElement | undefined;
+    public textData: string = '';
     public prev: JqElement | null = null;
     public next: JqElement | null = null;
+
+    // Typed accessors for inherited properties
+    get children(): JqElement[] {
+        return this._children as JqElement[];
+    }
+
+    set children(value: JqElement[]) {
+        this._children = value;
+    }
+
+    get parent(): JqElement | undefined {
+        return (this._parentNode as JqElement | null) ?? undefined;
+    }
+
+    set parent(value: JqElement | undefined) {
+        this._parentNode = value || null;
+    }
 
     // Extended properties for DOM integration
     public _originalElement: Element | null = null; // DOM element reference
@@ -44,7 +61,6 @@ export class JqElement extends JqNode {
     constructor(type: NodeType = 'element', name: string = '') {
         super();
         this.internalType = type;
-        this._name = name;
 
         // Set nodeType based on type
         if (type === 'element') {
@@ -63,22 +79,6 @@ export class JqElement extends JqNode {
         return this._attributes;
     }
 
-    /**
-     * Gets or sets the element name (tag name for elements).
-     * For HTML form elements (input, button, select, etc.), 
-     * this can be overridden to return the 'name' attribute instead.
-     */
-    get name(): string {
-        return this._name;
-    }
-
-    set name(value: string) {
-        this._name = value;
-        // Keep tagName in sync for element nodes
-        if (this.internalType === 'element') {
-            this.tagName = value;
-        }
-    }
 
     /**
      * Returns the node type string ('element', 'text', 'comment')
@@ -87,6 +87,7 @@ export class JqElement extends JqNode {
     get type(): string {
         return this.internalType;
     }
+
 
     /**
      * Gets or sets the text data for text and comment nodes
@@ -251,8 +252,7 @@ export class JqElement extends JqNode {
     }
 
     override cloneNode(deep?: boolean): JqElement {
-        const cloned = new JqElement(this.internalType, this.name);
-        cloned.tagName = this.tagName;
+        const cloned = new JqElement(this.internalType, this.tagName);
         cloned.textData = this.textData;        // Clone attributes
         const attrData = this._attributes._getData();
         cloned._attributes._setData(attrData);
@@ -279,7 +279,7 @@ export class JqElement extends JqNode {
         if (this.internalType === 'text' || this.internalType === 'comment') {
             this.textData = value || '';
         } else {
-            this.children = [];
+            this._children = [];
             if (value) {
                 const textNode = new JqElement('text');
                 textNode.textData = value;
@@ -382,14 +382,19 @@ export class JqElement extends JqNode {
         return this.children.map(child => this.serializeNode(child)).join('');
     }
 
-    set innerHTML(_html: string) {
-        // Stub implementation - would need full HTML parser
-        this.children = [];
-        if (_html) {
-            const textNode = new JqElement('text');
-            textNode.textData = _html;
-            textNode.parent = this;
-            this.children.push(textNode);
+    set innerHTML(html: string) {
+        // Clear existing children
+        this._children = [];
+
+        if (html) {
+            // Parse the HTML string into nodes
+            const nodes = parseHTML(html);
+
+            // Add parsed nodes as children
+            for (const node of nodes) {
+                node.parent = this;
+                this.children.push(node);
+            }
         }
     }
 
@@ -400,14 +405,30 @@ export class JqElement extends JqNode {
         return this.serializeNode(this);
     }
 
-    set outerHTML(_html: string) {
-        // Stub implementation - would need full HTML parser
-        if (this.parent) {
-            const index = this.parent.children.indexOf(this);
-            if (index !== -1) {
-                this.parent.children.splice(index, 1);
-            }
+    set outerHTML(html: string) {
+        if (!this.parent) {
+            // Can't replace if there's no parent
+            return;
         }
+
+        const index = this.parent.children.indexOf(this);
+        if (index === -1) {
+            return;
+        }
+
+        // Parse the HTML string into nodes
+        const nodes = parseHTML(html);
+
+        // Remove this element and insert the parsed nodes in its place
+        this.parent.children.splice(index, 1, ...nodes);
+
+        // Update parent references for all new nodes
+        for (const node of nodes) {
+            node.parent = this.parent;
+        }
+
+        // Clear this element's parent reference
+        this.parent = undefined;
     }
 
     /**
@@ -849,7 +870,7 @@ export class JqElement extends JqNode {
      * Replaces all children with the given nodes
      */
     replaceChildren(...nodes: (Node | string)[]): void {
-        this.children = [];
+        this._children = [];
         this.append(...nodes);
     }
 

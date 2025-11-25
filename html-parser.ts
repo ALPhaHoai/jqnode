@@ -183,7 +183,7 @@ function parseHTML(html: string): JqElement[] {
                         index++;
                     }
                     const doctypeNode = new JqElement('text');
-                    doctypeNode.name = '!DOCTYPE';
+                    doctypeNode.tagName = '!DOCTYPE';
                     doctypeNode.data = doctypeText.trim();
                     nodes.push(doctypeNode);
                 } else if (html.substr(index, 9) === '<![CDATA[') {
@@ -227,7 +227,7 @@ function parseHTML(html: string): JqElement[] {
                         index += 2;
                     }
                     const piNode = new JqElement('text');
-                    piNode.name = `?${name}`;
+                    piNode.tagName = `?${name}`;
                     piNode.data = piText.trim();
                     nodes.push(piNode);
                 } else if (html[index + 1] === '/') {

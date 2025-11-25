@@ -13,11 +13,11 @@ export class JqHTMLFieldSetElement extends JqElement {
     /**
      * The name of the fieldset (HTML name attribute)
      */
-    override get name(): string {
+    get name(): string {
         return this.getAttribute('name') || '';
     }
 
-    override set name(value: string) {
+    set name(value: string) {
         this.setAttribute('name', value);
     }
 

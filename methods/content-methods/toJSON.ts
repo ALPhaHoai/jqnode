@@ -19,7 +19,7 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
     const results: Array<Record<string, string>> = [];
 
     this.nodes.forEach((tableNode: JqElement) => {
-        const tagName = tableNode.name?.toLowerCase();
+        const tagName = tableNode.tagName?.toLowerCase();
         if (tableNode.internalType !== 'element' || tagName !== 'table') {
             return;
         }
@@ -29,16 +29,16 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
 
         // Try to find headers in <thead>
         const thead = tableNode.children?.find(
-            (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'thead',
+            (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'thead',
         );
         if (thead) {
             const theadRow = thead.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
             );
             if (theadRow) {
                 headerCells =
                     theadRow.children?.filter((child) => {
-                        const childTag = child.name?.toLowerCase();
+                        const childTag = child.tagName?.toLowerCase();
                         return child.internalType === 'element' && (childTag === 'th' || childTag === 'td');
                     }) || [];
             }
@@ -47,16 +47,16 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
         // If no headers in thead, use first row
         if (headerCells.length === 0) {
             const tbody = tableNode.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tbody',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tbody',
             );
             const rowContainer = tbody || tableNode;
             const firstRow = rowContainer.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
             );
             if (firstRow) {
                 headerCells =
                     firstRow.children?.filter((child) => {
-                        const childTag = child.name?.toLowerCase();
+                        const childTag = child.tagName?.toLowerCase();
                         return child.internalType === 'element' && (childTag === 'th' || childTag === 'td');
                     }) || [];
             }
@@ -72,20 +72,20 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
         // Find data rows
         let dataRows: JqElement[] = [];
         const tbody = tableNode.children?.find(
-            (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tbody',
+            (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tbody',
         );
 
         if (tbody) {
             // If tbody exists, get all rows from it
             dataRows =
                 tbody.children?.filter(
-                    (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                    (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
                 ) || [];
         } else {
             // If no tbody, get all rows except the first one (which we used as headers)
             const allRows =
                 tableNode.children?.filter(
-                    (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                    (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
                 ) || [];
             dataRows = allRows.slice(1); // Skip first row (headers)
         }
@@ -94,7 +94,7 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
         dataRows.forEach((row) => {
             const cells =
                 row.children?.filter((child) => {
-                    const childTag = child.name?.toLowerCase();
+                    const childTag = child.tagName?.toLowerCase();
                     return child.internalType === 'element' && (childTag === 'td' || childTag === 'th');
                 }) || [];
 

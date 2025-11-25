@@ -24,11 +24,11 @@ export class JqHTMLInputElement extends JqElement {
     /**
      * The name of the input (HTML name attribute)
      */
-    override get name(): string {
+    get name(): string {
         return this.getAttribute('name') || '';
     }
 
-    override set name(value: string) {
+    set name(value: string) {
         this.setAttribute('name', value);
     }
 
