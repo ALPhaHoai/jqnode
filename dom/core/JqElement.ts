@@ -490,14 +490,44 @@ export class JqElement extends JqNode {
     ]);
 
     /**
+     * Escapes special characters in text content for HTML
+     */
+    private static escapeText(text: string): string {
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    /**
+     * Escapes special characters in attribute values for HTML
+     */
+    private static escapeAttribute(value: string): string {
+        return value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Escapes special characters in comment content
+     * Note: Comments cannot contain -- so we replace it
+     */
+    private static escapeComment(text: string): string {
+        return text.replace(/--/g, '- -');
+    }
+
+    /**
      * Helper method to serialize a node to HTML string
      */
     private serializeNode(node: JqElement): string {
         if (node.internalType === 'text') {
-            return node.textData || '';
+            return JqElement.escapeText(node.textData || '');
         }
         if (node.internalType === 'comment') {
-            return `<!--${node.textData || ''}-->`;
+            return `<!--${JqElement.escapeComment(node.textData || '')}-->`;
         }
         if (node.internalType === 'element') {
             const tagNameLower = node.tagName.toLowerCase();
@@ -508,7 +538,7 @@ export class JqElement extends JqNode {
             for (let i = 0; i < attrs.length; i++) {
                 const attr = attrs.item(i);
                 if (attr) {
-                    html += ` ${attr.name}="${attr.value}"`;
+                    html += ` ${attr.name}="${JqElement.escapeAttribute(attr.value)}"`;
                 }
             }
 
