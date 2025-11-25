@@ -32,6 +32,7 @@ function closest(this: JQ, selector?: CssSelector): JQ {
                 // Check if this node matches the selector
                 if (nodeMatchesSelector(current, parsedSelector)) {
                     // Only add if we haven't seen this element before
+                    // jQuery DOES deduplicate when multiple elements have the same closest ancestor
                     if (!seen.has(current)) {
                         seen.add(current);
                         results.push(current);
