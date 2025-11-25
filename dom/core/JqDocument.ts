@@ -1,10 +1,10 @@
-﻿import { JqNode } from './JqNode';
-import { JqElement } from './JqElement';
-import { JqText } from './JqText';
-import { JqComment } from './JqComment';
-import { JqHTMLCollection } from '../collections/JqHTMLCollection';
-import { JqNodeList, JqNodeListOf } from '../collections/JqNodeList';
-import * as HTMLElements from '../index';
+﻿import {JqNode} from './JqNode';
+import {JqElement} from './JqElement';
+import {JqText} from './JqText';
+import {JqComment} from './JqComment';
+import {JqHTMLCollection} from '../collections/JqHTMLCollection';
+import {JqNodeList, JqNodeListOf} from '../collections/JqNodeList';
+import {createTypedElement} from '../helpers/createTypedElement';
 
 /**
  * JqDocument - Implementation of the DOM Document interface
@@ -93,157 +93,7 @@ export class JqDocument extends JqNode implements Document {
     // Methods
 
     createElement(tagName: string, options?: ElementCreationOptions): HTMLElement {
-        let element: JqElement;
-        const tag = tagName.toLowerCase();
-
-        // Factory method - return specific element types
-        switch (tag) {
-            // Structural elements
-            case 'html': element = new HTMLElements.JqHTMLHtmlElement(); break;
-            case 'head': element = new HTMLElements.JqHTMLHeadElement(); break;
-            case 'body': element = new HTMLElements.JqHTMLBodyElement(); break;
-            case 'div': element = new HTMLElements.JqHTMLDivElement(); break;
-            case 'span': element = new HTMLElements.JqHTMLSpanElement(); break;
-
-            // Text content
-            case 'p': element = new HTMLElements.JqHTMLParagraphElement(); break;
-            case 'h1': element = new HTMLElements.JqHTMLHeadingElement(1); break;
-            case 'h2': element = new HTMLElements.JqHTMLHeadingElement(2); break;
-            case 'h3': element = new HTMLElements.JqHTMLHeadingElement(3); break;
-            case 'h4': element = new HTMLElements.JqHTMLHeadingElement(4); break;
-            case 'h5': element = new HTMLElements.JqHTMLHeadingElement(5); break;
-            case 'h6': element = new HTMLElements.JqHTMLHeadingElement(6); break;
-            case 'br': element = new HTMLElements.JqHTMLBRElement(); break;
-            case 'hr': element = new HTMLElements.JqHTMLHRElement(); break;
-            case 'pre': element = new HTMLElements.JqHTMLPreElement(); break;
-
-            // Links
-            case 'a': element = new HTMLElements.JqHTMLAnchorElement(); break;
-
-            // Lists
-            case 'ul': element = new HTMLElements.JqHTMLUListElement(); break;
-            case 'ol': element = new HTMLElements.JqHTMLOListElement(); break;
-            case 'li': element = new HTMLElements.JqHTMLLIElement(); break;
-            case 'dl': element = new HTMLElements.JqHTMLDListElement(); break;
-            case 'dd': element = new HTMLElements.JqHTMLDDElement(); break;
-            case 'dt': element = new HTMLElements.JqHTMLDTElement(); break;
-
-            // Media
-            case 'img': element = new HTMLElements.JqHTMLImageElement(); break;
-            case 'audio': element = new HTMLElements.JqHTMLAudioElement(); break;
-            case 'video': element = new HTMLElements.JqHTMLVideoElement(); break;
-            case 'source': element = new HTMLElements.JqHTMLSourceElement(); break;
-            case 'track': element = new HTMLElements.JqHTMLTrackElement(); break;
-
-            // Forms
-            case 'form': element = new HTMLElements.JqHTMLFormElement(); break;
-            case 'input': element = new HTMLElements.JqHTMLInputElement(); break;
-            case 'button': element = new HTMLElements.JqHTMLButtonElement(); break;
-            case 'select': element = new HTMLElements.JqHTMLSelectElement(); break;
-            case 'option': element = new HTMLElements.JqHTMLOptionElement(); break;
-            case 'textarea': element = new HTMLElements.JqHTMLTextAreaElement(); break;
-            case 'label': element = new HTMLElements.JqHTMLLabelElement(); break;
-            case 'fieldset': element = new HTMLElements.JqHTMLFieldSetElement(); break;
-            case 'legend': element = new HTMLElements.JqHTMLLegendElement(); break;
-            case 'datalist': element = new HTMLElements.JqHTMLDataListElement(); break;
-            case 'optgroup': element = new HTMLElements.JqHTMLOptGroupElement(); break;
-            case 'output': element = new HTMLElements.JqHTMLOutputElement(); break;
-            case 'progress': element = new HTMLElements.JqHTMLProgressElement(); break;
-            case 'meter': element = new HTMLElements.JqHTMLMeterElement(); break;
-
-            // Tables
-            case 'table': element = new HTMLElements.JqHTMLTableElement(); break;
-            case 'tr': element = new HTMLElements.JqHTMLTableRowElement(); break;
-            case 'td': element = new HTMLElements.JqHTMLTableCellElement('td'); break;
-            case 'th': element = new HTMLElements.JqHTMLTableCellElement('th'); break;
-            case 'thead': element = new HTMLElements.JqHTMLTableSectionElement('thead'); break;
-            case 'tbody': element = new HTMLElements.JqHTMLTableSectionElement('tbody'); break;
-            case 'tfoot': element = new HTMLElements.JqHTMLTableSectionElement('tfoot'); break;
-            case 'caption': element = new HTMLElements.JqHTMLTableCaptionElement(); break;
-            case 'col': element = new HTMLElements.JqHTMLTableColElement('col'); break;
-            case 'colgroup': element = new HTMLElements.JqHTMLTableColElement('colgroup'); break;
-
-            // Metadata & Scripts
-            case 'meta': element = new HTMLElements.JqHTMLMetaElement(); break;
-            case 'link': element = new HTMLElements.JqHTMLLinkElement(); break;
-            case 'script': element = new HTMLElements.JqHTMLScriptElement(); break;
-            case 'style': element = new HTMLElements.JqHTMLStyleElement(); break;
-            case 'title': element = new HTMLElements.JqHTMLTitleElement(); break;
-            case 'base': element = new HTMLElements.JqHTMLBaseElement(); break;
-
-            // Embedded content
-            case 'iframe': element = new HTMLElements.JqHTMLIFrameElement(); break;
-            case 'canvas': element = new HTMLElements.JqHTMLCanvasElement(); break;
-            case 'embed': element = new HTMLElements.JqHTMLEmbedElement(); break;
-            case 'object': element = new HTMLElements.JqHTMLObjectElement(); break;
-            case 'picture': element = new HTMLElements.JqHTMLPictureElement(); break;
-            case 'area': element = new HTMLElements.JqHTMLAreaElement(); break;
-            case 'map': element = new HTMLElements.JqHTMLMapElement(); break;
-
-            // Semantic elements
-            case 'address': element = new HTMLElements.JqHTMLAddressElement(); break;
-            case 'article': element = new HTMLElements.JqHTMLArticleElement(); break;
-            case 'aside': element = new HTMLElements.JqHTMLAsideElement(); break;
-            case 'footer': element = new HTMLElements.JqHTMLFooterElement(); break;
-            case 'header': element = new HTMLElements.JqHTMLHeaderElement(); break;
-            case 'hgroup': element = new HTMLElements.JqHTMLHGroupElement(); break;
-            case 'main': element = new HTMLElements.JqHTMLMainElement(); break;
-            case 'nav': element = new HTMLElements.JqHTMLNavElement(); break;
-            case 'section': element = new HTMLElements.JqHTMLSectionElement(); break;
-            case 'search': element = new HTMLElements.JqHTMLSearchElement(); break;
-            case 'blockquote': element = new HTMLElements.JqHTMLBlockquoteElement(); break;
-            case 'figure': element = new HTMLElements.JqHTMLFigureElement(); break;
-            case 'figcaption': element = new HTMLElements.JqHTMLFigcaptionElement(); break;
-            case 'menu': element = new HTMLElements.JqHTMLMenuElement(); break;
-
-            // Inline text semantics
-            case 'abbr': element = new HTMLElements.JqHTMLAbbrElement(); break;
-            case 'b': element = new HTMLElements.JqHTMLBElement(); break;
-            case 'bdi': element = new HTMLElements.JqHTMLBDIElement(); break;
-            case 'bdo': element = new HTMLElements.JqHTMLBDOElement(); break;
-            case 'cite': element = new HTMLElements.JqHTMLCiteElement(); break;
-            case 'code': element = new HTMLElements.JqHTMLCodeElement(); break;
-            case 'data': element = new HTMLElements.JqHTMLDataElement(); break;
-            case 'dfn': element = new HTMLElements.JqHTMLDFNElement(); break;
-            case 'em': element = new HTMLElements.JqHTMLEmElement(); break;
-            case 'i': element = new HTMLElements.JqHTMLIElement(); break;
-            case 'kbd': element = new HTMLElements.JqHTMLKbdElement(); break;
-            case 'mark': element = new HTMLElements.JqHTMLMarkElement(); break;
-            case 'q': element = new HTMLElements.JqHTMLQuoteElement(); break;
-            case 'rp': element = new HTMLElements.JqHTMLRPElement(); break;
-            case 'rt': element = new HTMLElements.JqHTMLRTElement(); break;
-            case 'ruby': element = new HTMLElements.JqHTMLRubyElement(); break;
-            case 's': element = new HTMLElements.JqHTMLSElement(); break;
-            case 'samp': element = new HTMLElements.JqHTMLSampElement(); break;
-            case 'small': element = new HTMLElements.JqHTMLSmallElement(); break;
-            case 'strong': element = new HTMLElements.JqHTMLStrongElement(); break;
-            case 'sub': element = new HTMLElements.JqHTMLSubElement(); break;
-            case 'sup': element = new HTMLElements.JqHTMLSupElement(); break;
-            case 'time': element = new HTMLElements.JqHTMLTimeElement(); break;
-            case 'u': element = new HTMLElements.JqHTMLUElement(); break;
-            case 'var': element = new HTMLElements.JqHTMLVarElement(); break;
-            case 'wbr': element = new HTMLElements.JqHTMLWbrElement(); break;
-
-            // Edits
-            case 'ins': element = new HTMLElements.JqHTMLModElement('ins'); break;
-            case 'del': element = new HTMLElements.JqHTMLModElement('del'); break;
-
-            // Interactive
-            case 'details': element = new HTMLElements.JqHTMLDetailsElement(); break;
-            case 'dialog': element = new HTMLElements.JqHTMLDialogElement(); break;
-            case 'summary': element = new HTMLElements.JqHTMLSummaryElement(); break;
-
-            // Web components
-            case 'slot': element = new HTMLElements.JqHTMLSlotElement(); break;
-            case 'template': element = new HTMLElements.JqHTMLTemplateElement(); break;
-
-            // Scripting
-            case 'noscript': element = new HTMLElements.JqHTMLNoScriptElement(); break;
-
-            // Default fallback for unknown elements
-            default: element = new JqElement('element', tagName); break;
-        }
-
+        const element = createTypedElement(tagName);
         element.ownerDocument = this as any;
         return element as unknown as HTMLElement;
     }

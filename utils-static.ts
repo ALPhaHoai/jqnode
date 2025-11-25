@@ -3,7 +3,8 @@
  * These are utility functions that are attached to the jQuery/$ object itself
  */
 
-import type { JqElement } from './types';
+
+import {JqElement} from "./dom";
 
 /**
  * Return a number representing the current time.

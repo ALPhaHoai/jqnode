@@ -2,8 +2,9 @@
  * Minimal HTML parser that converts HTML strings to a node tree structure.
  */
 
-import { decodeHTMLEntities } from './helpers/html-entities';
-import { JqElement } from './types';
+import {decodeHTMLEntities} from './helpers/html-entities';
+import {JqElement} from './dom';
+import {createTypedElement} from './dom/helpers/createTypedElement';
 
 /**
  * HTML5 void elements that are always self-closing
@@ -326,7 +327,7 @@ function parseHTML(html: string): JqElement[] {
                     }
 
                     if (selfClosing) {
-                        const element = new JqElement('element', tagName);
+                        const element = createTypedElement(tagName);
                         element.attributes._setData(attributes);
                         nodes.push(element);
                     } else {
@@ -356,7 +357,7 @@ function parseHTML(html: string): JqElement[] {
                                 index = length;
                             }
 
-                            const element = new JqElement('element', tagName);
+                            const element = createTypedElement(tagName);
                             element.attributes._setData(attributes);
                             if (rawText) {
                                 const textNode = new JqElement('text');
@@ -367,7 +368,7 @@ function parseHTML(html: string): JqElement[] {
                         } else {
                             // Parse children normally, expecting this tag's closing tag
                             const children = parseNodes(tagName, openTags);
-                            const element = new JqElement('element', tagName);
+                            const element = createTypedElement(tagName);
                             element.attributes._setData(attributes);
                             element.children = children;
                             nodes.push(element);

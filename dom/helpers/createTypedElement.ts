@@ -1,20 +1,20 @@
 /**
  * Shared element factory function that creates typed HTML elements based on tag name.
  * Used by both JqDocument.createElement() and the HTML parser.
- * 
+ *
  * This centralizes the element creation logic to avoid duplication and ensure
  * consistency across the codebase.
  */
 
-import { JqElement } from '../core/JqElement';
+import {JqElement} from '../core/JqElement';
 import * as HTMLElements from '../index';
 
 /**
  * Creates a properly typed HTML element instance based on the tag name.
- * 
+ *
  * @param tagName - The HTML tag name (case-insensitive)
  * @returns A typed JqElement instance (e.g., JqHTMLDivElement for 'div')
- * 
+ *
  * @example
  * const div = createTypedElement('div');  // Returns JqHTMLDivElement
  * const table = createTypedElement('TABLE');  // Returns JqHTMLTableElement
