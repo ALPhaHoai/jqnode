@@ -11,6 +11,17 @@ export class JqHTMLFieldSetElement extends JqElement {
     }
 
     /**
+     * The name of the fieldset (HTML name attribute)
+     */
+    override get name(): string {
+        return this.getAttribute('name') || '';
+    }
+
+    override set name(value: string) {
+        this.setAttribute('name', value);
+    }
+
+    /**
      * Whether the fieldset is disabled
      */
     get disabled(): boolean {
@@ -23,17 +34,6 @@ export class JqHTMLFieldSetElement extends JqElement {
         } else {
             this.removeAttribute('disabled');
         }
-    }
-
-    /**
-     * The name of the fieldset
-     */
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
     }
 
     /**

@@ -29,7 +29,7 @@ function _cloneNode(
     }
 
     const cloned = new JqElement(nodeType, nodeName);
-    cloned.tagName = node.tagName || node.name;
+    cloned.tagName = node.tagName || nodeName;
     // Copy textData from node.textData or node.data (for plain objects)
     cloned.textData = node.textData || (node as any).data || '';
 

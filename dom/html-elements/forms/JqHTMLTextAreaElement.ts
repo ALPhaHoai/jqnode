@@ -13,11 +13,11 @@ export class JqHTMLTextAreaElement extends JqElement {
     /**
      * The name of the control
      */
-    get name(): string {
+    override get name(): string {
         return this.getAttribute('name') || '';
     }
 
-    set name(value: string) {
+    override set name(value: string) {
         this.setAttribute('name', value);
     }
 

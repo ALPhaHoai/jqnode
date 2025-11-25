@@ -4,7 +4,7 @@
  */
 
 
-import {JqElement} from "./dom";
+import { JqElement } from "./dom";
 
 /**
  * Return a number representing the current time.
@@ -59,7 +59,7 @@ function param(obj: any, traditional: boolean = false): string {
     if (obj && obj.nodes && Array.isArray(obj.nodes)) {
         // Serialize form elements
         obj.nodes.forEach((node: JqElement) => {
-            if (node.name === 'INPUT' || node.name === 'SELECT' || node.name === 'TEXTAREA') {
+            if (node.tagName === 'INPUT' || node.tagName === 'SELECT' || node.tagName === 'TEXTAREA') {
                 const name = node.getAttribute('name');
                 const value = node.getAttribute('value');
                 if (name) {
@@ -111,7 +111,7 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
 
         // Filter out script tags if keepScripts is false
         if (keepScripts === false) {
-            return nodes.filter((node) => !(node.internalType === 'element' && node.name === 'SCRIPT'));
+            return nodes.filter((node) => !(node.internalType === 'element' && node.tagName === 'SCRIPT'));
         }
 
         return nodes;

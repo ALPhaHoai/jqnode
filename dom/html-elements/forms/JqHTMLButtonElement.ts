@@ -13,12 +13,23 @@ export class JqHTMLButtonElement extends JqElement {
     /**
      * The type of button
      */
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || 'submit';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
+    }
+
+    /**
+     * The name of the button (HTML name attribute)
+     */
+    override get name(): string {
+        return this.getAttribute('name') || '';
+    }
+
+    override set name(value: string) {
+        this.setAttribute('name', value);
     }
 
     /**
@@ -30,17 +41,6 @@ export class JqHTMLButtonElement extends JqElement {
 
     set value(value: string) {
         this.setAttribute('value', value);
-    }
-
-    /**
-     * The name of the button
-     */
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
     }
 
     /**

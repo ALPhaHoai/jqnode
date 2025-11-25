@@ -5,6 +5,26 @@
  */
 
 /**
+ * HTML5 void elements that are always self-closing
+ */
+export const VOID_ELEMENTS = new Set([
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+]);
+
+/**
  * Gets the text content of a node recursively.
  * @param node - The node to get text content from
  * @returns The concatenated text content
@@ -70,27 +90,12 @@ function nodeToHTML(node: JqElement): string {
         }
         const attrs = attrPairs.join(' ');
 
-        const tagNameLower = node.name ? node.name.toLowerCase() : '';
+        const tagNameLower = node.tagName ? node.tagName.toLowerCase() : '';
         const tagOpen = attrs ? `<${tagNameLower} ${attrs}>` : `<${tagNameLower}>`;
 
         if (!node.children || node.children.length === 0) {
             // Void elements (self-closing tags) in HTML5 don't get closing tags
-            const voidElements = [
-                'area',
-                'base',
-                'br',
-                'col',
-                'embed',
-                'hr',
-                'img',
-                'input',
-                'link',
-                'meta',
-                'source',
-                'track',
-                'wbr',
-            ];
-            if (voidElements.includes(tagNameLower)) {
+            if (VOID_ELEMENTS.has(tagNameLower)) {
                 return tagOpen;
             } else {
                 return tagOpen.replace('>', '/>');

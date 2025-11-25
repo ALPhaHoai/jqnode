@@ -24,7 +24,7 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
 
     // Check current nodes
     this.nodes.forEach((node: JqElement) => {
-        if (node.internalType === 'element' && node.name && node.name.toLowerCase() === 'table') {
+        if (node.internalType === 'element' && node.tagName && node.tagName.toLowerCase() === 'table') {
             candidateTables.push(node);
         }
     });
@@ -44,17 +44,17 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
 
         // Try to find headers in <thead>
         const thead = tableNode.children?.find(
-            (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'thead',
+            (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'thead',
         );
 
         if (thead) {
             const theadRow = thead.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
             );
             if (theadRow) {
                 headerCells =
                     theadRow.children?.filter((child) => {
-                        const childTag = child.name?.toLowerCase();
+                        const childTag = child.tagName?.toLowerCase();
                         return child.internalType === 'element' && (childTag === 'th' || childTag === 'td');
                     }) || [];
             }
@@ -63,16 +63,16 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
         // If no headers in thead, use first row of tbody or table
         if (headerCells.length === 0) {
             const tbody = tableNode.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tbody',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tbody',
             );
             const rowContainer = tbody || tableNode;
             const firstRow = rowContainer.children?.find(
-                (child) => child.internalType === 'element' && child.name?.toLowerCase() === 'tr',
+                (child) => child.internalType === 'element' && child.tagName?.toLowerCase() === 'tr',
             );
             if (firstRow) {
                 headerCells =
                     firstRow.children?.filter((child) => {
-                        const childTag = child.name?.toLowerCase();
+                        const childTag = child.tagName?.toLowerCase();
                         return child.internalType === 'element' && (childTag === 'th' || childTag === 'td');
                     }) || [];
             }

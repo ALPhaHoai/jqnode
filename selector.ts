@@ -438,7 +438,7 @@ function nodeMatchesSelector(
 
     const simpleSelector = selector as SimpleSelector;
 
-    const nodeTag = (node.name && node.name.toLowerCase()) || '';
+    const nodeTag = (node.tagName && node.tagName.toLowerCase()) || '';
     const selectorTag = (simpleSelector.tagName || '').toLowerCase();
     if (!simpleSelector.universal && selectorTag && nodeTag !== selectorTag) {
         return false;
@@ -589,29 +589,29 @@ function matchesPseudo(node: JqElement, pseudo: PseudoSelector, context: Selecto
         case 'nth-of-type':
             const typeIndex = siblings
                 .slice(0, nodeIndex + 1)
-                .filter((sibling) => sibling.name === node.name).length;
+                .filter((sibling) => sibling.tagName === node.tagName).length;
             return matchesNth(pseudo.args!, typeIndex);
 
         case 'first-of-type':
-            const firstOfTypeIndex = siblings.findIndex((sibling) => sibling.name === node.name);
+            const firstOfTypeIndex = siblings.findIndex((sibling) => sibling.tagName === node.tagName);
             return nodeIndex === firstOfTypeIndex;
 
         case 'last-of-type':
             const lastOfTypeIndex = siblings
                 .slice()
                 .reverse()
-                .findIndex((sibling) => sibling.name === node.name);
+                .findIndex((sibling) => sibling.tagName === node.tagName);
             return nodeIndex === siblings.length - 1 - lastOfTypeIndex;
 
         case 'only-of-type':
-            const sameTypeCount = siblings.filter((sibling) => sibling.name === node.name).length;
+            const sameTypeCount = siblings.filter((sibling) => sibling.tagName === node.tagName).length;
             return sameTypeCount === 1;
 
         case 'nth-last-child':
             return matchesNth(pseudo.args!, siblings.length - nodeIndex);
 
         case 'nth-last-of-type':
-            const typeSiblings = siblings.filter((sibling) => sibling.name === node.name);
+            const typeSiblings = siblings.filter((sibling) => sibling.tagName === node.tagName);
             const typeIndexFromEnd = typeSiblings.length - typeSiblings.indexOf(node);
             return matchesNth(pseudo.args!, typeIndexFromEnd);
 

@@ -52,14 +52,6 @@ export class JqHTMLAreaElement extends JqElement {
 
 export class JqHTMLMapElement extends JqElement {
     constructor() { super('element', 'map'); }
-
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
-    }
 }
 
 export class JqHTMLTrackElement extends JqElement {
@@ -122,11 +114,11 @@ export class JqHTMLEmbedElement extends JqElement {
         this.setAttribute('src', value);
     }
 
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || '';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
     }
 
@@ -150,28 +142,20 @@ export class JqHTMLEmbedElement extends JqElement {
 export class JqHTMLObjectElement extends JqElement {
     constructor() { super('element', 'object'); }
 
-    get data(): string {
+    override get data(): string {
         return this.getAttribute('data') || '';
     }
 
-    set data(value: string) {
+    override set data(value: string) {
         this.setAttribute('data', value);
     }
 
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || '';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
-    }
-
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
     }
 
     get width(): string {
@@ -206,11 +190,11 @@ export class JqHTMLSourceElement extends JqElement {
         this.setAttribute('src', value);
     }
 
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || '';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
     }
 
@@ -313,14 +297,6 @@ export class JqHTMLOutputElement extends JqElement {
 
     set form(value: string) {
         this.setAttribute('form', value);
-    }
-
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
     }
 }
 
@@ -444,14 +420,6 @@ export class JqHTMLSummaryElement extends JqElement {
 // Web Components
 export class JqHTMLSlotElement extends JqElement {
     constructor() { super('element', 'slot'); }
-
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
-    }
 }
 
 export class JqHTMLTemplateElement extends JqElement {

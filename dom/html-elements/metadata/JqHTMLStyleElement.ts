@@ -24,11 +24,11 @@ export class JqHTMLStyleElement extends JqElement {
     /**
      * The type of style (obsolete, always text/css)
      */
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || 'text/css';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
     }
 }

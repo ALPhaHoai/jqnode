@@ -2,29 +2,11 @@
  * Minimal HTML parser that converts HTML strings to a node tree structure.
  */
 
-import {decodeHTMLEntities} from './helpers/html-entities';
-import {JqElement} from './dom';
-import {createTypedElement} from './dom/helpers/createTypedElement';
+import { decodeHTMLEntities } from './helpers/html-entities';
+import { JqElement } from './dom';
+import { createTypedElement } from './dom/helpers/createTypedElement';
+import { VOID_ELEMENTS } from './utils';
 
-/**
- * HTML5 void elements that are always self-closing
- */
-const VOID_ELEMENTS = new Set([
-    'area',
-    'base',
-    'br',
-    'col',
-    'embed',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr',
-]);
 
 /**
  * Elements whose content should be treated as raw text, not parsed as HTML

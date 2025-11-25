@@ -13,12 +13,23 @@ export class JqHTMLInputElement extends JqElement {
     /**
      * The type of control to display
      */
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || 'text';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
+    }
+
+    /**
+     * The name of the input (HTML name attribute)
+     */
+    override get name(): string {
+        return this.getAttribute('name') || '';
+    }
+
+    override set name(value: string) {
+        this.setAttribute('name', value);
     }
 
     /**
@@ -30,17 +41,6 @@ export class JqHTMLInputElement extends JqElement {
 
     set value(value: string) {
         this.setAttribute('value', value);
-    }
-
-    /**
-     * The name of the control
-     */
-    get name(): string {
-        return this.getAttribute('name') || '';
-    }
-
-    set name(value: string) {
-        this.setAttribute('name', value);
     }
 
     /**

@@ -25,11 +25,11 @@ export class JqHTMLLIElement extends JqElement {
     /**
      * Type of bullet or numbering (obsolete, use CSS instead)
      */
-    get type(): string {
+    override get type(): string {
         return this.getAttribute('type') || '';
     }
 
-    set type(value: string) {
+    override set type(value: string) {
         this.setAttribute('type', value);
     }
 }

@@ -22,7 +22,7 @@ export type NodeType = 'element' | 'text' | 'comment';
  */
 export class JqElement extends JqNode {
     public internalType: NodeType;
-    public name: string = '';
+    private _name: string = ''; // Internal storage for name/tag
     public tagName: string = ''; // Tag name for elements
     public textData: string = ''; public children: JqElement[] = [];
     public parent: JqElement | undefined;
@@ -44,7 +44,7 @@ export class JqElement extends JqNode {
     constructor(type: NodeType = 'element', name: string = '') {
         super();
         this.internalType = type;
-        this.name = name;
+        this._name = name;
 
         // Set nodeType based on type
         if (type === 'element') {
@@ -61,6 +61,23 @@ export class JqElement extends JqNode {
 
     get attributes(): JqNamedNodeMap {
         return this._attributes;
+    }
+
+    /**
+     * Gets or sets the element name (tag name for elements).
+     * For HTML form elements (input, button, select, etc.), 
+     * this can be overridden to return the 'name' attribute instead.
+     */
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+        // Keep tagName in sync for element nodes
+        if (this.internalType === 'element') {
+            this.tagName = value;
+        }
     }
 
     /**
