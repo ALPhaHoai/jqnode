@@ -79,6 +79,18 @@ export class JqElement extends JqNode {
         return this._attributes;
     }
 
+    /**
+     * Updates prev/next sibling pointers for all children
+     * This should be called after any modification to the children array
+     */
+    private updateSiblingPointers(): void {
+        for (let i = 0; i < this.children.length; i++) {
+            const child = this.children[i];
+            child.prev = i > 0 ? this.children[i - 1] : null;
+            child.next = i < this.children.length - 1 ? this.children[i + 1] : null;
+        }
+    }
+
 
     /**
      * Returns the node type string ('element', 'text', 'comment')
@@ -207,6 +219,7 @@ export class JqElement extends JqNode {
 
         this.children.push(jqElement);
         jqElement.parent = this;
+        this.updateSiblingPointers();
         return node;
     }
 
@@ -217,6 +230,9 @@ export class JqElement extends JqNode {
         }
         const removed = this.children.splice(index, 1)[0];
         removed.parent = undefined;
+        removed.prev = null;
+        removed.next = null;
+        this.updateSiblingPointers();
         return child;
     }
 
@@ -239,6 +255,7 @@ export class JqElement extends JqNode {
 
         this.children.splice(index, 0, jqElement);
         jqElement.parent = this;
+        this.updateSiblingPointers();
         return node;
     }
 
@@ -259,6 +276,9 @@ export class JqElement extends JqNode {
         this.children[index] = jqElement;
         jqElement.parent = this;
         removed.parent = undefined;
+        removed.prev = null;
+        removed.next = null;
+        this.updateSiblingPointers();
 
         return child;
     }
@@ -282,12 +302,8 @@ export class JqElement extends JqNode {
                 cloned.children.push(clonedChild);
             }
 
-            // Set up prev/next sibling pointers
-            for (let i = 0; i < cloned.children.length; i++) {
-                const child = cloned.children[i];
-                child.prev = i > 0 ? cloned.children[i - 1] : null;
-                child.next = i < cloned.children.length - 1 ? cloned.children[i + 1] : null;
-            }
+            // Set up prev/next sibling pointers using helper
+            cloned.updateSiblingPointers();
         }
 
         return cloned;
@@ -310,6 +326,7 @@ export class JqElement extends JqNode {
                 textNode.parent = this;
                 this.children.push(textNode);
             }
+            this.updateSiblingPointers();
         }
     }
 
@@ -420,6 +437,7 @@ export class JqElement extends JqNode {
                 this.children.push(node);
             }
         }
+        this.updateSiblingPointers();
     }
 
     /**
@@ -440,19 +458,26 @@ export class JqElement extends JqNode {
             return;
         }
 
+        const parentRef = this.parent;
+
         // Parse the HTML string into nodes
         const nodes = parseHTML(html);
 
         // Remove this element and insert the parsed nodes in its place
-        this.parent.children.splice(index, 1, ...nodes);
+        parentRef.children.splice(index, 1, ...nodes);
 
         // Update parent references for all new nodes
         for (const node of nodes) {
-            node.parent = this.parent;
+            node.parent = parentRef;
         }
 
-        // Clear this element's parent reference
+        // Clear this element's parent reference and sibling pointers
         this.parent = undefined;
+        this.prev = null;
+        this.next = null;
+
+        // Update sibling pointers in parent
+        parentRef.updateSiblingPointers();
     }
 
     /**
@@ -788,6 +813,7 @@ export class JqElement extends JqNode {
                 siblings.splice(index + 1, 0, jqNode);
             }
         }
+        this.parent.updateSiblingPointers();
     }
 
     /**
@@ -817,6 +843,7 @@ export class JqElement extends JqNode {
                 siblings.splice(index + i, 0, jqNode);
             }
         }
+        this.parent.updateSiblingPointers();
     }
 
     /**
@@ -839,6 +866,7 @@ export class JqElement extends JqNode {
                 this.children.push(jqNode);
             }
         }
+        this.updateSiblingPointers();
     }
 
     /**
@@ -862,6 +890,7 @@ export class JqElement extends JqNode {
                 this.children.unshift(jqNode);
             }
         }
+        this.updateSiblingPointers();
     }
 
     /**
@@ -869,11 +898,15 @@ export class JqElement extends JqNode {
      */
     remove(): void {
         if (this.parent) {
-            const index = this.parent.children.indexOf(this);
+            const parentRef = this.parent;
+            const index = parentRef.children.indexOf(this);
             if (index !== -1) {
-                this.parent.children.splice(index, 1);
+                parentRef.children.splice(index, 1);
+                parentRef.updateSiblingPointers();
             }
             this.parent = undefined;
+            this.prev = null;
+            this.next = null;
         }
     }
 
@@ -890,6 +923,8 @@ export class JqElement extends JqNode {
         const parentRef = this.parent;
         siblings.splice(index, 1);
         this.parent = undefined;
+        this.prev = null;
+        this.next = null;
 
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
@@ -908,6 +943,7 @@ export class JqElement extends JqNode {
                 siblings.splice(index + i, 0, jqNode);
             }
         }
+        parentRef.updateSiblingPointers();
     }
 
     /**
@@ -982,12 +1018,13 @@ export class JqElement extends JqNode {
                 return null;
 
             case 'afterbegin':
-                if (this.children.length > 0) {
-                    this.children.unshift(jqElement);
-                    jqElement.parent = this;
-                } else {
-                    this.appendChild(element);
+                // Remove from previous parent if it exists
+                if (jqElement.parent) {
+                    jqElement.parent.removeChild(element);
                 }
+                this.children.unshift(jqElement);
+                jqElement.parent = this;
+                this.updateSiblingPointers();
                 return element;
 
             case 'beforeend':
