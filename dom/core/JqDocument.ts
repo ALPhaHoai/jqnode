@@ -1,11 +1,11 @@
-﻿import {JqNode} from './JqNode';
-import {JqElement} from './JqElement';
-import {JqText} from './JqText';
-import {JqComment} from './JqComment';
-import {JqDocumentFragment} from './JqDocumentFragment';
-import {JqHTMLCollection} from '../collections/JqHTMLCollection';
-import {JqNodeList, JqNodeListOf} from '../collections/JqNodeList';
-import {createTypedElement} from '../helpers/createTypedElement';
+﻿import { JqNode } from './JqNode';
+import { JqElement } from './JqElement';
+import { JqText } from './JqText';
+import { JqComment } from './JqComment';
+import { JqDocumentFragment } from './JqDocumentFragment';
+import { JqHTMLCollection } from '../collections/JqHTMLCollection';
+import { JqNodeList, JqNodeListOf } from '../collections/JqNodeList';
+import { createTypedElement } from '../helpers/createTypedElement';
 
 /**
  * JqDocument - Implementation of the DOM Document interface
@@ -115,6 +115,7 @@ export class JqDocument extends JqNode implements Document {
 
     createDocumentFragment(): DocumentFragment {
         const fragment = new JqDocumentFragment();
+        fragment.ownerDocument = this as unknown as Document;
         return fragment as unknown as DocumentFragment;
     }
 

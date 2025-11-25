@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import {JqNodeListOf} from '../collections/JqNodeList';
+import { JqNodeListOf } from '../collections/JqNodeList';
 
 /**
  * JqNode implements the DOM Node interface.
@@ -72,7 +72,7 @@ export class JqNode implements Node {
         // To be implemented by subclasses
     }
 
-    private _ownerDocument: Document | null = null;
+    protected _ownerDocument: Document | null = null;
 
     get ownerDocument(): Document | null {
         return this._ownerDocument;

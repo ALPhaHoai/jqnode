@@ -7,11 +7,11 @@
  * document structure comprised of nodes just like a standard document.
  */
 
-import {JqNode} from './JqNode';
-import {JqElement} from './JqElement';
-import {JqHTMLCollection} from '../collections/JqHTMLCollection';
-import {JqNodeListOf} from '../collections/JqNodeList';
-import {selectNodes} from '../../selector';
+import { JqNode } from './JqNode';
+import { JqElement } from './JqElement';
+import { JqHTMLCollection } from '../collections/JqHTMLCollection';
+import { JqNodeListOf } from '../collections/JqNodeList';
+import { selectNodes } from '../../selector';
 
 export class JqDocumentFragment extends JqNode implements DocumentFragment {
     // Internal children storage
@@ -20,6 +20,18 @@ export class JqDocumentFragment extends JqNode implements DocumentFragment {
     constructor() {
         super();
         this.nodeType = this.DOCUMENT_FRAGMENT_NODE;
+    }
+
+    // Override ownerDocument to match DocumentFragment interface (non-nullable)
+    override get ownerDocument(): Document {
+        if (!this._ownerDocument) {
+            throw new Error('DocumentFragment must have an ownerDocument');
+        }
+        return this._ownerDocument;
+    }
+
+    override set ownerDocument(value: Document | null) {
+        this._ownerDocument = value;
     }
 
     override get nodeName(): string {
@@ -213,12 +225,12 @@ export class JqDocumentFragment extends JqNode implements DocumentFragment {
         }
     }
 
-    getElementById(elementId: string): Element | null {
-        const traverse = (nodes: JqElement[]): Element | null => {
+    getElementById(elementId: string): HTMLElement | null {
+        const traverse = (nodes: JqElement[]): HTMLElement | null => {
             for (const node of nodes) {
                 if (node.nodeType === this.ELEMENT_NODE) {
                     if (node.getAttribute('id') === elementId) {
-                        return node as unknown as Element;
+                        return node as unknown as HTMLElement;
                     }
                     // Recursively search children
                     const result = traverse(node.children);
