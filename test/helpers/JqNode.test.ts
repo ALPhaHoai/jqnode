@@ -323,9 +323,10 @@ describe('JqNode', () => {
                 expect(node1.contains(node2 as unknown as Node)).toBe(false);
             });
 
-            it('should return false when comparing with self', () => {
+
+            it('should return true when comparing with self', () => {
                 const node = new JqElement('element', 'div');
-                expect(node.contains(node as unknown as Node)).toBe(false);
+                expect(node.contains(node as unknown as Node)).toBe(true);
             });
         });
 

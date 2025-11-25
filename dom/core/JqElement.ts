@@ -269,7 +269,8 @@ export class JqElement extends JqNode {
 
     override cloneNode(deep?: boolean): JqElement {
         const cloned = new JqElement(this.internalType, this.tagName);
-        cloned.textData = this.textData;        // Clone attributes
+        cloned.textData = this.textData;
+        // Clone attributes
         const attrData = this._attributes._getData();
         cloned._attributes._setData(attrData);
 
@@ -279,6 +280,13 @@ export class JqElement extends JqNode {
                 const clonedChild = child.cloneNode(true);
                 clonedChild.parent = cloned;
                 cloned.children.push(clonedChild);
+            }
+
+            // Set up prev/next sibling pointers
+            for (let i = 0; i < cloned.children.length; i++) {
+                const child = cloned.children[i];
+                child.prev = i > 0 ? cloned.children[i - 1] : null;
+                child.next = i < cloned.children.length - 1 ? cloned.children[i + 1] : null;
             }
         }
 
