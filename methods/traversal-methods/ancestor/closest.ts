@@ -1,5 +1,6 @@
 import { parseSelector, nodeMatchesSelector } from '../../../selector';
-import type { JqElement, CssSelector, JQ } from '../../../types';
+import type { CssSelector, JQ, JqElement } from '../../../types';
+import { createEmptyJQ } from '../../../helpers/jq-factory';
 import JQClass from '../../../jq';
 
 /**
@@ -8,19 +9,13 @@ import JQClass from '../../../jq';
  */
 function closest(this: JQ, selector?: CssSelector): JQ {
     if (!selector) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        result.length = 0;
-        return result;
+        return createEmptyJQ(this);
     }
 
     // Parse the selector
     const parsedSelector = parseSelector(selector);
     if (!parsedSelector) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        result.length = 0;
-        return result;
+        return createEmptyJQ(this);
     }
 
     const results: JqElement[] = [];

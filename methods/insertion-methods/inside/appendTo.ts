@@ -1,6 +1,7 @@
 import type { JqElement, JQ, CssSelector } from '../../../types';
 import { selectNodes } from '../../../selector';
 import JQClass from '../../../jq';
+import { createJQWithNodes } from '../../../helpers/jq-factory';
 
 /**
  * Insert every element in the set of matched elements to the end of the target.
@@ -18,8 +19,7 @@ function appendTo(this: JQ, target: CssSelector | JQ | JqElement | JqElement[] |
         if (target.trim().startsWith('<')) {
             // HTML string - parse it and mark as dynamic
             const nodes = this._normalizeContent(target as any);
-            targetJQ = Object.create(Object.getPrototypeOf(this));
-            targetJQ.nodes = nodes;
+            targetJQ = createJQWithNodes(this, nodes);
             isDynamicTarget = true;
         } else {
             // Selector string - find matching elements
@@ -85,9 +85,7 @@ function appendTo(this: JQ, target: CssSelector | JQ | JqElement | JqElement[] |
     }
 
     // Return a new JQ object containing all appended nodes (originals + clones)
-    const newJQ = Object.create(Object.getPrototypeOf(this));
-    newJQ.nodes = newNodes;
-    return newJQ;
+    return createJQWithNodes(this, newNodes);
 }
 
 export default appendTo;

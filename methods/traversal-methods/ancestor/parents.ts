@@ -2,6 +2,7 @@ import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { CssSelector, JQ } from '../../../types';
 import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
+import { createEmptyJQ } from '../../../helpers/jq-factory';
 
 // Use ReturnType to infer ParsedSelector from parseSelector function
 type ParsedSelector = NonNullable<ReturnType<typeof parseSelector>>;
@@ -145,10 +146,7 @@ function parents(this: JQ, selector?: CssSelector): JQ {
 
     // If selector was provided but failed to parse, return empty JQ object
     if (selector && !parsedSelector) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        result.length = 0;
-        return result;
+        return createEmptyJQ(this);
     }
 
     const ancestors = _collectParents(this.nodes, parsedSelector);

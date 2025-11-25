@@ -1,6 +1,7 @@
 import { selectNodes } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 import JQClass from '../../jq';
+import { createJQWithNodes } from '../../helpers/jq-factory';
 
 /**
  * Removes elements from the set of matched elements.
@@ -58,10 +59,8 @@ function not(
             return new JQClass(filtered);
         }
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = this.nodes;
     // result.length is a getter that returns result.nodes.length, so we don't need to set it
-    return result;
+    return createJQWithNodes(this, this.nodes);
 }
 
 export default not;

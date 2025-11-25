@@ -1,6 +1,7 @@
 import type { JqElement, JQ, CssSelector } from '../../../types';
 import { isCSSSelector, selectNodes } from '../../../selector';
 import JQClass from '../../../jq';
+import { createJQWithNodes } from '../../../helpers/jq-factory';
 
 /**
  * Insert every element in the set of matched elements before the target.
@@ -18,8 +19,7 @@ function insertBefore(this: JQ, target: CssSelector | JQ | JqElement | JqElement
         if (isCSSSelector(target)) {
             // CSS selector - search within global context
             const nodes = selectNodes(JQClass.allRootNodes, target as CssSelector);
-            targetJQ = Object.create(Object.getPrototypeOf(this));
-            targetJQ.nodes = nodes;
+            targetJQ = createJQWithNodes(this, nodes);
         } else {
             // HTML string - parse it and mark as dynamic
             const nodes = this._normalizeContent(target as any);
@@ -117,9 +117,7 @@ function insertBefore(this: JQ, target: CssSelector | JQ | JqElement | JqElement
     }
 
     // Return a new JQ object containing all inserted nodes (originals + clones)
-    const newJQ = Object.create(Object.getPrototypeOf(this));
-    newJQ.nodes = newNodes;
-    return newJQ;
+    return createJQWithNodes(this, newNodes);
 }
 
 export default insertBefore;

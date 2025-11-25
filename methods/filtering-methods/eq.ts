@@ -1,4 +1,5 @@
 import type { JqElement, JQ } from '../../types';
+import { createEmptyJQ, createJQWithNodes } from '../../helpers/jq-factory';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
@@ -19,15 +20,11 @@ function eq(this: JQ, index: number | string | undefined): JQ {
 
     // Special case: undefined becomes NaN, return empty
     if (index === undefined) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        return result;
+        return createEmptyJQ(this);
     }
 
     if (isNaN(numericIndex)) {
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [];
-        return result;
+        return createEmptyJQ(this);
     }
 
     // Truncate fractional numbers towards zero
@@ -48,13 +45,11 @@ function eq(this: JQ, index: number | string | undefined): JQ {
             selectedNode = { ...selectedNode, _detached: true } as JqElement;
         }
 
-        const result = Object.create(Object.getPrototypeOf(this));
-        result.nodes = [selectedNode];
+        const result = createJQWithNodes(this, [selectedNode]);
         result._prevObject = this;
         return result;
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = [];
+    const result = createEmptyJQ(this);
     result._prevObject = this;
     return result;
 }

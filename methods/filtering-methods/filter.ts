@@ -1,6 +1,7 @@
 import { nodeMatchesSelector, parseSelector } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 import JQClass from '../../jq';
+import { createEmptyJQ } from '../../helpers/jq-factory';
 
 /**
  * Reduces the set of matched elements to those that match the selector or pass the function's test.
@@ -15,10 +16,7 @@ function filter(
         // CSS selector filter
         const parsedSelector = parseSelector(selectorOrFunction);
         if (!parsedSelector) {
-            const result = Object.create(Object.getPrototypeOf(this));
-            result.nodes = [];
-
-            return result;
+            return createEmptyJQ(this);
         }
 
         const filtered = this.nodes.filter((node: JqElement) => {
@@ -56,9 +54,7 @@ function filter(
         result._prevObject = this;
         return result;
     }
-    const result = Object.create(Object.getPrototypeOf(this));
-    result.nodes = [];
-
+    const result = createEmptyJQ(this);
     result._prevObject = this;
     return result;
 }
