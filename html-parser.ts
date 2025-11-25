@@ -5,70 +5,13 @@
 import { decodeHTMLEntities } from './helpers/html-entities';
 import { JqElement } from './dom';
 import { createTypedElement } from './dom/helpers/createTypedElement';
-import { VOID_ELEMENTS } from './utils';
-
-
-/**
- * Elements whose content should be treated as raw text, not parsed as HTML
- */
-const RAW_TEXT_ELEMENTS = new Set(['script', 'style']);
-
-/**
- * Tags that auto-close when certain other tags are encountered
- */
-const AUTO_CLOSE_RULES: Record<string, string[]> = {
-    p: [
-        'address',
-        'article',
-        'aside',
-        'blockquote',
-        'div',
-        'dl',
-        'fieldset',
-        'footer',
-        'form',
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'header',
-        'hgroup',
-        'hr',
-        'main',
-        'nav',
-        'ol',
-        'p',
-        'pre',
-        'section',
-        'table',
-        'ul',
-    ],
-    li: ['li'],
-    dt: ['dt', 'dd'],
-    dd: ['dt', 'dd'],
-    option: ['option', 'optgroup'],
-    optgroup: ['optgroup'],
-    tr: ['tr'],
-    td: ['td', 'th'],
-    th: ['td', 'th'],
-    thead: ['tbody', 'tfoot'],
-    tbody: ['tbody', 'tfoot'],
-    tfoot: ['tbody'],
-    colgroup: ['thead', 'tbody', 'tfoot', 'tr'],
-    body: ['head'],
-    head: ['body'],
-    rb: ['rb', 'rt', 'rtc', 'rp'],
-    rt: ['rb', 'rt', 'rtc', 'rp'],
-    rtc: ['rb', 'rtc', 'rp'],
-    rp: ['rb', 'rt', 'rtc', 'rp'],
-};
+import { VOID_ELEMENTS, RAW_TEXT_ELEMENTS, AUTO_CLOSE_RULES } from './helpers/html-constants';
 
 /**
  * Maximum length for an attribute value to prevent infinite loops on malformed HTML
  */
 const MAX_ATTRIBUTE_VALUE_LENGTH = 100000;
+
 
 /**
  * Parses an HTML string into a node tree.

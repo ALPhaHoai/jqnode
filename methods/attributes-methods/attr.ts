@@ -1,4 +1,5 @@
 import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
+import { isBooleanAttribute } from '../../helpers/html-constants';
 
 /**
  * Gets or sets an attribute on the first element in the collection.
@@ -18,26 +19,6 @@ function attr(
     name: string | Record<string, AttributeValue>,
     value?: AttributeValue | ((index: number, attr: string) => string | number | void | undefined),
 ): GetterSetterReturn<string> {
-    const booleanAttributes = [
-        'checked',
-        'selected',
-        'disabled',
-        'readonly',
-        'required',
-        'multiple',
-        'autofocus',
-        'autoplay',
-        'hidden',
-        'controls',
-        'loop',
-        'muted',
-        'default',
-        'open',
-        'reversed',
-        'scoped',
-        'async',
-        'defer',
-    ];
 
     // Handle object map: attr({ key: value, ... })
     if (typeof name === 'object' && name !== null) {
@@ -56,7 +37,7 @@ function attr(
 
         // Check DOM element first
         if (element._originalElement) {
-            if (booleanAttributes.includes(name)) {
+            if (isBooleanAttribute(name)) {
                 return element._originalElement.hasAttribute(name) ? name : undefined;
             }
             const attrValue = element._originalElement.getAttribute(name);
@@ -66,14 +47,14 @@ function attr(
         // Fallback to internal attributes
         const attrValue = element.getAttribute(name);
         if (attrValue !== null) {
-            if (booleanAttributes.includes(name)) {
+            if (isBooleanAttribute(name)) {
                 return name;
             }
             return attrValue;
         }
 
         // Check boolean properties if not found in attributes (for consistency)
-        if (booleanAttributes.includes(name) && element.properties && element.properties[name]) {
+        if (isBooleanAttribute(name) && element.properties && element.properties[name]) {
             return name;
         }
 
@@ -96,7 +77,7 @@ function attr(
         }
 
         // Handle boolean attributes
-        if (booleanAttributes.includes(name)) {
+        if (isBooleanAttribute(name)) {
             if (valToSet === false || valToSet === null || valToSet === undefined) {
                 // Remove attribute
                 element.removeAttribute(name);

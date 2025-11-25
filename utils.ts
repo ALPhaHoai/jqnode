@@ -1,28 +1,10 @@
 ﻿import type { JqElement } from './types';
+import { VOID_ELEMENTS } from './helpers/html-constants';
 
 /**
  * Utility functions for working with the HTML node tree.
  */
 
-/**
- * HTML5 void elements that are always self-closing
- */
-export const VOID_ELEMENTS = new Set([
-    'area',
-    'base',
-    'br',
-    'col',
-    'embed',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr',
-]);
 
 /**
  * Gets the text content of a node recursively.
@@ -109,4 +91,5 @@ function nodeToHTML(node: JqElement): string {
     return '';
 }
 
-export { getTextContent, nodeToHTML, unescapeHtml };
+export { getTextContent, nodeToHTML, unescapeHtml, VOID_ELEMENTS };
+

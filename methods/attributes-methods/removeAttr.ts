@@ -1,4 +1,5 @@
 import type { JqElement, JQ } from '../../types';
+import { isBooleanAttribute } from '../../helpers/html-constants';
 
 /**
  * Removes an attribute from each element in the set of matched elements.
@@ -7,26 +8,6 @@ import type { JqElement, JQ } from '../../types';
 function removeAttr(this: JQ, name: string): JQ {
     // Split space-separated attribute names (jQuery compatibility)
     const attrNames = name.split(/\s+/).filter((n) => n.length > 0);
-    const booleanAttributes = [
-        'checked',
-        'selected',
-        'disabled',
-        'readonly',
-        'required',
-        'multiple',
-        'autofocus',
-        'autoplay',
-        'hidden',
-        'controls',
-        'loop',
-        'muted',
-        'default',
-        'open',
-        'reversed',
-        'scoped',
-        'async',
-        'defer',
-    ];
 
     this.nodes.forEach((element: JqElement) => {
         if (element) {
@@ -46,7 +27,7 @@ function removeAttr(this: JQ, name: string): JQ {
                 }
 
                 // For boolean attributes, also set the property to false
-                if (booleanAttributes.includes(attrName)) {
+                if (isBooleanAttribute(attrName)) {
                     if (!element.properties) {
                         element.properties = {};
                     }

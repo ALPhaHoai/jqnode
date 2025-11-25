@@ -1,4 +1,5 @@
 import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
+import { isBooleanAttribute } from '../../helpers/html-constants';
 
 /**
  * Gets or sets a property on the first element in the collection.
@@ -50,27 +51,7 @@ function prop(
             if (attrsData[name] !== undefined) {
                 const attrValue = attrsData[name];
                 // Handle boolean attributes
-                const booleanAttributes = [
-                    'checked',
-                    'selected',
-                    'disabled',
-                    'readonly',
-                    'required',
-                    'multiple',
-                    'autofocus',
-                    'autoplay',
-                    'hidden',
-                    'controls',
-                    'loop',
-                    'muted',
-                    'default',
-                    'open',
-                    'reversed',
-                    'scoped',
-                    'async',
-                    'defer',
-                ];
-                if (booleanAttributes.includes(name)) {
+                if (isBooleanAttribute(name)) {
                     result = attrValue !== undefined; // If attribute exists, property is true
                 } else {
                     result = attrValue;
@@ -106,27 +87,7 @@ function prop(
                 const attrsData = element.attributes._getData();
                 if (attrsData[name] !== undefined) {
                     const attrValue = attrsData[name];
-                    const booleanAttributes = [
-                        'checked',
-                        'selected',
-                        'disabled',
-                        'readonly',
-                        'required',
-                        'multiple',
-                        'autofocus',
-                        'autoplay',
-                        'hidden',
-                        'controls',
-                        'loop',
-                        'muted',
-                        'default',
-                        'open',
-                        'reversed',
-                        'scoped',
-                        'async',
-                        'defer',
-                    ];
-                    if (booleanAttributes.includes(name)) {
+                    if (isBooleanAttribute(name)) {
                         currentProp = attrValue !== undefined;
                     } else {
                         currentProp = attrValue;
@@ -146,28 +107,7 @@ function prop(
         if (element._originalElement) {
             const domElement = element._originalElement as unknown as Record<string, unknown>;
             // For boolean properties like checked/selected/disabled, we should always sync
-            const booleanProps = [
-                'checked',
-                'selected',
-                'disabled',
-                'readonly',
-                'required',
-                'multiple',
-                'autofocus',
-                'autoplay',
-                'hidden',
-                'controls',
-                'loop',
-                'muted',
-                'default',
-                'open',
-                'reversed',
-                'scoped',
-                'async',
-                'defer',
-            ];
-
-            if (booleanProps.includes(name) || domElement[name] !== undefined) {
+            if (isBooleanAttribute(name) || domElement[name] !== undefined) {
                 domElement[name] = valToSet;
             }
         }
