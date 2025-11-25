@@ -4,7 +4,23 @@
  */
 
 import { setupParentReferences } from './selector';
-import type { JqElement } from './types';
+import type {
+    JqElement,
+    CssSelector,
+    GetterSetterReturn,
+    AttributeValue,
+    FormValueInput,
+    CssValueInput,
+    CssProperties,
+    ClassNameInput,
+    ToJSONOptions,
+    EachCallback,
+    MapCallback,
+    FilterCallback,
+    UntilSelector,
+    IndexTarget,
+    ContentInput,
+} from './types';
 
 class JQ {
     /**
@@ -105,71 +121,139 @@ class JQ {
     }
 
     // Method stubs - actual implementations are attached below
-    find: any;
-    attr: any;
-    prop: any;
-    removeAttr: any;
-    removeProp: any;
-    val: any;
-    css: any;
-    cssCamel: any;
-    addClass: any;
-    removeClass: any;
-    toggleClass: any;
-    hasClass: any;
-    text: any;
-    normalizedText: any;
-    html: any;
-    toJSON: any;
-    findTableWithHeader: any;
-    title: any;
-    each: any;
-    map: any;
-    parent: any;
-    parents: any;
-    parentsUntil: any;
-    closest: any;
-    children: any;
-    contents: any;
-    siblings: any;
-    next: any;
-    nextAll: any;
-    nextUntil: any;
-    prev: any;
-    prevAll: any;
-    prevUntil: any;
-    eq: any;
-    end: any;
-    first: any;
-    last: any;
-    filter: any;
-    not: any;
-    has: any;
-    is: any;
-    slice: any;
-    append: any;
-    appendTo: any;
-    prepend: any;
-    prependTo: any;
-    before: any;
-    insertBefore: any;
-    after: any;
-    insertAfter: any;
-    wrap: any;
-    wrapAll: any;
-    wrapInner: any;
-    toArray: any;
-    get: any;
-    index: any;
-    data: any;
-    removeData: any;
-    remove: any;
-    clone: any;
-    position: any;
-    _normalizeContent: any;
-    _cloneNode: any;
-    _hasDescendant: any;
-    _findCommonRoots: any;
+    // Selector methods
+    find!: (selector: CssSelector) => JQ;
+
+    // Attribute methods
+    attr!: {
+        (name: string): GetterSetterReturn<string>;
+        (name: string, value: AttributeValue): JQ;
+        (name: string, value: (index: number, attr: string) => string | number | void | undefined): JQ;
+        (attributes: Record<string, AttributeValue>): JQ;
+    };
+
+    prop!: {
+        (name: string): GetterSetterReturn<AttributeValue>;
+        (name: string, value: AttributeValue): JQ;
+        (name: string, value: (index: number, oldVal: any) => AttributeValue): JQ;
+        (properties: Record<string, AttributeValue>): JQ;
+    };
+
+    removeAttr!: (attributeName: string) => JQ;
+    removeProp!: (propertyName: string) => JQ;
+
+    val!: {
+        (): GetterSetterReturn<string | string[]>;
+        (value: FormValueInput): JQ;
+    };
+
+    css!: {
+        (propertyName: string): GetterSetterReturn<string>;
+        (propertyNames: string[]): Record<string, string>;
+        (propertyName: string, value: CssValueInput): JQ;
+        (properties: CssProperties): JQ;
+    };
+
+    cssCamel!: {
+        (propertyName: string): GetterSetterReturn<string>;
+        (propertyNames: string[]): Record<string, string>;
+        (propertyName: string, value: CssValueInput): JQ;
+        (properties: Record<string, string | number>): JQ;
+    };
+
+    addClass!: (className: ClassNameInput) => JQ;
+    removeClass!: (className?: ClassNameInput) => JQ;
+    toggleClass!: (className: ClassNameInput, state?: boolean) => JQ;
+    hasClass!: (className: string) => boolean;
+
+    // Content methods
+    text!: {
+        (): GetterSetterReturn<string>;
+        (content: string): JQ;
+    };
+
+    normalizedText!: () => string;
+
+    html!: {
+        (): GetterSetterReturn<string>;
+        (htmlString: string): JQ;
+    };
+
+    toJSON!: <T = any>(options?: ToJSONOptions) => T;
+
+    findTableWithHeader!: (headerText: string | string[]) => JQ;
+
+    title!: () => string;
+
+    // Iteration methods
+    each!: (callback: EachCallback) => JQ;
+    map!: <R = unknown>(callback: MapCallback<JqElement, R>) => R[];
+
+    // Traversal methods
+    parent!: (selector?: CssSelector) => JQ;
+    parents!: (selector?: CssSelector) => JQ;
+    parentsUntil!: (selector?: UntilSelector, filter?: CssSelector) => JQ;
+    closest!: (selector: CssSelector) => JQ;
+    children!: (selector?: CssSelector) => JQ;
+    contents!: () => JQ;
+    siblings!: (selector?: CssSelector) => JQ;
+    next!: (selector?: CssSelector) => JQ;
+    nextAll!: (selector?: CssSelector) => JQ;
+    nextUntil!: (selector?: UntilSelector, filter?: CssSelector) => JQ;
+    prev!: (selector?: CssSelector) => JQ;
+    prevAll!: (selector?: CssSelector) => JQ;
+    prevUntil!: (selector?: UntilSelector, filter?: CssSelector) => JQ;
+    eq!: (index: any) => JQ;
+    end!: () => JQ;
+    first!: () => JQ;
+    last!: () => JQ;
+
+    // Filtering methods
+    filter!: (selector: CssSelector | FilterCallback) => JQ;
+    not!: (selector: CssSelector | FilterCallback) => JQ;
+    has!: (selector: CssSelector | JqElement) => JQ;
+    is!: (selector: CssSelector | JqElement | JQ) => boolean;
+    slice!: (start: any, end?: any) => JQ;
+
+    // Insertion methods
+    append!: (content: ContentInput) => JQ;
+    appendTo!: (target: CssSelector | JQ) => JQ;
+    prepend!: (content: ContentInput) => JQ;
+    prependTo!: (target: CssSelector | JQ) => JQ;
+    before!: (content: ContentInput) => JQ;
+    insertBefore!: (target: CssSelector | JQ) => JQ;
+    after!: (content: ContentInput) => JQ;
+    insertAfter!: (target: CssSelector | JQ) => JQ;
+    wrap!: (wrappingElement: string | JqElement) => JQ;
+    wrapAll!: (wrappingElement: string | JqElement) => JQ;
+    wrapInner!: (wrappingElement: string | JqElement) => JQ;
+
+    // Miscellaneous methods
+    toArray!: () => JqElement[];
+    get!: {
+        (): JqElement[];
+        (index: number): JqElement | undefined;
+    };
+    index!: (element?: IndexTarget) => number;
+
+    // Data methods
+    data!: {
+        (): Record<string, unknown>;
+        (key: string): unknown;
+        (key: string, value: unknown): JQ;
+        (obj: Record<string, unknown>): JQ;
+    };
+
+    removeData!: (key?: string | string[]) => JQ;
+    remove!: (selector?: CssSelector) => JQ;
+    clone!: (withDataAndEvents?: boolean, deepWithDataAndEvents?: boolean) => JQ;
+    position!: () => { top: number; left: number } | undefined;
+
+    // Private helpers (prefixed with _)
+    _normalizeContent!: (content: ContentInput) => JqElement[];
+    _cloneNode!: (node: JqElement, deep?: boolean) => JqElement;
+    _hasDescendant!: (ancestor: JqElement, descendant: JqElement) => boolean;
+    _findCommonRoots!: (nodes: JqElement[]) => JqElement[];
 }
 
 // Attach all methods to the prototype

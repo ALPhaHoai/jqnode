@@ -6,7 +6,9 @@
  * consistency across the codebase.
  */
 
-import {JqElement} from '../core/JqElement';
+import { JqElement } from '../core/JqElement';
+import { JqHTMLElement } from '../core/JqHTMLElement';
+import { JqHTMLUnknownElement } from '../core/JqHTMLUnknownElement';
 import * as HTMLElements from '../index';
 
 /**
@@ -168,6 +170,19 @@ export function createTypedElement(tagName: string): JqElement {
         case 'noscript': return new HTMLElements.JqHTMLNoScriptElement();
 
         // Default fallback for unknown elements
-        default: return new JqElement('element', tagName);
+        // HTML5 distinguishes between:
+        // 1. Custom elements (tag contains hyphen) → HTMLElement
+        // 2. Unknown elements (no hyphen) → HTMLUnknownElement
+        default: {
+            if (tagName.includes('-')) {
+                // Custom element (e.g., 'my-element', 'web-component')
+                // In HTML5: document.createElement('my-custom').constructor.name === "HTMLElement"
+                return new JqHTMLElement(tagName);
+            } else {
+                // Unknown element (e.g., 'foobar', 'unknown123')
+                // In HTML5: document.createElement('foobar').constructor.name === "HTMLUnknownElement"
+                return new JqHTMLUnknownElement(tagName);
+            }
+        }
     }
 }
