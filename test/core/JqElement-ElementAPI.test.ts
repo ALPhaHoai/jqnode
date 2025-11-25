@@ -79,6 +79,69 @@ describe('JqElement - Element API', () => {
         test('prefix returns null', () => {
             expect(element.prefix).toBeNull();
         });
+
+        test('void elements serialize with self-closing tags', () => {
+            // Test img element
+            const img = new JqElement('element', 'img');
+            img.setAttribute('src', 'test.png');
+            img.setAttribute('alt', 'Test Image');
+            expect(img.outerHTML).toBe('<img src="test.png" alt="Test Image" />');
+
+            // Test br element
+            const br = new JqElement('element', 'br');
+            expect(br.outerHTML).toBe('<br />');
+
+            // Test input element
+            const input = new JqElement('element', 'input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('name', 'username');
+            expect(input.outerHTML).toBe('<input type="text" name="username" />');
+
+            // Test hr element
+            const hr = new JqElement('element', 'hr');
+            expect(hr.outerHTML).toBe('<hr />');
+        });
+
+        test('normal elements serialize with closing tags', () => {
+            // Test div element
+            const div = new JqElement('element', 'div');
+            div.setAttribute('id', 'test');
+            expect(div.outerHTML).toContain('</div>');
+
+            // Test span element
+            const span = new JqElement('element', 'span');
+            expect(span.outerHTML).toBe('<span></span>');
+        });
+
+        test('void elements in innerHTML serialization', () => {
+            const container = new JqElement('element', 'div');
+
+            const img = new JqElement('element', 'img');
+            img.setAttribute('src', 'photo.jpg');
+            container.appendChild(img as unknown as Node);
+
+            const br = new JqElement('element', 'br');
+            container.appendChild(br as unknown as Node);
+
+            const text = new JqElement('text');
+            text.data = 'Hello';
+            container.appendChild(text as unknown as Node);
+
+            expect(container.innerHTML).toContain('<img src="photo.jpg" />');
+            expect(container.innerHTML).toContain('<br />');
+            expect(container.innerHTML).toContain('Hello');
+        });
+
+        test('all void elements serialize correctly', () => {
+            const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+
+            voidElements.forEach(tagName => {
+                const element = new JqElement('element', tagName);
+                const html = element.outerHTML;
+                expect(html).toContain(' />');
+                expect(html).not.toContain(`</${tagName}>`);
+            });
+        });
     });
 
     // ==================== Element Relationships ====================

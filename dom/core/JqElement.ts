@@ -481,6 +481,15 @@ export class JqElement extends JqNode {
     }
 
     /**
+     * HTML void elements that should not have closing tags
+     * @see https://developer.mozilla.org/en-US/docs/Glossary/Void_element
+     */
+    private static readonly VOID_ELEMENTS = new Set([
+        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+        'link', 'meta', 'param', 'source', 'track', 'wbr'
+    ]);
+
+    /**
      * Helper method to serialize a node to HTML string
      */
     private serializeNode(node: JqElement): string {
@@ -491,6 +500,7 @@ export class JqElement extends JqNode {
             return `<!--${node.textData || ''}-->`;
         }
         if (node.internalType === 'element') {
+            const tagNameLower = node.tagName.toLowerCase();
             let html = `<${node.tagName}`;
 
             // Add attributes
@@ -500,6 +510,12 @@ export class JqElement extends JqNode {
                 if (attr) {
                     html += ` ${attr.name}="${attr.value}"`;
                 }
+            }
+
+            // Check if this is a void element
+            if (JqElement.VOID_ELEMENTS.has(tagNameLower)) {
+                html += ' />';
+                return html;
             }
 
             html += '>';
