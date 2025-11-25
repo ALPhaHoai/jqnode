@@ -248,6 +248,34 @@ export class JqNode implements Node {
             return false;
         }
 
+        // Compare attributes for element nodes (nodeType === 1)
+        if (this.nodeType === this.ELEMENT_NODE) {
+            const thisElement = this as any; // Cast to access attributes
+            const otherElement = otherNode as any;
+
+            // Check if both have attributes property
+            if (thisElement.attributes && otherElement.attributes) {
+                const thisAttrs = thisElement.attributes;
+                const otherAttrs = otherElement.attributes;
+
+                // Compare attribute count
+                if (thisAttrs.length !== otherAttrs.length) {
+                    return false;
+                }
+
+                // Compare each attribute
+                for (let i = 0; i < thisAttrs.length; i++) {
+                    const attr = thisAttrs.item(i);
+                    if (attr) {
+                        const otherAttr = otherAttrs.getNamedItem(attr.name);
+                        if (!otherAttr || otherAttr.value !== attr.value) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         // Compare children count
         if (this.childNodes.length !== otherNode.childNodes.length) {
             return false;

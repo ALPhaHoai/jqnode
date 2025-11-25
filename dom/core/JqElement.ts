@@ -385,7 +385,8 @@ export class JqElement extends JqNode {
         const traverse = (node: JqElement) => {
             for (const child of node.children) {
                 if (child.internalType === 'element') {
-                    const classList = (child.getAttribute('class') || '').trim().split(/\s+/);
+                    const classAttr = (child.getAttribute('class') || '').trim();
+                    const classList = classAttr ? classAttr.split(/\s+/) : [];
                     const hasAllClasses = classes.every(cls => classList.includes(cls));
 
                     if (hasAllClasses) {
@@ -847,24 +848,28 @@ export class JqElement extends JqNode {
         if (!this.parent) return;
 
         const siblings = this.parent.children;
-        const index = siblings.indexOf(this);
+        let index = siblings.indexOf(this);
         if (index === -1) return;
 
-        for (let i = nodes.length - 1; i >= 0; i--) {
+        for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
             if (typeof node === 'string') {
                 const textNode = new JqElement('text');
                 textNode.textData = node;
                 textNode.parent = this.parent;
-                siblings.splice(index + 1, 0, textNode);
+                siblings.splice(index + 1 + i, 0, textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
                     jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
+
                 jqNode.parent = this.parent;
-                siblings.splice(index + 1, 0, jqNode);
+                // Recalculate index after potential removal from same parent
+                const currentIndex = siblings.indexOf(this);
+                siblings.splice(currentIndex + 1 + i, 0, jqNode);
             }
         }
         this.parent.updateSiblingPointers();
@@ -877,7 +882,7 @@ export class JqElement extends JqNode {
         if (!this.parent) return;
 
         const siblings = this.parent.children;
-        const index = siblings.indexOf(this);
+        let index = siblings.indexOf(this);
         if (index === -1) return;
 
         for (let i = 0; i < nodes.length; i++) {
@@ -889,12 +894,16 @@ export class JqElement extends JqNode {
                 siblings.splice(index + i, 0, textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
                     jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
+
                 jqNode.parent = this.parent;
-                siblings.splice(index + i, 0, jqNode);
+                // Recalculate index after potential removal from same parent
+                const currentIndex = siblings.indexOf(this);
+                siblings.splice(currentIndex + i, 0, jqNode);
             }
         }
         this.parent.updateSiblingPointers();
@@ -1004,6 +1013,12 @@ export class JqElement extends JqNode {
      * Replaces all children with the given nodes
      */
     replaceChildren(...nodes: (Node | string)[]): void {
+        // Properly detach old children
+        for (const child of this.children) {
+            child.parent = undefined;
+            child.prev = null;
+            child.next = null;
+        }
         this._children = [];
         this.append(...nodes);
     }
