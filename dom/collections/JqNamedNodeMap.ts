@@ -22,8 +22,9 @@ export class JqNamedNodeMap implements NamedNodeMap {
                     }
 
                     // Handle direct attribute access (e.g., attributes.class)
+                    // Must return Attr object, not string value
                     if (prop in target._data) {
-                        return target._data[prop];
+                        return target.getNamedItem(prop);
                     }
                 }
                 return (target as any)[prop];
@@ -70,9 +71,28 @@ export class JqNamedNodeMap implements NamedNodeMap {
     }
 
     setNamedItem(attr: Attr): Attr | null {
-        const oldAttr = this.getNamedItem(attr.name);
+        // Must capture old value BEFORE setting new value
+        // Otherwise getNamedItem would return an Attr with the new value
+        const hadAttribute = Object.prototype.hasOwnProperty.call(this._data, attr.name);
+        const oldValue = hadAttribute ? this._data[attr.name] : null;
+
+        // Set the new value
         this._data[attr.name] = attr.value;
-        return oldAttr;
+
+        // Return old Attr with old value, or null if didn't exist
+        if (hadAttribute) {
+            const oldAttr = new JqAttr(attr.name, this._node);
+            // Temporarily set the old value for return
+            // This is a bit of a hack, but matches HTML5 behavior
+            Object.defineProperty(oldAttr, 'value', {
+                value: oldValue,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            });
+            return oldAttr;
+        }
+        return null;
     }
 
     setNamedItemNS(attr: Attr): Attr | null {

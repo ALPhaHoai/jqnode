@@ -16,6 +16,20 @@ export class JqDOMTokenList implements DOMTokenList {
         this._element = element;
         this._attributeName = attributeName;
         this._sync();
+
+        // Create a proxy to support numeric indexing
+        return new Proxy(this, {
+            get: (target, prop) => {
+                if (typeof prop === 'string') {
+                    const index = Number(prop);
+                    // Support numeric indexing: classList[0], classList[1], etc.
+                    if (!isNaN(index) && Number.isInteger(index)) {
+                        return target.item(index);
+                    }
+                }
+                return (target as any)[prop];
+            }
+        });
     }
 
     /**
