@@ -54,8 +54,8 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                     if (parsedFilterSelector) {
                         const selectorList =
-                            'type' in parsedFilterSelector &&
-                                parsedFilterSelector.internalType === 'compound'
+                            'internalType' in parsedFilterSelector &&
+                                (parsedFilterSelector as any).internalType === 'compound'
                                 ? (parsedFilterSelector as any).selectors
                                 : [parsedFilterSelector];
                         if (!selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {
@@ -109,8 +109,8 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
 
                     if (parsedFilterSelector) {
                         const selectorList =
-                            'type' in parsedFilterSelector &&
-                                parsedFilterSelector.internalType === 'compound'
+                            'internalType' in parsedFilterSelector &&
+                                (parsedFilterSelector as any).internalType === 'compound'
                                 ? (parsedFilterSelector as any).selectors
                                 : [parsedFilterSelector];
                         if (!selectorList.some((sel: any) => nodeMatchesSelector(sibling, sel))) {

@@ -31,7 +31,7 @@ export class JqElement extends JqNode {
 
     // Extended properties for DOM integration
     public _originalElement: Element | null = null; // DOM element reference
-    public _jqData: Record<string, unknown> = {}; // jQuery-style data storage
+    public _jqData?: Record<string, unknown>; // jQuery-style data storage (optional)
     public _detached: boolean = false; // Marks nodes from fractional eq() indices as detached
     public properties: Record<string, unknown> = {}; // Custom properties storage
 

@@ -36,33 +36,36 @@ function prop(
         }
 
         // Fallback to attribute for initial value if property not set
-        if (result === undefined && element.attributes && element.attributes[name] !== undefined) {
-            const attrValue = element.attributes[name];
-            // Handle boolean attributes
-            const booleanAttributes = [
-                'checked',
-                'selected',
-                'disabled',
-                'readonly',
-                'required',
-                'multiple',
-                'autofocus',
-                'autoplay',
-                'hidden',
-                'controls',
-                'loop',
-                'muted',
-                'default',
-                'open',
-                'reversed',
-                'scoped',
-                'async',
-                'defer',
-            ];
-            if (booleanAttributes.includes(name)) {
-                result = attrValue !== undefined; // If attribute exists, property is true
-            } else {
-                result = attrValue;
+        if (result === undefined && element.attributes) {
+            const attrsData = element.attributes._getData();
+            if (attrsData[name] !== undefined) {
+                const attrValue = attrsData[name];
+                // Handle boolean attributes
+                const booleanAttributes = [
+                    'checked',
+                    'selected',
+                    'disabled',
+                    'readonly',
+                    'required',
+                    'multiple',
+                    'autofocus',
+                    'autoplay',
+                    'hidden',
+                    'controls',
+                    'loop',
+                    'muted',
+                    'default',
+                    'open',
+                    'reversed',
+                    'scoped',
+                    'async',
+                    'defer',
+                ];
+                if (booleanAttributes.includes(name)) {
+                    result = attrValue !== undefined; // If attribute exists, property is true
+                } else {
+                    result = attrValue;
+                }
             }
         }
 
@@ -90,36 +93,35 @@ function prop(
                 currentProp = (element as any)[name];
             }
 
-            if (
-                currentProp === undefined &&
-                element.attributes &&
-                element.attributes[name] !== undefined
-            ) {
-                const attrValue = element.attributes[name];
-                const booleanAttributes = [
-                    'checked',
-                    'selected',
-                    'disabled',
-                    'readonly',
-                    'required',
-                    'multiple',
-                    'autofocus',
-                    'autoplay',
-                    'hidden',
-                    'controls',
-                    'loop',
-                    'muted',
-                    'default',
-                    'open',
-                    'reversed',
-                    'scoped',
-                    'async',
-                    'defer',
-                ];
-                if (booleanAttributes.includes(name)) {
-                    currentProp = attrValue !== undefined;
-                } else {
-                    currentProp = attrValue;
+            if (currentProp === undefined && element.attributes) {
+                const attrsData = element.attributes._getData();
+                if (attrsData[name] !== undefined) {
+                    const attrValue = attrsData[name];
+                    const booleanAttributes = [
+                        'checked',
+                        'selected',
+                        'disabled',
+                        'readonly',
+                        'required',
+                        'multiple',
+                        'autofocus',
+                        'autoplay',
+                        'hidden',
+                        'controls',
+                        'loop',
+                        'muted',
+                        'default',
+                        'open',
+                        'reversed',
+                        'scoped',
+                        'async',
+                        'defer',
+                    ];
+                    if (booleanAttributes.includes(name)) {
+                        currentProp = attrValue !== undefined;
+                    } else {
+                        currentProp = attrValue;
+                    }
                 }
             }
 

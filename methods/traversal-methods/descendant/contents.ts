@@ -40,9 +40,10 @@ function contents(this: JQ): JQ {
                         }
                     }
                 } else {
-                    // JqElement attribs object
-                    const attrs = domNode.attributes as Record<string, unknown>;
-                    Object.assign(attributes, attrs);
+                    // JqElement attributes - use _getData() method
+                    if ('_getData' in domNode.attributes && typeof domNode.attributes._getData === 'function') {
+                        Object.assign(attributes, domNode.attributes._getData());
+                    }
                 }
             }
 
@@ -51,7 +52,7 @@ function contents(this: JQ): JQ {
             node.attributes._setData(attributes);
             node._originalElement = ('nodeType' in domNode && domNode.nodeType === 1
                 ? (domNode as Element)
-                : undefined);
+                : null);
 
             // Copy properties from DOM element
             if ('nodeType' in domNode && domNode.nodeType === 1) {

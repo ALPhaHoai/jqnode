@@ -36,7 +36,7 @@ function remove(this: JQ, selector?: string): JQ {
 
         // Clear data associated with the node
         if (node._jqData) {
-            delete node._jqData;
+            node._jqData = undefined;
         }
     });
 

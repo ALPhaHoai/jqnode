@@ -48,11 +48,11 @@ function normalizedText(this: JQ, value?: string): string | JQ {
         // Use HTML5 textContent property as single source of truth
         if ('textContent' in node) {
             node.textContent = value;
-        } else {
+        } else if ('children' in node && Array.isArray((node as JqElement).children)) {
             // Fallback for internal nodes - replace children with text node
             const textNode = new JqElement('text');
             textNode.textData = value || '';
-            node.children = [textNode];
+            (node as JqElement).children = [textNode];
         }
     });
 

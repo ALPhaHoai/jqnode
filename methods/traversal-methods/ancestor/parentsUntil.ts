@@ -1,5 +1,6 @@
 ﻿import { selectNodes } from '../../../selector';
-import type { JqElement, CssSelector, JQ, UntilSelector } from '../../../types';
+import type { CssSelector, JQ, UntilSelector } from '../../../types';
+import { JqElement } from '../../../dom/core/JqElement';
 import JQClass from '../../../jq';
 
 /**
@@ -28,7 +29,7 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
                 const shouldStop = Array.from(stopElements).some((stopNode: JqElement) => {
                     if (stopNode._originalElement === domCurrent) return true;
                     if (stopNode.tagName === domCurrent!.tagName.toLowerCase()) {
-                        const stopAttrs = stopNode.attributes || {};
+                        const stopAttrs = stopNode.attributes._getData();
                         const domAttrs: Record<string, string> = {};
                         for (let i = 0; i < domCurrent!.attributes.length; i++) {
                             const attr = domCurrent!.attributes[i];
@@ -52,15 +53,12 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
 
                 if (!seen.has(key)) {
                     seen.add(key);
-                    const domNode: JqElement = {
-                        type: 'element',
-                        tagName: domCurrent.tagName.toLowerCase(),
-                        attributes: attributes,
-                        properties: {},
-                        children: [],
-                        parent: undefined,
-                        _originalElement: domCurrent,
-                    };
+                    const domNode = new JqElement('element', domCurrent.tagName.toLowerCase());
+                    domNode.attributes._setData(attributes);
+                    domNode.properties = {};
+                    domNode.children = [];
+                    domNode.parent = undefined;
+                    domNode._originalElement = domCurrent;
                     ancestors.push(domNode);
                 }
                 domCurrent = domCurrent.parentElement;
