@@ -5,6 +5,7 @@
 
 import { JqCharacterData } from './JqCharacterData';
 import { JqElement } from './JqElement';
+import { JqText } from './JqText';
 
 /**
  * JqComment implements the DOM Comment interface.
@@ -55,7 +56,7 @@ export class JqComment extends JqCharacterData implements Comment {
      * Clones this comment node
      */
     override cloneNode(_deep?: boolean): Comment {
-        const cloned = new JqComment(this._data);
+        const cloned = new JqComment(this.data);
 
         // Comment nodes don't have children, so deep parameter doesn't matter
         return cloned;
@@ -65,16 +66,7 @@ export class JqComment extends JqCharacterData implements Comment {
      * Helper method to create a text node
      */
     protected override _createTextNode(data: string): Node {
-        // For comment nodes, we still create text nodes when needed for operations
-        // like before(), after(), etc.
-        // We'll need to import JqText for this, or create a simple text node
-        // For now, we'll create a simple object that satisfies the Node interface
-        return {
-            nodeType: this.TEXT_NODE,
-            nodeName: '#text',
-            nodeValue: data,
-            textContent: data,
-        } as unknown as Node;
+        return new JqText(data);
     }
 
     // Sync data changes with JqElement if present

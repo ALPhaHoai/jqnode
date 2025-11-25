@@ -40,7 +40,7 @@ export class JqCDATASection extends JqText implements CDATASection {
      * Clones this CDATA section node
      */
     override cloneNode(_deep?: boolean): CDATASection {
-        const cloned = new JqCDATASection(this._data);
+        const cloned = new JqCDATASection(this.data);
 
         // CDATA section nodes don't have children, so deep parameter doesn't matter
         return cloned;
@@ -63,10 +63,10 @@ export class JqCDATASection extends JqText implements CDATASection {
         }
 
         // Get the text after the offset
-        const newData = this._data.substring(offset);
+        const newData = this.data.substring(offset);
 
         // Truncate this node's data to the offset
-        this.data = this._data.substring(0, offset);
+        this.data = this.data.substring(0, offset);
 
         // Create a new CDATASection node with the remaining data
         const newNode = new JqCDATASection(newData);

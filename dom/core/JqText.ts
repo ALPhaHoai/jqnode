@@ -92,10 +92,10 @@ export class JqText extends JqCharacterData implements Text {
         }
 
         // Get the text after the offset
-        const newData = this._data.substring(offset);
+        const newData = this.data.substring(offset);
 
         // Truncate this node's data to the offset
-        this._data = this._data.substring(0, offset);
+        this.data = this.data.substring(0, offset);
 
         // Create a new text node with the remaining data
         const newNode = new JqText(newData);
@@ -117,7 +117,7 @@ export class JqText extends JqCharacterData implements Text {
      * Clones this text node
      */
     override cloneNode(_deep?: boolean): Text {
-        const cloned = new JqText(this._data);
+        const cloned = new JqText(this.data);
 
         // Text nodes don't have children, so deep parameter doesn't matter
         return cloned;
