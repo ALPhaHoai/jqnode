@@ -89,7 +89,7 @@ export abstract class JqCharacterData extends JqNode {
      * data contains the concatenated string
      */
     appendData(data: string): void {
-        this._data += data;
+        this.data = this.data + data;
     }
 
     /**
@@ -105,7 +105,7 @@ export abstract class JqCharacterData extends JqNode {
 
         const before = this._data.substring(0, offset);
         const after = this._data.substring(offset + count);
-        this._data = before + after;
+        this.data = before + after;
     }
 
     /**
@@ -121,7 +121,7 @@ export abstract class JqCharacterData extends JqNode {
 
         const before = this._data.substring(0, offset);
         const after = this._data.substring(offset);
-        this._data = before + data + after;
+        this.data = before + data + after;
     }
 
     /**
@@ -138,7 +138,7 @@ export abstract class JqCharacterData extends JqNode {
 
         const before = this._data.substring(0, offset);
         const after = this._data.substring(offset + count);
-        this._data = before + data + after;
+        this.data = before + data + after;
     }
 
     /**

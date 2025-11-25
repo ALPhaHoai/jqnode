@@ -3,8 +3,8 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Attr
  */
 
-import {JqElement} from './JqElement';
-import {JqNodeListOf} from '../collections/JqNodeList';
+import { JqElement } from './JqElement';
+import { JqNodeListOf } from '../collections/JqNodeList';
 
 export class JqAttr implements Attr {
     private readonly _node: JqElement | null;
@@ -97,8 +97,8 @@ export class JqAttr implements Attr {
         return this.value;
     }
 
-    set textContent(v: string) {
-        this.value = v;
+    set textContent(v: string | null) {
+        this.value = v || '';
     }
 
     // Methods
