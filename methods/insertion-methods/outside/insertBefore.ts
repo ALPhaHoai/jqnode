@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, CssSelector } from '../../../types';
+import type { JqElement, JQ, CssSelector } from '../../../types';
 import { isCSSSelector, selectNodes } from '../../../selector';
 import JQClass from '../../../jq';
 
@@ -122,4 +122,4 @@ function insertBefore(this: JQ, target: CssSelector | JQ | JqElement | JqElement
     return newJQ;
 }
 
-export = insertBefore;
+export default insertBefore;

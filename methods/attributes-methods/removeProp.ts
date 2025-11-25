@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Removes a property set by the .prop() method.
@@ -45,4 +45,4 @@ function removeProp(this: JQ, name: string): JQ {
     return this;
 }
 
-export = removeProp;
+export default removeProp;

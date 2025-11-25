@@ -1,4 +1,4 @@
-﻿import type { JqElement } from '../types';
+import type { JqElement } from '../types';
 
 /**
  * Helper method to check if an element has a specific descendant.
@@ -26,4 +26,4 @@ function _hasDescendant(element: JqElement, targetElement: JqElement): boolean {
     return false;
 }
 
-export = _hasDescendant;
+export default _hasDescendant;

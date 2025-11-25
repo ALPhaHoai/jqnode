@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -40,4 +40,4 @@ function siblings(this: JQ, selector?: CssSelector): JQ {
     return new JQClass(allSiblings);
 }
 
-export = siblings;
+export default siblings;

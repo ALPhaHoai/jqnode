@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
@@ -6,11 +6,20 @@ import { getComputedStyleValue, setStyleValue } from '../../css-utils';
  *
  * Note: This is not a jQuery method. For jQuery CSS manipulation, use the .css() method.
  */
+// Getter overload - single property
+function cssCamel(this: JQ, propertyName: string): string | undefined;
+// Getter overload - multiple properties
+function cssCamel(this: JQ, propertyNames: string[]): Record<string, string>;
+// Setter overload - single property with value
+function cssCamel(this: JQ, propertyName: string, value: string | number | ((index: number, currentValue: string) => string | number)): JQ;
+// Setter overload - multiple properties via object
+function cssCamel(this: JQ, properties: Record<string, string | number>): JQ;
+// Implementation
 function cssCamel(
     this: JQ,
     prop: string | string[] | Record<string, string | number>,
     value?: string | number | ((index: number, currentValue: string) => string | number),
-): JQ {
+): any {
     // GETTER CASES
     // Arrays and non-objects (strings) go through getter logic
     if (value === undefined && (typeof prop !== 'object' || Array.isArray(prop))) {
@@ -71,4 +80,4 @@ function cssCamel(
     return this;
 }
 
-export = cssCamel;
+export default cssCamel;

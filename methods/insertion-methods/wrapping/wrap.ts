@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../../types';
+import type { JqElement, JQ } from '../../../types';
 
 /**
  * Wrap an HTML structure around each element in the set of matched elements.
@@ -69,4 +69,4 @@ function wrap(this: JQ, wrappingElement: string | JqElement | JQ): JQ {
     return this;
 }
 
-export = wrap;
+export default wrap;

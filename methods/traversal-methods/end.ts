@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../types';
+import type { JQ } from '../../types';
 
 /**
  * End the most recent filtering operation in the current chain and return the set of matched elements to its previous state.
@@ -14,4 +14,4 @@ function end(this: JQ): JQ {
     return this;
 }
 
-export = end;
+export default end;

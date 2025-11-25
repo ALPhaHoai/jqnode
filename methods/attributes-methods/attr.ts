@@ -1,9 +1,18 @@
-﻿import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
+import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets an attribute on the first element in the collection.
  * @see https://api.jquery.com/attr/
  */
+// Getter overload
+function attr(this: JQ, name: string): GetterSetterReturn<string>;
+// Setter overload with value
+function attr(this: JQ, name: string, value: AttributeValue): JQ;
+// Setter overload with function
+function attr(this: JQ, name: string, value: (index: number, attr: string) => string | number | void | undefined): JQ;
+// Setter overload with object
+function attr(this: JQ, attributes: Record<string, AttributeValue>): JQ;
+// Implementation
 function attr(
     this: JQ,
     name: string | Record<string, AttributeValue>,
@@ -123,4 +132,4 @@ function attr(
     return this;
 }
 
-export = attr;
+export default attr;

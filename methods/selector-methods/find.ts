@@ -1,4 +1,4 @@
-﻿import { selectNodes } from '../../selector';
+import { selectNodes } from '../../selector';
 import type { CssSelector, JQ } from '../../types';
 import JQClass from '../../jq';
 
@@ -13,4 +13,4 @@ function find(this: JQ, selector: CssSelector): JQ {
     return result;
 }
 
-export = find;
+export default find;

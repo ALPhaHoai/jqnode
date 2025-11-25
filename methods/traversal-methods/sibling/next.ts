@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -83,4 +83,4 @@ function next(this: JQ, selector?: CssSelector): JQ {
     return new JQClass(nextSiblings);
 }
 
-export = next;
+export default next;

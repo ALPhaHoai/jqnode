@@ -1,4 +1,4 @@
-﻿import type { JqElement } from '../types';
+import type { JqElement } from '../types';
 
 /**
  * Helper method to find common root nodes for selector matching.
@@ -23,4 +23,4 @@ function _findCommonRoots(this: { nodes: JqElement[] }): JqElement[] {
     return Array.from(roots);
 }
 
-export = _findCommonRoots;
+export default _findCommonRoots;

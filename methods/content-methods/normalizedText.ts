@@ -1,4 +1,4 @@
-﻿import { getTextContent, unescapeHtml } from '../../utils';
+import { getTextContent, unescapeHtml } from '../../utils';
 import { normalizeHTML } from '../../utils-static';
 import { JqElement } from '../../dom/core/JqElement';
 import type { JQ } from '../../types';
@@ -10,6 +10,8 @@ import type { JQ } from '../../types';
  *
  * Note: This is not a jQuery method. This is a custom jqnode method.
  */
+function normalizedText(this: JQ): string;
+function normalizedText(this: JQ, value: string): JQ;
 function normalizedText(this: JQ, value?: string): string | JQ {
     if (value === undefined) {
         // Get text content from element nodes only
@@ -59,4 +61,4 @@ function normalizedText(this: JQ, value?: string): string | JQ {
     return this;
 }
 
-export = normalizedText;
+export default normalizedText;

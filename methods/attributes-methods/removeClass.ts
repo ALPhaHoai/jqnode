@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ClassNameInput } from '../../types';
+import type { JqElement, JQ, ClassNameInput } from '../../types';
 
 /**
  * Removes one or more classes from each element.
@@ -63,4 +63,4 @@ function removeClass(this: JQ, className?: ClassNameInput): JQ {
     return this;
 }
 
-export = removeClass;
+export default removeClass;

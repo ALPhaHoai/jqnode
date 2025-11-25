@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../../types';
+import type { JqElement, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -89,4 +89,4 @@ function wrapAll(this: JQ, wrappingElement: string | JqElement | JQ): JQ {
     return this;
 }
 
-export = wrapAll;
+export default wrapAll;

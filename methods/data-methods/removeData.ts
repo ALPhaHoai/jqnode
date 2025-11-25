@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../types';
+import type { JQ } from '../../types';
 import { initDataAttributes, toCamelCase, NodeWithData } from '../../helpers/dataHelper';
 
 /**
@@ -30,4 +30,4 @@ function removeData(this: JQ, name?: string | string[]): JQ {
     });
 }
 
-export = removeData;
+export default removeData;

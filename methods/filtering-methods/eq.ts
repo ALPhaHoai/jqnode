@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
@@ -59,4 +59,4 @@ function eq(this: JQ, index: number | string | undefined): JQ {
     return result;
 }
 
-export = eq;
+export default eq;

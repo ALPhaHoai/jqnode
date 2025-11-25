@@ -1,4 +1,4 @@
-﻿import type { JqElement, ContentInput } from '../types';
+import type { JqElement, ContentInput } from '../types';
 
 // Import will be updated once html-parser is converted
 const { parseHTML } = require('../html-parser');
@@ -45,4 +45,4 @@ function _normalizeContent(content: ContentInput): JqElement[] {
     return [];
 }
 
-export = _normalizeContent;
+export default _normalizeContent;

@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../types';
+import type { JQ } from '../../types';
 
 /**
  * Checks if the first element has the specified class.
@@ -26,4 +26,4 @@ function hasClass(this: JQ, className: string): boolean {
     return classes.includes(className);
 }
 
-export = hasClass;
+export default hasClass;

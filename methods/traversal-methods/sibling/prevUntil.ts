@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ, UntilSelector } from '../../../types';
 import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
@@ -164,4 +164,4 @@ function prevUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
     return new JQClass(uniqueSiblings);
 }
 
-export = prevUntil;
+export default prevUntil;

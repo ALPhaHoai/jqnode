@@ -1,4 +1,4 @@
-﻿import { getTextContent, unescapeHtml } from '../../utils';
+import { getTextContent, unescapeHtml } from '../../utils';
 import { JqElement } from '../../dom/core/JqElement';
 import type { JQ, GetterSetterReturn } from '../../types';
 
@@ -6,6 +6,11 @@ import type { JQ, GetterSetterReturn } from '../../types';
  * Gets or sets the text content of elements.
  * @see https://api.jquery.com/text/
  */
+// Getter overload
+function text(this: JQ): GetterSetterReturn<string>;
+// Setter overload
+function text(this: JQ, content: string): JQ;
+// Implementation
 function text(this: JQ, value?: string): GetterSetterReturn<string> {
     if (value === undefined) {
         // Get text content from element nodes only
@@ -53,4 +58,4 @@ function text(this: JQ, value?: string): GetterSetterReturn<string> {
     return this;
 }
 
-export = text;
+export default text;

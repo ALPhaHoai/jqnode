@@ -1,4 +1,4 @@
-﻿import { getTextContent } from '../../utils';
+import { getTextContent } from '../../utils';
 import type { JqElement, JQ } from '../../types';
 import JQClass from '../../jq';
 
@@ -90,4 +90,4 @@ function findTableWithHeader(this: JQ, headers: string | string[]): JQ {
     return new JQClass(matchingTables);
 }
 
-export = findTableWithHeader;
+export default findTableWithHeader;

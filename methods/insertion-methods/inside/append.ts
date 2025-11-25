@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ContentInput } from '../../../types';
+import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -66,4 +66,4 @@ function append(this: JQ, ...content: ContentInput[]): JQ {
     return this;
 }
 
-export = append;
+export default append;

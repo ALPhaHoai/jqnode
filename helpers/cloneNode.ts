@@ -1,4 +1,4 @@
-﻿import { JqElement } from '../types';
+import { JqElement } from '../types';
 
 /**
  * Helper method to deep clone a node.
@@ -57,4 +57,4 @@ function _cloneNode(
     return cloned;
 }
 
-export = _cloneNode;
+export default _cloneNode;

@@ -4,7 +4,8 @@
  */
 
 // Core Element Classes
-export { JqElement, NodeType } from './core/JqElement';
+export { JqElement } from './core/JqElement';
+export type { NodeType } from './core/JqElement';
 export { JqHTMLElement } from './core/JqHTMLElement';
 export { JqHTMLUnknownElement } from './core/JqHTMLUnknownElement';
 export { JqNode } from './core/JqNode';

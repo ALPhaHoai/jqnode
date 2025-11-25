@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../types';
+import type { JQ } from '../../types';
 import JQClass from '../../jq';
 
 /**
@@ -12,4 +12,4 @@ function slice(this: JQ, start?: number, end?: number): JQ {
     return new JQClass(sliced);
 }
 
-export = slice;
+export default slice;

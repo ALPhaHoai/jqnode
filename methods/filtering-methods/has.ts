@@ -1,4 +1,4 @@
-﻿import { selectNodes } from '../../selector';
+import { selectNodes } from '../../selector';
 import type { JqElement, CssSelector, JQ } from '../../types';
 import JQClass from '../../jq';
 
@@ -48,4 +48,4 @@ function has(this: JQ, selectorOrElement: CssSelector | JqElement): JQ {
     return new JQClass(matchingElements);
 }
 
-export = has;
+export default has;

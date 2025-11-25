@@ -1,4 +1,4 @@
-﻿import { JqElement } from '../../types';
+import { JqElement } from '../../types';
 import type { JQ, FormValueInput, GetterSetterReturn } from '../../types';
 
 // ============================================================================
@@ -308,6 +308,11 @@ function setValueFromCallback(
  * @param {string} [value] - Value to set (if setting)
  * @returns {string|JQ} Current value if getting, JQ instance if setting
  */
+// Getter overload
+function val(this: JQ): GetterSetterReturn<string | string[]>;
+// Setter overload
+function val(this: JQ, value: FormValueInput): JQ;
+// Implementation
 function val(this: JQ, value?: FormValueInput): GetterSetterReturn<string | string[]> {
     // Getter: Get value from first element
     if (value === undefined) {
@@ -334,4 +339,4 @@ function val(this: JQ, value?: FormValueInput): GetterSetterReturn<string | stri
     return this;
 }
 
-export = val;
+export default val;

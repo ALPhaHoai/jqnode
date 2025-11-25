@@ -1,12 +1,17 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Retrieve the DOM elements matched by the jQuery object.
  * @see https://api.jquery.com/get/
  */
-function get(this: JQ, index?: number): (JqElement | Element)[] | JqElement | Element | undefined {
+// Overload - get all elements
+function get(this: JQ): JqElement[];
+// Overload - get element at index
+function get(this: JQ, index: number): JqElement | undefined;
+// Implementation
+function get(this: JQ, index?: number): JqElement[] | JqElement | undefined {
     if (index === undefined) {
-        return this.nodes.map((node: JqElement) => node._originalElement || node);
+        return this.nodes;
     }
     let node: JqElement | undefined;
     if (index < 0) {
@@ -14,7 +19,7 @@ function get(this: JQ, index?: number): (JqElement | Element)[] | JqElement | El
     } else {
         node = this.nodes[index];
     }
-    return node ? node._originalElement || node : undefined;
+    return node;
 }
 
-export = get;
+export default get;

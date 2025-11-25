@@ -1,4 +1,4 @@
-﻿import { getTextContent } from '../../utils';
+import { getTextContent } from '../../utils';
 import type { JqElement, JQ } from '../../types';
 
 interface ToJSONOptions {
@@ -117,4 +117,4 @@ function toJSON(this: JQ, options: ToJSONOptions = {}): Array<Record<string, str
     return results;
 }
 
-export = toJSON;
+export default toJSON;

@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 import JQClass from '../../jq';
 
@@ -63,4 +63,4 @@ function filter(
     return result;
 }
 
-export = filter;
+export default filter;

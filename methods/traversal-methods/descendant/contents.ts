@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../../types';
+import type { JQ } from '../../../types';
 import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -126,4 +126,4 @@ function contents(this: JQ): JQ {
     return new JQClass(contents);
 }
 
-export = contents;
+export default contents;

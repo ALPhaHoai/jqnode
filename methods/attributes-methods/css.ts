@@ -1,11 +1,20 @@
-﻿import type { JqElement, JQ, CssValueInput, CssProperties } from '../../types';
+import type { JqElement, JQ, CssValueInput, CssProperties } from '../../types';
 import { getComputedStyleValue, setStyleValue } from '../../css-utils';
 
 /**
  * Gets or sets CSS properties on elements.
  * @see https://api.jquery.com/css/
  */
-function css(this: JQ, prop: string | string[] | CssProperties, value?: CssValueInput): JQ {
+// Getter overload - single property
+function css(this: JQ, propertyName: string): string | undefined;
+// Getter overload - multiple properties
+function css(this: JQ, propertyNames: string[]): Record<string, string>;
+// Setter overload - single property with value
+function css(this: JQ, propertyName: string, value: CssValueInput): JQ;
+// Setter overload - multiple properties via object
+function css(this: JQ, properties: CssProperties): JQ;
+// Implementation
+function css(this: JQ, prop: string | string[] | CssProperties, value?: CssValueInput): any {
     // GETTER CASES
     // Arrays and non-objects (strings) go through getter logic
     if (value === undefined && (typeof prop !== 'object' || Array.isArray(prop))) {
@@ -66,4 +75,4 @@ function css(this: JQ, prop: string | string[] | CssProperties, value?: CssValue
     return this;
 }
 
-export = css;
+export default css;

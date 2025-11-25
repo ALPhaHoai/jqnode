@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ClassNameInput } from '../../types';
+import type { JqElement, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds one or more classes to each element.
@@ -44,4 +44,4 @@ function addClass(this: JQ, className: ClassNameInput): JQ {
     return this;
 }
 
-export = addClass;
+export default addClass;

@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ } from '../../../types';
 import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
@@ -85,4 +85,4 @@ function nextAll(this: JQ, selector?: CssSelector): JQ {
     return new JQClass(resultNodes);
 }
 
-export = nextAll;
+export default nextAll;

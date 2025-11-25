@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Removes an attribute from each element in the set of matched elements.
@@ -62,4 +62,4 @@ function removeAttr(this: JQ, name: string): JQ {
     return this;
 }
 
-export = removeAttr;
+export default removeAttr;

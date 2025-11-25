@@ -1,4 +1,4 @@
-﻿import { selectNodes } from '../../../selector';
+import { selectNodes } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -41,4 +41,4 @@ function children(this: JQ, selector?: CssSelector): JQ {
     return result;
 }
 
-export = children;
+export default children;

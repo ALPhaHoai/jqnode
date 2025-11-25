@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ContentInput } from '../../../types';
+import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -74,4 +74,4 @@ function before(this: JQ, ...content: ContentInput[]): JQ {
     return this;
 }
 
-export = before;
+export default before;

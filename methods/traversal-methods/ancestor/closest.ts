@@ -1,4 +1,4 @@
-﻿import { parseSelector, nodeMatchesSelector } from '../../../selector';
+import { parseSelector, nodeMatchesSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -51,4 +51,4 @@ function closest(this: JQ, selector?: CssSelector): JQ {
     return new JQClass(results);
 }
 
-export = closest;
+export default closest;

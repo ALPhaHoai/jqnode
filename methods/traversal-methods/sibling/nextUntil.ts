@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ, UntilSelector } from '../../../types';
 import JQClass from '../../../jq';
 
@@ -126,4 +126,4 @@ function nextUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector): JQ
     return new JQClass(followingSiblings);
 }
 
-export = nextUntil;
+export default nextUntil;

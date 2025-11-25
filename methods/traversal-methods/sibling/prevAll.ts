@@ -1,4 +1,4 @@
-﻿import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ } from '../../../types';
 import { JqElement } from '../../../types';
 import JQClass from '../../../jq';
@@ -88,5 +88,5 @@ function prevAll(this: JQ, selector?: CssSelector): JQ {
     return new JQClass(uniqueSiblings);
 }
 
-export = prevAll;
+export default prevAll;
 

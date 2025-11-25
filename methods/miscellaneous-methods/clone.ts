@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 import JQClass from '../../jq';
 import _cloneNode from '../../helpers/cloneNode';
 
@@ -60,4 +60,4 @@ function clone(
     return new JQClass(clonedNodes);
 }
 
-export = clone;
+export default clone;

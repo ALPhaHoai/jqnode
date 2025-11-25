@@ -1,4 +1,4 @@
-﻿import { selectNodes } from '../../../selector';
+import { selectNodes } from '../../../selector';
 import type { CssSelector, JQ, UntilSelector } from '../../../types';
 import { JqElement } from '../../../dom/core/JqElement';
 import JQClass from '../../../jq';
@@ -91,4 +91,4 @@ function parentsUntil(this: JQ, selector?: UntilSelector, filter?: CssSelector):
     return new JQClass(resultNodes);
 }
 
-export = parentsUntil;
+export default parentsUntil;

@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ClassNameInput } from '../../types';
+import type { JqElement, JQ, ClassNameInput } from '../../types';
 
 /**
  * Adds or removes one or more classes from each element, depending on the class's presence or the state argument.
@@ -57,4 +57,4 @@ function toggleClass(this: JQ, className: ClassNameInput, state?: boolean): JQ {
     return this;
 }
 
-export = toggleClass;
+export default toggleClass;

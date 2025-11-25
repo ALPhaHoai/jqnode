@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, IndexTarget } from '../../types';
+import type { JqElement, JQ, IndexTarget } from '../../types';
 
 /**
  * Search for a given element from among the matched elements.
@@ -89,4 +89,4 @@ function index(this: JQ, arg?: IndexTarget): number {
     });
 }
 
-export = index;
+export default index;

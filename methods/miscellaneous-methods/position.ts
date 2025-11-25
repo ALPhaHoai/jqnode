@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ } from '../../types';
 
 /**
  * Get the current coordinates of the first element in the set of matched elements, relative to the offset parent.
@@ -25,4 +25,4 @@ function position(this: JQ): { top: number; left: number } | undefined {
     return { top: 0, left: 0 };
 }
 
-export = position;
+export default position;

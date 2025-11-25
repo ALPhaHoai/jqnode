@@ -163,11 +163,12 @@ export interface JQ {
     text(content: string): JQ;
 
     normalizedText(): string;
+    normalizedText(value: string): JQ;
 
     html(): GetterSetterReturn<string>;
     html(htmlString: string): JQ;
 
-    toJSON<T = any>(options?: ToJSONOptions): T;
+    toJSON(options?: ToJSONOptions): Record<string, string>[];
 
     findTableWithHeader(headerText: string | string[]): JQ;
 
@@ -192,17 +193,17 @@ export interface JQ {
     slice(start: any, end?: any): JQ;
 
     // Insertion methods
-    append(content: ContentInput): JQ;
-    appendTo(target: CssSelector | JQ): JQ;
-    prepend(content: ContentInput): JQ;
-    prependTo(target: CssSelector | JQ): JQ;
-    before(content: ContentInput): JQ;
-    insertBefore(target: CssSelector | JQ): JQ;
-    after(content: ContentInput): JQ;
-    insertAfter(target: CssSelector | JQ): JQ;
-    wrap(wrappingElement: string | JqElement): JQ;
-    wrapAll(wrappingElement: string | JqElement): JQ;
-    wrapInner(wrappingElement: string | JqElement): JQ;
+    append(...content: ContentInput[]): JQ;
+    appendTo(target: CssSelector | JQ | JqElement | JqElement[]): JQ;
+    prepend(...content: ContentInput[]): JQ;
+    prependTo(target: CssSelector | JQ | JqElement | JqElement[]): JQ;
+    before(...content: ContentInput[]): JQ;
+    insertBefore(target: CssSelector | JQ | JqElement | JqElement[]): JQ;
+    after(...content: ContentInput[]): JQ;
+    insertAfter(target: CssSelector | JQ | JqElement | JqElement[]): JQ;
+    wrap(wrappingElement: string | JqElement | JQ): JQ;
+    wrapAll(wrappingElement: string | JqElement | JQ): JQ;
+    wrapInner(wrappingElement: string | JqElement | JQ): JQ;
 
     // Iteration methods
     each(callback: EachCallback): JQ;
@@ -235,7 +236,7 @@ export interface JQ {
 
     // Private helpers (prefixed with _)
     _normalizeContent(content: ContentInput): JqElement[];
-    _cloneNode(node: JqElement, deep?: boolean): JqElement;
+    _cloneNode(node: JqElement | null | undefined, deep?: boolean): JqElement | null | undefined;
     _hasDescendant(ancestor: JqElement, descendant: JqElement): boolean;
     _findCommonRoots(nodes: JqElement[]): JqElement[];
 }

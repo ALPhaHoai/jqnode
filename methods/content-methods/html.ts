@@ -1,4 +1,4 @@
-﻿import { nodeToHTML } from '../../utils';
+import { nodeToHTML } from '../../utils';
 import { parseHTML } from '../../html-parser';
 import type { JqElement, JQ, GetterSetterReturn } from '../../types';
 
@@ -6,6 +6,11 @@ import type { JqElement, JQ, GetterSetterReturn } from '../../types';
  * Gets or sets the inner HTML of elements in the collection.
  * @see https://api.jquery.com/html/
  */
+// Getter overload
+function html(this: JQ): GetterSetterReturn<string>;
+// Setter overload
+function html(this: JQ, htmlString: string): JQ;
+// Implementation
 function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
     if (htmlString === undefined) {
         // Get inner HTML from first element
@@ -41,4 +46,4 @@ function html(this: JQ, htmlString?: string): GetterSetterReturn<string> {
     return this;
 }
 
-export = html;
+export default html;

@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, ContentInput } from '../../../types';
+import type { JqElement, JQ, ContentInput } from '../../../types';
 import JQClass from '../../../jq';
 
 /**
@@ -68,4 +68,4 @@ function prepend(this: JQ, ...content: ContentInput[]): JQ {
     return this;
 }
 
-export = prepend;
+export default prepend;

@@ -1,4 +1,4 @@
-﻿import type { JqElement, JQ, MapCallback } from '../../types';
+import type { JqElement, JQ, MapCallback } from '../../types';
 
 /**
  * Translate a set of elements into a new jQuery set or array.
@@ -30,4 +30,4 @@ function map<R = JqElement>(this: JQ, callback: MapCallback<JqElement, R>): R[] 
     return new JQClass(results);
 }
 
-export = map;
+export default map;

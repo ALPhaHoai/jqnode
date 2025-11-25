@@ -1,4 +1,4 @@
-﻿import { selectNodes } from '../../selector';
+import { selectNodes } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
 import JQClass from '../../jq';
 
@@ -64,4 +64,4 @@ function not(
     return result;
 }
 
-export = not;
+export default not;

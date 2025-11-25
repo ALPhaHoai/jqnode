@@ -20,9 +20,105 @@ import type {
     UntilSelector,
     IndexTarget,
     ContentInput,
+    JQ as IJQ,
 } from './types';
 
-class JQ {
+// Selector methods
+import find from './methods/selector-methods/find';
+
+// Attribute methods
+import attr from './methods/attributes-methods/attr';
+import prop from './methods/attributes-methods/prop';
+import removeAttr from './methods/attributes-methods/removeAttr';
+import removeProp from './methods/attributes-methods/removeProp';
+import val from './methods/attributes-methods/val';
+import css from './methods/attributes-methods/css';
+import cssCamel from './methods/attributes-methods/cssCamel';
+import addClass from './methods/attributes-methods/addClass';
+import removeClass from './methods/attributes-methods/removeClass';
+import toggleClass from './methods/attributes-methods/toggleClass';
+import hasClass from './methods/attributes-methods/hasClass';
+
+// Content methods
+import text from './methods/content-methods/text';
+import normalizedText from './methods/content-methods/normalizedText';
+import html from './methods/content-methods/html';
+import toJSON from './methods/content-methods/toJSON';
+import findTableWithHeader from './methods/content-methods/findTableWithHeader';
+import title from './methods/content-methods/title';
+
+// Iteration methods
+import each from './methods/iteration-methods/each';
+import map from './methods/iteration-methods/map';
+
+// Traversal methods - Ancestor
+import parent from './methods/traversal-methods/ancestor/parent';
+import parents from './methods/traversal-methods/ancestor/parents';
+import parentsUntil from './methods/traversal-methods/ancestor/parentsUntil';
+import closest from './methods/traversal-methods/ancestor/closest';
+
+// Traversal methods - Descendant
+import children from './methods/traversal-methods/descendant/children';
+import contents from './methods/traversal-methods/descendant/contents';
+
+// Traversal methods - Sibling
+import siblings from './methods/traversal-methods/sibling/siblings';
+import next from './methods/traversal-methods/sibling/next';
+import nextAll from './methods/traversal-methods/sibling/nextAll';
+import nextUntil from './methods/traversal-methods/sibling/nextUntil';
+import prev from './methods/traversal-methods/sibling/prev';
+import prevAll from './methods/traversal-methods/sibling/prevAll';
+import prevUntil from './methods/traversal-methods/sibling/prevUntil';
+
+// Traversal methods - Other
+import end from './methods/traversal-methods/end';
+
+// Filtering methods
+import eq from './methods/filtering-methods/eq';
+import first from './methods/filtering-methods/first';
+import last from './methods/filtering-methods/last';
+import filter from './methods/filtering-methods/filter';
+import not from './methods/filtering-methods/not';
+import has from './methods/filtering-methods/has';
+import is from './methods/filtering-methods/is';
+import slice from './methods/filtering-methods/slice';
+
+// Insertion methods - Inside
+import append from './methods/insertion-methods/inside/append';
+import appendTo from './methods/insertion-methods/inside/appendTo';
+import prepend from './methods/insertion-methods/inside/prepend';
+import prependTo from './methods/insertion-methods/inside/prependTo';
+
+// Insertion methods - Outside
+import before from './methods/insertion-methods/outside/before';
+import insertBefore from './methods/insertion-methods/outside/insertBefore';
+import after from './methods/insertion-methods/outside/after';
+import insertAfter from './methods/insertion-methods/outside/insertAfter';
+
+// Insertion methods - Wrapping
+import wrap from './methods/insertion-methods/wrapping/wrap';
+import wrapAll from './methods/insertion-methods/wrapping/wrapAll';
+import wrapInner from './methods/insertion-methods/wrapping/wrapInner';
+
+// Miscellaneous methods
+import toArray from './methods/miscellaneous-methods/toArray';
+import get from './methods/miscellaneous-methods/get';
+import index from './methods/miscellaneous-methods/index';
+import remove from './methods/miscellaneous-methods/remove';
+import clone from './methods/miscellaneous-methods/clone';
+import position from './methods/miscellaneous-methods/position';
+
+// Data methods
+import data from './methods/data-methods/data';
+import removeData from './methods/data-methods/removeData';
+
+// Private helpers
+import normalizeContent from './helpers/normalizeContent';
+import cloneNode from './helpers/cloneNode';
+import hasDescendant from './helpers/hasDescendant';
+import findCommonRoots from './helpers/findCommonRoots';
+
+class JQ implements IJQ {
     /**
      * Global registry of all root nodes for selector searches
      */
@@ -172,14 +268,17 @@ class JQ {
         (content: string): JQ;
     };
 
-    normalizedText!: () => string;
+    normalizedText!: {
+        (): string;
+        (value: string): JQ;
+    };
 
     html!: {
         (): GetterSetterReturn<string>;
         (htmlString: string): JQ;
     };
 
-    toJSON!: <T = any>(options?: ToJSONOptions) => T;
+    toJSON!: (options?: ToJSONOptions) => Record<string, string>[];
 
     findTableWithHeader!: (headerText: string | string[]) => JQ;
 
@@ -216,17 +315,17 @@ class JQ {
     slice!: (start: any, end?: any) => JQ;
 
     // Insertion methods
-    append!: (content: ContentInput) => JQ;
-    appendTo!: (target: CssSelector | JQ) => JQ;
-    prepend!: (content: ContentInput) => JQ;
-    prependTo!: (target: CssSelector | JQ) => JQ;
-    before!: (content: ContentInput) => JQ;
-    insertBefore!: (target: CssSelector | JQ) => JQ;
-    after!: (content: ContentInput) => JQ;
-    insertAfter!: (target: CssSelector | JQ) => JQ;
-    wrap!: (wrappingElement: string | JqElement) => JQ;
-    wrapAll!: (wrappingElement: string | JqElement) => JQ;
-    wrapInner!: (wrappingElement: string | JqElement) => JQ;
+    append!: (...content: ContentInput[]) => JQ;
+    appendTo!: (target: CssSelector | JQ | JqElement | JqElement[]) => JQ;
+    prepend!: (...content: ContentInput[]) => JQ;
+    prependTo!: (target: CssSelector | JQ | JqElement | JqElement[]) => JQ;
+    before!: (...content: ContentInput[]) => JQ;
+    insertBefore!: (target: CssSelector | JQ | JqElement | JqElement[]) => JQ;
+    after!: (...content: ContentInput[]) => JQ;
+    insertAfter!: (target: CssSelector | JQ | JqElement | JqElement[]) => JQ;
+    wrap!: (wrappingElement: string | JqElement | JQ) => JQ;
+    wrapAll!: (wrappingElement: string | JqElement | JQ) => JQ;
+    wrapInner!: (wrappingElement: string | JqElement | JQ) => JQ;
 
     // Miscellaneous methods
     toArray!: () => JqElement[];
@@ -251,78 +350,78 @@ class JQ {
 
     // Private helpers (prefixed with _)
     _normalizeContent!: (content: ContentInput) => JqElement[];
-    _cloneNode!: (node: JqElement, deep?: boolean) => JqElement;
+    _cloneNode!: (node: JqElement | null | undefined, deep?: boolean) => JqElement | null | undefined;
     _hasDescendant!: (ancestor: JqElement, descendant: JqElement) => boolean;
     _findCommonRoots!: (nodes: JqElement[]) => JqElement[];
 }
 
 // Attach all methods to the prototype
-JQ.prototype.find = require('./methods/selector-methods/find');
-JQ.prototype.attr = require('./methods/attributes-methods/attr');
-JQ.prototype.prop = require('./methods/attributes-methods/prop');
-JQ.prototype.removeAttr = require('./methods/attributes-methods/removeAttr');
-JQ.prototype.removeProp = require('./methods/attributes-methods/removeProp');
-JQ.prototype.val = require('./methods/attributes-methods/val');
-JQ.prototype.css = require('./methods/attributes-methods/css');
-JQ.prototype.cssCamel = require('./methods/attributes-methods/cssCamel');
-JQ.prototype.addClass = require('./methods/attributes-methods/addClass');
-JQ.prototype.removeClass = require('./methods/attributes-methods/removeClass');
-JQ.prototype.toggleClass = require('./methods/attributes-methods/toggleClass');
-JQ.prototype.hasClass = require('./methods/attributes-methods/hasClass');
-JQ.prototype.text = require('./methods/content-methods/text');
-JQ.prototype.normalizedText = require('./methods/content-methods/normalizedText');
-JQ.prototype.html = require('./methods/content-methods/html');
-JQ.prototype.toJSON = require('./methods/content-methods/toJSON');
-JQ.prototype.findTableWithHeader = require('./methods/content-methods/findTableWithHeader');
-JQ.prototype.title = require('./methods/content-methods/title');
-JQ.prototype.each = require('./methods/iteration-methods/each');
-JQ.prototype.map = require('./methods/iteration-methods/map');
-JQ.prototype.parent = require('./methods/traversal-methods/ancestor/parent');
-JQ.prototype.parents = require('./methods/traversal-methods/ancestor/parents');
-JQ.prototype.parentsUntil = require('./methods/traversal-methods/ancestor/parentsUntil');
-JQ.prototype.closest = require('./methods/traversal-methods/ancestor/closest');
-JQ.prototype.children = require('./methods/traversal-methods/descendant/children');
-JQ.prototype.contents = require('./methods/traversal-methods/descendant/contents');
-JQ.prototype.siblings = require('./methods/traversal-methods/sibling/siblings');
-JQ.prototype.next = require('./methods/traversal-methods/sibling/next');
-JQ.prototype.nextAll = require('./methods/traversal-methods/sibling/nextAll');
-JQ.prototype.nextUntil = require('./methods/traversal-methods/sibling/nextUntil');
-JQ.prototype.prev = require('./methods/traversal-methods/sibling/prev');
-JQ.prototype.prevAll = require('./methods/traversal-methods/sibling/prevAll');
-JQ.prototype.prevUntil = require('./methods/traversal-methods/sibling/prevUntil');
-JQ.prototype.eq = require('./methods/filtering-methods/eq');
-JQ.prototype.end = require('./methods/traversal-methods/end');
-JQ.prototype.first = require('./methods/filtering-methods/first');
-JQ.prototype.last = require('./methods/filtering-methods/last');
-JQ.prototype.filter = require('./methods/filtering-methods/filter');
-JQ.prototype.not = require('./methods/filtering-methods/not');
-JQ.prototype.has = require('./methods/filtering-methods/has');
-JQ.prototype.is = require('./methods/filtering-methods/is');
-JQ.prototype.slice = require('./methods/filtering-methods/slice');
-JQ.prototype.append = require('./methods/insertion-methods/inside/append');
-JQ.prototype.appendTo = require('./methods/insertion-methods/inside/appendTo');
-JQ.prototype.prepend = require('./methods/insertion-methods/inside/prepend');
-JQ.prototype.prependTo = require('./methods/insertion-methods/inside/prependTo');
-JQ.prototype.before = require('./methods/insertion-methods/outside/before');
-JQ.prototype.insertBefore = require('./methods/insertion-methods/outside/insertBefore');
-JQ.prototype.after = require('./methods/insertion-methods/outside/after');
-JQ.prototype.insertAfter = require('./methods/insertion-methods/outside/insertAfter');
-JQ.prototype.wrap = require('./methods/insertion-methods/wrapping/wrap');
-JQ.prototype.wrapAll = require('./methods/insertion-methods/wrapping/wrapAll');
-JQ.prototype.wrapInner = require('./methods/insertion-methods/wrapping/wrapInner');
-JQ.prototype.toArray = require('./methods/miscellaneous-methods/toArray');
-JQ.prototype.get = require('./methods/miscellaneous-methods/get');
-JQ.prototype.index = require('./methods/miscellaneous-methods/index');
-JQ.prototype.data = require('./methods/data-methods/data');
-JQ.prototype.removeData = require('./methods/data-methods/removeData');
-JQ.prototype.remove = require('./methods/miscellaneous-methods/remove');
-JQ.prototype.clone = require('./methods/miscellaneous-methods/clone');
-JQ.prototype.position = require('./methods/miscellaneous-methods/position');
+JQ.prototype.find = find;
+JQ.prototype.attr = attr;
+JQ.prototype.prop = prop;
+JQ.prototype.removeAttr = removeAttr;
+JQ.prototype.removeProp = removeProp;
+JQ.prototype.val = val;
+JQ.prototype.css = css;
+JQ.prototype.cssCamel = cssCamel;
+JQ.prototype.addClass = addClass;
+JQ.prototype.removeClass = removeClass;
+JQ.prototype.toggleClass = toggleClass;
+JQ.prototype.hasClass = hasClass;
+JQ.prototype.text = text;
+JQ.prototype.normalizedText = normalizedText;
+JQ.prototype.html = html;
+JQ.prototype.toJSON = toJSON;
+JQ.prototype.findTableWithHeader = findTableWithHeader;
+JQ.prototype.title = title;
+JQ.prototype.each = each;
+JQ.prototype.map = map;
+JQ.prototype.parent = parent;
+JQ.prototype.parents = parents;
+JQ.prototype.parentsUntil = parentsUntil;
+JQ.prototype.closest = closest;
+JQ.prototype.children = children;
+JQ.prototype.contents = contents;
+JQ.prototype.siblings = siblings;
+JQ.prototype.next = next;
+JQ.prototype.nextAll = nextAll;
+JQ.prototype.nextUntil = nextUntil;
+JQ.prototype.prev = prev;
+JQ.prototype.prevAll = prevAll;
+JQ.prototype.prevUntil = prevUntil;
+JQ.prototype.eq = eq;
+JQ.prototype.end = end;
+JQ.prototype.first = first;
+JQ.prototype.last = last;
+JQ.prototype.filter = filter;
+JQ.prototype.not = not;
+JQ.prototype.has = has;
+JQ.prototype.is = is;
+JQ.prototype.slice = slice;
+JQ.prototype.append = append;
+JQ.prototype.appendTo = appendTo;
+JQ.prototype.prepend = prepend;
+JQ.prototype.prependTo = prependTo;
+JQ.prototype.before = before;
+JQ.prototype.insertBefore = insertBefore;
+JQ.prototype.after = after;
+JQ.prototype.insertAfter = insertAfter;
+JQ.prototype.wrap = wrap;
+JQ.prototype.wrapAll = wrapAll;
+JQ.prototype.wrapInner = wrapInner;
+JQ.prototype.toArray = toArray;
+JQ.prototype.get = get;
+JQ.prototype.index = index;
+JQ.prototype.data = data;
+JQ.prototype.removeData = removeData;
+JQ.prototype.remove = remove;
+JQ.prototype.clone = clone;
+JQ.prototype.position = position;
 
 // Attach private helpers (prefixed with _)
-JQ.prototype._normalizeContent = require('./helpers/normalizeContent');
-JQ.prototype._cloneNode = require('./helpers/cloneNode');
-JQ.prototype._hasDescendant = require('./helpers/hasDescendant');
-JQ.prototype._findCommonRoots = require('./helpers/findCommonRoots');
+JQ.prototype._normalizeContent = normalizeContent;
+JQ.prototype._cloneNode = cloneNode;
+JQ.prototype._hasDescendant = hasDescendant;
+JQ.prototype._findCommonRoots = findCommonRoots;
 
 export default JQ;

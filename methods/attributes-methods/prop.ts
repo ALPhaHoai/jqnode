@@ -1,9 +1,18 @@
-﻿import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
+import type { JqElement, JQ, AttributeValue, GetterSetterReturn } from '../../types';
 
 /**
  * Gets or sets a property on the first element in the collection.
  * @see https://api.jquery.com/prop/
  */
+// Getter overload
+function prop(this: JQ, name: string): GetterSetterReturn<AttributeValue>;
+// Setter overload with value
+function prop(this: JQ, name: string, value: AttributeValue): JQ;
+// Setter overload with function
+function prop(this: JQ, name: string, value: (index: number, oldVal: any) => AttributeValue): JQ;
+// Setter overload with object
+function prop(this: JQ, properties: Record<string, AttributeValue>): JQ;
+// Implementation
 function prop(
     this: JQ,
     name: string | Record<string, AttributeValue>,
@@ -167,4 +176,4 @@ function prop(
     return this;
 }
 
-export = prop;
+export default prop;

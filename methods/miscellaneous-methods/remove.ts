@@ -1,10 +1,10 @@
-﻿import type { JqElement, JQ } from '../../types';
+import type { JqElement, JQ, CssSelector } from '../../types';
 
 /**
  * Remove the set of matched elements from the DOM.
  * @see https://api.jquery.com/remove/
  */
-function remove(this: JQ, selector?: string): JQ {
+function remove(this: JQ, selector?: CssSelector): JQ {
     let nodesToRemove: JqElement[] = this.nodes;
 
     // If selector is provided, filter nodes
@@ -43,4 +43,4 @@ function remove(this: JQ, selector?: string): JQ {
     return this;
 }
 
-export = remove;
+export default remove;

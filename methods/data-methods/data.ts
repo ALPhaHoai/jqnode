@@ -1,4 +1,4 @@
-﻿import type { JQ } from '../../types';
+import type { JQ } from '../../types';
 import {
     initDataAttributes,
     getData,
@@ -11,6 +11,15 @@ import {
  * Store arbitrary data associated with the matched elements or return the value at the named data store for the first element in the set of matched elements.
  * @see https://api.jquery.com/data/
  */
+// Getter overload - all data
+function data(this: JQ): Record<string, unknown>;
+// Getter overload - single key
+function data(this: JQ, key: string): unknown;
+// Setter overload - single key-value
+function data(this: JQ, key: string, value: unknown): JQ;
+// Setter overload - object
+function data(this: JQ, obj: Record<string, unknown>): JQ;
+// Implementation
 function data(
     this: JQ,
     key?: string | Record<string, unknown>,
@@ -62,4 +71,4 @@ function data(
     return d[camelKey];
 }
 
-export = data;
+export default data;
