@@ -4,13 +4,13 @@
  * and https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import {JqNamedNodeMap} from '../collections/JqNamedNodeMap';
-import {JqNode} from './JqNode';
-import {JqHTMLCollection} from '../collections/JqHTMLCollection';
-import {JqNodeListOf} from '../collections/JqNodeList';
-import {JqDOMTokenList} from '../collections/JqDOMTokenList';
-import {nodeMatchesSelector, parseSelector, selectNodes} from '../../selector';
-import {parseHTML} from '../../html-parser';
+import { JqNamedNodeMap } from '../collections/JqNamedNodeMap';
+import { JqNode } from './JqNode';
+import { JqHTMLCollection } from '../collections/JqHTMLCollection';
+import { JqNodeListOf } from '../collections/JqNodeList';
+import { JqDOMTokenList } from '../collections/JqDOMTokenList';
+import { nodeMatchesSelector, parseSelector, selectNodes } from '../../selector';
+import { parseHTML } from '../../html-parser';
 
 /**
  * Node type identifier
@@ -320,7 +320,7 @@ export class JqElement extends JqNode {
     override get textContent(): string | null {
         if (this.internalType === 'text') return this.textData;
         if (this.internalType === 'comment') return this.textData;
-        return this.children.map(c => c.textContent).join('');
+        return this.children.map(c => c.textContent || '').join('');
     }
 
     override set textContent(value: string | null) {
@@ -861,7 +861,7 @@ export class JqElement extends JqNode {
                 const jqNode = node as unknown as JqElement;
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
-                    jqNode.parent.removeChild(node);
+                    jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
                 jqNode.parent = this.parent;
                 siblings.splice(index + 1, 0, jqNode);
@@ -891,7 +891,7 @@ export class JqElement extends JqNode {
                 const jqNode = node as unknown as JqElement;
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
-                    jqNode.parent.removeChild(node);
+                    jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
                 jqNode.parent = this.parent;
                 siblings.splice(index + i, 0, jqNode);
@@ -914,7 +914,7 @@ export class JqElement extends JqNode {
                 const jqNode = node as unknown as JqElement;
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
-                    jqNode.parent.removeChild(node);
+                    jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
                 jqNode.parent = this;
                 this.children.push(jqNode);
@@ -938,7 +938,7 @@ export class JqElement extends JqNode {
                 const jqNode = node as unknown as JqElement;
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
-                    jqNode.parent.removeChild(node);
+                    jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
                 jqNode.parent = this;
                 this.children.unshift(jqNode);
@@ -991,7 +991,7 @@ export class JqElement extends JqNode {
                 const jqNode = node as unknown as JqElement;
                 // Remove from previous parent if it exists
                 if (jqNode.parent) {
-                    jqNode.parent.removeChild(node);
+                    jqNode.parent.removeChild(jqNode as unknown as Node);
                 }
                 jqNode.parent = parentRef;
                 siblings.splice(index + i, 0, jqNode);
@@ -1061,8 +1061,6 @@ export class JqElement extends JqNode {
      * Inserts an element at a relative position
      */
     insertAdjacentElement(position: InsertPosition, element: Element): Element | null {
-        const jqElement = element as unknown as JqElement;
-
         switch (position) {
             case 'beforebegin':
                 if (this.parent) {
@@ -1072,13 +1070,7 @@ export class JqElement extends JqNode {
                 return null;
 
             case 'afterbegin':
-                // Remove from previous parent if it exists
-                if (jqElement.parent) {
-                    jqElement.parent.removeChild(element);
-                }
-                this.children.unshift(jqElement);
-                jqElement.parent = this;
-                this.updateSiblingPointers();
+                this.prepend(element);
                 return element;
 
             case 'beforeend':
