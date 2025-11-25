@@ -199,6 +199,12 @@ export class JqElement extends JqNode {
 
     override appendChild<T extends Node>(node: T): T {
         const jqElement = node as unknown as JqElement;
+
+        // Remove from previous parent if it exists
+        if (jqElement.parent) {
+            jqElement.parent.removeChild(node);
+        }
+
         this.children.push(jqElement);
         jqElement.parent = this;
         return node;
@@ -226,6 +232,11 @@ export class JqElement extends JqNode {
             throw new Error('Reference node was not found');
         }
 
+        // Remove from previous parent if it exists
+        if (jqElement.parent) {
+            jqElement.parent.removeChild(node);
+        }
+
         this.children.splice(index, 0, jqElement);
         jqElement.parent = this;
         return node;
@@ -237,6 +248,11 @@ export class JqElement extends JqNode {
 
         if (index === -1) {
             throw new Error('Node was not found');
+        }
+
+        // Remove from previous parent if it exists
+        if (jqElement.parent) {
+            jqElement.parent.removeChild(node as Node);
         }
 
         const removed = this.children[index];
@@ -756,6 +772,10 @@ export class JqElement extends JqNode {
                 siblings.splice(index + 1, 0, textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+                // Remove from previous parent if it exists
+                if (jqNode.parent) {
+                    jqNode.parent.removeChild(node);
+                }
                 jqNode.parent = this.parent;
                 siblings.splice(index + 1, 0, jqNode);
             }
@@ -781,6 +801,10 @@ export class JqElement extends JqNode {
                 siblings.splice(index + i, 0, textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+                // Remove from previous parent if it exists
+                if (jqNode.parent) {
+                    jqNode.parent.removeChild(node);
+                }
                 jqNode.parent = this.parent;
                 siblings.splice(index + i, 0, jqNode);
             }
@@ -799,6 +823,10 @@ export class JqElement extends JqNode {
                 this.children.push(textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+                // Remove from previous parent if it exists
+                if (jqNode.parent) {
+                    jqNode.parent.removeChild(node);
+                }
                 jqNode.parent = this;
                 this.children.push(jqNode);
             }
@@ -818,6 +846,10 @@ export class JqElement extends JqNode {
                 this.children.unshift(textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+                // Remove from previous parent if it exists
+                if (jqNode.parent) {
+                    jqNode.parent.removeChild(node);
+                }
                 jqNode.parent = this;
                 this.children.unshift(jqNode);
             }
@@ -860,6 +892,10 @@ export class JqElement extends JqNode {
                 siblings.splice(index + i, 0, textNode);
             } else {
                 const jqNode = node as unknown as JqElement;
+                // Remove from previous parent if it exists
+                if (jqNode.parent) {
+                    jqNode.parent.removeChild(node);
+                }
                 jqNode.parent = parentRef;
                 siblings.splice(index + i, 0, jqNode);
             }

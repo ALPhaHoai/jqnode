@@ -3,7 +3,6 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import type { JqElement } from './JqElement';
 import { JqNodeListOf } from '../collections/JqNodeList';
 
 /**
@@ -41,7 +40,8 @@ export class JqNode implements Node {
     protected _parentNode: JqNode | null = null;
 
     get childNodes(): NodeListOf<ChildNode> {
-        return new JqNodeListOf(this._children as unknown as JqElement[]) as unknown as NodeListOf<ChildNode>;
+        // Cast to any to avoid needing to import JqElement and create circular dependency
+        return new JqNodeListOf(this._children as any) as unknown as NodeListOf<ChildNode>;
     }
 
     get firstChild(): ChildNode | null {
