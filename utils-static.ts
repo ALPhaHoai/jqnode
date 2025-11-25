@@ -1,10 +1,11 @@
 ﻿/**
- * Static utility methods for jQuery compatibility
+ * Static utility functions for jQuery compatibility
  * These are utility functions that are attached to the jQuery/$ object itself
  */
 
 
 import { JqElement } from "./dom";
+import { parseHTML as parseHTMLInternal } from './html-parser';
 
 /**
  * Return a number representing the current time.
@@ -106,7 +107,6 @@ function parseHTML(data: string, context?: Document | boolean, keepScripts?: boo
 
     // Use the html-parser for server-side
     if (typeof document === 'undefined') {
-        const { parseHTML: parseHTMLInternal } = require('./html-parser');
         const nodes: JqElement[] = parseHTMLInternal(data);
 
         // Filter out script tags if keepScripts is false

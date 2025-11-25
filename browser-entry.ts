@@ -5,7 +5,7 @@
 
 // Mock process.env for browser environment
 if (typeof process === 'undefined') {
-    (global as any).process = {
+    (globalThis as any).process = {
         env: {
             JQNODE_DEBUG: '0',
             DEBUG: '',
@@ -15,8 +15,11 @@ if (typeof process === 'undefined') {
 
 // Mock jest global for browser
 if (typeof jest === 'undefined') {
-    (global as any).jest = undefined;
+    (globalThis as any).jest = undefined;
 }
 
-// Re-export everything from index
-module.exports = require('./index');
+// Import and re-export main library
+import JQExport from './index';
+
+// Export as default (Rollup's UMD wrapper will assign this to window.$ via the 'name' config)
+export default JQExport;

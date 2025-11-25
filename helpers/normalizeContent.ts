@@ -1,7 +1,5 @@
 import type { JqElement, ContentInput } from '../types';
-
-// Import will be updated once html-parser is converted
-const { parseHTML } = require('../html-parser');
+import { parseHTML } from '../html-parser';
 
 /**
  * Helper method to normalize content into an array of nodes.
