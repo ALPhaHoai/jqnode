@@ -4,13 +4,13 @@
  * and https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import { JqNamedNodeMap } from '../collections/JqNamedNodeMap';
-import { JqNode } from './JqNode';
-import { JqHTMLCollection } from '../collections/JqHTMLCollection';
-import { JqNodeListOf } from '../collections/JqNodeList';
-import { JqDOMTokenList } from '../collections/JqDOMTokenList';
-import { selectNodes, nodeMatchesSelector, parseSelector } from '../../selector';
-import { parseHTML } from '../../html-parser';
+import {JqNamedNodeMap} from '../collections/JqNamedNodeMap';
+import {JqNode} from './JqNode';
+import {JqHTMLCollection} from '../collections/JqHTMLCollection';
+import {JqNodeListOf} from '../collections/JqNodeList';
+import {JqDOMTokenList} from '../collections/JqDOMTokenList';
+import {nodeMatchesSelector, parseSelector, selectNodes} from '../../selector';
+import {parseHTML} from '../../html-parser';
 
 /**
  * Node type identifier
@@ -43,6 +43,14 @@ export class JqElement extends JqNode {
     }
 
     set parent(value: JqElement | undefined) {
+        this._parentNode = value || null;
+    }
+
+    /**
+     * Internal method to set parent that allows Document as parent type.
+     * This is used by JqDocument when appending elements to the document.
+     */
+    _setParent(value: any): void {
         this._parentNode = value || null;
     }
 
@@ -224,7 +232,7 @@ export class JqElement extends JqNode {
     }
 
     override removeChild<T extends Node>(child: T): T {
-        const index = this.children.findIndex(c => c === child as unknown as JqElement);
+        const index = this.children.findIndex(c => c === (child as unknown as JqElement));
         if (index === -1) {
             throw new Error('Node was not found');
         }
@@ -243,7 +251,7 @@ export class JqElement extends JqNode {
             return this.appendChild(node);
         }
 
-        const index = this.children.findIndex(c => c === child as unknown as JqElement);
+        const index = this.children.findIndex(c => c === (child as unknown as JqElement));
         if (index === -1) {
             throw new Error('Reference node was not found');
         }
@@ -261,7 +269,7 @@ export class JqElement extends JqNode {
 
     override replaceChild<T extends Node>(node: Node, child: T): T {
         const jqElement = node as unknown as JqElement;
-        const index = this.children.findIndex(c => c === child as unknown as JqElement);
+        const index = this.children.findIndex(c => c === (child as unknown as JqElement));
 
         if (index === -1) {
             throw new Error('Node was not found');

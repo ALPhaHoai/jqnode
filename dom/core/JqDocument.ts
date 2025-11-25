@@ -2,6 +2,7 @@
 import {JqElement} from './JqElement';
 import {JqText} from './JqText';
 import {JqComment} from './JqComment';
+import {JqDocumentFragment} from './JqDocumentFragment';
 import {JqHTMLCollection} from '../collections/JqHTMLCollection';
 import {JqNodeList, JqNodeListOf} from '../collections/JqNodeList';
 import {createTypedElement} from '../helpers/createTypedElement';
@@ -12,7 +13,7 @@ import {createTypedElement} from '../helpers/createTypedElement';
  */
 export class JqDocument extends JqNode implements Document {
     // Internal children storage
-    public _children: JqElement[] = [];
+    public override _children: JqElement[] = [];
 
     constructor() {
         super();
@@ -68,19 +69,22 @@ export class JqDocument extends JqNode implements Document {
 
 
     get documentElement(): HTMLElement {
-        return this._children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HTML') as unknown as HTMLElement;
+        const htmlElement = this._children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HTML');
+        return (htmlElement as unknown as HTMLElement) || null!;
     }
 
     get head(): HTMLHeadElement {
         const docEl = this.documentElement as unknown as JqElement;
-        if (!docEl) return null as unknown as HTMLHeadElement;
-        return (docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HEAD') as unknown as HTMLHeadElement) || null;
+        if (!docEl) return null!;
+        const headElement = docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'HEAD');
+        return (headElement as unknown as HTMLHeadElement) || null!;
     }
 
     get body(): HTMLElement {
         const docEl = this.documentElement as unknown as JqElement;
-        if (!docEl) return null as unknown as HTMLElement;
-        return (docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'BODY') as unknown as HTMLElement) || null;
+        if (!docEl) return null!;
+        const bodyElement = docEl.children.find(child => child.nodeType === this.ELEMENT_NODE && child.tagName.toUpperCase() === 'BODY');
+        return (bodyElement as unknown as HTMLElement) || null!;
     }
 
     implementation: DOMImplementation = {
@@ -110,8 +114,8 @@ export class JqDocument extends JqNode implements Document {
     }
 
     createDocumentFragment(): DocumentFragment {
-        // TODO: Implement JqDocumentFragment
-        throw new Error('Method not implemented.');
+        const fragment = new JqDocumentFragment();
+        return fragment as unknown as DocumentFragment;
     }
 
     createTextNode(data: string): Text {
@@ -177,12 +181,17 @@ export class JqDocument extends JqNode implements Document {
                 if (node.getAttribute('id') === elementId) {
                     return node as unknown as HTMLElement;
                 }
-            }
-            // @ts-ignore - Access children from either JqElement or JqDocument
-            const children = node.children || node._children || [];
-            for (const child of children) {
-                const result = traverse(child);
-                if (result) return result;
+                // For JqElement, use children property
+                for (const child of node.children) {
+                    const result = traverse(child);
+                    if (result) return result;
+                }
+            } else {
+                // For JqDocument, use _children property
+                for (const child of node._children) {
+                    const result = traverse(child);
+                    if (result) return result;
+                }
             }
             return null;
         };
@@ -524,20 +533,26 @@ export class JqDocument extends JqNode implements Document {
 
     override appendChild<T extends Node>(node: T): T {
         const jqElement = node as unknown as JqElement;
+
+        // Remove from previous parent if it exists
+        if (jqElement._parentNode) {
+            jqElement._parentNode.removeChild(node);
+        }
+
         this._children.push(jqElement);
-        jqElement.parent = this as unknown as JqElement;
+        // Use _setParent to allow Document as parent type
+        jqElement._setParent(this);
         jqElement.ownerDocument = this;
         return node;
     }
 
     override removeChild<T extends Node>(child: T): T {
-        const index = this._children.findIndex(c => c === child as unknown as JqElement);
+        const index = this._children.findIndex(c => c === (child as unknown as JqElement));
         if (index === -1) {
             throw new Error('Node was not found');
         }
         const removed = this._children.splice(index, 1)[0];
-        // @ts-ignore
-        removed.parent = undefined;
+        removed._parentNode = null;
         return child;
     }
 
@@ -546,12 +561,19 @@ export class JqDocument extends JqNode implements Document {
         if (!child) {
             return this.appendChild(node);
         }
-        const index = this._children.findIndex(c => c === child as unknown as JqElement);
+
+        // Remove from previous parent if it exists
+        if (jqElement._parentNode) {
+            jqElement._parentNode.removeChild(node);
+        }
+
+        const index = this._children.findIndex(c => c === (child as unknown as JqElement));
         if (index === -1) {
             throw new Error('Reference node was not found');
         }
         this._children.splice(index, 0, jqElement);
-        jqElement.parent = this as unknown as JqElement;
+        // Use _setParent to allow Document as parent type
+        jqElement._setParent(this);
         jqElement.ownerDocument = this;
         return node;
     }

@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 
-import { JqNodeListOf } from '../collections/JqNodeList';
+import {JqNodeListOf} from '../collections/JqNodeList';
 
 /**
  * JqNode implements the DOM Node interface.
@@ -35,9 +35,9 @@ export class JqNode implements Node {
     // Node properties - to be implemented by subclasses
     baseURI: string = '';
 
-    // Protected storage for child nodes
-    protected _children: JqNode[] = [];
-    protected _parentNode: JqNode | null = null;
+    // Public storage for child nodes - accessible by subclasses and related classes
+    public _children: JqNode[] = [];
+    public _parentNode: JqNode | null = null;
 
     get childNodes(): NodeListOf<ChildNode> {
         // Cast to any to avoid needing to import JqElement and create circular dependency

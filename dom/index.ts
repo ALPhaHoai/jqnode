@@ -7,6 +7,7 @@
 export { JqElement, NodeType } from './core/JqElement';
 export { JqNode } from './core/JqNode';
 export { JqDocument } from './core/JqDocument';
+export { JqDocumentFragment } from './core/JqDocumentFragment';
 export { JqAttr } from './core/JqAttr';
 export { JqCharacterData } from './core/JqCharacterData';
 export { JqText } from './core/JqText';

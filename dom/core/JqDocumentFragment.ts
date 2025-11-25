@@ -1,21 +1,21 @@
 /**
  * JqDocumentFragment - Implementation of the DOM DocumentFragment interface
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
- * 
+ *
  * DocumentFragment represents a minimal document object that has no parent.
  * It is used as a lightweight version of Document that stores a segment of a
  * document structure comprised of nodes just like a standard document.
  */
 
-import { JqNode } from './JqNode';
-import { JqElement } from './JqElement';
-import { JqHTMLCollection } from '../collections/JqHTMLCollection';
-import { JqNodeListOf } from '../collections/JqNodeList';
-import { selectNodes, parseSelector, nodeMatchesSelector } from '../../selector';
+import {JqNode} from './JqNode';
+import {JqElement} from './JqElement';
+import {JqHTMLCollection} from '../collections/JqHTMLCollection';
+import {JqNodeListOf} from '../collections/JqNodeList';
+import {selectNodes} from '../../selector';
 
 export class JqDocumentFragment extends JqNode implements DocumentFragment {
-    // Internal children storage  
-    public _children: JqElement[] = [];
+    // Internal children storage
+    public override _children: JqElement[] = [];
 
     constructor() {
         super();
@@ -34,15 +34,16 @@ export class JqDocumentFragment extends JqNode implements DocumentFragment {
         // Document fragments don't have a value
     }
 
-    override get textContent(): string | null {
+    override get textContent(): string {
         // Returns the concatenated text of all descendant text nodes
+        // DocumentFragment.textContent returns empty string, never null
         return this._children.map(child => child.textContent).join('');
     }
 
     override set textContent(value: string | null) {
         // Setting textContent removes all children and adds a single text node
         this._children = [];
-        if (value) {
+        if (value !== null && value !== '') {
             const textNode = new JqElement('text');
             textNode.textData = value;
             textNode._setParent(this);
