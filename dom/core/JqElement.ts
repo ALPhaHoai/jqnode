@@ -1063,28 +1063,27 @@ export class JqElement extends JqNode {
      * Inserts HTML at a relative position
      */
     insertAdjacentHTML(position: InsertPosition, html: string): void {
-        // Stub implementation - would need HTML parser
-        const textNode = new JqElement('text');
-        textNode.textData = html;
+        // Parse the HTML string into nodes
+        const nodes = parseHTML(html);
 
         switch (position) {
             case 'beforebegin':
                 if (this.parent) {
-                    this.before(textNode as unknown as Node);
+                    this.before(...(nodes as unknown as Node[]));
                 }
                 break;
 
             case 'afterbegin':
-                this.prepend(textNode as unknown as Node);
+                this.prepend(...(nodes as unknown as Node[]));
                 break;
 
             case 'beforeend':
-                this.append(textNode as unknown as Node);
+                this.append(...(nodes as unknown as Node[]));
                 break;
 
             case 'afterend':
                 if (this.parent) {
-                    this.after(textNode as unknown as Node);
+                    this.after(...(nodes as unknown as Node[]));
                 }
                 break;
         }

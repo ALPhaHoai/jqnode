@@ -543,5 +543,45 @@ describe('JqElement - Element API', () => {
             expect(parent.children[0].type).toBe('text');
             expect(parent.children[0].data).toBe('Hello');
         });
+
+        test('insertAdjacentHTML beforebegin parses HTML', () => {
+            target.insertAdjacentHTML('beforebegin', '<p class="test">Hello</p>');
+            expect(parent.children[0].type).toBe('element');
+            expect(parent.children[0].tagName).toBe('p');
+            expect(parent.children[0].className).toBe('test');
+            expect(parent.children[0].textContent).toBe('Hello');
+            expect(parent.children[1]).toBe(target);
+        });
+
+        test('insertAdjacentHTML afterbegin parses HTML', () => {
+            target.insertAdjacentHTML('afterbegin', '<strong>Bold</strong>');
+            expect(target.children[0].type).toBe('element');
+            expect(target.children[0].tagName).toBe('strong');
+            expect(target.children[0].textContent).toBe('Bold');
+        });
+
+        test('insertAdjacentHTML beforeend parses HTML', () => {
+            target.insertAdjacentHTML('beforeend', '<em>Italic</em>');
+            expect(target.children[target.children.length - 1].type).toBe('element');
+            expect(target.children[target.children.length - 1].tagName).toBe('em');
+            expect(target.children[target.children.length - 1].textContent).toBe('Italic');
+        });
+
+        test('insertAdjacentHTML afterend parses HTML', () => {
+            target.insertAdjacentHTML('afterend', '<div id="after">After</div>');
+            expect(parent.children[1].type).toBe('element');
+            expect(parent.children[1].tagName).toBe('div');
+            expect(parent.children[1].id).toBe('after');
+            expect(parent.children[1].textContent).toBe('After');
+        });
+
+        test('insertAdjacentHTML parses multiple elements', () => {
+            target.insertAdjacentHTML('beforeend', '<span>One</span><span>Two</span>');
+            expect(target.children.length).toBe(2);
+            expect(target.children[0].tagName).toBe('span');
+            expect(target.children[1].tagName).toBe('span');
+            expect(target.children[0].textContent).toBe('One');
+            expect(target.children[1].textContent).toBe('Two');
+        });
     });
 });
