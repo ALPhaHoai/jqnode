@@ -1,5 +1,5 @@
 import _cloneNode from '../../helpers/cloneNode';
-import { JqElement } from '../../dom/core/JqElement';
+import { JqElement } from '../../dom/JqNode/JqElement/JqElement';
 
 describe('_cloneNode Helper', () => {
     test('should not share attributes reference between original and clone', () => {

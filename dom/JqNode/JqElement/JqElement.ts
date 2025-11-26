@@ -1247,7 +1247,4 @@ export class JqElement extends JqNode {
     requestPointerLock(): void {
         // Stub - no-op
     }
-
-    public offsetTop: number = 0; // DOM offset properties
-    public offsetLeft: number = 0;
 }

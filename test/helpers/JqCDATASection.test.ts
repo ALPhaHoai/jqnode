@@ -2,7 +2,7 @@
  * Tests for JqCDATASection class
  */
 
-import { JqCDATASection } from '../../dom/core/JqCDATASection';
+import { JqCDATASection } from '../../dom/JqNode/JqCharacterData/JqCDATASection';
 import { JqElement } from '../../types';
 
 describe('JqCDATASection', () => {

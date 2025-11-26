@@ -2,7 +2,7 @@
  * Tests for JqText class
  */
 
-import { JqText } from '../../dom/core/JqText';
+import { JqText } from '../../dom/JqNode/JqCharacterData/JqText';
 import { JqElement } from '../../types';
 
 describe('JqText', () => {

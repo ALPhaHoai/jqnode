@@ -1,7 +1,7 @@
-﻿import { JqDocument } from '../../dom/core/JqDocument';
-import { JqElement } from '../../dom/core/JqElement';
-import { JqText } from '../../dom/core/JqText';
-import { JqComment } from '../../dom/core/JqComment';
+import { JqDocument } from '../../dom/JqNode/JqDocument/JqDocument';
+import { JqElement } from '../../dom/JqNode/JqElement/JqElement';
+import { JqText } from '../../dom/JqNode/JqCharacterData/JqText';
+import { JqComment } from '../../dom/JqNode/JqCharacterData/JqComment';
 
 describe('JqDocument', () => {
     let doc: JqDocument;

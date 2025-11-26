@@ -2,7 +2,7 @@
  * Tests for JqComment class
  */
 
-import { JqComment } from '../../dom/core/JqComment';
+import { JqComment } from '../../dom/JqNode/JqCharacterData/JqComment';
 import { JqElement } from '../../types';
 
 describe('JqComment', () => {

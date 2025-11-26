@@ -1,5 +1,5 @@
-﻿import { JqNamedNodeMap } from '../../dom/collections/JqNamedNodeMap';
-import { JqAttr } from '../../dom/core/JqAttr';
+import { JqNamedNodeMap } from '../../dom/collections/JqNamedNodeMap';
+import { JqAttr } from '../../dom/JqNode/JqAttr/JqAttr';
 import { JqElement } from '../../types';
 
 describe('JqNamedNodeMap', () => {
