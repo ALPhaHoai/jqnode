@@ -6,9 +6,9 @@
  * consistency across the codebase.
  */
 
-import { JqElement } from '../core/JqElement';
-import { JqHTMLElement } from '../core/JqHTMLElement';
-import { JqHTMLUnknownElement } from '../core/JqHTMLUnknownElement';
+import { JqElement } from '../JqNode/JqElement/JqElement';
+import { JqHTMLElement } from '../JqNode/JqElement/JqHTMLElement/JqHTMLElement';
+import { JqHTMLUnknownElement } from '../JqNode/JqElement/JqHTMLUnknownElement/JqHTMLUnknownElement';
 import * as HTMLElements from '../index';
 
 /**

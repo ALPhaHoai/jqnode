@@ -4,175 +4,164 @@
  */
 
 // Core Element Classes
-export { JqElement } from './core/JqElement';
-export type { NodeType } from './core/JqElement';
-export { JqHTMLElement } from './core/JqHTMLElement';
-export { JqHTMLUnknownElement } from './core/JqHTMLUnknownElement';
-export { JqNode } from './core/JqNode';
-export { JqDocument } from './core/JqDocument';
-export { JqDocumentFragment } from './core/JqDocumentFragment';
-export { JqAttr } from './core/JqAttr';
-export { JqCharacterData } from './core/JqCharacterData';
-export { JqText } from './core/JqText';
-export { JqComment } from './core/JqComment';
-export { JqCDATASection } from './core/JqCDATASection';
+export { JqElement } from './JqNode/JqElement/JqElement';
+export type { NodeType } from './JqNode/JqElement/JqElement';
+export { JqHTMLElement } from './JqNode/JqElement/JqHTMLElement/JqHTMLElement';
+export { JqHTMLUnknownElement } from './JqNode/JqElement/JqHTMLUnknownElement/JqHTMLUnknownElement';
+export { JqNode } from './JqNode/JqNode';
+export { JqDocument } from './JqNode/JqDocument/JqDocument';
+export { JqDocumentFragment } from './JqNode/JqDocument/JqDocumentFragment';
+export { JqAttr } from './JqNode/JqAttr/JqAttr';
+export { JqCharacterData } from './JqNode/JqCharacterData/JqCharacterData';
+export { JqText } from './JqNode/JqCharacterData/JqText';
+export { JqComment } from './JqNode/JqCharacterData/JqComment';
+export { JqCDATASection } from './JqNode/JqCharacterData/JqCDATASection';
 export { JqHTMLCollection } from './collections/JqHTMLCollection';
 export { JqNodeListOf } from './collections/JqNodeList';
 export { JqNamedNodeMap } from './collections/JqNamedNodeMap';
 export { JqDOMTokenList } from './collections/JqDOMTokenList';
 
+// Specialized Elements
+export { JqSVGElement } from './JqNode/JqElement/JqSVGElement/JqSVGElement';
+export { JqMathMLElement } from './JqNode/JqElement/JqMathMLElement/JqMathMLElement';
+
 // Structural Elements
-export { JqHTMLHtmlElement } from './html-elements/structural/JqHTMLHtmlElement';
-export { JqHTMLHeadElement } from './html-elements/structural/JqHTMLHeadElement';
-export { JqHTMLBodyElement } from './html-elements/structural/JqHTMLBodyElement';
+export { JqHTMLHtmlElement } from './JqNode/JqElement/JqHTMLElement/html-elements/structural/JqHTMLHtmlElement';
+export { JqHTMLHeadElement } from './JqNode/JqElement/JqHTMLElement/html-elements/structural/JqHTMLHeadElement';
+export { JqHTMLBodyElement } from './JqNode/JqElement/JqHTMLElement/html-elements/structural/JqHTMLBodyElement';
 
 // Container Elements
-export { JqHTMLDivElement } from './html-elements/text/JqHTMLDivElement';
-export { JqHTMLSpanElement } from './html-elements/text/JqHTMLSpanElement';
+export { JqHTMLDivElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLDivElement';
+export { JqHTMLSpanElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLSpanElement';
 
 // Text Content Elements
-export { JqHTMLParagraphElement } from './html-elements/text/JqHTMLParagraphElement';
-export { JqHTMLHeadingElement } from './html-elements/text/JqHTMLHeadingElement';
-export { JqHTMLBRElement } from './html-elements/text/JqHTMLBRElement';
-export { JqHTMLHRElement } from './html-elements/text/JqHTMLHRElement';
-export { JqHTMLPreElement } from './html-elements/text/JqHTMLPreElement';
+export { JqHTMLParagraphElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLParagraphElement';
+export { JqHTMLHeadingElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLHeadingElement';
+export { JqHTMLBRElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLBRElement';
+export { JqHTMLHRElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLHRElement';
+export { JqHTMLPreElement } from './JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLPreElement';
 
 // Hyperlink Elements
-export { JqHTMLAnchorElement } from './html-elements/links/JqHTMLAnchorElement';
+export { JqHTMLAnchorElement } from './JqNode/JqElement/JqHTMLElement/html-elements/links/JqHTMLAnchorElement';
 
 // List Elements
-export { JqHTMLUListElement } from './html-elements/lists/JqHTMLUListElement';
-export { JqHTMLOListElement } from './html-elements/lists/JqHTMLOListElement';
-export { JqHTMLLIElement } from './html-elements/lists/JqHTMLLIElement';
-export { JqHTMLDListElement } from './html-elements/lists/JqHTMLDListElement';
+export { JqHTMLUListElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLUListElement';
+export { JqHTMLOListElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLOListElement';
+export { JqHTMLLIElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLLIElement';
+export { JqHTMLDListElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLDListElement';
+export { JqHTMLDDElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLDDElement';
+export { JqHTMLDTElement } from './JqNode/JqElement/JqHTMLElement/html-elements/lists/JqHTMLDTElement';
 
 // Media Elements
-export { JqHTMLImageElement } from './html-elements/media/JqHTMLImageElement';
-export { JqHTMLAudioElement } from './html-elements/media/JqHTMLAudioElement';
-export { JqHTMLVideoElement } from './html-elements/media/JqHTMLVideoElement';
+export { JqHTMLImageElement } from './JqNode/JqElement/JqHTMLElement/html-elements/media/JqHTMLImageElement';
+export { JqHTMLAudioElement } from './JqNode/JqElement/JqHTMLElement/html-elements/media/JqHTMLAudioElement';
+export { JqHTMLVideoElement } from './JqNode/JqElement/JqHTMLElement/html-elements/media/JqHTMLVideoElement';
+export { JqHTMLSourceElement } from './JqNode/JqElement/JqHTMLElement/html-elements/media/JqHTMLSourceElement';
+export { JqHTMLTrackElement } from './JqNode/JqElement/JqHTMLElement/html-elements/media/JqHTMLTrackElement';
 
 // Form Elements
-export { JqHTMLFormElement } from './html-elements/forms/JqHTMLFormElement';
-export { JqHTMLInputElement } from './html-elements/forms/JqHTMLInputElement';
-export { JqHTMLButtonElement } from './html-elements/forms/JqHTMLButtonElement';
-export { JqHTMLSelectElement } from './html-elements/forms/JqHTMLSelectElement';
-export { JqHTMLOptionElement } from './html-elements/forms/JqHTMLOptionElement';
-export { JqHTMLTextAreaElement } from './html-elements/forms/JqHTMLTextAreaElement';
-export { JqHTMLLabelElement } from './html-elements/forms/JqHTMLLabelElement';
-export { JqHTMLFieldSetElement } from './html-elements/forms/JqHTMLFieldSetElement';
-export { JqHTMLLegendElement } from './html-elements/forms/JqHTMLLegendElement';
+export { JqHTMLFormElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLFormElement';
+export { JqHTMLInputElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLInputElement';
+export { JqHTMLButtonElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLButtonElement';
+export { JqHTMLSelectElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLSelectElement';
+export { JqHTMLOptionElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLOptionElement';
+export { JqHTMLTextAreaElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLTextAreaElement';
+export { JqHTMLLabelElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLLabelElement';
+export { JqHTMLFieldSetElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLFieldSetElement';
+export { JqHTMLLegendElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLLegendElement';
+export { JqHTMLDataListElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLDataListElement';
+export { JqHTMLOptGroupElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLOptGroupElement';
+export { JqHTMLOutputElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLOutputElement';
+export { JqHTMLProgressElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLProgressElement';
+export { JqHTMLMeterElement } from './JqNode/JqElement/JqHTMLElement/html-elements/forms/JqHTMLMeterElement';
 
 // Table Elements
-export { JqHTMLTableElement } from './html-elements/tables/JqHTMLTableElement';
-export { JqHTMLTableRowElement } from './html-elements/tables/JqHTMLTableRowElement';
-export { JqHTMLTableCellElement } from './html-elements/tables/JqHTMLTableCellElement';
-export { JqHTMLTableSectionElement } from './html-elements/tables/JqHTMLTableSectionElement';
-export { JqHTMLTableCaptionElement } from './html-elements/tables/JqHTMLTableCaptionElement';
-export { JqHTMLTableColElement } from './html-elements/tables/JqHTMLTableColElement';
+export { JqHTMLTableElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableElement';
+export { JqHTMLTableRowElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableRowElement';
+export { JqHTMLTableCellElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableCellElement';
+export { JqHTMLTableSectionElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableSectionElement';
+export { JqHTMLTableCaptionElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableCaptionElement';
+export { JqHTMLTableColElement } from './JqNode/JqElement/JqHTMLElement/html-elements/tables/JqHTMLTableColElement';
 
 // Metadata Elements
-export { JqHTMLMetaElement } from './html-elements/metadata/JqHTMLMetaElement';
-export { JqHTMLLinkElement } from './html-elements/metadata/JqHTMLLinkElement';
-export { JqHTMLScriptElement } from './html-elements/metadata/JqHTMLScriptElement';
-export { JqHTMLStyleElement } from './html-elements/metadata/JqHTMLStyleElement';
+export { JqHTMLMetaElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLMetaElement';
+export { JqHTMLLinkElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLLinkElement';
+export { JqHTMLScriptElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLScriptElement';
+export { JqHTMLStyleElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLStyleElement';
+export { JqHTMLTitleElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLTitleElement';
+export { JqHTMLBaseElement } from './JqNode/JqElement/JqHTMLElement/html-elements/metadata/JqHTMLBaseElement';
 
 // Embedded Content
-export { JqHTMLIFrameElement } from './html-elements/embedded/JqHTMLIFrameElement';
-export { JqHTMLCanvasElement } from './html-elements/embedded/JqHTMLCanvasElement';
+export { JqHTMLIFrameElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLIFrameElement';
+export { JqHTMLCanvasElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLCanvasElement';
+export { JqHTMLEmbedElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLEmbedElement';
+export { JqHTMLObjectElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLObjectElement';
+export { JqHTMLPictureElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLPictureElement';
+export { JqHTMLAreaElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLAreaElement';
+export { JqHTMLMapElement } from './JqNode/JqElement/JqHTMLElement/html-elements/embedded/JqHTMLMapElement';
 
-// Semantic Elements (from grouped file)
-export {
-    // Content Sectioning
-    JqHTMLAddressElement,
-    JqHTMLArticleElement,
-    JqHTMLAsideElement,
-    JqHTMLFooterElement,
-    JqHTMLHeaderElement,
-    JqHTMLHGroupElement,
-    JqHTMLMainElement,
-    JqHTMLNavElement,
-    JqHTMLSectionElement,
-    JqHTMLSearchElement,
+// Semantic Elements
+export { JqHTMLAddressElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLAddressElement';
+export { JqHTMLArticleElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLArticleElement';
+export { JqHTMLAsideElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLAsideElement';
+export { JqHTMLFooterElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLFooterElement';
+export { JqHTMLHeaderElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLHeaderElement';
+export { JqHTMLHGroupElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLHGroupElement';
+export { JqHTMLMainElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLMainElement';
+export { JqHTMLNavElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLNavElement';
+export { JqHTMLSectionElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLSectionElement';
+export { JqHTMLSearchElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLSearchElement';
+export { JqHTMLBlockquoteElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLBlockquoteElement';
+export { JqHTMLFigureElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLFigureElement';
+export { JqHTMLFigcaptionElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLFigcaptionElement';
+export { JqHTMLMenuElement } from './JqNode/JqElement/JqHTMLElement/html-elements/semantic/JqHTMLMenuElement';
 
-    // Text Content
-    JqHTMLBlockquoteElement,
-    JqHTMLDDElement,
-    JqHTMLDTElement,
-    JqHTMLFigureElement,
-    JqHTMLFigcaptionElement,
-    JqHTMLMenuElement,
+// Inline Text Semantics
+export { JqHTMLAbbrElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLAbbrElement';
+export { JqHTMLBElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLBElement';
+export { JqHTMLBDIElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLBDIElement';
+export { JqHTMLBDOElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLBDOElement';
+export { JqHTMLCiteElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLCiteElement';
+export { JqHTMLCodeElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLCodeElement';
+export { JqHTMLDataElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLDataElement';
+export { JqHTMLDFNElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLDFNElement';
+export { JqHTMLEmElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLEmElement';
+export { JqHTMLIElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLIElement';
+export { JqHTMLKbdElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLKbdElement';
+export { JqHTMLMarkElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLMarkElement';
+export { JqHTMLQuoteElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLQuoteElement';
+export { JqHTMLRPElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLRPElement';
+export { JqHTMLRTElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLRTElement';
+export { JqHTMLRubyElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLRubyElement';
+export { JqHTMLSElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLSElement';
+export { JqHTMLSampElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLSampElement';
+export { JqHTMLSmallElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLSmallElement';
+export { JqHTMLStrongElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLStrongElement';
+export { JqHTMLSubElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLSubElement';
+export { JqHTMLSupElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLSupElement';
+export { JqHTMLTimeElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLTimeElement';
+export { JqHTMLUElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLUElement';
+export { JqHTMLVarElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLVarElement';
+export { JqHTMLWbrElement } from './JqNode/JqElement/JqHTMLElement/html-elements/inline/JqHTMLWbrElement';
 
-    // Inline Text Semantics
-    JqHTMLAbbrElement,
-    JqHTMLBElement,
-    JqHTMLBDIElement,
-    JqHTMLBDOElement,
-    JqHTMLCiteElement,
-    JqHTMLCodeElement,
-    JqHTMLDataElement,
-    JqHTMLDFNElement,
-    JqHTMLEmElement,
-    JqHTMLIElement,
-    JqHTMLKbdElement,
-    JqHTMLMarkElement,
-    JqHTMLQuoteElement,
-    JqHTMLRPElement,
-    JqHTMLRTElement,
-    JqHTMLRubyElement,
-    JqHTMLSElement,
-    JqHTMLSampElement,
-    JqHTMLSmallElement,
-    JqHTMLStrongElement,
-    JqHTMLSubElement,
-    JqHTMLSupElement,
-    JqHTMLTimeElement,
-    JqHTMLUElement,
-    JqHTMLVarElement,
-    JqHTMLWbrElement,
-} from './html-elements/semantic/JqHTMLSemanticElements';
+// Edit Elements
+export { JqHTMLModElement } from './JqNode/JqElement/JqHTMLElement/html-elements/edits/JqHTMLModElement';
 
-// Media and Interactive Elements (from grouped file)
-export {
-    // Image and Multimedia
-    JqHTMLAreaElement,
-    JqHTMLMapElement,
-    JqHTMLTrackElement,
+// Interactive Elements
+export { JqHTMLDetailsElement } from './JqNode/JqElement/JqHTMLElement/html-elements/interactive/JqHTMLDetailsElement';
+export { JqHTMLDialogElement } from './JqNode/JqElement/JqHTMLElement/html-elements/interactive/JqHTMLDialogElement';
+export { JqHTMLSummaryElement } from './JqNode/JqElement/JqHTMLElement/html-elements/interactive/JqHTMLSummaryElement';
 
-    // Embedded Content
-    JqHTMLEmbedElement,
-    JqHTMLObjectElement,
-    JqHTMLPictureElement,
-    JqHTMLSourceElement,
+// Web Components
+export { JqHTMLSlotElement } from './JqNode/JqElement/JqHTMLElement/html-elements/webcomponents/JqHTMLSlotElement';
+export { JqHTMLTemplateElement } from './JqNode/JqElement/JqHTMLElement/html-elements/webcomponents/JqHTMLTemplateElement';
 
-    // Scripting
-    JqHTMLNoScriptElement,
+// Scripting
+export { JqHTMLNoScriptElement } from './JqNode/JqElement/JqHTMLElement/html-elements/scripting/JqHTMLNoScriptElement';
 
-    // Demarcating Edits
-    JqHTMLModElement,
+// Helper utilities
+export { createTypedElement } from './helpers/createTypedElement';
 
-    // Forms (additional)
-    JqHTMLDataListElement,
-    JqHTMLOptGroupElement,
-    JqHTMLOutputElement,
-    JqHTMLProgressElement,
-    JqHTMLMeterElement,
-
-    // Interactive Elements
-    JqHTMLDetailsElement,
-    JqHTMLDialogElement,
-    JqHTMLSummaryElement,
-
-    // Web Components
-    JqHTMLSlotElement,
-    JqHTMLTemplateElement,
-} from './html-elements/semantic/JqHTMLMediaElements';
-
-// Metadata and Special Elements (from grouped file)
-export {
-    JqHTMLBaseElement,
-    JqHTMLTitleElement,
-    JqSVGElement,
-    JqMathMLElement,
-    JqHTMLFencedFrameElement,
-    JqHTMLSelectedContentElement,
-} from './html-elements/semantic/JqHTMLMetadataElements';
+// Utility Classes
+export { JqCSSStyleDeclaration } from './JqNode/JqElement/JqHTMLElement/JqCSSStyleDeclaration';
+export { JqDOMStringMap, createDOMStringMap } from './JqNode/JqElement/JqHTMLElement/JqDOMStringMap';
