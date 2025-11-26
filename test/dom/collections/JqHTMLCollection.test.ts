@@ -1,5 +1,5 @@
-﻿import { JqHTMLCollection } from '../../dom/collections/JqHTMLCollection';
-import { JqElement } from '../../types';
+﻿import { JqHTMLCollection } from '../../../dom/collections/JqHTMLCollection';
+import { JqElement } from '../../../types';
 
 describe('JqHTMLCollection', () => {
     let elements: JqElement[];

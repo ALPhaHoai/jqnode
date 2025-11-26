@@ -3,8 +3,8 @@
  */
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { JqDOMTokenList } from '../../dom/collections/JqDOMTokenList';
-import { JqElement } from '../../dom/JqNode/JqElement/JqElement';
+import { JqDOMTokenList } from '../../../dom/collections/JqDOMTokenList';
+import { JqElement } from '../../../dom/JqNode/JqElement/JqElement';
 
 describe('JqDOMTokenList', () => {
     let element: JqElement;

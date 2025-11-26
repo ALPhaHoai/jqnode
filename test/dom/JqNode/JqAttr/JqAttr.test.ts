@@ -1,5 +1,5 @@
-import { JqAttr } from '../../dom/JqNode/JqAttr/JqAttr';
-import { JqElement } from '../../types';
+import { JqAttr } from '../../../../dom/JqNode/JqAttr/JqAttr';
+import { JqElement } from '../../../../types';
 
 describe('JqAttr', () => {
     let node: JqElement;

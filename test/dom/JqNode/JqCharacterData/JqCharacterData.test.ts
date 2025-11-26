@@ -2,8 +2,8 @@
  * Tests for JqCharacterData class
  */
 
-import { JqCharacterData } from '../../dom/JqNode/JqCharacterData/JqCharacterData';
-import { JqText } from '../../dom/JqNode/JqCharacterData/JqText';
+import { JqCharacterData } from '../../../../dom/JqNode/JqCharacterData/JqCharacterData';
+import { JqText } from '../../../../dom/JqNode/JqCharacterData/JqText';
 
 // Use JqText as concrete implementation for testing abstract JqCharacterData
 describe('JqCharacterData', () => {

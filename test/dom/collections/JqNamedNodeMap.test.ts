@@ -1,6 +1,6 @@
-import { JqNamedNodeMap } from '../../dom/collections/JqNamedNodeMap';
-import { JqAttr } from '../../dom/JqNode/JqAttr/JqAttr';
-import { JqElement } from '../../types';
+import { JqNamedNodeMap } from '../../../dom/collections/JqNamedNodeMap';
+import { JqAttr } from '../../../dom/JqNode/JqAttr/JqAttr';
+import { JqElement } from '../../../types';
 
 describe('JqNamedNodeMap', () => {
     let node: JqElement;

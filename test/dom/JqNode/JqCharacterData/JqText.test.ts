@@ -2,8 +2,8 @@
  * Tests for JqText class
  */
 
-import { JqText } from '../../dom/JqNode/JqCharacterData/JqText';
-import { JqElement } from '../../types';
+import { JqText } from '../../../../dom/JqNode/JqCharacterData/JqText';
+import { JqElement } from '../../../../types';
 
 describe('JqText', () => {
     describe('Constructor', () => {

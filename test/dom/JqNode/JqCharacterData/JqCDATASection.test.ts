@@ -2,8 +2,8 @@
  * Tests for JqCDATASection class
  */
 
-import { JqCDATASection } from '../../dom/JqNode/JqCharacterData/JqCDATASection';
-import { JqElement } from '../../types';
+import { JqCDATASection } from '../../../../dom/JqNode/JqCharacterData/JqCDATASection';
+import { JqElement } from '../../../../types';
 
 describe('JqCDATASection', () => {
     describe('Constructor', () => {

@@ -1,5 +1,5 @@
-import { JqElement } from '../../types';
-import { JqNode } from '../../dom/JqNode/JqNode';
+import { JqElement } from '../../../types';
+import { JqNode } from '../../../dom/JqNode/JqNode';
 
 describe('JqNode', () => {
     describe('Node Type Constants', () => {

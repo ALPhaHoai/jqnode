@@ -1,5 +1,5 @@
-import { JqNodeList, JqNodeListOf } from '../../dom/collections/JqNodeList';
-import { JqElement } from '../../types';
+import { JqNodeList, JqNodeListOf } from '../../../dom/collections/JqNodeList';
+import { JqElement } from '../../../types';
 
 describe('JqNodeList', () => {
     let nodes: JqElement[];

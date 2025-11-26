@@ -2,8 +2,8 @@
  * Tests for JqComment class
  */
 
-import { JqComment } from '../../dom/JqNode/JqCharacterData/JqComment';
-import { JqElement } from '../../types';
+import { JqComment } from '../../../../dom/JqNode/JqCharacterData/JqComment';
+import { JqElement } from '../../../../types';
 
 describe('JqComment', () => {
     describe('Constructor', () => {
