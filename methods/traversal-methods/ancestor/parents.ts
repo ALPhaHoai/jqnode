@@ -1,11 +1,6 @@
-import { parseSelector, nodeMatchesSelector } from '../../../selector';
-import type { CssSelector, JQ } from '../../../types';
-import { JqElement } from '../../../types';
-import JQClass from '../../../jq';
-import { createEmptyJQ } from '../../../helpers/jq-factory';
-
-// Use ReturnType to infer ParsedSelector from parseSelector function
-type ParsedSelector = NonNullable<ReturnType<typeof parseSelector>>;
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { CssSelector, JQ, ParsedSelector } from '../../../types';
+import { JqElement } from '../../../dom/core/JqElement';
 
 /**
  * Parses and validates the provided selector.
@@ -146,11 +141,11 @@ function parents(this: JQ, selector?: CssSelector): JQ {
 
     // If selector was provided but failed to parse, return empty JQ object
     if (selector && !parsedSelector) {
-        return createEmptyJQ(this);
+        return this.pushStack([]);
     }
 
     const ancestors = _collectParents(this.nodes, parsedSelector);
-    return new JQClass(ancestors);
+    return this.pushStack(ancestors);
 }
 
 export default parents;

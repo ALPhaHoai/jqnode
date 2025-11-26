@@ -25,9 +25,7 @@ function map<R = JqElement>(this: JQ, callback: MapCallback<JqElement, R>): R[] 
     }
 
     // Return a new JQ object containing the results
-    // We use this.constructor to avoid circular dependency and ensure we use the correct class
-    const JQClass = this.constructor as any;
-    return new JQClass(results);
+    return this.pushStack(results as any);
 }
 
 export default map;

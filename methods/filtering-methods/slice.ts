@@ -1,5 +1,4 @@
 import type { JQ } from '../../types';
-import JQClass from '../../jq';
 
 /**
  * Creates a subset of matched elements using array slice.
@@ -9,7 +8,7 @@ import JQClass from '../../jq';
  */
 function slice(this: JQ, start?: number, end?: number): JQ {
     const sliced = this.nodes.slice(start, end);
-    return new JQClass(sliced);
+    return this.pushStack(sliced);
 }
 
 export default slice;

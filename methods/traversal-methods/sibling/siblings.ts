@@ -1,6 +1,5 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
-import JQClass from '../../../jq';
 
 /**
  * Gets the siblings of each element in the set of matched elements, optionally filtered by a selector.
@@ -37,7 +36,8 @@ function siblings(this: JQ, selector?: CssSelector): JQ {
             });
         }
     }
-    return new JQClass(allSiblings);
+
+    return this.pushStack(allSiblings);
 }
 
 export default siblings;

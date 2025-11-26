@@ -1,9 +1,9 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
-import JQClass from '../../../jq';
 
 /**
- * Gets the immediately following sibling of each element, optionally filtered by a selector.
+ * Get the immediately following sibling of each element in the set of matched elements.
+ * If a selector is provided, it retrieves the next sibling only if it matches that selector.
  * @see https://api.jquery.com/next/
  */
 function next(this: JQ, selector?: CssSelector): JQ {
@@ -11,44 +11,14 @@ function next(this: JQ, selector?: CssSelector): JQ {
 
     for (const node of this.nodes) {
         if (node.parent && node.parent.children) {
-            const siblings = node.parent.children.filter(
-                (child: JqElement) => child.internalType === 'element',
-            );
-            const currentIndex = siblings.indexOf(node);
+            const allChildren = node.parent.children;
+            const currentIndex = allChildren.indexOf(node);
 
-            if (currentIndex !== -1) {
-                // Check if there's a next sibling
-                if (currentIndex < siblings.length - 1) {
-                    const nextSibling = siblings[currentIndex + 1];
-
-                    if (selector) {
-                        // With selector: only return if immediate next sibling matches
-                        const parsedSelector = parseSelector(selector);
-                        if (parsedSelector) {
-                            const selectorList =
-                                'type' in parsedSelector && parsedSelector.type === 'compound'
-                                    ? parsedSelector.selectors
-                                    : [parsedSelector];
-                            if (selectorList.some((sel) => nodeMatchesSelector(nextSibling, sel))) {
-                                nextSiblings.push(nextSibling);
-                            }
-                        }
-                    } else {
-                        // Without selector: return immediate next sibling
-                        nextSiblings.push(nextSibling);
-                    }
-                }
-            }
-        } else {
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            const rootNodes = require('../../../jq').allRootNodes;
-            const currentIndex = rootNodes.indexOf(node);
-
-            if (currentIndex !== -1) {
+            if (currentIndex !== -1 && currentIndex < allChildren.length - 1) {
                 // Find immediate next element sibling
                 let nextElementSibling = null;
-                for (let i = currentIndex + 1; i < rootNodes.length; i++) {
-                    const sibling = rootNodes[i];
+                for (let i = currentIndex + 1; i < allChildren.length; i++) {
+                    const sibling = allChildren[i];
                     if (sibling.internalType === 'element') {
                         nextElementSibling = sibling;
                         break;
@@ -57,30 +27,18 @@ function next(this: JQ, selector?: CssSelector): JQ {
 
                 if (nextElementSibling) {
                     if (selector) {
-                        // With selector: only return if immediate next sibling matches
-                        const parsedSelector = parseSelector(selector);
-                        if (parsedSelector) {
-                            const selectorList =
-                                'type' in parsedSelector && parsedSelector.type === 'compound'
-                                    ? parsedSelector.selectors
-                                    : [parsedSelector];
-                            if (
-                                selectorList.some((sel) =>
-                                    nodeMatchesSelector(nextElementSibling, sel),
-                                )
-                            ) {
-                                nextSiblings.push(nextElementSibling);
-                            }
+                        const parsed = parseSelector(selector);
+                        if (parsed && nodeMatchesSelector(nextElementSibling, parsed)) {
+                            nextSiblings.push(nextElementSibling);
                         }
                     } else {
-                        // Without selector: return immediate next sibling
                         nextSiblings.push(nextElementSibling);
                     }
                 }
             }
         }
     }
-    return new JQClass(nextSiblings);
+    return this.pushStack(nextSiblings);
 }
 
 export default next;

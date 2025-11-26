@@ -1,5 +1,5 @@
 import type { JqElement, JQ } from '../../types';
-import { createEmptyJQ, createJQWithNodes } from '../../helpers/jq-factory';
+import { createEmptyJQ } from '../../helpers/jq-factory';
 
 /**
  * Selects the element at a specific index from the matched set (0-based).
@@ -45,13 +45,9 @@ function eq(this: JQ, index: number | string | undefined): JQ {
             selectedNode = { ...selectedNode, _detached: true } as JqElement;
         }
 
-        const result = createJQWithNodes(this, [selectedNode]);
-        result._prevObject = this;
-        return result;
+        return this.pushStack([selectedNode]);
     }
-    const result = createEmptyJQ(this);
-    result._prevObject = this;
-    return result;
+    return this.pushStack([]);
 }
 
 export default eq;

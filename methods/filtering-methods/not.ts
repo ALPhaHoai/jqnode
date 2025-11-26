@@ -1,7 +1,5 @@
 import { selectNodes } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
-import JQClass from '../../jq';
-import { createJQWithNodes } from '../../helpers/jq-factory';
 
 /**
  * Removes elements from the set of matched elements.
@@ -18,7 +16,7 @@ function not(
         const allMatches = selectNodes(rootNodes, selectorOrFunctionOrElementOrJQ);
 
         const filtered = this.nodes.filter((node: JqElement) => !allMatches.includes(node));
-        return new JQClass(filtered);
+        return this.pushStack(filtered);
     } else if (typeof selectorOrFunctionOrElementOrJQ === 'function') {
         // Function filter
         const filtered: JqElement[] = [];
@@ -34,33 +32,34 @@ function not(
                 filtered.push(node);
             }
         }
-        return new JQClass(filtered);
+        return this.pushStack(filtered);
     } else if (
         selectorOrFunctionOrElementOrJQ &&
         typeof selectorOrFunctionOrElementOrJQ === 'object'
     ) {
         if (
-            'type' in selectorOrFunctionOrElementOrJQ &&
-            selectorOrFunctionOrElementOrJQ.type === 'element'
+            'internalType' in selectorOrFunctionOrElementOrJQ &&
+            selectorOrFunctionOrElementOrJQ.internalType === 'element'
         ) {
             // Direct element reference - exclude this specific element
             const filtered = this.nodes.filter(
                 (node: JqElement) => node !== selectorOrFunctionOrElementOrJQ,
             );
-            return new JQClass(filtered);
+            return this.pushStack(filtered);
         } else if (
             'nodes' in selectorOrFunctionOrElementOrJQ &&
             Array.isArray(selectorOrFunctionOrElementOrJQ.nodes)
         ) {
-            // JQ object - exclude all nodes in the other JQ object
+            // JQ object - exclude all elements in it
+            const nodesToExclude = selectorOrFunctionOrElementOrJQ.nodes;
             const filtered = this.nodes.filter(
-                (node: JqElement) => !selectorOrFunctionOrElementOrJQ.nodes.includes(node),
+                (node: JqElement) => !nodesToExclude.includes(node),
             );
-            return new JQClass(filtered);
+            return this.pushStack(filtered);
         }
     }
-    // result.length is a getter that returns result.nodes.length, so we don't need to set it
-    return createJQWithNodes(this, this.nodes);
+
+    return this.pushStack(this.nodes);
 }
 
 export default not;

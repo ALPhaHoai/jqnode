@@ -1,6 +1,5 @@
 import { nodeMatchesSelector, parseSelector } from '../../selector';
 import type { JqElement, CssSelector, JQ, FilterCallback } from '../../types';
-import JQClass from '../../jq';
 import { createEmptyJQ } from '../../helpers/jq-factory';
 
 /**
@@ -32,9 +31,7 @@ function filter(
             return nodeMatchesSelector(node, parsedSelector, selectorContext);
         });
 
-        const result = new JQClass(filtered) as JQ;
-        result._prevObject = this;
-        return result;
+        return this.pushStack(filtered);
     } else if (typeof selectorOrFunction === 'function') {
         // Function filter
         const filtered: JqElement[] = [];
@@ -47,16 +44,13 @@ function filter(
                     filtered.push(node);
                 }
             } catch (error) {
-                // Skip elements that cause errors in the filter function
+                // Skip elements that cause error
             }
         }
-        const result = new JQClass(filtered) as JQ;
-        result._prevObject = this;
-        return result;
+        return this.pushStack(filtered);
     }
-    const result = createEmptyJQ(this);
-    result._prevObject = this;
-    return result;
+
+    return this.pushStack([]);
 }
 
 export default filter;

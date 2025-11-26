@@ -1,6 +1,5 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { JqElement, CssSelector, JQ } from '../../../types';
-import JQClass from '../../../jq';
 
 /**
  * Gets the immediately preceding sibling of each element, optionally filtered by a selector.
@@ -43,7 +42,7 @@ function prev(this: JQ, selector?: CssSelector): JQ {
             }
         }
     }
-    return new JQClass(prevSiblings);
+    return this.pushStack(prevSiblings);
 }
 
 export default prev;

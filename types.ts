@@ -233,6 +233,9 @@ export interface JQ {
     prevAll(selector?: CssSelector): JQ;
     prevUntil(selector?: UntilSelector, filter?: CssSelector): JQ;
     end(): JQ;
+    pushStack(elements: JqElement[]): JQ;
+    sort(compareFn?: (a: JqElement, b: JqElement) => number): this;
+    splice(start: number, deleteCount?: number, ...items: JqElement[]): JqElement[];
 
     // Private helpers (prefixed with _)
     _normalizeContent(content: ContentInput): JqElement[];

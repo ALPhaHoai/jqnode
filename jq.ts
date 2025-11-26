@@ -72,6 +72,7 @@ import prevUntil from './methods/traversal-methods/sibling/prevUntil';
 
 // Traversal methods - Other
 import end from './methods/traversal-methods/end';
+import pushStack from './methods/traversal-methods/pushStack';
 
 // Filtering methods
 import eq from './methods/filtering-methods/eq';
@@ -107,6 +108,8 @@ import index from './methods/miscellaneous-methods/index';
 import remove from './methods/miscellaneous-methods/remove';
 import clone from './methods/miscellaneous-methods/clone';
 import position from './methods/miscellaneous-methods/position';
+import sort from './methods/miscellaneous-methods/sort';
+import splice from './methods/miscellaneous-methods/splice';
 
 // Data methods
 import data from './methods/data-methods/data';
@@ -142,12 +145,17 @@ class JQ implements IJQ {
      */
     nodes: JqElement[];
     [index: number]: JqElement | undefined;
+    _prevObject?: JQ;
 
     /**
      * Length of the nodes array (jQuery compatibility)
      */
     get length(): number {
         return this.nodes.length;
+    }
+
+    set length(value: number) {
+        this.nodes.length = value;
     }
 
     /**
@@ -192,9 +200,11 @@ class JQ implements IJQ {
                 return (target as any)[prop];
             },
             set(target: JQ, prop: string | symbol, value: any): boolean {
-                // Prevent setting numeric indices
+                // Handle numeric indices
                 if (typeof prop === 'string' && /^\d+$/.test(prop)) {
-                    return false; // Don't allow setting
+                    const index = parseInt(prop, 10);
+                    target.nodes[index] = value;
+                    return true;
                 }
                 (target as any)[prop] = value;
                 return true;
@@ -304,6 +314,9 @@ class JQ implements IJQ {
     prevUntil!: (selector?: UntilSelector, filter?: CssSelector) => JQ;
     eq!: (index: any) => JQ;
     end!: () => JQ;
+    pushStack!: (elements: JqElement[]) => JQ;
+    sort!: (compareFn?: (a: JqElement, b: JqElement) => number) => this;
+    splice!: (start: number, deleteCount?: number, ...items: JqElement[]) => JqElement[];
     first!: () => JQ;
     last!: () => JQ;
 
@@ -391,6 +404,9 @@ JQ.prototype.prevAll = prevAll;
 JQ.prototype.prevUntil = prevUntil;
 JQ.prototype.eq = eq;
 JQ.prototype.end = end;
+JQ.prototype.pushStack = pushStack;
+JQ.prototype.sort = sort;
+JQ.prototype.splice = splice;
 JQ.prototype.first = first;
 JQ.prototype.last = last;
 JQ.prototype.filter = filter;
