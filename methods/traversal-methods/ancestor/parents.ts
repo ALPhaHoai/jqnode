@@ -1,6 +1,6 @@
 import { nodeMatchesSelector, parseSelector } from '../../../selector';
 import type { CssSelector, JQ, ParsedSelector } from '../../../types';
-import { JqElement } from '../../../dom/core/JqElement';
+import { JqElement } from '../../../dom/JqNode/JqElement/JqElement';
 
 /**
  * Parses and validates the provided selector.

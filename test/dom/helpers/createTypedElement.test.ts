@@ -3,9 +3,9 @@
  */
 
 import { createTypedElement } from '../../../dom/helpers/createTypedElement';
-import { JqHTMLElement } from '../../../dom/core/JqHTMLElement';
-import { JqHTMLUnknownElement } from '../../../dom/core/JqHTMLUnknownElement';
-import { JqHTMLDivElement } from '../../../dom/html-elements/text/JqHTMLDivElement';
+import { JqHTMLElement } from '../../../dom/JqNode/JqElement/JqHTMLElement/JqHTMLElement';
+import { JqHTMLUnknownElement } from '../../../dom/JqNode/JqElement/JqHTMLUnknownElement/JqHTMLUnknownElement';
+import { JqHTMLDivElement } from '../../../dom/JqNode/JqElement/JqHTMLElement/html-elements/text/JqHTMLDivElement';
 
 describe('createTypedElement - Custom vs Unknown Elements', () => {
     describe('Custom Elements (with hyphen)', () => {

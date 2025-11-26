@@ -1,6 +1,6 @@
 import { selectNodes } from '../../../selector';
 import type { CssSelector, JQ, UntilSelector } from '../../../types';
-import { JqElement } from '../../../dom/core/JqElement';
+import { JqElement } from '../../../dom/JqNode/JqElement/JqElement';
 import JQClass from '../../../jq';
 
 /**

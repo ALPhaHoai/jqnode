@@ -3,7 +3,7 @@
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
  */
 
-import {JqElement} from '../core/JqElement';
+import { JqElement } from '../JqNode/JqElement/JqElement';
 
 export class JqHTMLCollection {
     private _elements: JqElement[];

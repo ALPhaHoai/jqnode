@@ -1,6 +1,6 @@
 import { getTextContent, unescapeHtml } from '../utils';
 import type { JqElement } from '../types';
-import { JqElement as JqElementClass } from '../dom/core/JqElement';
+import { JqElement as JqElementClass } from '../dom/JqNode/JqElement/JqElement';
 
 /**
  * Gets the combined text content from a collection of nodes.

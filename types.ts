@@ -2,15 +2,17 @@
  * Core type definitions for jqnode
  */
 
-import { JqElement, NodeType } from './dom/core/JqElement';
-import { JqAttr } from './dom/core/JqAttr';
+import { JqElement, NodeType } from './dom/JqNode/JqElement/JqElement';
+import { JqAttr } from './dom/JqNode/JqAttr/JqAttr';
 import { JqNamedNodeMap } from './dom/collections/JqNamedNodeMap';
 import { JqHTMLCollection } from './dom/collections/JqHTMLCollection';
-import { JqNode } from './dom/core/JqNode';
-import { JqCharacterData } from './dom/core/JqCharacterData';
-import { JqText } from './dom/core/JqText';
-import { JqComment } from './dom/core/JqComment';
-import { JqCDATASection } from './dom/core/JqCDATASection';
+import { JqDocument } from './dom/JqNode/JqDocument/JqDocument';
+import { JqDocumentFragment } from './dom/JqNode/JqDocument/JqDocumentFragment';
+import { JqNode } from './dom/JqNode/JqNode';
+import { JqCharacterData } from './dom/JqNode/JqCharacterData/JqCharacterData';
+import { JqText } from './dom/JqNode/JqCharacterData/JqText';
+import { JqComment } from './dom/JqNode/JqCharacterData/JqComment';
+import { JqCDATASection } from './dom/JqNode/JqCharacterData/JqCDATASection';
 import { JqDOMTokenList } from './dom/collections/JqDOMTokenList';
 
 export { JqElement, JqNode, JqCharacterData, JqText, JqComment, JqCDATASection, JqAttr, JqNamedNodeMap, JqHTMLCollection, JqDOMTokenList };
@@ -98,6 +100,11 @@ export type GetterSetterReturn<T> = T | undefined | JQ;
  * Callback for sorting methods
  */
 export type SortCallback = (a: JqElement, b: JqElement) => number;
+
+/**
+ * Parsed selector (for internal use)
+ */
+export type ParsedSelector = any;
 
 /**
  * Options for toJSON method
