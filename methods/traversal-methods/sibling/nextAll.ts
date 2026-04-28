@@ -1,0 +1,88 @@
+import { nodeMatchesSelector, parseSelector } from '../../../selector';
+import type { CssSelector, JQ } from '../../../types';
+import { JqElement } from '../../../types';
+import JQClass from '../../../jq';
+
+/**
+ * Gets all following siblings of each element, optionally filtered by a selector.
+ * @see https://api.jquery.com/nextAll/
+ */
+function nextAll(this: JQ, selector?: CssSelector): JQ {
+    const followingSiblings: JqElement[] = [];
+    const seen = new Set<JqElement>();
+
+    for (const node of this.nodes) {
+        if (node._originalElement) {
+            // Use DOM traversal for elements with _originalElement
+            let sibling = node._originalElement.nextElementSibling;
+            while (sibling) {
+                if (!seen.has(sibling as any)) {
+                    seen.add(sibling as any);
+                    // Create attributes object
+                    const attributes: Record<string, string> = {};
+                    for (let i = 0; i < sibling.attributes.length; i++) {
+                        const attr = sibling.attributes[i];
+                        attributes[attr.name] = attr.value;
+                    }
+
+                    // Populate children from DOM childNodes
+                    const children: JqElement[] = [];
+                    for (let i = 0; i < sibling.childNodes.length; i++) {
+                        const child = sibling.childNodes[i];
+                        if (child.nodeType === 3) {
+                            // Text node
+                            const textNode = new JqElement('text');
+                            textNode.textData = child.textContent || '';
+                            children.push(textNode);
+                        } else if (child.nodeType === 1) {
+                            // Element node - add placeholder, will be processed if needed
+                            const elemNode = new JqElement('element', (child as Element).tagName.toLowerCase());
+                            elemNode._originalElement = child as Element;
+                            children.push(elemNode);
+                        }
+                    }
+
+                    const internalNode = new JqElement('element', sibling.tagName.toLowerCase());
+                    internalNode.attributes._setData(attributes);
+                    internalNode.children = children;
+                    internalNode._originalElement = sibling;
+                    followingSiblings.push(internalNode);
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        } else if (node.parent && node.parent.children) {
+            const siblings = node.parent.children.filter(
+                (child: JqElement) => child.internalType === 'element',
+            );
+            const currentIndex = siblings.indexOf(node);
+
+            if (currentIndex !== -1) {
+                for (let i = currentIndex + 1; i < siblings.length; i++) {
+                    const sibling = siblings[i];
+                    if (!seen.has(sibling)) {
+                        seen.add(sibling);
+                        followingSiblings.push(sibling);
+                    }
+                }
+            }
+        }
+    }
+
+    let resultNodes = followingSiblings;
+
+    if (selector) {
+        const parsedSelector = parseSelector(selector);
+        if (parsedSelector) {
+            resultNodes = followingSiblings.filter((sibling: JqElement) => {
+                const selectorList =
+                    'type' in parsedSelector && parsedSelector.type === 'compound'
+                        ? parsedSelector.selectors
+                        : [parsedSelector];
+                return selectorList.some((sel) => nodeMatchesSelector(sibling, sel));
+            });
+        }
+    }
+    return new JQClass(resultNodes);
+}
+
+export default nextAll;
